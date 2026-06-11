@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "lemmas": [
+    {
+      "id": "convergence_tail_bound",
+      "statement": "Omitted-prime tail bound for Gaussian heat kernel",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/TailConvergence.md",
+      "heat": "docs/Heat/TailRegime.md",
+      "lean": "docs/Formal/HPWeil.lean"
+    },
+    {
+      "id": "convergence_uniform_trace",
+      "statement": "Uniform trace convergence as P -> infinity",
+      "proof_status": "NUMERICAL",
+      "doc": "docs/Analysis/TailConvergence.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/HPWeil.lean"
+    },
+    {
+      "id": "convergence_spectral_measure",
+      "statement": "Berezansky-Krein spectral measure convergence",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/OperatorLimit.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/HPWeil.lean"
+    },
+    {
+      "id": "resolvent_limit",
+      "statement": "Strong resolvent limit H_P -> H",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/OperatorLimit.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/AdeleQuotient.lean"
+    },
+    {
+      "id": "quotient_spectrum",
+      "statement": "Quotient projected spectrum converges to Riemann ordinates",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/QuotientSpectrum.md",
+      "heat": "docs/Heat/QuotientDiagnostic.md",
+      "lean": "docs/Formal/AdeleQuotient.lean"
+    },
+    {
+      "id": "frequency_lock",
+      "statement": "GL(1) frequency-locked cascade is impossible",
+      "proof_status": "IMPOSSIBLE",
+      "doc": "docs/Analysis/FrequencyLockImpossibility.md",
+      "heat": "docs/Heat/QuotientDiagnostic.md",
+      "lean": "docs/Formal/AdeleQuotient.lean"
+    },
+    {
+      "id": "trace_mode_extraction",
+      "statement": "Prony/log-slope recovers true eigenvalues",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/TraceModeExtraction.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/HPWeil.lean"
+    },
+    {
+      "id": "cylinder_direct_sum_falsified",
+      "statement": "H_P = ⊕_{p≤P} D_p on L²(S¹_log p) does not have spectrum {γ_n}",
+      "proof_status": "FALSIFIED",
+      "doc": "docs/Falsification/Sinc2Mismatch.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/HPWeil.lean",
+      "falsification_method": "compact_sinc2",
+      "falsification_residual": 12.67,
+      "falsification_threshold": 1e-10,
+      "primes_tested": [500000, 10000000],
+      "zeros_tested": 100000,
+      "certificates": [
+        "build/cert/spectral_demo_sinc2.json",
+        "build/cert/spectral_catalog_sinc2.json"
+      ],
+      "evidence": {
+        "lex_sorted_gap_max": 169.43,
+        "fixed_quotient_gap_max": 166.21,
+        "quotient_gamma_tuned_sq_gap_max": 179.24,
+        "compact_sinc2_residual": 12.6749,
+        "stable_across_primes": true
+      }
+    },
+    {
+      "id": "quotient_gamma_tuned_circular",
+      "statement": "γ-tuned quotient linear gap does not identify spectrum; ω² gap remains large",
+      "proof_status": "FALSIFIED",
+      "doc": "docs/Falsification/QuotientGammaTuned.md",
+      "heat": "docs/Heat/QuotientDiagnostic.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "falsification_method": "quotient_sq_gap",
+      "falsification_residual": 179.24,
+      "linear_gap_misleading": 0.613,
+      "primes_tested": [500000, 10000000],
+      "certificates": ["build/cert/spectral_demo_sinc2.json"]
+    },
+    {
+      "id": "cylinder_poisson_duality",
+      "statement": "Heat trace on S¹_log p: mode sum equals Poisson winding sum",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/CylinderClass.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/PoissonDuality.lean",
+      "depends_on": [],
+      "note": "Geometric local model only; not the exact arithmetic local factor"
+    },
+    {
+      "id": "cylinder_density_divergence",
+      "statement": "Cylinder counting N_P(T) diverges as max P -> infinity for fixed T",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/CylinderNoGo.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/CylinderNoGo.lean",
+      "evidence": "docs/generated/density_growth_study.json"
+    },
+    {
+      "id": "pair_correlation_gue",
+      "statement": "Cylinder spacing law differs from Montgomery GUE pair correlation; zeros match GUE spacing target",
+      "proof_status": "NUMERICAL",
+      "doc": "docs/Analysis/CylinderNoGo.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/CylinderNoGo.lean",
+      "anavm_gate": "pair_correlation_vs_gue",
+      "evidence": "docs/generated/pair_correlation.json",
+      "backend": "Marshal::Analysis::PairCorrelation"
+    },
+    {
+      "id": "cylinder_class_nogo",
+      "statement": "No H in cylinder class C has Sobolev spectral distance 0 from mu_Riemann",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/CylinderNoGo.md",
+      "heat": "docs/Analysis/CylinderClass.md",
+      "lean": "docs/Formal/CylinderNoGo.lean",
+      "depends_on": ["cylinder_density_divergence", "cylinder_direct_sum_falsified", "pair_correlation_gue"],
+      "proved_reduction": "cylinder_density_divergence + compact_sinc2_falsification + pair_correlation_gue",
+      "not_claimed": "cylinder is exact arithmetic local factor",
+      "rigorous_gap": "Full Sobolev d_s without vague-limit assumptions"
+    },
+    {
+      "id": "weil_weighted_trace_match",
+      "statement": "H_log Weil trace Tr_w' equals Marshal explicit-formula prime sum (log p)/p^{k/2}",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/LogPrimeOperator.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "depends_on": ["cylinder_poisson_duality"],
+      "evidence": "docs/generated/log_prime_validation.json",
+      "note": "T1 vs Marshal prime; NOT tautological p^{-k/2} rescaling"
+    },
+    {
+      "id": "logp_prime_dual",
+      "statement": "Trace duality: H_log Weil prime trace linked to zero trace via full Weil identity",
+      "proof_status": "NUMERICAL_PENDING",
+      "doc": "docs/Analysis/ExplicitFormulaDuality.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "depends_on": ["weil_weighted_trace_match"],
+      "evidence": "docs/generated/log_prime_validation.json",
+      "note": "Spectra differ; prime trace != zero trace (expected duality gap)"
+    },
+    {
+      "id": "log_prime_measure_convergence",
+      "statement": "Connes crossed-product assembly: global sinc2 or measure convergence to mu_Riemann as P grows",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/LogPrimeOperator.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "depends_on": ["logp_prime_dual", "weil_weighted_trace_match"],
+      "evidence": {
+        "note": "p^{-k/2} sinc2 ~0.01% was misweighted artifact; Weil sinc2 vs zeros is duality gap",
+        "cylinder_baseline": 12.67,
+        "catalog": "build/cert/log_prime_catalog.json"
+      }
+    },
+    {
+      "id": "connes_crossed_product_assembly",
+      "statement": "Finite Q^x crossed product of H_log local factors improves global sinc2 vs bare direct sum",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/ConnesBerryKeating.md",
+      "heat": "docs/Analysis/LogPrimeOperator.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "depends_on": ["log_prime_measure_convergence", "logp_prime_dual"],
+      "blocks": ["SPECTRUM_IDENTIFIED"]
+    },
+    {
+      "id": "weil_trace_duality",
+      "statement": "Explicit formula is trace duality (H_gamma, H_log), not spectrum {gamma_n} = {k log p}",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/ExplicitFormulaDuality.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "depends_on": ["cylinder_direct_sum_falsified", "cylinder_poisson_duality"],
+      "blocks": ["SPECTRUM_IDENTIFIED"]
+    },
+    {
+      "id": "spectral_measure_limit_conjecture",
+      "statement": "Weak-* limit μ_P of cylinder spectral measures exists and is singular w.r.t. Riemann zero measure",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/MeasureLimitConjecture.md",
+      "heat": "docs/Heat/HeatCylinderOperator.md",
+      "lean": "docs/Formal/HPWeil.lean",
+      "origin": "numerics",
+      "evidence": {
+        "sinc2_residual_stable_at_500k_and_10M": 12.6749,
+        "gaussian_moments_may_agree": true,
+        "compact_support_discriminates": true,
+        "measure_limit_sweep": "docs/generated/measure_limit_sweep.json",
+        "lean_cert": "HP.SpectralMeasureLimitCert"
+      }
+    }
+  ]
+}

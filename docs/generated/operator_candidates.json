@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "zeros": 10000,
+  "prime_limit": 200000,
+  "inferred_requirements_doc": "docs/Analysis/OperatorTraitRegistry.json",
+  "candidates": [
+    {
+      "ansatz_id": "berry_keating_xp",
+      "registry_status": "OPEN",
+      "verdict": "OPEN_SCAFFOLD",
+      "plausibility_score": 0.5,
+      "traits": {
+        "rule_id": "berry_keating_xp",
+        "space_kind": "phase_space",
+        "spectrum_merge": "semiclassical",
+        "spectrum_scale": "unknown",
+        "numeric_backend": "none",
+        "weil_poisson_compatible": true,
+        "uses_gamma": false,
+        "scaffold": true
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "discrete_spike_measure",
+          "gamma_free_identification",
+          "not_independent_cylinder_tensor",
+          "classical_periods_log_p"
+        ],
+        "violated": [],
+        "missing": [
+          "paley_wiener_discriminating"
+        ]
+      },
+      "metrics": {
+        "gamma_free_gap_max": 0,
+        "gamma_free_gap_mean": 0,
+        "matched_sq_gap_max": 0,
+        "quotient_sq_gap_max": 0,
+        "fixed_quotient_gap_max": 0,
+        "compact_sinc2_residual": 0,
+        "compact_sinc2_mismatch_proved": false
+      }
+    },
+    {
+      "ansatz_id": "connes_adele_quotient",
+      "registry_status": "OPEN",
+      "verdict": "OPEN_SCAFFOLD",
+      "plausibility_score": 0.5,
+      "traits": {
+        "rule_id": "connes_dirac",
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "gamma_tuned_quotient",
+        "spectrum_scale": "D_spectral",
+        "numeric_backend": "none",
+        "weil_poisson_compatible": true,
+        "uses_gamma": false,
+        "scaffold": true
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "discrete_spike_measure",
+          "gamma_free_identification",
+          "not_independent_cylinder_tensor",
+          "adelic_or_global_quotient"
+        ],
+        "violated": [],
+        "missing": [
+          "paley_wiener_discriminating"
+        ]
+      },
+      "metrics": {
+        "gamma_free_gap_max": 0,
+        "gamma_free_gap_mean": 0,
+        "matched_sq_gap_max": 0,
+        "quotient_sq_gap_max": 0,
+        "fixed_quotient_gap_max": 0,
+        "compact_sinc2_residual": 0,
+        "compact_sinc2_mismatch_proved": false,
+        "frequency_locked_max_gap": null,
+        "unconstrained_max_gap": 84.48428869700777,
+        "frequency_locked_improves": true,
+        "matrix_s_unit_dim_invariant": 12,
+        "matrix_s_unit_first_omega": [
+          0.46944581945865993,
+          0.469445819458661,
+          0.9068996821171085,
+          0.9068996821171087,
+          1.2825498301618639
+        ]
+      }
+    },
+    {
+      "ansatz_id": "quotient_gamma_tuned",
+      "registry_status": "FALSIFIED",
+      "verdict": "REQUIREMENTS_VIOLATED",
+      "plausibility_score": -10,
+      "traits": {
+        "rule_id": "circle_logp_poisson",
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "gamma_tuned_quotient",
+        "spectrum_scale": "omega_2pi_n_over_logp",
+        "numeric_backend": "quotient_toy",
+        "weil_poisson_compatible": false,
+        "uses_gamma": true,
+        "scaffold": false
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "discrete_spike_measure",
+          "paley_wiener_discriminating",
+          "not_independent_cylinder_tensor",
+          "adelic_or_global_quotient"
+        ],
+        "violated": [
+          "gamma_free_identification"
+        ],
+        "missing": []
+      },
+      "metrics": {
+        "gamma_free_gap_max": 169.39705076258792,
+        "gamma_free_gap_mean": 102.56932901637754,
+        "matched_sq_gap_max": 37.92832114498786,
+        "quotient_sq_gap_max": 987571042526.4445,
+        "fixed_quotient_gap_max": 166.04481039621785,
+        "compact_sinc2_residual": 0,
+        "compact_sinc2_mismatch_proved": false
+      }
+    },
+    {
+      "ansatz_id": "logp_frequency",
+      "registry_status": "CANDIDATE",
+      "verdict": "REQUIREMENTS_VIOLATED",
+      "plausibility_score": -10,
+      "traits": {
+        "rule_id": "circle_logp_poisson",
+        "space_kind": "circle_logp",
+        "spectrum_merge": "direct_sum",
+        "spectrum_scale": "omega_2pi_n",
+        "numeric_backend": "cylinder",
+        "weil_poisson_compatible": false,
+        "uses_gamma": false,
+        "scaffold": false
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "paley_wiener_discriminating",
+          "gamma_free_identification",
+          "not_independent_cylinder_tensor"
+        ],
+        "violated": [
+          "discrete_spike_measure"
+        ],
+        "missing": []
+      },
+      "metrics": {
+        "gamma_free_gap_max": 163.6287911722321,
+        "gamma_free_gap_mean": 96.80098411992444,
+        "matched_sq_gap_max": 37.92832114498786,
+        "quotient_sq_gap_max": 0,
+        "fixed_quotient_gap_max": 0,
+        "compact_sinc2_residual": 0,
+        "compact_sinc2_mismatch_proved": false
+      }
+    },
+    {
+      "ansatz_id": "quotient_sunit_lowmode",
+      "registry_status": "FALSIFIED",
+      "verdict": "FALSIFIED",
+      "plausibility_score": -65,
+      "traits": {
+        "rule_id": "circle_logp_poisson",
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "fixed_low_mode",
+        "spectrum_scale": "omega_2pi_n_over_logp",
+        "numeric_backend": "quotient_toy",
+        "weil_poisson_compatible": true,
+        "uses_gamma": false,
+        "scaffold": false
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "discrete_spike_measure",
+          "paley_wiener_discriminating",
+          "gamma_free_identification",
+          "not_independent_cylinder_tensor",
+          "adelic_or_global_quotient"
+        ],
+        "violated": [],
+        "missing": []
+      },
+      "metrics": {
+        "gamma_free_gap_max": 169.39705076258792,
+        "gamma_free_gap_mean": 102.56932901637754,
+        "matched_sq_gap_max": 37.92832114498786,
+        "quotient_sq_gap_max": 987571042526.4445,
+        "fixed_quotient_gap_max": 166.04481039621785,
+        "compact_sinc2_residual": 12.674762102852773,
+        "compact_sinc2_mismatch_proved": true
+      }
+    },
+    {
+      "ansatz_id": "exponent_klogp",
+      "registry_status": "DIAGNOSTIC",
+      "verdict": "FALSIFIED",
+      "plausibility_score": -65,
+      "traits": {
+        "rule_id": "circle_logp_poisson",
+        "space_kind": "unknown",
+        "spectrum_merge": "unknown",
+        "spectrum_scale": "omega_2pi_n_over_logp",
+        "numeric_backend": "cylinder",
+        "weil_poisson_compatible": true,
+        "uses_gamma": false,
+        "scaffold": false
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "discrete_spike_measure",
+          "paley_wiener_discriminating",
+          "gamma_free_identification",
+          "not_independent_cylinder_tensor"
+        ],
+        "violated": [],
+        "missing": []
+      },
+      "metrics": {
+        "gamma_free_gap_max": 169.39705076258792,
+        "gamma_free_gap_mean": 102.56932901637754,
+        "matched_sq_gap_max": 37.92832114498786,
+        "quotient_sq_gap_max": 0,
+        "fixed_quotient_gap_max": 0,
+        "compact_sinc2_residual": 12.674762102852773,
+        "compact_sinc2_mismatch_proved": true
+      }
+    },
+    {
+      "ansatz_id": "cylinder_direct_sum",
+      "registry_status": "FALSIFIED",
+      "verdict": "FALSIFIED",
+      "plausibility_score": -120,
+      "traits": {
+        "rule_id": "circle_logp_poisson",
+        "space_kind": "circle_logp",
+        "spectrum_merge": "direct_sum",
+        "spectrum_scale": "omega_2pi_n_over_logp",
+        "numeric_backend": "cylinder",
+        "weil_poisson_compatible": true,
+        "uses_gamma": false,
+        "scaffold": false
+      },
+      "requirements": {
+        "satisfied": [
+          "self_adjoint",
+          "paley_wiener_discriminating",
+          "gamma_free_identification"
+        ],
+        "violated": [
+          "discrete_spike_measure",
+          "not_independent_cylinder_tensor"
+        ],
+        "missing": []
+      },
+      "metrics": {
+        "gamma_free_gap_max": 169.39705076258792,
+        "gamma_free_gap_mean": 102.56932901637754,
+        "matched_sq_gap_max": 37.92832114498786,
+        "quotient_sq_gap_max": 0,
+        "fixed_quotient_gap_max": 0,
+        "compact_sinc2_residual": 12.674762102852773,
+        "compact_sinc2_mismatch_proved": true
+      }
+    },
+    {
+      "ansatz_id": "idele_frequency_locked",
+      "registry_status": "OPEN",
+      "verdict": "OPEN",
+      "plausibility_score": 25,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "frequency_locked",
+        "coupling": "none",
+        "spectrum_scale": "omega_2pi_n_over_logp",
+        "symmetry": "gl1_character",
+        "boundedness": "bounded"
+      },
+      "requirements": {
+        "satisfied": [],
+        "violated": [],
+        "missing": [
+          "numeric_backend"
+        ]
+      },
+      "metrics": {
+        "frequency_locked_max_gap": null,
+        "unconstrained_max_gap": 84.48428869700777,
+        "frequency_locked_improves": true,
+        "matrix_s_unit_dim_invariant": 12,
+        "matrix_s_unit_first_omega": [
+          0.46944581945865993,
+          0.469445819458661,
+          0.9068996821171085,
+          0.9068996821171087,
+          1.2825498301618639
+        ]
+      }
+    },
+    {
+      "ansatz_id": "idele_s_unit_matrix_quotient",
+      "registry_status": "OPEN",
+      "verdict": "OPEN",
+      "plausibility_score": 25,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "s_unit_matrix",
+        "coupling": "none",
+        "symmetry": "s_unit_translation",
+        "boundedness": "bounded"
+      },
+      "requirements": {
+        "satisfied": [],
+        "violated": [],
+        "missing": [
+          "numeric_backend"
+        ]
+      },
+      "metrics": {}
+    },
+    {
+      "ansatz_id": "hecke_twisted_adele_laplacian",
+      "registry_status": "THEORETICAL",
+      "verdict": "THEORETICAL",
+      "plausibility_score": 10,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "semiclassical",
+        "coupling": "connes_heat",
+        "symmetry": "hecke",
+        "boundedness": "unknown"
+      },
+      "requirements": {
+        "satisfied": [],
+        "violated": [],
+        "missing": [
+          "numeric_backend"
+        ]
+      },
+      "metrics": {}
+    },
+    {
+      "ansatz_id": "berry_keating_logged",
+      "registry_status": "THEORETICAL",
+      "verdict": "THEORETICAL",
+      "plausibility_score": 10,
+      "traits": {
+        "space_kind": "phase_space",
+        "spectrum_merge": "semiclassical",
+        "coupling": "berry_keating",
+        "spectrum_scale": "unknown",
+        "symmetry": "none",
+        "boundedness": "unbounded"
+      },
+      "requirements": {
+        "satisfied": [],
+        "violated": [],
+        "missing": [
+          "numeric_backend"
+        ]
+      },
+      "metrics": {}
+    },
+    {
+      "ansatz_id": "sturm_liouville_log_circle",
+      "registry_status": "THEORETICAL",
+      "verdict": "THEORETICAL",
+      "plausibility_score": 10,
+      "traits": {
+        "space_kind": "circle_logp",
+        "spectrum_merge": "direct_sum",
+        "coupling": "poisson",
+        "spectrum_scale": "omega_2pi_n_over_logp",
+        "symmetry": "none",
+        "boundedness": "bounded"
+      },
+      "requirements": {
+        "satisfied": [],
+        "violated": [],
+        "missing": [
+          "numeric_backend"
+        ]
+      },
+      "metrics": {}
+    }
+  ],
+  "idele_spectrum": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\generated\\idele_class_spectrum.json",
+  "inferred_requirements": {
+    "source": "cylinder_falsification + measure_limit_conjecture",
+    "traits": [
+      {
+        "id": "self_adjoint",
+        "required": true,
+        "rationale": "Hilbert-P\u00c3\u00b3lya real spectrum"
+      },
+      {
+        "id": "discrete_spike_measure",
+        "required": true,
+        "rationale": "sinc\u00c2\u00b2 residual 12.67; \u00ce\u00bc_P \u00e2\u2030\u00a0 \u00ce\u00a3 \u00ce\u00b4_\u00ce\u00b3 on Paley-Wiener class"
+      },
+      {
+        "id": "paley_wiener_discriminating",
+        "required": true,
+        "rationale": "Gaussian moments insufficient; compact \u00c4\u00a5 falsifies cylinder"
+      },
+      {
+        "id": "gamma_free_identification",
+        "required": true,
+        "rationale": "\u00ce\u00b3-tuned gap 0.61 circular; honest \u00cf\u2030\u00c2\u00b2 gap 179"
+      },
+      {
+        "id": "not_independent_cylinder_tensor",
+        "required": true,
+        "rationale": "lex-sorted gap 169; fixed-mode 166"
+      },
+      {
+        "id": "adelic_or_global_quotient",
+        "likely": true,
+        "rationale": "local blocks pass; global spectrum wrong without GL(1)/S-unit constraint"
+      },
+      {
+        "id": "classical_periods_log_p",
+        "likely": true,
+        "rationale": "explicit formula prime weights log p"
+      }
+    ]
+  }
+}

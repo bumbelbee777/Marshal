@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "n_zero_spacings": 4999,
+  "n_cylinder_spacings": 4999,
+  "gue_spacing_l2_zero": 0.095578077881215653,
+  "gue_spacing_l2_cylinder": 1.0645991150420988,
+  "cylinder_vs_gue_excess": 0.96902103716088306,
+  "montgomery_r2_l2": 0,
+  "zero_spacing_var": 0.2028113490586709,
+  "cylinder_spacing_var": 6.0239311827258284,
+  "zeros_gue_like": true,
+  "cylinder_poisson_like": false,
+  "separates_from_gue": true
+}

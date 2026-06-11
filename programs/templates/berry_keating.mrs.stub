@@ -1,0 +1,24 @@
+ansatz berry_keating_xp {
+
+  meta {
+    uses_gamma: false
+    sym_tier: scaffold
+    kind: operator
+  }
+
+  space phase_space { }
+
+  local {
+    H = x*p + p*x
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    falsify compact_sinc2
+  }
+
+  lemma ref berry_keating { status: open }
+}

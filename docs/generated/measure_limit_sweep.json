@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "conjecture": "spectral_measure_limit_conjecture",
+  "residual_stable": true,
+  "reference_residual": 12.674874741258042,
+  "max_deviation": 0,
+  "points": [
+    {"prime_limit": 50000, "sinc2_residual": 12.674874741258042, "mismatch_proved": true},
+    {"prime_limit": 100000, "sinc2_residual": 12.674874741258042, "mismatch_proved": true},
+    {"prime_limit": 500000, "sinc2_residual": 12.674874741258042, "mismatch_proved": true},
+    {"prime_limit": 1000000, "sinc2_residual": 12.674874741258042, "mismatch_proved": true},
+    {"prime_limit": 5000000, "sinc2_residual": 12.674874741258042, "mismatch_proved": true},
+    {"prime_limit": 10000000, "sinc2_residual": 12.674874741258042, "mismatch_proved": true}
+  ]
+}

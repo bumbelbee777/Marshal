@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "includes": ["psi_lut.inc", "exp_coeffs.inc", "gh32.inc", "gh64.inc", "gh128.inc", "gh256.inc", "gh512.inc", "gh1024.inc"],
+  "generator": "tools/LutGenerator/GenerateLuts.py"
+}

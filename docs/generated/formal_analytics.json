@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "engine": "AnaVM_FormalAnalytics",
+  "ansatz_id": "cylinder_direct_sum",
+  "lean_emit_ready": true,
+  "lean_module": "CylinderNoGo",
+  "cylinder_class_excluded": true,
+  "counting": {
+    "window_t": 100,
+    "predicted_cylinder_count": 1583019.311753538,
+    "riemann_count": 29,
+    "chebyshev_theta": 49732.018402956855
+  },
+  "pair_correlation": {
+    "gue_spacing_l2_zero": 0.095578077881215653,
+    "gue_spacing_l2_cylinder": 1.0645991150420988,
+    "montgomery_r2_l2": 0,
+    "separates_from_gue": true
+  },
+  "proved_gates": ["cylinder_density_divergence", "density_slope_mismatch", "pair_correlation_vs_gue", "cylinder_class_membership"],
+  "diagnostic_gates": ["zeros_gue_spacing", "discrete_spike_measure", "not_independent_cylinder_tensor"],
+  "failed_gates": [],
+  "traits": {
+    "space": "circle_logp",
+    "merge": "direct_sum",
+    "uses_gamma": false
+  }
+}

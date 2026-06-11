@@ -1,0 +1,15 @@
+ansatz exponent_klogp {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: diagnostic
+  }
+
+  match against zeros {
+    search k in 1..kmax, p in primes {
+      gap linear(k * log(p), gamma)
+      gap quadratic((k * log(p))^2, gamma^2)
+    }
+  }
+}

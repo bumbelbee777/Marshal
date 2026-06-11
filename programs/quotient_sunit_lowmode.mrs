@@ -1,0 +1,24 @@
+ansatz quotient_sunit_lowmode {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  on adelic_grid(mesh) {
+    quotient sunit {
+      modes from sunit
+      modes fixed(n ≡ 1)
+    }
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    gap linear(omega, gamma)
+    gap quadratic(lambda, gamma^2)
+  }
+}

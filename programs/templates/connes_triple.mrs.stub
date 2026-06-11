@@ -1,0 +1,28 @@
+ansatz connes_adele_quotient {
+
+  meta {
+    uses_gamma: false
+    sym_tier: scaffold
+    kind: operator
+  }
+
+  space adele_class(truncation P) { }
+
+  local {
+    spectral_triple(A, H, D)
+  }
+
+  quotient sunit { generators: auto }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    trace_lhs quotient_spectrum
+    falsify compact_sinc2
+  }
+
+  lemma ref resolvent_limit { status: open }
+  lemma ref quotient_spectrum { status: open }
+}

@@ -1,0 +1,30 @@
+# ⊕_p D_p² on L²(S¹_log p) — FALSIFIED reference ansatz
+ansatz cylinder_direct_sum {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+    description: "D = -i d/dθ, circumference log(p)"
+  }
+
+  on circle S¹_log(p) for mode n ≥ 1 {
+    frequency omega = 2*pi * n / log(p)
+    eigenvalue lambda = omega^2
+  }
+
+  coupling {
+    heat: poisson
+  }
+
+  diagnostics {
+    gap linear(omega, gamma)
+    gap quadratic(lambda, gamma^2)
+    falsify compact_sinc2
+    pair_correlation gue
+    formal analytics
+  }
+
+  lemma ref cylinder_density_divergence { status: proved }
+  lemma ref cylinder_class_nogo { status: open }
+}

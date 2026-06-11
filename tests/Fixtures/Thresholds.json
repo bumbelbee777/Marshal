@@ -1,0 +1,112 @@
+{
+  "smoke": {
+    "max_zeros": 200,
+    "prime_limit": 500,
+    "sigma": 2.236,
+    "max_residual": 0.05,
+    "max_weil_heat_err": 1e-8,
+    "max_poisson_err": 1e-6,
+    "max_euler_err": 1e-6,
+    "max_prime_heat_err": 1e-15,
+    "verify_rel_tol": 1e-6,
+    "prime_rel_tol": 0.05
+  },
+  "mini": {
+    "max_zeros": 50000,
+    "prime_limit": 5000,
+    "sigma": 2.236,
+    "max_residual": 0.001,
+    "max_weil_heat_err": 1e-10,
+    "max_poisson_err": 1e-8,
+    "max_euler_err": 1e-8,
+    "max_prime_heat_err": 1e-15,
+    "verify_rel_tol": 1e-8,
+    "prime_rel_tol": 0.01,
+    "ladder_tol": 0.002
+  },
+  "medium": {
+    "max_zeros": 20000,
+    "prime_limit": 50000,
+    "sigma": 2.236,
+    "max_residual": 0.001,
+    "max_weil_heat_err": 1e-10,
+    "max_poisson_err": 1e-8,
+    "max_euler_err": 1e-8,
+    "max_prime_heat_err": 1e-15,
+    "verify_rel_tol": 1e-8,
+    "prime_rel_tol": 0.005,
+    "ladder_tol": 0.002
+  },
+  "demo": {
+    "zeros_file": "tests/Fixtures/Zeros/NtzMergedOneLine.txt",
+    "max_zeros": 100000,
+    "prime_limit": 500000,
+    "sigma": 2.236,
+    "sigma_trace": 5.0,
+    "sigma_weil": 5.0,
+    "local_prime_count": 1500,
+    "induction_export_max": 1500,
+    "heat_sweep_n": 12,
+    "quotient_max_cells": 500000,
+    "spectral_compare_n": 32,
+    "ntz_count": 2000,
+    "ntz_dps": 80,
+    "max_residual": 0.001,
+    "max_weil_heat_err": 1e-10,
+    "max_poisson_err": 1e-8,
+    "max_euler_err": 1e-8,
+    "max_prime_heat_err": 1e-15,
+    "verify_rel_tol": 1e-7,
+    "prime_rel_tol": 0.002,
+    "ladder_tol": 0.001
+  },
+  "hp_catalog": {
+    "zeros_file": "tests/Fixtures/Zeros/NtzMergedOneLine.txt",
+    "max_zeros": 100000,
+    "prime_limit": 10000000,
+    "sigma": 5.0,
+    "sigma_trace": 5.0,
+    "local_prime_count": 2000,
+    "induction_export_max": 2000,
+    "heat_sweep_n": 12,
+    "quotient_max_cells": 500000,
+    "spectral_compare_n": 64,
+    "sinc2_T": 1.0,
+    "sinc2_mismatch_tol": 1e-10,
+    "ntz_count": 50000,
+    "ntz_dps": 120,
+    "ntz_pad_to": 100000,
+    "max_residual": 0.01,
+    "max_weil_heat_err": 1e-8,
+    "max_poisson_err": 1e-6,
+    "max_euler_err": 1e-6,
+    "verify_rel_tol": 1e-5,
+    "prime_rel_tol": 0.01,
+    "ladder_tol": 0.005
+  },
+  "global": {
+    "primes": 8,
+    "prime_limit": 500,
+    "min_unconstrained_gap": 5.0,
+    "max_frequency_locked_gap": 1.5,
+    "max_quotient_galerkin_gap": 0.75,
+    "max_xi_scan_gap": 2.0
+  },
+  "audit": {
+    "underflow_case": {
+      "expected_verdict": "INVALID_SPECTRAL_UNDERFLOW",
+      "require_local_cylinder": true,
+      "require_global_balance": false,
+      "require_lhs_underflow": true
+    },
+    "numerics_pass_case": {
+      "expected_verdict": "DIAGNOSTIC_SUGGESTIVE",
+      "require_local_cylinder": true,
+      "require_global_balance": true,
+      "max_residual_abs": 1e-5,
+      "require_trace_identity": true,
+      "max_heat_sweep_residual": 1e-5,
+      "min_direct_sum_gap": 100
+    }
+  }
+}

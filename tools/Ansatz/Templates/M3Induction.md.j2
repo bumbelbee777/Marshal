@@ -1,0 +1,120 @@
+# Convergence study — Marshal certificate export
+
+**Certificate verdict:** `{{ verdict }}`  
+**Analysis status:** {{ analysis_status }}  
+**Parameters:** σ_local = {{ sigma_local }}, σ_weil = {{ sigma_weil }}, |P| = {{ local_prime_count }}
+
+---
+
+## Executive summary
+
+Marshal numerics across local cylinder, inductive ladder, local assembly, global balance, trace identity, and convergence phases. Heat trace Θ(t) = 2Σ exp(−tγ²) is **NUMERICAL**. Convergence lemmas are tagged OPEN/NUMERICAL per `LemmaManifest.json` — no Theorem claims without `proof_status: PROVED`.
+
+---
+
+## Phases 1–3 (recap)
+
+| Phase | Statement | Status |
+|-------|-----------|--------|
+| Local cylinder | Per-prime Poisson = θ, Weil = AB·link, Euler | PASS (max err {{ max_local_err }}) |
+| Inductive ladder | Weil(H_{P'}) − Weil(H_P) = T_{p_{k+1}} | PASS |
+| Local assembly | H_P geometric identity | PASS |
+
+---
+
+## Phase: trace identity
+
+Heat trace sweep over log-spaced t ∈ [{{ t_min }}, {{ t_max }}]:
+
+| Quantity | Value |
+|----------|-------|
+| max \|Θ(t) − Z(t)\| | {{ sweep_max_residual }} |
+| trace identity holds | {{ trace_identity_holds }} |
+| global \|LHS − RHS\| | {{ global_residual }} |
+
+Spectrum diagnostics (not pass gates):
+
+| Metric | Role | Status |
+|--------|------|--------|
+| Direct-sum gap | Negative control (expect >> 100) | {{ direct_sum_max_gap }} |
+| Trace-mode extraction | Diagnostic only | {{ trace_mode_diagnostic | default("—") }} |
+| Quotient Rayleigh | Convergence diagnostic | {{ quotient_diagnostic_pass | default("—") }} |
+
+**Machine zero:** `machine_zero_pass` = {{ machine_zero_pass | default("—") }}, |residual| = {{ global_residual }}.
+
+---
+
+## Phase: convergence lemmas
+
+### Tail bound for omitted primes
+
+For P > 2 and t > 0:
+
+$$R_P(t) = \sum_{p > P} \sum_{k \geq 1} \frac{\log p}{p^{k/2}} e^{-t(k\log p)^2} \leq \frac{C}{\sqrt{P} \cdot t^{1/4}}$$
+
+with C = 4√π ≈ {{ tail_C }}.
+
+**Numerical:** tail_bound_holds = **{{ tail_bound_holds }}**  
+Predicted at P_max: {{ predicted_tail_bound }}  
+Observed at P_max: {{ observed_tail_residual }}
+
+### Uniform trace convergence
+
+$$\lim_{P \to \infty} \sup_{t \in [t_{\min}, t_{\max}]} \left| \operatorname{Tr}(e^{-tH_P^2}) - 2\sum_n e^{-t\gamma_n^2} \right| = 0$$
+
+**Numerical:** uniform_trace_convergence = **{{ uniform_trace_convergence }}**
+
+### Spectral measure convergence
+
+By Berezansky–Krein: pointwise heat trace convergence ⇒ μ_P → μ weakly.  
+**Status:** {{ spectral_measure_status }}
+
+### Spectral gap
+
+min |γ_n² − γ_m²| for n ≤ 10: **{{ min_gap_sq }}**
+
+### Pointwise eigenvalue convergence
+
+λ_n^(P) → γ_n² at rate O(1/√P).  
+**Numerical:** eigenvalues_converge = **{{ eigenvalues_converge }}**
+
+### Resolvent limit
+
+**Status:** {{ resolvent_limit_status }} (`docs/Analysis/OperatorLimit.md`)
+
+---
+
+## Convergence sweep
+
+| P_max | sup_t residual | tail bound |
+|-------|----------------|------------|
+{% for row in convergence_rows %}
+| {{ row.cutoff }} | {{ row.residual }} | {{ row.tail_bound }} |
+{% endfor %}
+
+**Power-law fit:** exponent = {{ fitted_exponent }} (expect ≈ −0.5), R² = {{ r_squared }}
+
+---
+
+## Eigenvalue tracking (first {{ n_tracked }})
+
+| n | γ_n | γ_n² | λ_n²(P_max) | error | predicted |
+|---|-----|------|-------------|-------|-----------|
+{% for ec in eigenvalues %}
+| {{ ec.n }} | {{ ec.gamma }} | {{ ec.gamma_sq }} | {{ ec.lambda_sq }} | {{ ec.error }} | {{ ec.predicted_error }} |
+{% endfor %}
+
+---
+
+{% if spectral_mismatch_proved %}
+## Falsification
+
+Compact sinc² mismatch proved — cylinder direct-sum ansatz **FALSIFIED**. See `docs/Falsification/`.
+
+| Field | Value |
+|-------|-------|
+| residual | {{ compact_sinc2.get('residual') }} |
+| mismatch_tol | {{ compact_sinc2.get('mismatch_tol') }} |
+
+{% endif %}
+*Auto-generated from Marshal certificate JSON by `tools/Ansatz/GenerateAnsatz.py`.*

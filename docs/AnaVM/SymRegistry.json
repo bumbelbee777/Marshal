@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "circle_logp_poisson",
+      "status": "implemented",
+      "space": "circle S¹_log(p)",
+      "omega_ref": "2*pi*n/log(p)",
+      "coupling_ref": "poisson",
+      "lean_module": "HPWeil",
+      "lean_cert": "HP.SpecCert",
+      "diagnostics": ["pair_correlation_gue", "formal_analytics"]
+    },
+    {
+      "id": "pair_correlation_gue",
+      "status": "implemented",
+      "backend": "Marshal::Analysis::PairCorrelation",
+      "montgomery_r2": "1 - (sin(pi*s)/(pi*s))^2",
+      "lean_module": "CylinderNoGo",
+      "lean_cert": "HP.Cylinder.PairCorrelationCert"
+    },
+    {
+      "id": "berry_keating_xp",
+      "status": "placeholder",
+      "space": "phase_space",
+      "local": "H = x*p + p*x",
+      "omega_ref": "x*p_classical",
+      "coupling_ref": "berry_keating",
+      "lean_module": "AdeleQuotient",
+      "lean_cert": "HP.Global.BerryKeatingScaffoldCert",
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+    },
+    {
+      "id": "connes_dirac",
+      "status": "placeholder",
+      "space": "adele_class",
+      "local": "spectral_triple(A,H,D)",
+      "omega_ref": "D_spectral",
+      "coupling_ref": "connes_heat",
+      "lean_module": "AdeleQuotient",
+      "lean_cert": "HP.Global.ConnesScaffoldCert",
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+    }
+  ]
+}

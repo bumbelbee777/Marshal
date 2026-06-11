@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "gap_semantics": {
+    "lex_sorted": "i-th global omega vs gamma_i — negative control; spectrum build is gamma-free",
+    "matched": "per-gamma min|omega-gamma| — density coincidence; spectrum build is gamma-free",
+    "gamma_tuned": "n=round(gamma*log(p)/2pi) — CIRCULAR; not comparable to gamma-free gaps",
+    "compact_sinc2": "spectral measure falsification gate — decisive"
+  },
+  "trait_axes": {
+    "space_kind": ["circle_logp", "adelic_truncated", "phase_space", "unknown"],
+    "spectrum_merge": [
+      "direct_sum",
+      "frequency_locked",
+      "gamma_tuned_quotient",
+      "s_unit_matrix",
+      "fixed_low_mode",
+      "semiclassical",
+      "unknown"
+    ],
+    "coupling": ["poisson", "none", "berry_keating", "connes_heat"],
+    "spectrum_scale": ["omega_2pi_n_over_logp", "omega_2pi_n", "D_spectral", "unknown"],
+    "symmetry": ["none", "gl1_character", "s_unit_translation", "hecke"],
+    "boundedness": ["bounded", "unbounded", "unknown"]
+  },
+  "inferred_requirements": {
+    "source": "cylinder_falsification + measure_limit_conjecture",
+    "traits": [
+      {
+        "id": "self_adjoint",
+        "required": true,
+        "rationale": "Hilbert-Pólya real spectrum"
+      },
+      {
+        "id": "discrete_spike_measure",
+        "required": true,
+        "rationale": "sinc² residual 12.67; μ_P ≠ Σ δ_γ on Paley-Wiener class"
+      },
+      {
+        "id": "paley_wiener_discriminating",
+        "required": true,
+        "rationale": "Gaussian moments insufficient; compact ĥ falsifies cylinder"
+      },
+      {
+        "id": "gamma_free_identification",
+        "required": true,
+        "rationale": "γ-tuned gap 0.61 and idele gamma_locked 1.44 are circular"
+      },
+      {
+        "id": "not_independent_cylinder_tensor",
+        "required": true,
+        "rationale": "lex-sorted gap 169; fixed-mode 166"
+      },
+      {
+        "id": "adelic_or_global_quotient",
+        "likely": true,
+        "rationale": "local blocks pass; global spectrum wrong without constraint"
+      },
+      {
+        "id": "classical_periods_log_p",
+        "likely": true,
+        "rationale": "explicit formula prime weights log p"
+      }
+    ]
+  },
+  "synthetic_candidates": [
+    {
+      "id": "idele_unconstrained_direct_sum",
+      "status": "FALSIFIED",
+      "plausibility_score": 0,
+      "traits": {
+        "space_kind": "circle_logp",
+        "spectrum_merge": "direct_sum",
+        "uses_gamma": false,
+        "gamma_input": "none",
+        "circular_fit": false,
+        "independent_confirmation": false,
+        "note": "Same heap as cylinder; uncon_lex gap depends on |S| and pairing"
+      },
+      "numeric_backend": "idele_laplacian",
+      "doc": "docs/Analysis/OperatorInference.md"
+    },
+    {
+      "id": "idele_gamma_locked",
+      "status": "DIAGNOSTIC_ONLY",
+      "plausibility_score": 0,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "gamma_tuned_quotient",
+        "uses_gamma": true,
+        "gamma_input": "mode_selection",
+        "circular_fit": true,
+        "independent_confirmation": false
+      },
+      "numeric_backend": "idele_laplacian",
+      "doc": "docs/Analysis/OperatorInference.md"
+    },
+    {
+      "id": "idele_frequency_locked_scan",
+      "status": "DIAGNOSTIC_ONLY",
+      "plausibility_score": 0,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "frequency_locked",
+        "uses_gamma": false,
+        "gamma_input": "none",
+        "circular_fit": false,
+        "independent_confirmation": false,
+        "note": "gamma-free but often 0 modes; not identification"
+      },
+      "numeric_backend": "idele_laplacian",
+      "doc": "docs/Analysis/OperatorInference.md"
+    },
+    {
+      "id": "idele_s_unit_matrix_quotient",
+      "status": "OPEN",
+      "plausibility_score": 0,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "s_unit_matrix",
+        "uses_gamma": false,
+        "gamma_input": "none",
+        "circular_fit": false,
+        "independent_confirmation": false
+      },
+      "numeric_backend": "idele_laplacian",
+      "doc": "docs/Analysis/ConnesBerryKeating.md"
+    },
+    {
+      "id": "hecke_twisted_adele_laplacian",
+      "status": "THEORETICAL",
+      "plausibility_score": 0,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "semiclassical",
+        "coupling": "connes_heat",
+        "symmetry": "hecke",
+        "boundedness": "unknown"
+      },
+      "numeric_backend": "none",
+      "doc": "docs/Analysis/OperatorInference.md"
+    },
+    {
+      "id": "berry_keating_logged",
+      "status": "THEORETICAL",
+      "plausibility_score": 0,
+      "traits": {
+        "space_kind": "phase_space",
+        "spectrum_merge": "semiclassical",
+        "coupling": "berry_keating",
+        "boundedness": "unbounded"
+      },
+      "numeric_backend": "none",
+      "doc": "docs/Analysis/ConnesBerryKeating.md"
+    }
+  ],
+  "analytic_gates": {
+    "anavm_engine": "AnaVM_FormalAnalytics",
+    "proved_emit_lean_when": ["cylinder_density_divergence", "density_slope_mismatch"],
+    "diagnostic_only": ["zeros_gue_spacing", "scaffold_no_identification"],
+    "pair_correlation": {
+      "montgomery_kernel": "1 - (sin(pi*s)/(pi*s))^2",
+      "spacing_pdf": "GUE_Wigner_s^2_exp",
+      "metrics": ["gue_spacing_l2_zero", "gue_spacing_l2_cylinder", "montgomery_r2_l2", "separates_from_gue"]
+    }
+  },
+  "backend_metrics": {
+    "cylinder": [
+      "gamma_free_gap_max_lex",
+      "gamma_free_gap_max_matched",
+      "compact_sinc2_residual",
+      "gue_spacing_l2_cylinder",
+      "separates_from_gue"
+    ],
+    "quotient_toy": ["quotient_sq_gap_max", "fixed_quotient_gap_max"],
+    "idele_laplacian": [
+      "uncon_lex_max_gap",
+      "uncon_matched_max_gap",
+      "gamma_locked_max_gap_circular",
+      "frequency_locked_scan_n_modes"
+    ],
+    "none": []
+  }
+}

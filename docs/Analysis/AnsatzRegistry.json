@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "formal_bridge": "docs/AnaVM/FormalBridge.md",
+  "falsification_gates": [
+    {
+      "id": "local_weil_heat",
+      "order": 1,
+      "description": "Local Weil-heat identity (Poisson=θ, AB link)",
+      "blocking": true
+    },
+    {
+      "id": "inductive_ladder",
+      "order": 2,
+      "description": "Inductive ladder stability",
+      "blocking": true
+    },
+    {
+      "id": "gaussian_trace",
+      "order": 3,
+      "description": "Gaussian trace identity (diagnostic only — does not override falsification)",
+      "blocking": false
+    },
+    {
+      "id": "compact_sinc2",
+      "order": 4,
+      "description": "Sinc² spectral measure test (falsification gate; residual > 1e-10 => FALSIFIED)",
+      "blocking": true,
+      "threshold": 1e-10
+    },
+    {
+      "id": "gamma_free_gaps",
+      "order": 5,
+      "description": "γ-free gap metrics required for spectrum_identified claims",
+      "blocking": true
+    },
+    {
+      "id": "pair_correlation_gue",
+      "order": 6,
+      "description": "Montgomery GUE pair-correlation / spacing L² separates cylinder from zeros (AnaVM analytic gate)",
+      "blocking": false,
+      "anavm_only": true,
+      "lean_when_ready": "HP.Cylinder.PairCorrelationCert"
+    },
+    {
+      "id": "formal_analytics",
+      "order": 7,
+      "description": "Built-in AnaVM counting + pair-correlation gates; Lean emitted only when lean_emit_ready",
+      "blocking": false,
+      "anavm_only": true
+    }
+  ],
+  "ansatze": [
+    {
+      "id": "cylinder_direct_sum",
+      "status": "FALSIFIED",
+      "program": "programs/cylinder_direct_sum.mrs",
+      "falsification": "compact_sinc2",
+      "falsification_residual": 12.67,
+      "falsification_threshold": 1e-10,
+      "primes_tested": [500000, 10000000],
+      "zeros_tested": 100000,
+      "certificates": [
+        "build/cert/spectral_demo_sinc2.json",
+        "build/cert/spectral_catalog_sinc2.json"
+      ],
+      "lemma": "cylinder_direct_sum_falsified",
+      "doc": "docs/Falsification/Sinc2Mismatch.md",
+      "evidence_summary": "Sinc² residual 12.67 stable at 500k/10M primes; lex-sorted gap 169; fixed-mode 166"
+    },
+    {
+      "id": "quotient_gamma_tuned",
+      "status": "FALSIFIED",
+      "program": "programs/quotient_gamma_tuned.mrs",
+      "falsification": "quotient_sq_gap",
+      "falsification_residual": 179.24,
+      "linear_gap_misleading": 0.613,
+      "primes_tested": [500000, 10000000],
+      "lemma": "quotient_gamma_tuned_circular",
+      "doc": "docs/Falsification/QuotientGammaTuned.md",
+      "evidence_summary": "Linear γ-tuned gap 0.61 is circular; honest ω² gap 179.24"
+    },
+    {
+      "id": "quotient_sunit_lowmode",
+      "status": "FALSIFIED",
+      "program": "programs/quotient_sunit_lowmode.mrs",
+      "falsification": "gamma_free_gap",
+      "falsification_residual": 166.21,
+      "primes_tested": [500000, 10000000],
+      "doc": "docs/Falsification/QuotientGammaTuned.md",
+      "evidence_summary": "γ-free fixed-mode gap 166.21 — no approximation to zeros"
+    },
+    {
+      "id": "logp_frequency",
+      "status": "CANDIDATE",
+      "program": "programs/logp_frequency.mrs",
+      "falsification": "compact_sinc2",
+      "doc": null,
+      "notes": "compile_fail in ansatz sweep — not yet testable"
+    },
+    {
+      "id": "exponent_klogp",
+      "status": "DIAGNOSTIC",
+      "program": "programs/exponent_klogp.mrs",
+      "falsification": "compact_sinc2",
+      "doc": "docs/Falsification/CylinderSpectrum.md",
+      "notes": "Poisson-scale exponent diagnostic; not an identification ansatz"
+    },
+    {
+      "id": "logp_prime_dual",
+      "status": "NUMERICAL_PENDING",
+      "program": "programs/exponent_klogp.mrs",
+      "falsification": "compact_sinc2",
+      "doc": "docs/Analysis/ExplicitFormulaDuality.md",
+      "lemma": "logp_prime_dual",
+      "notes": "Trace duality T1+Weil identity; spectrum identification false; exact Weil weights (log p)/p^{k/2}"
+    },
+    {
+      "id": "connes_adele_quotient",
+      "status": "OPEN",
+      "program": "programs/templates/connes_triple.mrs.stub",
+      "falsification": "compact_sinc2",
+      "doc": "docs/Analysis/ConnesBerryKeating.md",
+      "sym_registry": "connes_dirac",
+      "lean_cert": "HP.Global.ConnesScaffoldCert",
+      "verdict_when_scaffold": "ANSATZ_SCAFFOLD_CALIBRATION",
+      "notes": "Scaffold — IdeleClassLaplacian.py + spectral triple numerics TBD"
+    },
+    {
+      "id": "berry_keating_xp",
+      "status": "OPEN",
+      "program": "programs/templates/berry_keating.mrs.stub",
+      "falsification": "compact_sinc2",
+      "doc": "docs/Analysis/ConnesBerryKeating.md",
+      "sym_registry": "berry_keating_xp",
+      "lean_cert": "HP.Global.BerryKeatingScaffoldCert",
+      "verdict_when_scaffold": "ANSATZ_SCAFFOLD_CALIBRATION",
+      "notes": "Scaffold — x*p Hamiltonian numerics TBD"
+    }
+  ]
+}

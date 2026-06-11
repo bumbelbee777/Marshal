@@ -1,0 +1,27 @@
+ansatz quotient_gamma_tuned {
+
+  meta {
+    uses_gamma: true
+    sym_tier: production
+    kind: operator
+  }
+
+  on adelic_grid(mesh) {
+    quotient haar_weighted {
+      modes from gamma
+      rayleigh -> lambda
+      omega = sqrt(lambda)
+    }
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    gap linear(omega, gamma)
+    gap quadratic(lambda, gamma^2)
+    trace_lhs quotient_spectrum
+    falsify compact_sinc2
+  }
+}

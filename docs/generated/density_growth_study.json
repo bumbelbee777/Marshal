@@ -1,0 +1,211 @@
+{
+  "version": 1,
+  "theorem": "cylinder_density_divergence",
+  "doc": "docs/Analysis/CylinderNoGo.md",
+  "fixed_T": 100.0,
+  "divergence_in_P": [
+    {
+      "prime_limit": 100,
+      "cylinder_count": 2663
+    },
+    {
+      "prime_limit": 500,
+      "cylinder_count": 15107
+    },
+    {
+      "prime_limit": 2000,
+      "cylinder_count": 61741
+    },
+    {
+      "prime_limit": 10000,
+      "cylinder_count": 315009
+    },
+    {
+      "prime_limit": 50000,
+      "cylinder_count": 1583013
+    }
+  ],
+  "grid": [
+    {
+      "prime_limit": 100,
+      "T": 10.0,
+      "cylinder_count": 265,
+      "riemann_count": 0,
+      "chebyshev_theta": 83.72839039906393,
+      "cylinder_over_riemann": null,
+      "predicted_cylinder_slope": 26.65157441827803
+    },
+    {
+      "prime_limit": 100,
+      "T": 50.0,
+      "cylinder_count": 1329,
+      "riemann_count": 10,
+      "chebyshev_theta": 83.72839039906393,
+      "cylinder_over_riemann": 132.9,
+      "predicted_cylinder_slope": 26.65157441827803
+    },
+    {
+      "prime_limit": 100,
+      "T": 100.0,
+      "cylinder_count": 2663,
+      "riemann_count": 29,
+      "chebyshev_theta": 83.72839039906393,
+      "cylinder_over_riemann": 91.82758620689656,
+      "predicted_cylinder_slope": 26.65157441827803
+    },
+    {
+      "prime_limit": 100,
+      "T": 500.0,
+      "cylinder_count": 13329,
+      "riemann_count": 269,
+      "chebyshev_theta": 83.72839039906393,
+      "cylinder_over_riemann": 49.55018587360595,
+      "predicted_cylinder_slope": 26.65157441827803
+    },
+    {
+      "prime_limit": 500,
+      "T": 10.0,
+      "cylinder_count": 1501,
+      "riemann_count": 0,
+      "chebyshev_theta": 474.5544441546942,
+      "cylinder_over_riemann": null,
+      "predicted_cylinder_slope": 151.05537110689275
+    },
+    {
+      "prime_limit": 500,
+      "T": 50.0,
+      "cylinder_count": 7549,
+      "riemann_count": 10,
+      "chebyshev_theta": 474.5544441546942,
+      "cylinder_over_riemann": 754.9,
+      "predicted_cylinder_slope": 151.05537110689275
+    },
+    {
+      "prime_limit": 500,
+      "T": 100.0,
+      "cylinder_count": 15107,
+      "riemann_count": 29,
+      "chebyshev_theta": 474.5544441546942,
+      "cylinder_over_riemann": 520.9310344827586,
+      "predicted_cylinder_slope": 151.05537110689275
+    },
+    {
+      "prime_limit": 500,
+      "T": 500.0,
+      "cylinder_count": 75531,
+      "riemann_count": 269,
+      "chebyshev_theta": 474.5544441546942,
+      "cylinder_over_riemann": 280.7843866171004,
+      "predicted_cylinder_slope": 151.05537110689275
+    },
+    {
+      "prime_limit": 2000,
+      "T": 10.0,
+      "cylinder_count": 6159,
+      "riemann_count": 0,
+      "chebyshev_theta": 1939.839200302561,
+      "cylinder_over_riemann": null,
+      "predicted_cylinder_slope": 617.4699950631638
+    },
+    {
+      "prime_limit": 2000,
+      "T": 50.0,
+      "cylinder_count": 30865,
+      "riemann_count": 10,
+      "chebyshev_theta": 1939.839200302561,
+      "cylinder_over_riemann": 3086.5,
+      "predicted_cylinder_slope": 617.4699950631638
+    },
+    {
+      "prime_limit": 2000,
+      "T": 100.0,
+      "cylinder_count": 61741,
+      "riemann_count": 29,
+      "chebyshev_theta": 1939.839200302561,
+      "cylinder_over_riemann": 2129.0,
+      "predicted_cylinder_slope": 617.4699950631638
+    },
+    {
+      "prime_limit": 2000,
+      "T": 500.0,
+      "cylinder_count": 308733,
+      "riemann_count": 269,
+      "chebyshev_theta": 1939.839200302561,
+      "cylinder_over_riemann": 1147.7063197026023,
+      "predicted_cylinder_slope": 617.4699950631638
+    },
+    {
+      "prime_limit": 10000,
+      "T": 10.0,
+      "cylinder_count": 31535,
+      "riemann_count": 0,
+      "chebyshev_theta": 9895.991379156987,
+      "cylinder_over_riemann": null,
+      "predicted_cylinder_slope": 3149.9918895752344
+    },
+    {
+      "prime_limit": 10000,
+      "T": 50.0,
+      "cylinder_count": 157503,
+      "riemann_count": 10,
+      "chebyshev_theta": 9895.991379156987,
+      "cylinder_over_riemann": 15750.3,
+      "predicted_cylinder_slope": 3149.9918895752344
+    },
+    {
+      "prime_limit": 10000,
+      "T": 100.0,
+      "cylinder_count": 315009,
+      "riemann_count": 29,
+      "chebyshev_theta": 9895.991379156987,
+      "cylinder_over_riemann": 10862.379310344828,
+      "predicted_cylinder_slope": 3149.9918895752344
+    },
+    {
+      "prime_limit": 10000,
+      "T": 500.0,
+      "cylinder_count": 1575011,
+      "riemann_count": 269,
+      "chebyshev_theta": 9895.991379156987,
+      "cylinder_over_riemann": 5855.059479553904,
+      "predicted_cylinder_slope": 3149.9918895752344
+    },
+    {
+      "prime_limit": 50000,
+      "T": 10.0,
+      "cylinder_count": 158337,
+      "riemann_count": 0,
+      "chebyshev_theta": 49732.018402956855,
+      "cylinder_over_riemann": null,
+      "predicted_cylinder_slope": 15830.19311753538
+    },
+    {
+      "prime_limit": 50000,
+      "T": 50.0,
+      "cylinder_count": 791431,
+      "riemann_count": 10,
+      "chebyshev_theta": 49732.018402956855,
+      "cylinder_over_riemann": 79143.1,
+      "predicted_cylinder_slope": 15830.19311753538
+    },
+    {
+      "prime_limit": 50000,
+      "T": 100.0,
+      "cylinder_count": 1583013,
+      "riemann_count": 29,
+      "chebyshev_theta": 49732.018402956855,
+      "cylinder_over_riemann": 54586.65517241379,
+      "predicted_cylinder_slope": 15830.19311753538
+    },
+    {
+      "prime_limit": 50000,
+      "T": 500.0,
+      "cylinder_count": 7915069,
+      "riemann_count": 269,
+      "chebyshev_theta": 49732.018402956855,
+      "cylinder_over_riemann": 29424.048327137545,
+      "predicted_cylinder_slope": 15830.19311753538
+    }
+  ],
+  "conclusion": "N_P(T) grows linearly in theta(P) ~ sum log p as P increases (fixed T); N_Rie(T) is finite per truncation. Supports Theorem 1."
+}

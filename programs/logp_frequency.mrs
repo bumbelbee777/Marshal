@@ -1,0 +1,28 @@
+ansatz logp_frequency {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+    description: "D' = -i log(p) d/dθ => omega = 2πn"
+  }
+
+  rescale {
+    derivative *= log(p)
+  }
+
+  on circle S¹_log(p) for mode n ≥ 1 {
+    frequency omega = 2*pi * n
+    eigenvalue lambda = omega^2
+  }
+
+  coupling {
+    heat: none
+  }
+
+  expect local_weil_pass == false
+
+  diagnostics {
+    falsify compact_sinc2
+  }
+}

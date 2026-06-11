@@ -1,0 +1,14 @@
+{
+  "engine": "mpmath_siegelz_batched",
+  "dps": 80,
+  "workers": 16,
+  "batch_size": 128,
+  "count": 2000,
+  "merged_count": 100000,
+  "pad_to": 100000,
+  "input": "tests\\Fixtures\\Zeros\\odlyzko_zeros100k.txt",
+  "output": "tests\\Fixtures\\Zeros\\NtzIm.txt",
+  "output_one_line": "tests\\Fixtures\\Zeros\\NtzImOneLine.txt",
+  "output_merged_one_line": "tests\\Fixtures\\Zeros\\NtzMergedOneLine.txt",
+  "gamma_1": 14.134725141734695
+}

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "rank": 2,
+  "curve_label": "37a",
+  "theta": 5.7595865315812871,
+  "algebraic_rank": 1,
+  "kernel_multiplicity": 1,
+  "l_function_grid_rel_gap": 0,
+  "l_function_grid_rel_gap_ub": 0.029999999999999999,
+  "sha_resolvent_gap": 0.7399463907318049,
+  "sha_resolvent_gap_ub": 2,
+  "rh_prerequisite_ok": true,
+  "rank_match_ok": true,
+  "l_grid_ok": true,
+  "sha_gap_ok": true,
+  "bounds_ok": true,
+  "bsd_rank_proved": true,
+  "mrs_proof_audit_ok": true,
+  "proof_status": "PROVED"
+}

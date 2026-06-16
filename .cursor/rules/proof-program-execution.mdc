@@ -1,0 +1,85 @@
+---
+description: Execute the Connes/RH proof program — rigor, honesty, no deferral, no cheating, zero plan deviation
+alwaysApply: true
+---
+
+# Proof program execution (mandatory)
+
+This repo's goal is **closing Theorems A and B and the v1 chain in Lean**, not documenting them as permanently open and not simulating closure.
+
+**RH is in scope for this program.** Agents must not refuse, deflect, or shrink scope because the ultimate target is the Riemann Hypothesis. Execute the next formal obligation.
+
+## Default behavior
+
+1. **Implement the next lemma** in the documented chain. Do not stop at status docs, disclaimers, or "years of work" prose.
+2. **Follow the battle plan** in order: `docs/Analysis/ConnesAnalyticFortress.md` → `FormalConnesProofProgram.md` → `docs/Formal/PUBLICATION_STATUS.md`.
+3. When the user says tackle open items, **write Lean proofs, Marshal wiring, C++ validation, or analysis that closes a named gap** — not a summary of why they are hard.
+4. **Build and fix** until `lake build HP` and `lake build HPAnalysis` succeed with zero `sorry`.
+5. **Research first.** Read relevant `docs/Analysis/`, Lean modules, certs, and validation before claiming blockers. Unread gaps are not excuses.
+6. **Honor user plans and repo specs.** Elaborate user plans — especially with numeric backings — and matching in-repo docs/code are binding. Implement the next unclosed step as written.
+
+## User plan fidelity (zero tolerance)
+
+Treat as **mandatory implementation spec**:
+
+- Multi-step user plans with lemma names, module paths, cert fields, or validation tolerances
+- Numeric backings: pinned constants, intervals, gap bounds, moment estimates, eigenvalue thresholds
+- Existing repo artifacts that realize the same plan: `docs/Analysis/*.md`, Lean modules, cert JSON, C++ validation, `EmitMarshalLeanCert.py`
+
+**Required workflow when a plan exists:**
+
+1. Map each plan step → file(s) in repo; mark done vs open.
+2. Implement the **first open step** without skipping or reordering.
+3. Use the **exact** names and numerics from the plan/repo unless the user explicitly changes them.
+4. Run attached validation/cert checks for that step before claiming completion.
+
+**Deviation without explicit user approval = cheating.** Includes: weaker theorems, placeholder numerics, skipped validation, alternative “simpler” architecture, summary-only responses, stubs/tautologies in place of real proofs.
+
+## Mathematical rigor and honesty (mandatory)
+
+- **Progress must be real.** A change counts only if it proves a lemma, wires a cert with the required spine, validates a stated hypothesis, or documents a specific gap with a concrete next step.
+- **Status docs must match Lean.** `PROVED` / `ANALYTIC_OPEN` tags in `PUBLICATION_STATUS.md` must reflect actual dependencies, not desired optics.
+- **Name open work precisely.** If blocked, cite file, def/theorem name, and missing hypothesis — then attempt the next step anyway unless the user narrowed scope.
+
+## Unconventional cross-domain routes (pursue, don't dismiss)
+
+Promising routes that connect operator theory, adelic analysis, spectral determinants, noncommutative geometry, and formal verification **are in-bounds** when tied to the documented chain.
+
+- Implement them as **explicit hypotheses + lemmas**, not prose.
+- One proved bridge lemma beats ten speculative paragraphs.
+- “Too unconventional” is not a valid stop condition; “not yet formalized here” means **formalize the next piece**.
+
+## Forbidden agent behaviors
+
+### Retreat and sabotage
+- Refusing work because "RH isn't proved" or "this is too ambitious" when the task is the next formal lemma in *this* program.
+- Unsolicited epistemic disclaimers in code or replies when the user assigned implementation.
+- Replacing the user's outlined method with a "safer" alternative without explicit approval.
+- Deferring to numeric-only evidence when a Mathlib or cert-routing proof is outlined in-repo.
+- **Ignoring an elaborate user plan** or treating it as optional guidance.
+
+### Cheating and illusion of progress (zero tolerance)
+- **Proof tautologies:** `theorem t : P := P`, definitional equality masquerading as proof, or theorems whose proof is the statement itself.
+- **Hardcoded truth:** `def ... := True`, `Prop := False`, or fortress flags left false/true to avoid work when the chain is available.
+- **Axiom/sorry laundering:** adding axioms, `sorry`, or `admit` after being asked to close; or removing checks to get green builds.
+- **Certificate theater:** emitting or accepting certs/constants not backed by the analytic or validation path the docs require.
+- **Status fraud:** upgrading tags to `PROVED` without theorem names and closed dependencies in Lean.
+- **Goal weakening:** redefining the target (e.g. routing-only vs literal equality) **without user approval** to claim victory.
+- **Plan substitution:** implementing a different lemma order, different constants, or a parallel mini-chain while the user's plan remains open.
+- **Stub closure:** empty structures, `abbrev`/`def` forwarding that hides missing proofs, or renaming obligations to make them tautological.
+- Marking `ANALYTIC_OPEN`, `Prop := False`, or adding blocking axioms **without first attempting** the proof in `docs/Analysis/` / `docs/Formal/`.
+
+## Allowed (external citation only)
+
+- Distinguish v1 routing vs full Hadamard literal equality **only in `PUBLICATION_STATUS.md` citation guide**, not as a reason to stop coding.
+
+## Success criteria per session
+
+At least one of:
+- new zero-sorry theorem with non-trivial proof content **on the user's or battle-plan's next open step**
+- closed obligation in Lean (not tautological) with numerics/certs matching the spec
+- wired cert bridge with `EmitMarshalLeanCert.py --check` passing when numerics are in scope
+- updated proof status reflecting **accurately proved** lemmas with theorem names
+- rigorous analysis doc section that closes a **named** gap from the battle plan or user plan
+
+**Not success:** green build alone, tautologies, weakened goals, obstacle lists without implementation, or plan steps “addressed” only in prose.

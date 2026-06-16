@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "verdict": "OPERATOR_HUNT_SANITY_PASS",
+  "mode": "full",
+  "elapsed_sec": 124.27,
+  "epistemic_note": "SANITY_PASS means not fooling ourselves today; not RH close",
+  "steps": {
+    "t1_local_weil": {
+      "pass": true,
+      "t1_gap": 9.974659986866641e-18,
+      "gate": "SANITY"
+    },
+    "trace_duality": {
+      "pass": true,
+      "t1_pass": true,
+      "gate": "SANITY"
+    },
+    "c_fin_pair_correlation": {
+      "pass": true,
+      "separates_from_gue": true,
+      "gue_spacing_l2_cylinder": 1.0645991150420988,
+      "gate": "EXCLUSION"
+    },
+    "cylinder_sinc2_exclusion": {
+      "pass": true,
+      "sinc2_residual": 12.674874741258042,
+      "gate": "EXCLUSION"
+    },
+    "density_growth_trait": {
+      "pass": true,
+      "required": "logarithmic",
+      "gate": "EXCLUSION"
+    },
+    "connes_scaffold_compile": {
+      "pass": true,
+      "gate": "SANITY"
+    },
+    "continuum_persistence": {
+      "pass": true,
+      "verdict": "ANALYTIC_INCONCLUSIVE",
+      "gate": "ANALYTIC_SHAPE",
+      "paths": [
+        "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\build\\cert\\continuum_100.json",
+        "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\build\\cert\\continuum_1000.json",
+        "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\build\\cert\\continuum_10000.json"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "cert_id": "marshal_odilyzko_zero_cert",
+  "engine": "marshal_riemann_siegel",
+  "source": "docs\\generated\\NtzRefinedVerify.txt",
+  "offset": 9999,
+  "certified_count": 1,
+  "verified_count": 1,
+  "contiguous_verified": 1,
+  "all_verified": true,
+  "z_abs_tolerance": 1e-10,
+  "max_z_abs": 1.6928125567972074e-13,
+  "max_z_abs_refined": 1.27902965996185e-11,
+  "elapsed_ms": 0.1825,
+  "failed_index": 1,
+  "failed_indices": [],
+  "lean_emit_ready": true,
+  "head_samples": [
+    {"index": 9999, "height": 9878.6547710512878, "z_abs": 1.6928125567972074e-13, "z_abs_refined": 1.27902965996185e-11, "verified": true}
+  ],
+  "note": "|Z(gamma)| via Riemann-Siegel + Gabcke; Lean consumes certified_count only."
+}

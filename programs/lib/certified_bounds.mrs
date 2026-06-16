@@ -1,0 +1,18 @@
+// Certified rational pins — inferred by Marshal (v1 spine).
+mod certified_bounds {
+    pub const MOMENT_TOLERANCE: Rational = infer!rational_bound(
+        witness = "marshal_theorem_b_cert",
+        field = "moment_l2_distance",
+        ceiling = "marshal_moment_tolerance"
+    );
+
+    prove moment_tolerance_ok: MOMENT_TOLERANCE < Rational(1, 100) {
+        infer
+    }
+
+    pub const GRID_REL_GAP_UB: Real = infer!tolerance("xi_hadamard", "grid_rel_gap");
+
+    prove grid_rel_gap_bounded: GRID_REL_GAP_UB <= Rational(3, 100) {
+        infer
+    }
+}

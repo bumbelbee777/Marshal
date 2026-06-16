@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "program_id": "connes_global_dirac_limit",
+  "rule_id": "connes_global_dirac_limit",
+  "proof_status": "FORMAL_LIMIT_OPEN",
+  "kind": "global_connes_dirac",
+  "limit_target": "riemann_zero_heights",
+  "metric": "spectrum_rmse",
+  "formal_status": "open",
+  "formal_lemma": "spectral_discreteness",
+  "formal_approach": "adelic_quotient_limit",
+  "limit_verdict": "DISCRETIZATION_IDENTIFICATION_FAILS",
+  "monotone_rmse_increase": true,
+  "lean_emit_ready": true,
+  "total_elapsed_ms": 1334.1960999999999,
+  "points": [
+    {"combined_cap": 120, "n_modes": 120, "spectrum_rmse": 166.37269931722662, "elapsed_ms": 9.3888999999999996},
+    {"combined_cap": 240, "n_modes": 240, "spectrum_rmse": 277.53792720431107, "elapsed_ms": 50.988599999999998},
+    {"combined_cap": 400, "n_modes": 400, "spectrum_rmse": 409.85061903331382, "elapsed_ms": 233.8331},
+    {"combined_cap": 600, "n_modes": 600, "spectrum_rmse": 571.51044913720216, "elapsed_ms": 1033.0445999999999}
+  ]
+}

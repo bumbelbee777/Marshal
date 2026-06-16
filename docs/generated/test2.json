@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "cert_id": "marshal_odilyzko_zero_cert",
+  "engine": "marshal_riemann_siegel",
+  "source": "tests\Fixtures\Zeros\NtzMergedOneLine.txt",
+  "offset": 54,
+  "certified_count": 5,
+  "verified_count": 4,
+  "all_verified": false,
+  "z_abs_tolerance": 1e-10,
+  "max_z_abs": 0.57987856966935325,
+  "max_z_abs_refined": 0.27300799836755307,
+  "elapsed_ms": 0.29010000000000002,
+  "failed_index": 56,
+  "lean_emit_ready": false,
+  "head_samples": [
+    {"index": 54, "height": 153.02469381119889, "z_abs": 0.094967069324734255, "z_abs_refined": 3.7636560534792807e-14, "verified": true},
+    {"index": 55, "height": 156.11290929423788, "z_abs": 0.47233260358389584, "z_abs_refined": 6.7168492989821971e-14, "verified": true},
+    {"index": 56, "height": 157.59759181759406, "z_abs": 0.57987856966935325, "z_abs_refined": 0.27300799836755307, "verified": false},
+    {"index": 57, "height": 158.84998817142051, "z_abs": 0.14254561178241798, "z_abs_refined": 1.9942936191341687e-12, "verified": true},
+    {"index": 58, "height": 161.18896413759603, "z_abs": 0.0094737267383401269, "z_abs_refined": 5.5067062021407764e-14, "verified": true}
+  ],
+  "note": "|Z(gamma)| via Riemann-Siegel + Gabcke; Lean consumes certified_count only."
+}

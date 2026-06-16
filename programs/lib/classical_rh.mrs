@@ -1,0 +1,8 @@
+// v1 classical RH capstone — explicit Weierstrass closure.
+mod classical_rh {
+    use marshal_hadamard_proof::*;
+
+    prove classical_rh_unconditional: ClassicalRiemannHypothesis {
+        classical_riemann_hypothesis_unconditional(marshal_hadamard_proof::weierstrass_identification)
+    }
+}

@@ -1,0 +1,27 @@
+ansatz logp_catalog {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: diagnostic
+  }
+
+  on circle S¹_log(p) {
+    frequency omega = k * log(p)
+    eigenvalue lambda = k * log(p)
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    local_weil_t1: true
+    weil_identity: all
+    trace_test: gauss
+  }
+
+  expect {
+    local_weil_pass == true
+  }
+}

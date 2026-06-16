@@ -18,7 +18,28 @@ FormalCalibration build_formal_calibration(const MrsProgram& prog) {
     c.trace_lhs_quotient = prog.trace_lhs_quotient;
     c.pair_correlation_gue = prog.pair_correlation_gue;
     c.formal_analytics = prog.formal_analytics;
-    if (prog.placeholder) {
+    if (prog.rule_id == "connes_analytic_construction") {
+        c.lean_module = "AdeleQuotient";
+        c.lean_cert = "HP.Global.ConnesAnalyticCert";
+    } else if (prog.rule_id == "connes_analytic_lemmas") {
+        c.lean_module = "ConnesAnalyticProof";
+        c.lean_cert = "HP.Global.ConnesAnalyticLemmaCert";
+    } else if (prog.rule_id == "connes_global_dirac_limit") {
+        c.lean_module = "GlobalConnesDiracLimit";
+        c.lean_cert = "HP.Global.GlobalConnesDiracLimitCert";
+    } else if (prog.rule_id == "spectral_action_selection") {
+        c.lean_module = "SpectralActionSelection";
+        c.lean_cert = "HP.Global.SpectralActionSelectionCert";
+    } else if (prog.rule_id == "theorem_a_analytic") {
+        c.lean_module = "Analysis.TheoremA";
+        c.lean_cert = "HPAnalysis.TheoremACert";
+    } else if (prog.rule_id == "theorem_b") {
+        c.lean_module = "Analysis.TheoremBScaffold";
+        c.lean_cert = "HPAnalysis.TheoremBScaffoldCert";
+    } else if (prog.rule_id == "berry_keating_xp" && !prog.placeholder) {
+        c.lean_module = "AdeleQuotient";
+        c.lean_cert = "HP.Global.BerryKeatingCert";
+    } else if (prog.placeholder) {
         if (prog.rule_id == "connes_dirac" || prog.id.find("connes") != std::string::npos)
             c.lean_module = "AdeleQuotient";
         else if (prog.rule_id == "berry_keating_xp" || prog.id.find("berry") != std::string::npos)
@@ -46,6 +67,8 @@ void export_formal_calibration_json(const std::string& path, const FormalCalibra
     out << "  \"derived_omega\": \"" << cal.derived_omega << "\",\n";
     out << "  \"derived_lambda\": \"" << cal.derived_lambda << "\",\n";
     out << "  \"lean_module\": \"" << cal.lean_module << "\",\n";
+    if (!cal.lean_cert.empty())
+        out << "  \"lean_cert\": \"" << cal.lean_cert << "\",\n";
     out << "  \"falsify_sinc2\": " << (cal.falsify_sinc2 ? "true" : "false") << ",\n";
     out << "  \"trace_lhs_quotient\": " << (cal.trace_lhs_quotient ? "true" : "false") << ",\n";
     out << "  \"pair_correlation_gue\": " << (cal.pair_correlation_gue ? "true" : "false") << ",\n";

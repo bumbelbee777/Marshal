@@ -13,6 +13,7 @@
 #include "Numerics/TestFunctions.hxx"
 #include "Cert/Verdict.hxx"
 #include "MeasureLimitSweep.hxx"
+#include "IO/ZeroView.hxx"
 #include "TraceApi.hxx"
 
 namespace Marshal::Induction {
@@ -25,6 +26,9 @@ std::unique_ptr<TestFunction> MakeTestFunction(const Config& cfg);
 TraceResult RunEvaluate(const Config& cfg, const TestFunction& tf,
                         const std::vector<double>& gammas, const std::vector<Real>& gammas_ld,
                         const Heat::PrimeCatalog& cat);
+
+TraceResult RunEvaluateView(const Config& cfg, const TestFunction& tf,
+                            const IO::ZeroView& zeros, const Heat::PrimeCatalog& cat);
 Analysis::ResidualBudget ComputeResidualBudget(const TestFunction& tf, Real sigma,
     const std::vector<double>& gammas, const std::vector<Real>& gammas_ld,
     const Heat::PrimeCatalog& cat, ZeroKernel zk, SimdLevel simd,

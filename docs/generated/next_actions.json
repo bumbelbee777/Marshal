@@ -1,0 +1,107 @@
+{
+  "engine": "Marshal",
+  "verdict": "OPERATOR_HUNT_CLOSED",
+  "next_actions": [
+    {
+      "priority": 1,
+      "hunt_tier": "TIER_2_FALSIFICATION",
+      "action": "closed_path",
+      "lemma": "poisson_gue_finite_coupling_nogo",
+      "status": "PROVED",
+      "suggested_approach": "C_fin closed — cylinder, adelic, crossed product, height map permanently excluded",
+      "note": "Finite operator hunt ended; see PoissonGueNoGo.md",
+      "_ordinal": 1
+    },
+    {
+      "priority": 2,
+      "hunt_tier": "TIER_2_FALSIFICATION",
+      "action": "closed_path",
+      "lemma": "global_operator_trait_profile",
+      "status": "PROVED",
+      "suggested_approach": "Trait profile locked: not_in_C_fin, trace_duality, density_growth logarithmic",
+      "note": "docs/Analysis/OperatorTraitRegistry.json",
+      "_ordinal": 2
+    },
+    {
+      "priority": 3,
+      "hunt_tier": "TIER_1_SANITY",
+      "action": "done",
+      "lemma": "operator_hunt_sanity_cert",
+      "status": "NUMERICAL_PASS",
+      "suggested_approach": "Run tools/Workload/RunOperatorHuntSanity.py --quick; T1 + trace + C_fin exclusion",
+      "note": "OPERATOR_HUNT_SANITY_PASS",
+      "_ordinal": 3
+    },
+    {
+      "priority": 4,
+      "hunt_tier": "TIER_3_ANALYTIC_SHAPE",
+      "action": "done",
+      "lemma": "continuum_persistence_check",
+      "status": "CLASSIFIED",
+      "suggested_approach": "Run ContinuumPersistenceCheck.py on P ladder; ANALYTIC_SHAPE_OK vs BAD",
+      "note": "ANALYTIC_SHAPE_BAD — not a C_fin defect",
+      "_ordinal": 4
+    },
+    {
+      "priority": 5,
+      "hunt_tier": "TIER_3_ANALYTIC_SHAPE",
+      "action": "done",
+      "lemma": "connes_analytic_construction",
+      "status": "SCAFFOLD_V2",
+      "suggested_approach": "Revise scaffold: no BK height_map; spectral action selects extension; see SpectralDiscretenessTheorem.md",
+      "note": "BK height_map excluded; OPEN_SPECTRAL_DISCRETENESS at operational P",
+      "_ordinal": 5
+    },
+    {
+      "priority": 6,
+      "hunt_tier": "TIER_4_PROOF_TRACK",
+      "action": "run_analytic_lemma_demo",
+      "lemma": "connes_analytic_lemma_demo",
+      "status": "ANALYTIC_DEMONSTRATION_OPEN",
+      "suggested_approach": "Run RunAnalyticLemmaDemo.py; emit ConnesAnalyticLemmaCert; lake build",
+      "note": "Per-lemma gate map: weil PROVED, extension/discreteness/det=xi OPEN",
+      "_ordinal": 6
+    },
+    {
+      "priority": 7,
+      "hunt_tier": "TIER_4_PROOF_TRACK",
+      "action": "run_formal_limit",
+      "lemma": "global_connes_dirac_limit",
+      "status": "FORMAL_LIMIT_OPEN",
+      "suggested_approach": "Run RunGlobalDiracLimit.py; emit GlobalConnesDiracLimitCert; lake build in docs/Formal",
+      "note": "Primary track — finite RMSE divergence documents DISCRETIZATION_IDENTIFICATION_FAILS",
+      "_ordinal": 7
+    },
+    {
+      "priority": 8,
+      "hunt_tier": "TIER_4_PROOF_TRACK",
+      "action": "prove_lemma",
+      "lemma": "self_adjoint_extension_selection",
+      "status": "OPEN",
+      "all_dependencies_satisfied": true,
+      "suggested_approach": "Prove extension selected by spectral action / trace functional — not log n/(2pi) height map",
+      "note": "Extension from spectral action — not height map",
+      "_ordinal": 8
+    },
+    {
+      "priority": 9,
+      "hunt_tier": "TIER_4_PROOF_TRACK",
+      "action": "prove_lemma",
+      "lemma": "spectral_discreteness",
+      "status": "OPEN",
+      "suggested_approach": "Analytic proof: spectral action selects discrete spectrum on critical strip",
+      "note": "THE GAP — sole remaining RH closure lemma on this track",
+      "_ordinal": 9
+    },
+    {
+      "priority": 10,
+      "hunt_tier": "TIER_4_PROOF_TRACK",
+      "action": "prove_lemma",
+      "lemma": "spectral_det_xi",
+      "status": "OPEN",
+      "suggested_approach": "After extension + discreteness: det(s-D) vs completed xi",
+      "note": "Blocked until self_adjoint_extension_selection + spectral_discreteness",
+      "_ordinal": 10
+    }
+  ]
+}

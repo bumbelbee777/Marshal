@@ -1,6 +1,6 @@
 # Marshal
 
-**Marshal** is a research engine for the Hilbert–Pólya / Weil explicit-formula program. It combines:
+**Marshal** is a research engine for the Hilbert–Pólya / Weil explicit-formula / Connes program. It combines:
 
 1. **Numerical verification** — high-precision trace identities linking Riemann zeros, archimedean terms, and prime sums  
 2. **Induction** — prime-by-prime ladder certificates for local heat-cylinder blocks  
@@ -38,7 +38,7 @@ Marshal runs in **128-bit `long double`** with optional OpenMP, AVX2 zero kernel
 | **HP induction** | `--hp-proof` ladder: Poisson=θ, Weil=AB·link, cumulative prime blocks |
 | **Spectral gates** | Compact sinc² falsification, pair correlation, quotient diagnostics |
 | **Inference engine** | `LemmaManifest.json` + `AnsatzRegistry.json` → `--suggest-next` actions |
-| **AnaVM bridge** | `.mrs` program stubs, formal calibration export, Lean cert hooks |
+| **AnaVM bridge** | `.mrs` programs with `diagnostics`/`expect` blocks; `RunOperatorTests.py` |
 | **Workloads** | E2E pipeline, HP catalog, log-prime validation, measure-limit sweeps |
 
 ---
@@ -51,8 +51,10 @@ Marshal runs in **128-bit `long double`** with optional OpenMP, AVX2 zero kernel
 |--------|---------|
 | **Cylinder Poisson duality** | Mode sum = Poisson winding sum on each \(S^1_{\log p}\) |
 | **Cylinder class no-go (numerical)** | Direct sum \(H_P=\oplus D_p\) does **not** have spectrum \(\{\gamma_n\}\) |
+| **Poisson–GUE finite-coupling no-go** | No commutative / finite-rank / height-map assembly in \(\mathcal{C}_{\mathrm{fin}}\) can carry \(\{\gamma_n\}\) |
 | **\(H_{\log}\) local factor (T1)** | Weil-weighted trace \(\mathrm{Tr}_{w'}(h(H_{\log}))\) matches Marshal prime sum exactly |
-| **Gaussian Weil identity** | \(\|LHS-RHS\|\sim 10^{-8}\) at catalog scale (diagnostic, not falsification gate) |
+| **Gaussian Weil identity** | \(\|LHS-RHS\|\lesssim 10^{-12}\) with `--precision` |
+| **Sinc² Weil identity** | \(T,\kappa\)-dependent; min near \(T\approx\gamma_1\), \(\kappa\approx 60\) |
 
 ### Falsified ansätze
 
@@ -60,6 +62,8 @@ Marshal runs in **128-bit `long double`** with optional OpenMP, AVX2 zero kernel
 |--------|----------|
 | **Cylinder direct sum** | Compact sinc² residual \(\approx 12.67\) stable at 500k–10M primes ([Sinc2Mismatch.md](docs/Falsification/Sinc2Mismatch.md)) |
 | **γ-tuned quotient (circular)** | Linear gap \(\approx 0.61\) misleading; honest \(\omega^2\) gap \(\approx 179\) |
+| **Adelic completion / height map** | RMSE \(\sim 0.043\,P^{1.43}\); BK height map worsens spectrum |
+| **Finite crossed product** | Spectrum RMSE \(\sim 120\); Poisson bulk cannot become GUE |
 | **Frequency lock** | GL(1) cascade impossible (lemma `frequency_lock`) |
 
 ### Active framework: trace duality (Path B)
@@ -73,20 +77,42 @@ The explicit formula is **trace duality** between two operators with **different
 
 They are linked by arch + poles, **not** by spectral equality. Density below \(T=100\): \(\sim 3\times 10^5\) log-prime modes vs \(\sim 29\) zeros.
 
-**Sinc² scale note:** At \(T=1\), \(\gamma_1\approx 14.13\) lies in the sinc² tail (\(h(\gamma_1)\approx 0.005\)), so \(|LHS-RHS|\approx 10\) is a **band mismatch**, not a log-prime defect. A \(T\)-sweep finds minimum residual \(\sim 5\times 10^{-3}\) near \(T\approx\gamma_1\) (see `docs/generated/log_prime_validation.json` → `T_sinc2_sweep`).
+**Sinc² scale note:** Compact \(\hat{h}\) support is \(\pi\kappa/T\) (not \(2\pi/T\)). At \(T=\gamma_1\), \(\kappa=1\) excludes all catalog primes; \(\kappa\gtrsim 60\) covers \(p\le 5\times 10^5\). At \(T=1\), \(|LHS-RHS|\approx 10\) is **band mismatch**, not a log-prime defect. See `log_prime_validation.json`, `weil_convergence_gamma1.json`, `arch_sinc2_audit.json`.
 
-### Open challenges
+### Global operator hunt — **CLOSED** (`OPERATOR_HUNT_CLOSED`)
+
+Every finite commutative / weakly non-commutative path in \(\mathcal{C}_{\mathrm{fin}}\) is **permanently excluded**. The sole surviving target is **`connes_analytic_construction`**. Certificate: [`operator_hunt_closure.json`](docs/generated/operator_hunt_closure.json).
+
+| Closed | Open (proof track) |
+|--------|---------------------|
+| Cylinder, adelic, crossed product, BK height map | **`spectral_discreteness`** (THE GAP) |
+| Trait profile + trace duality | `self_adjoint_extension_selection` |
+| Operator hunt sanity + continuum classified | `spectral_det_xi` |
+
+```bash
+python tools/Workload/RunOperatorHuntClosure.py   # closure cert + next_actions.json
+```
+
+`OPERATOR_HUNT_CLOSED` means the elimination funnel is finished — **not** that RH is proved.
+
+### Other open lemmas (off critical path)
 
 | Challenge | Lemma / track |
 |-----------|----------------|
-| Global operator with spectrum \(\{\gamma_n\}\) | Connes adele / Berry–Keating scaffolds |
-| Connes crossed-product assembly | `connes_crossed_product_assembly` |
-| Measure limit \(\mu_P \to \mu_{\mathrm{Riemann}}\)? | `spectral_measure_limit_conjecture` — numerics suggest **no** |
-| Full Sobolev \(d_s\) cylinder no-go | `cylinder_class_nogo` (rigorous gap) |
-| Resolvent / quotient spectrum limits | `resolvent_limit`, `quotient_spectrum` |
-| Sinc² arch quadrature to machine closure | T-sweep residual \(\sim 10^{-3}\) at \(T\approx\gamma_1\) |
+| Full Sobolev \(d_s\) cylinder no-go (rigorous) | `cylinder_class_nogo` |
+| Sinc² arch quadrature closure | `RunWeilConvergenceStudy.py` |
 
 Registry: [`docs/Analysis/LemmaManifest.json`](docs/Analysis/LemmaManifest.json), [`docs/Analysis/AnsatzRegistry.json`](docs/Analysis/AnsatzRegistry.json).
+
+### Formal verification (Lean)
+
+| Target | Command | What it checks |
+|--------|---------|----------------|
+| Cert routing (CI) | `cmake --build build --target verify-formal` | `lake build HP` — Mathlib-free, Marshal cert discipline |
+| Full analytic chain | `cmake --build build --target verify-formal-analysis` | `lake build HPAnalysis` — Theorem A/B + Hadamard, zero sorries |
+| JSON ↔ Lean sync | `python tools/Analysis/EmitMarshalLeanCert.py --check` | Pinned cert matches `analytic_lemma_demo.json` |
+
+**Publication source of truth:** [`docs/Formal/PUBLICATION_STATUS.md`](docs/Formal/PUBLICATION_STATUS.md) — what is proved vs conditional vs open. `V1_PROVED` in JSON is formal routing, not RH.
 
 ---
 
@@ -108,8 +134,24 @@ cmake --build build --target test-unit test-log-prime
 ### Run core validations
 
 ```bash
-# Log-prime Weil trace + sinc² T-sweep
+# Log-prime Weil trace + sinc² T/κ-sweep + Connes ladder
 python tools/Analysis/RunLogPrimeValidation.py
+
+# Arch audit + zero/prime convergence at T=γ₁ and T=8
+python tools/Analysis/RunWeilConvergenceStudy.py
+
+# Laplace gold standard (mpmath LHS + T1 + arch cross-check)
+python tools/Analysis/RunDualityGoldStandard.py
+
+# AnaVM operator tests (.mrs with diagnostics block)
+python tools/Analysis/RunOperatorTests.py
+
+# Connes crossed-product spectrum vs gamma_n
+python tools/Analysis/RunConnesCrossedValidation.py
+
+# Fast zero ingest → .zerocache (100k ~1s; 2M target <5s with odlyzko_zeros2m.txt)
+build/Marshal.exe --zeros-ingest --zeros-input odlyzko_zeros2m.txt \
+  --zeros-cache build/cache/zeros2m.zerocache --zeros-count 2000000
 
 # Full-scale catalog (quick: 100k zeros, 500k primes)
 python tools/Workload/RunLogPrimeCatalog.py --quick --skip-ntz
@@ -123,8 +165,11 @@ build/Marshal.exe --zeros tests/Fixtures/Zeros/odlyzko_zeros100k.txt \
 build/Marshal.exe --suggest-next --lemma-manifest docs/Analysis/LemmaManifest.json \
   --export-next-actions build/cert/next_actions.json
 
-# Full pipeline
-python tools/Workload/RunE2E.py
+# Operator hunt sanity (<60s; not spectrum identification)
+python tools/Workload/RunOperatorHuntSanity.py --quick
+
+# Full pipeline (+ optional hunt)
+python tools/Workload/RunE2E.py --operator-hunt
 ```
 
 ### Verdict discipline
@@ -163,6 +208,9 @@ build/                    CMake output (gitignored)
 |-------|----------|
 | Cylinder class & Poisson duality | [CylinderClass.md](docs/Analysis/CylinderClass.md) |
 | Cylinder no-go | [CylinderNoGo.md](docs/Analysis/CylinderNoGo.md) |
+| Poisson–GUE no-go (closes finite program) | [PoissonGueNoGo.md](docs/Analysis/PoissonGueNoGo.md) |
+| Global operator hunt | [GlobalOperatorHunt.md](docs/Analysis/GlobalOperatorHunt.md) |
+| Test gate discipline (hunt) | [TestGateDiscipline.md](docs/Analysis/TestGateDiscipline.md) |
 | Trace duality (Path B) | [ExplicitFormulaDuality.md](docs/Analysis/ExplicitFormulaDuality.md) |
 | Log-prime operator \(H_{\log}\) | [LogPrimeOperator.md](docs/Analysis/LogPrimeOperator.md) |
 | Connes / Berry–Keating | [ConnesBerryKeating.md](docs/Analysis/ConnesBerryKeating.md) |

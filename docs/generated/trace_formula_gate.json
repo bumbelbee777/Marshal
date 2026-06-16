@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "program_id": "connes_analytic_lemmas",
+  "rule_id": "connes_analytic_lemmas",
+  "max_residual": 11.894982134387172,
+  "residual_threshold": 1,
+  "log_prime_t1_gap": 9.9746599868666408e-18,
+  "arch_weil_residual": 11.894982134387172,
+  "combined_bk_logprime": true,
+  "verdict": "TRACE_FORMULA_T1_PASS",
+  "t1_verdict": "T1_LOCAL_PASS",
+  "full_weil_verdict": "FULL_WEIL_ARCH_OPEN",
+  "tests": [
+    {"name": "laplace", "lhs": 1.4549502429892646e-06, "rhs": -4.8803178381165511, "residual": 4.880319293066794, "pass": false},
+    {"name": "gauss", "lhs": 4.2095995884874697e-09, "rhs": 7.9562593725861696e-08, "residual": 7.5352994137462123e-08, "pass": true},
+    {"name": "sinc2", "lhs": 0.0011011193698716817, "rhs": -11.893881015017302, "residual": 11.894982134387172, "pass": false}
+  ]
+}

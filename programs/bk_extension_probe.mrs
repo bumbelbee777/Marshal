@@ -1,0 +1,32 @@
+ansatz bk_extension_probe {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  space phase_space { }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 500
+  }
+
+  self_adjoint_extension {
+    deficiency_indices: (1,1)
+    family: U(1)
+    sweep_steps: 12
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    self_adjoint_extension_sweep: true
+    spectrum_rmse < 50
+  }
+}

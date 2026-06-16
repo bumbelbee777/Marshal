@@ -1,0 +1,33 @@
+ansatz theorem_b {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: investigation
+  }
+
+  investigation {
+    id: theorem_b
+    cert_root: build/cert/investigations/theorem_b
+    fixed_theta: 5.76
+  }
+
+  lemma ref theorem_b_B1_1 { status: proved }
+  lemma ref theorem_b_B1_2 { status: proved }
+  lemma ref theorem_b_B1_3 { status: open }
+  lemma ref theorem_b_B1_4 { status: open }
+  lemma ref theorem_b_B2 { status: proved_reduction }
+  lemma ref theorem_b_B3 { status: proved_reduction }
+  lemma ref theorem_b_B4 { status: proved }
+
+  formal_target {
+    lemma: theorem_b
+    approach: crossed_product_compactness
+    proof_status: open
+  }
+
+  diagnostics {
+    investigation_suite: false
+    theorem_b_scaffold: true
+  }
+}

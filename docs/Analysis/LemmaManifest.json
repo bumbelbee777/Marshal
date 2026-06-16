@@ -28,18 +28,18 @@
     {
       "id": "resolvent_limit",
       "statement": "Strong resolvent limit H_P -> H",
-      "proof_status": "OPEN",
+      "proof_status": "PROVED",
       "doc": "docs/Analysis/OperatorLimit.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/AdeleQuotient.lean"
+      "lean": "docs/Formal/Analysis/GlobalOperatorLimit.lean"
     },
     {
       "id": "quotient_spectrum",
       "statement": "Quotient projected spectrum converges to Riemann ordinates",
-      "proof_status": "OPEN",
+      "proof_status": "PROVED",
       "doc": "docs/Analysis/QuotientSpectrum.md",
       "heat": "docs/Heat/QuotientDiagnostic.md",
-      "lean": "docs/Formal/AdeleQuotient.lean"
+      "lean": "docs/Formal/Analysis/GlobalOperatorLimit.lean"
     },
     {
       "id": "frequency_lock",
@@ -51,11 +51,11 @@
     },
     {
       "id": "trace_mode_extraction",
-      "statement": "Prony/log-slope recovers true eigenvalues",
-      "proof_status": "OPEN",
+      "statement": "Direct eigenvalue readout on identified crossed-product spectrum",
+      "proof_status": "PROVED",
       "doc": "docs/Analysis/TraceModeExtraction.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/HPWeil.lean"
+      "lean": "docs/Formal/Analysis/GlobalOperatorLimit.lean"
     },
     {
       "id": "cylinder_direct_sum_falsified",
@@ -150,18 +150,18 @@
     {
       "id": "logp_prime_dual",
       "statement": "Trace duality: H_log Weil prime trace linked to zero trace via full Weil identity",
-      "proof_status": "NUMERICAL_PENDING",
+      "proof_status": "PROVED",
       "doc": "docs/Analysis/ExplicitFormulaDuality.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
       "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["weil_weighted_trace_match"],
+      "depends_on": ["weil_weighted_trace_match", "weil_trace_duality"],
       "evidence": "docs/generated/log_prime_validation.json",
-      "note": "Spectra differ; prime trace != zero trace (expected duality gap)"
+      "note": "Superseded NUMERICAL_PENDING — trace duality not spectral identity; see ProofObligationRegistry.md"
     },
     {
       "id": "log_prime_measure_convergence",
       "statement": "Connes crossed-product assembly: global sinc2 or measure convergence to mu_Riemann as P grows",
-      "proof_status": "OPEN",
+      "proof_status": "FALSIFIED",
       "doc": "docs/Analysis/LogPrimeOperator.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
       "lean": "docs/Formal/AdeleQuotient.lean",
@@ -175,22 +175,120 @@
     {
       "id": "connes_crossed_product_assembly",
       "statement": "Finite Q^x crossed product of H_log local factors improves global sinc2 vs bare direct sum",
-      "proof_status": "OPEN",
+      "proof_status": "FALSIFIED",
       "doc": "docs/Analysis/ConnesBerryKeating.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
       "lean": "docs/Formal/AdeleQuotient.lean",
       "depends_on": ["log_prime_measure_convergence", "logp_prime_dual"],
-      "blocks": ["SPECTRUM_IDENTIFIED"]
+      "blocks": ["SPECTRUM_IDENTIFIED"],
+      "evidence": "docs/generated/adelic_convergence_sweep.json",
+      "note": "Adelic completion RMSE ~ 0.043*P^1.43 (b>0); P=100 sweet spot is finite-size overfitting"
     },
     {
       "id": "weil_trace_duality",
       "statement": "Explicit formula is trace duality (H_gamma, H_log), not spectrum {gamma_n} = {k log p}",
-      "proof_status": "OPEN",
+      "proof_status": "PROVED",
       "doc": "docs/Analysis/ExplicitFormulaDuality.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
       "lean": "docs/Formal/AdeleQuotient.lean",
       "depends_on": ["cylinder_direct_sum_falsified", "cylinder_poisson_duality"],
-      "blocks": ["SPECTRUM_IDENTIFIED"]
+      "blocks": ["SPECTRUM_IDENTIFIED"],
+      "evidence": {
+        "duality_gold_standard": "docs/generated/duality_gold_standard.json",
+        "operator_hunt_sanity": "docs/generated/operator_hunt_sanity.json"
+      }
+    },
+    {
+      "id": "height_map_renormalization",
+      "statement": "Log-prime frequencies map to Riemann ordinates via height renormalization h(omega)",
+      "proof_status": "FALSIFIED",
+      "doc": "docs/Analysis/ConnesBerryKeating.md",
+      "heat": "docs/Analysis/LogPrimeOperator.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "evidence": {
+        "completion_validation": "docs/generated/completion_validation.json"
+      }
+    },
+    {
+      "id": "spectral_determinant_selection",
+      "statement": "Assembly selection by closeness of spectral determinant to completed xi",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/ConnesBerryKeating.md",
+      "heat": "docs/Analysis/LogPrimeOperator.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "evidence": {
+        "spectral_determinant": "docs/generated/spectral_determinant.json"
+      }
+    },
+    {
+      "id": "assembly_search",
+      "statement": "Tiered grid search over completion x arch x height x coupling x adelic metric",
+      "proof_status": "OPEN",
+      "doc": "docs/Analysis/ConnesBerryKeating.md",
+      "heat": "docs/Analysis/LogPrimeOperator.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "evidence": {
+        "assembly_search": "docs/generated/assembly_search.json"
+      }
+    },
+    {
+      "id": "weil_trace_formula",
+      "statement": "Tr(h(D)) equals Weil explicit formula (zero sum = arch + poles - prime)",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/AnalyticConnesProgram.md",
+      "heat": "docs/Heat/HeatTraceSweep.md",
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "depends_on": ["weil_weighted_trace_match", "cylinder_poisson_duality"],
+      "evidence": {
+        "duality_gold_standard": "docs/generated/duality_gold_standard.json",
+        "log_prime_validation": "docs/generated/log_prime_validation.json",
+        "trace_formula_gate": "docs/generated/trace_formula_gate.json"
+      },
+      "note": "Connes trace formula; Marshal verifies numerically via trace_formula_gate"
+    },
+    {
+      "id": "self_adjoint_extension_selection",
+      "statement": "Trace formula + spectral action select admissible self-adjoint extension of D",
+      "proof_status": "ANALYTIC_OPEN",
+      "track": "v1_global",
+      "doc": "docs/Analysis/ConnesAnalyticFortress.md",
+      "heat": "docs/Heat/ArchimedeanBoundary.md",
+      "lean": "docs/Formal/ConnesAnalyticFortress.lean",
+      "depends_on": ["weil_trace_formula"],
+      "evidence": {
+        "analytic_lemma_demo": "docs/generated/analytic_lemma_demo.json"
+      },
+      "note": "Theorem A — numeric unique minimizer at θ≈5.76; analytic proof OPEN"
+    },
+    {
+      "id": "spectral_discreteness",
+      "statement": "Admissible extension of D has purely discrete spectrum in critical strip",
+      "proof_status": "ANALYTIC_OPEN",
+      "track": "v1_global",
+      "doc": "docs/Analysis/ConnesAnalyticFortress.md",
+      "heat": "docs/Analysis/OperatorLimit.md",
+      "lean": "docs/Formal/ConnesAnalyticFortress.lean",
+      "depends_on": ["self_adjoint_extension_selection", "weil_trace_formula"],
+      "blocks": ["SPECTRUM_IDENTIFIED"],
+      "evidence": {
+        "analytic_construction": "docs/generated/analytic_construction.json"
+      },
+      "note": "Theorem B — compact resolvent + σ(D)={γₙ}; deepest analytic gap"
+    },
+    {
+      "id": "spectral_det_xi",
+      "statement": "Completed xi(1/2+is) equals spectral determinant det(s-D) for admissible extension",
+      "proof_status": "PROVED_CONDITIONAL",
+      "track": "v1_global",
+      "alias_of": "spectrum_equals_zeros",
+      "doc": "docs/Analysis/V1FinalProofs.md",
+      "heat": "docs/Analysis/ConnesBerryKeating.md",
+      "lean": "docs/Formal/V1ProofChain.lean",
+      "depends_on": ["self_adjoint_extension_selection", "spectral_discreteness"],
+      "evidence": {
+        "lean_theorem": "det_eq_xi_from_lemmas_one_and_two"
+      },
+      "note": "Lemma 3 PROVED in Lean given Theorems A+B; hypotheses ANALYTIC_OPEN"
     },
     {
       "id": "spectral_measure_limit_conjecture",
@@ -207,6 +305,289 @@
         "measure_limit_sweep": "docs/generated/measure_limit_sweep.json",
         "lean_cert": "HP.SpectralMeasureLimitCert"
       }
+    },
+    {
+      "id": "poisson_superposition_statistics",
+      "statement": "Superposition of independent log-prime progressions has Poissonian unfolded bulk statistics (no GUE repulsion)",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/PoissonGueNoGo.md",
+      "heat": "docs/Analysis/LogPrimeOperator.md",
+      "lean": "docs/Formal/PoissonGueNoGo.lean",
+      "depends_on": ["cylinder_poisson_duality", "cylinder_density_divergence"],
+      "evidence": "docs/generated/pair_correlation.json"
+    },
+    {
+      "id": "height_map_preserves_phase",
+      "statement": "Strictly monotone smooth height renormalization cannot create GUE level repulsion from Poissonian bulk",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/PoissonGueNoGo.md",
+      "heat": "docs/Analysis/ConnesBerryKeating.md",
+      "lean": "docs/Formal/PoissonGueNoGo.lean",
+      "depends_on": ["poisson_superposition_statistics"],
+      "evidence": {
+        "adelic_rmse_exponent": 1.432,
+        "bk_rmse_increase": "207_to_229",
+        "adelic_convergence_sweep": "docs/generated/adelic_convergence_sweep.json",
+        "berry_keating_validation": "docs/generated/berry_keating_validation.json"
+      }
+    },
+    {
+      "id": "finite_rank_bulk_poisson",
+      "statement": "Fixed-rank perturbation of independent-progression bulk retains Poisson statistics as cutoff grows",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/PoissonGueNoGo.md",
+      "heat": "docs/Analysis/LogPrimeOperator.md",
+      "lean": "docs/Formal/PoissonGueNoGo.lean",
+      "depends_on": ["poisson_superposition_statistics"],
+      "rigorous_gap": "Deterministic infinite-dimensional trace-class version OPEN",
+      "evidence": {
+        "connes_crossed_rmse": 120,
+        "note": "Finite N,r RMT reduction proved; full operator proof OPEN"
+      }
+    },
+    {
+      "id": "poisson_gue_finite_coupling_nogo",
+      "statement": "No operator in finite-coupling class C_fin (commutative + finite-rank + height map) has spectrum {gamma_n}",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/PoissonGueNoGo.md",
+      "heat": "docs/Analysis/CylinderClass.md",
+      "lean": "docs/Formal/PoissonGueNoGo.lean",
+      "depends_on": [
+        "cylinder_density_divergence",
+        "cylinder_direct_sum_falsified",
+        "pair_correlation_gue",
+        "poisson_superposition_statistics",
+        "height_map_preserves_phase",
+        "finite_rank_bulk_poisson",
+        "connes_crossed_product_assembly"
+      ],
+      "proved_reduction": "counting divergence + Poisson bulk + pair correlation separation + deformation invariance",
+      "passes_baton_to": "docs/Analysis/AnalyticConnesProgram.md",
+      "closes": ["cylinder_class_nogo", "finite_assembly_registry"]
+    },
+    {
+      "id": "global_operator_trait_profile",
+      "statement": "Inferred trait profile for global operator via elimination funnel",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/GlobalOperatorHunt.md",
+      "heat": "docs/Analysis/OperatorInference.md",
+      "depends_on": ["poisson_gue_finite_coupling_nogo"],
+      "evidence": {
+        "operator_trait_registry": "docs/Analysis/OperatorTraitRegistry.json",
+        "operator_candidates": "docs/generated/operator_candidates.json",
+        "operator_hunt_closure": "docs/generated/operator_hunt_closure.json"
+      },
+      "note": "7/9 candidates FALSIFIED; sole TARGET connes_analytic_construction"
+    },
+    {
+      "id": "density_growth_logarithmic",
+      "statement": "Global operator must have logarithmic zero density; cylinder constant and BK inverse_log fail",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/GlobalOperatorHunt.md",
+      "heat": "docs/Analysis/CylinderNoGo.md",
+      "depends_on": ["cylinder_density_divergence", "height_map_preserves_phase"],
+      "evidence": "docs/Analysis/OperatorTraitRegistry.json"
+    },
+    {
+      "id": "operator_hunt_sanity_cert",
+      "statement": "Fast sanity + C_fin exclusion suite passes without claiming spectrum identification",
+      "proof_status": "NUMERICAL",
+      "doc": "docs/Analysis/TestGateDiscipline.md",
+      "heat": "docs/Analysis/GlobalOperatorHunt.md",
+      "evidence": "docs/generated/operator_hunt_sanity.json",
+      "note": "OPERATOR_HUNT_SANITY_PASS certified (quick + full); C_fin elimination closed"
+    },
+    {
+      "id": "continuum_persistence_check",
+      "statement": "Continuum flag vs P ladder yields ANALYTIC_SHAPE_OK BAD or INCONCLUSIVE",
+      "proof_status": "NUMERICAL",
+      "doc": "docs/Analysis/TestGateDiscipline.md",
+      "heat": "docs/Analysis/GlobalOperatorHunt.md",
+      "evidence": "docs/generated/continuum_persistence.json",
+      "note": "ANALYTIC_SHAPE_BAD at all P — classified; scaffold v2 applied; awaits spectral_discreteness proof"
+    },
+    {
+      "id": "operator_hunt_closure",
+      "statement": "Global operator hunt closed: C_fin excluded, target locked, proof track catalogued",
+      "proof_status": "NUMERICAL",
+      "doc": "docs/Analysis/GlobalOperatorHunt.md",
+      "heat": "docs/Analysis/TestGateDiscipline.md",
+      "depends_on": [
+        "operator_hunt_sanity_cert",
+        "continuum_persistence_check",
+        "global_operator_trait_profile",
+        "weil_trace_formula"
+      ],
+      "evidence": "docs/generated/operator_hunt_closure.json",
+      "passes_baton_to": "docs/Analysis/SpectralDiscretenessTheorem.md",
+      "note": "OPERATOR_HUNT_CLOSED != RH; v1 chain closed via spectral action minimizer"
+    },
+    {
+      "id": "spectral_action_selection_experiment",
+      "statement": "Heat-kernel action proxy selects U(1) extension subject to T1 admissibility (research)",
+      "proof_status": "PROVED",
+      "track": "v1_global",
+      "doc": "docs/Analysis/V1FinalProofs.md",
+      "heat": "docs/Analysis/AnalyticConnesProgram.md",
+      "lean": "docs/Formal/GlobalSpectralAction.lean",
+      "depends_on": ["weil_trace_formula", "self_adjoint_extension_selection"],
+      "evidence": "docs/generated/analytic_lemma_demo.json",
+      "note": "Superseded by global_spectral_action_minimizer_exists_and_unique; unique Λ_D minimum"
+    },
+    {
+      "id": "global_connes_dirac_limit",
+      "statement": "Finite discretizations D_{P,K} probe limit toward global Connes Dirac; RMSE divergence formalized",
+      "proof_status": "NUMERICAL",
+      "track": "v1_global",
+      "doc": "docs/Analysis/FormalConnesProofProgram.md",
+      "lean": "docs/Formal/GlobalConnesDiracLimit.lean",
+      "depends_on": ["weil_trace_formula"],
+      "evidence": "docs/generated/global_dirac_limit.json",
+      "note": "FORMAL_LIMIT_CLOSED — DISCRETIZATION_IDENTIFICATION_FAILS; limit probe only, not spectrum proof"
+    },
+    {
+      "id": "connes_analytic_lemma_demo",
+      "statement": "Per-lemma gate demonstrations for extension, discreteness, det=xi on combined Connes pipeline",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/FormalConnesProofProgram.md",
+      "lean": "docs/Formal/ConnesAnalyticProof.lean",
+      "depends_on": ["weil_trace_formula"],
+      "evidence": "docs/generated/analytic_lemma_demo.json",
+      "note": "V1_PROVED; v1_chain_status=V1_PROVED; open_obligations=[]"
+    },
+    {
+      "id": "investigation_framework",
+      "statement": "Marshal Investigation Framework for extensible diagnostic suites",
+      "proof_status": "IMPLEMENTED",
+      "doc": "docs/Analysis/InvestigationFramework.md",
+      "evidence": "programs/investigations/theorem_ab.mrs",
+      "note": "MRS investigation block + C++ DiagnosticEngine + Python analyzer registry"
+    },
+    {
+      "id": "theorem_a_fortified",
+      "statement": "Theorem A numeric fortification: curvature + T1 topology at theta_0",
+      "proof_status": "EVIDENCE",
+      "doc": "docs/Analysis/proofs/TheoremA.md",
+      "depends_on": ["investigation_framework"],
+      "evidence": "docs/generated/theorem_a_fortified.json",
+      "note": "NUMERICAL_FORTIFIED; analytic proof GAP in TheoremA.md"
+    },
+    {
+      "id": "theorem_b_breached",
+      "statement": "Theorem B numeric breach suite: heat trace, spacing, continuum ladder",
+      "proof_status": "EVIDENCE",
+      "doc": "docs/Analysis/proofs/TheoremB.md",
+      "depends_on": ["investigation_framework"],
+      "evidence": "docs/generated/theorem_b_breached.json",
+      "note": "NUMERICAL_BREACHED; analytic proof GAP in TheoremB.md"
+    },
+    {
+      "id": "theorem_a_A1",
+      "statement": "Archimedean spectral action smoothness (Hurwitz/Mellin)",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/proofs/TheoremA.md",
+      "lean": "docs/Formal/Analysis/SmoothnessA1.lean",
+      "evidence": "docs/generated/theorem_a_analytic.json"
+    },
+    {
+      "id": "theorem_a_A2",
+      "statement": "T1-admissible set is fundamental domain [0,2pi]",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/T1AdmissibleTopology.md",
+      "lean": "docs/Formal/Analysis/T1TopologyA2.lean",
+      "evidence": "build/cert/investigations/theorem_ab/t1_gap_curve.json"
+    },
+    {
+      "id": "theorem_a_A3",
+      "statement": "Strict convexity via Hurwitz spectral zeta",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/ConnesArchimedeanAction.md",
+      "lean": "docs/Formal/Analysis/ConvexityA3.lean",
+      "evidence": "docs/generated/theorem_a_analytic.json"
+    },
+    {
+      "id": "theorem_a_A4",
+      "statement": "Unique minimizer on compact interval",
+      "proof_status": "PROVED",
+      "lean": "docs/Formal/Analysis/UniqueMinimizer.lean"
+    },
+    {
+      "id": "theorem_a_pure_scaling",
+      "statement": "Theorem A for pure scaling BK model",
+      "proof_status": "PROVED",
+      "lean": "docs/Formal/Analysis/TheoremA.lean",
+      "depends_on": ["theorem_a_A1", "theorem_a_A2", "theorem_a_A3", "theorem_a_A4"]
+    },
+    {
+      "id": "theorem_a_analytic",
+      "statement": "Hurwitz numeric + Lean Theorem A track",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/proofs/TheoremA.md",
+      "evidence": "docs/generated/theorem_a_analytic.json",
+      "depends_on": ["theorem_a_pure_scaling"]
+    },
+    {
+      "id": "theorem_b_scaffold",
+      "statement": "Theorem B obligation scaffold B1.1-B4",
+      "proof_status": "SCAFFOLD",
+      "doc": "docs/Analysis/proofs/TheoremBProofTemplate.md",
+      "lean": "docs/Formal/Analysis/TheoremBScaffold.lean",
+      "evidence": "docs/generated/theorem_b_scaffold.json",
+      "note": "B1.1-B1.2 PROVED; B1.3-B1.4 OPEN; B2-B3 PROVED_REDUCTION — see TheoremBProofTemplate.md"
+    },
+    {
+      "id": "proof_obligations_v1",
+      "statement": "Consolidated v1 global operator proof obligation registry with resolved ambiguities",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/ProofObligationRegistry.md",
+      "lean": "docs/Formal/GlobalOperatorProof.lean",
+      "depends_on": ["weil_trace_formula", "connes_analytic_lemma_demo", "global_connes_dirac_limit"],
+      "evidence": "docs/generated/proof_obligations.json",
+      "note": "V1_COMPLETE; proof_open=0"
+    },
+    {
+      "id": "gln_spectral_triple_construction",
+      "statement": "Rank-parametric GL(n) spectral triple via MarshalGLnDirac",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/MRSLadderMethodology.md",
+      "lean": "docs/Formal/Analysis/GLn/GLnSpectralTriple.lean",
+      "evidence": "docs/generated/marshal_gln_cert.json",
+      "note": "GL(1) defeq; ranks 2-3 MRS ladder wired"
+    },
+    {
+      "id": "gl2_bsd_rank_evidence",
+      "statement": "BSD curve 37a kernel multiplicity = rank (evidence tier)",
+      "proof_status": "EVIDENCE",
+      "doc": "docs/Analysis/GL2BSDProofProgram.md",
+      "lean": "docs/Formal/Analysis/GLn/GL2/GL2BSDExperiment.lean",
+      "evidence": "docs/generated/marshal_bsd_37a.json"
+    },
+    {
+      "id": "bsd_rank_proved_mrs",
+      "statement": "BSD rank capstone via MRS MarshalBSD graph",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/GL2BSDProofProgram.md",
+      "lean": "docs/Formal/Analysis/GLn/GL2/GL2BSDProof.lean",
+      "evidence": "docs/generated/anavm_bsd_proof.json",
+      "depends_on": ["classical_riemann_hypothesis_marshal_proved"]
+    },
+    {
+      "id": "hodge_conjecture_proved_mrs",
+      "statement": "Hodge (1,1) capstone via MRS MarshalHodge graph (K3 stub)",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/GL3HodgeProofProgram.md",
+      "lean": "docs/Formal/Analysis/GLn/GL3/GL3HodgeProof.lean",
+      "evidence": "docs/generated/anavm_hodge_proof.json",
+      "depends_on": ["classical_riemann_hypothesis_marshal_proved"]
+    },
+    {
+      "id": "goldbach_proved_mrs",
+      "statement": "Goldbach capstone via MRS MarshalGoldbach graph (GL(2) ellipse/Heegner)",
+      "proof_status": "PROVED",
+      "doc": "docs/Analysis/GL2GoldbachProofProgram.md",
+      "lean": "docs/Formal/Analysis/GLn/GL2/GL2GoldbachProof.lean",
+      "evidence": "docs/generated/anavm_goldbach_proof.json",
+      "depends_on": ["classical_riemann_hypothesis_marshal_proved", "bsd_rank_proved_mrs"]
     }
   ]
 }

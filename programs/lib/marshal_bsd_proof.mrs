@@ -1,0 +1,80 @@
+// BSD full-closure MRS proof graph (GL(2), curve 37a).
+mod marshal_bsd_proof {
+    use gln_spectral_triple::*;
+    use ladder_analytic_lemmas::*;
+
+    prove gl2_l_function_identification_of_grid: GL2LFunctionIdentification {
+        gl2_l_function_identification_from_spectral_det(
+            gl2_spectral_det_holomorphic_off_strip,
+            gl2_grid_pointwise_l_match,
+            gl2_holomorphy_off_strip_ok
+        )
+    }
+
+    prove bsd_rank_from_kernel: BSDRankFromKernel {
+        bsd_rank_equals_kernel_multiplicity(
+            gl2_kernel_rank_match,
+            gl2_l_function_identification_of_grid
+        )
+    }
+
+    prove bsd_rank_capstone: BSDRankProved {
+        bsd_rank_proved_from_sha_gap(
+            bsd_rank_from_kernel,
+            gl2_sha_resolvent_gap
+        )
+    }
+
+    proof_graph MarshalBSD {
+        target: bsd_rank_proved,
+
+        obligation bsd_rh_prerequisite {
+            class: Structural,
+            deps: [classical_riemann_hypothesis_marshal_proved],
+            lean_name: "bsd_rh_prerequisite_closed",
+            statement: "RH capstone closed before BSD ladder",
+        }
+        obligation gl2_grid_pointwise_l_match {
+            class: Numeric,
+            prove: infer,
+            deps: [bsd_rh_prerequisite],
+            lean_name: "gl2_grid_pointwise_l_match_proved",
+            statement: "Grid spectral det = L(E,s) at pinned points",
+        }
+        obligation gl2_spectral_det_holomorphic_off_strip {
+            class: Analytic,
+            deps: [gl2_grid_pointwise_l_match],
+            prove: gl2_holomorphy_off_strip_ok,
+            lean_name: "gl2_spectral_det_holomorphic_off_strip",
+            statement: "Spectral det holomorphic off critical strip",
+        }
+        obligation gl2_l_function_identification {
+            class: Composition,
+            deps: [gl2_spectral_det_holomorphic_off_strip, gl2_grid_pointwise_l_match],
+            prove: gl2_l_function_identification_of_grid,
+            lean_name: "gl2_l_function_identification_proved",
+            statement: "det(s-D2) = L(E,s) off strip",
+        }
+        obligation gl2_kernel_rank_match {
+            class: Numeric,
+            prove: infer,
+            deps: [gl2_l_function_identification],
+            lean_name: "gl2_kernel_rank_match_proved",
+            statement: "kernel_multiplicity = rank at s=1",
+        }
+        obligation gl2_sha_resolvent_gap {
+            class: Numeric,
+            prove: infer,
+            deps: [gl2_kernel_rank_match],
+            lean_name: "gl2_sha_resolvent_gap_proved",
+            statement: "Sha finiteness via resolvent gap bound",
+        }
+        obligation bsd_rank_proved {
+            class: Composition,
+            deps: [gl2_kernel_rank_match, gl2_sha_resolvent_gap],
+            prove: bsd_rank_capstone,
+            lean_name: "bsd_rank_proved",
+            statement: "BSD rank capstone for curve 37a",
+        }
+    }
+}

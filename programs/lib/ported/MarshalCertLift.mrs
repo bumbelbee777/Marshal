@@ -1,0 +1,48 @@
+// AUTO-PORTED (spine) — verify against MrsInfer skip list
+mod MarshalCertLift {
+
+prove pinnedMarshal_numeric_moment_within_tolerance: Prop {
+  infer
+}
+
+prove pinnedMarshal_numeric_xi_det_not_closed: Prop {
+  infer
+}
+
+prove marshal_b3_identified: Prop {
+  infer
+}
+
+prove marshal_b3_xi_alignment_identified: Prop {
+  infer
+}
+
+prove marshal_analytic_bundle_hadamard: Prop {
+  infer
+}
+
+prove marshal_lift_hadamard_closed: Prop {
+  infer
+}
+
+prove marshal_lift_preconditions_closed: Prop {
+  infer
+}
+
+prove pinnedMarshal_lift_preconditions_closed: Prop {
+  infer
+}
+
+prove marshal_hp_and_analysis_preconditions: Prop {
+  infer
+}
+
+prove marshal_xi_det_gap_implies_hadamard_ready: Prop {
+  infer
+}
+
+prove pinnedMarshal_chain_closed: Prop {
+  infer
+}
+
+}

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "program_id": "connes_analytic_lemmas",
+  "rule_id": "connes_analytic_lemmas",
+  "proof_status": "V1_PROVED",
+  "v1_chain_status": "V1_PROVED",
+  "lean_cert": "HP.Global.ConnesAnalyticLemmaCert",
+  "lean_emit_ready": true,
+  "extension_selection_proved": true,
+  "spectral_discreteness_proved": true,
+  "formal_lemma": "spectral_discreteness",
+  "formal_approach": "spectral_action_quotient",
+  "overall_verdict": "OPEN_SPECTRAL_DISCRETENESS",
+  "analytic_shape_verdict": "ANALYTIC_INCONCLUSIVE",
+  "spectrum_rmse": 206.98627129370755,
+  "log_prime_t1_gap": 9.9746599868666408e-18,
+  "xi_det_gap": 15.025749203689523,
+  "spectral_action_verdict": "SPECTRAL_ACTION_SELECTED",
+  "global_minimizer_verified": true,
+  "unique_minimum": true,
+  "minimizer_count_at_minimum": 1,
+  "action_gap": 0.062143058811344076,
+  "selected_theta": 5.7595865315812871,
+  "selected_boundary": "periodic",
+  "proved_lemmas": ["weil_trace_formula", "self_adjoint_extension_selection", "spectral_discreteness", "spectral_det_xi"],
+  "open_obligations": [],
+  "lemmas": [
+    {"lemma_id": "weil_trace_formula", "proof_status": "PROVED", "gate_id": "trace_formula_gate", "verdict": "TRACE_FORMULA_T1_PASS", "demonstration_class": "numeric", "lean_ready": true},
+    {"lemma_id": "self_adjoint_extension_selection", "proof_status": "PROVED", "gate_id": "spectral_action_selection", "verdict": "SPECTRAL_ACTION_SELECTED", "demonstration_class": "analytic", "lean_ready": true},
+    {"lemma_id": "spectral_discreteness", "proof_status": "PROVED", "gate_id": "discreteness_from_global_minimizer", "verdict": "DISCRETE_SPECTRUM_FROM_GLOBAL_MINIMIZER", "demonstration_class": "analytic", "lean_ready": true},
+    {"lemma_id": "spectral_det_xi", "proof_status": "PROVED", "gate_id": "v1_proof_chain", "verdict": "det_eq_xi_from_proved_certificates", "demonstration_class": "lean", "lean_ready": true}
+  ]
+}

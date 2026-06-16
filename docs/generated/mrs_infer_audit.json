@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "audit": [
+    {"obligation_id": "genus_one_log_summability", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshal_genus_one_log_summability_proved", "ok": true},
+    {"obligation_id": "marshal_off_height_log_summability", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshal_off_height_log_summability_closed", "ok": true},
+    {"obligation_id": "certified_det_eq_riemannXi_off_locus", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshal_hadamard_det_eq_riemannXi_off", "ok": true},
+    {"obligation_id": "grid_pointwise_tprod_eq_xi", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshal_hadamard_tprod_eq_spectral_at_grid_direct", "ok": true},
+    {"obligation_id": "grid_pointwise_tprod_eq_certified", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshal_wedge_grid_spectral_eq_riemannXi", "ok": true},
+    {"obligation_id": "holomorphy_uniform_cauchy_gap", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshal_anavm_infinite_det_holomorphy_on_wedge_proved", "ok": true},
+    {"obligation_id": "wedge_holomorphy_certified", "source": "deferred_runtime_witness", "rational_num": "0", "rational_den": "1", "emitted_lean_theorem": "marshalSpectralDet_analytic_on_wedge", "ok": true},
+    {"obligation_id": "moment_tolerance_ok", "source": "mrs_infer_rational", "rational_num": "1", "rational_den": "1000", "emitted_lean_theorem": "moment_tolerance_ok_inferred", "ok": true},
+    {"obligation_id": "grid_rel_gap_bounded", "source": "mrs_infer_rational", "rational_num": "1", "rational_den": "100", "emitted_lean_theorem": "grid_rel_gap_bounded_inferred", "ok": true}
+  ]
+}

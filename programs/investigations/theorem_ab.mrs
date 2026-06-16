@@ -1,0 +1,61 @@
+ansatz theorem_ab {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: investigation
+  }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 120
+    height_renormalize: none
+  }
+
+  coupling {
+    heat: none
+  }
+
+  investigation {
+    id: theorem_ab
+    cert_root: build/cert/investigations/theorem_ab
+    fixed_theta: 5.76
+    fixed_boundary: periodic
+    t1_tolerance: 1e-6
+    heat_scale_base: 1.0
+    heat_scales: 3
+    coupling_lambda: 0.5
+    combined_cap: 400
+    arch_cap: 80
+    mode_kmax: 12
+
+    theta_sweep_centered {
+      center: 5.76
+      range: 1.0
+      steps: 200
+    }
+
+    theta_sweep_full {
+      min: 0
+      max: 6.283185307179586
+      steps: 400
+    }
+
+    ladder heat_t {
+      values: 0.001, 0.01, 0.1, 1.0, 10.0, 100.0
+    }
+
+    ladder prime_limit {
+      values: 10, 50, 100, 500, 1000, 5000, 10000, 50000
+    }
+
+    diagnostic spectral_spacing { }
+  }
+
+  diagnostics {
+    investigation_suite: true
+    local_weil_t1: false
+  }
+}

@@ -50,19 +50,22 @@ struct LogPrimeGlobal {
         return total;
     }
 
-    static Real sinc_sq(Real x) {
+    static Real sinc_sq_weil(Real x) { return Sinc2Test::sinc_sq_weil(x); }
+
+    static Real sinc_sq_pi(Real x) {
         if (std::fabs(x) < 1e-30L) return 1.0L;
         const Real s = std::sin(kPi * x) / (kPi * x);
         return s * s;
     }
 
-    Real zero_sinc2_sum(const std::vector<Real>& gammas, Real T) const {
+    Real zero_sinc2_sum(const std::vector<Real>& gammas, Real T, Real kappa = 1.0L) const {
         Real total = 0;
-        for (Real gamma : gammas) total += sinc_sq(gamma / T);
+        for (Real gamma : gammas) total += sinc_sq_weil(kappa * gamma / T);
         return total;
     }
 
-    Real sinc2_residual(const std::vector<Real>& gammas, Real T, int kmax) const {
+    Real sinc2_residual(const std::vector<Real>& gammas, Real T, int kmax,
+                        Real kappa = 1.0L) const {
         if (T <= 0 || gammas.empty()) return 0;
         Real lhs = 0;
         const int n = static_cast<int>(operators.size());
@@ -71,12 +74,13 @@ struct LogPrimeGlobal {
         #endif
         for (int i = 0; i < n; ++i) {
             const auto& op = operators[static_cast<size_t>(i)];
-            for (int k = 1; k <= kmax; ++k) lhs += sinc_sq(op.eigenvalue(k) / T);
+            for (int k = 1; k <= kmax; ++k)
+                lhs += sinc_sq_weil(kappa * op.eigenvalue(k) / T);
         }
-        return std::fabs(lhs - zero_sinc2_sum(gammas, T));
+        return std::fabs(lhs - zero_sinc2_sum(gammas, T, kappa));
     }
 
-    Real p_weight_sinc2_sum(Real T, int kmax, Real eps = 0) const {
+    Real p_weight_sinc2_sum(Real T, int kmax, Real kappa = 1.0L, Real eps = 0) const {
         Real sum = 0;
         const int n = static_cast<int>(operators.size());
         #ifdef _OPENMP
@@ -86,7 +90,7 @@ struct LogPrimeGlobal {
             const auto& op = operators[static_cast<size_t>(i)];
             Real ppow = op.sqrt_p;
             for (int k = 1; k <= kmax; ++k) {
-                const Real term = (1.0L / ppow) * sinc_sq(op.eigenvalue(k) / T);
+                const Real term = (1.0L / ppow) * sinc_sq_weil(kappa * op.eigenvalue(k) / T);
                 sum += term;
                 ppow *= op.sqrt_p;
                 if (eps > 0 && term < eps) break;
@@ -96,11 +100,11 @@ struct LogPrimeGlobal {
     }
 
     Real p_weight_sinc2_residual(const std::vector<Real>& gammas, Real T, int kmax,
-                                 Real eps = 0) const {
-        return std::fabs(p_weight_sinc2_sum(T, kmax, eps) - zero_sinc2_sum(gammas, T));
+                                 Real kappa = 1.0L, Real eps = 0) const {
+        return std::fabs(p_weight_sinc2_sum(T, kmax, kappa, eps) - zero_sinc2_sum(gammas, T, kappa));
     }
 
-    Real weil_prime_sinc2_sum(Real T, int kmax, Real eps = 0) const {
+    Real weil_prime_sinc2_sum(Real T, int kmax, Real kappa = 1.0L, Real eps = 0) const {
         Real sum = 0;
         const int n = static_cast<int>(operators.size());
         #ifdef _OPENMP
@@ -110,7 +114,8 @@ struct LogPrimeGlobal {
             const auto& op = operators[static_cast<size_t>(i)];
             Real ppow = op.sqrt_p;
             for (int k = 1; k <= kmax; ++k) {
-                const Real term = (op.log_p / ppow) * sinc_sq(op.eigenvalue(k) / T);
+                const Real term =
+                    (op.log_p / ppow) * sinc_sq_weil(kappa * op.eigenvalue(k) / T);
                 sum += term;
                 ppow *= op.sqrt_p;
                 if (eps > 0 && term < eps) break;
@@ -120,8 +125,9 @@ struct LogPrimeGlobal {
     }
 
     Real weil_prime_sinc2_residual(const std::vector<Real>& gammas, Real T, int kmax,
-                                   Real eps = 0) const {
-        return std::fabs(weil_prime_sinc2_sum(T, kmax, eps) - zero_sinc2_sum(gammas, T));
+                                     Real kappa = 1.0L, Real eps = 0) const {
+        return std::fabs(weil_prime_sinc2_sum(T, kmax, kappa, eps) -
+                         zero_sinc2_sum(gammas, T, kappa));
     }
 
     int count_below(Real T, int kmax) const {

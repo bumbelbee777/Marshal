@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "program_id": "berry_keating",
+  "best_theta": 6.0213859193804371,
+  "spectrum_rmse": 229.43200834384291,
+  "spectrum_rmse_raw": 206.94509756689385,
+  "height_map_applied": true,
+  "height_map_formula": "gamma_bk * log(n) / (2*pi)",
+  "verdict": "BK_SPECTRUM_MISMATCH",
+  "extension_sweep_verdict": "EXTENSION_INCONCLUSIVE"
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "cert_id": "marshal_xi_spectral_determinant",
+  "source": "tests/Fixtures/Zeros/NtzMergedOneLine.txt",
+  "test_point_im": 20.0,
+  "truncation_gaps": {
+    "5": 11.752762303197926,
+    "10": 12.254268895810906,
+    "30": 12.97246000383252
+  },
+  "normalized_gap_n30": 0.86,
+  "gap_increases_with_truncation": true,
+  "finite_truncation_not_closing": true,
+  "inv_gamma2_partial_sum": 0.022385414976433392,
+  "inv_gamma2_truncation_n": 1000,
+  "xi_det_gap_marshal": 15.025749203689523,
+  "xi_det_tolerance": 1e-06,
+  "moment_witness_closes_xi_vanishes": false,
+  "connes_global_log_summability_closed": false,
+  "riemann_zero_log_summability_witness": true,
+  "lean_emit_ready": true,
+  "note": "Finite det_N does not approach xi at fixed off-line point; XiVanishesAtSpectrum needs RiemannXiZeroCert (not moments alone); Riemann |gamma|^{-2} tail converges; global Connes log summability open."
+}

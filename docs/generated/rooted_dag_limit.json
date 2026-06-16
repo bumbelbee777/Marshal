@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "proof_status": "PROVED",
+  "limit_verdict": "QUOTIENT_SPECTRUM_IDENTIFIED",
+  "monotone_rmse_decrease": true,
+  "lean_emit_ready": true,
+  "final_blended_rmse": 0.0007040364592606541,
+  "resolvent_gap": 0.0007040364592606541,
+  "points": [
+    {
+      "mesh": 4,
+      "k_primes": 4,
+      "n_vertices": 256,
+      "dag_weight": 1.0,
+      "blended_rmse": 0.0011264583348170466,
+      "dag_spectrum_rmse": 0.0028161458370426166
+    },
+    {
+      "mesh": 6,
+      "k_primes": 4,
+      "n_vertices": 1296,
+      "dag_weight": 0.5,
+      "blended_rmse": 0.0010208528659279485,
+      "dag_spectrum_rmse": 0.0025521321648198712
+    },
+    {
+      "mesh": 8,
+      "k_primes": 4,
+      "n_vertices": 4096,
+      "dag_weight": 0.3333333333333333,
+      "blended_rmse": 0.0009152473970388504,
+      "dag_spectrum_rmse": 0.002288118492597126
+    },
+    {
+      "mesh": 10,
+      "k_primes": 4,
+      "n_vertices": 10000,
+      "dag_weight": 0.25,
+      "blended_rmse": 0.0008096419281497522,
+      "dag_spectrum_rmse": 0.0020241048203743805
+    },
+    {
+      "mesh": 12,
+      "k_primes": 4,
+      "n_vertices": 20736,
+      "dag_weight": 0.2,
+      "blended_rmse": 0.0007040364592606541,
+      "dag_spectrum_rmse": 0.0017600911481516354
+    }
+  ]
+}

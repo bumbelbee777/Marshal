@@ -1,0 +1,41 @@
+ansatz connes_crossed_product {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  on circle S¹_log(p) {
+    frequency omega = k * log(p)
+    eigenvalue lambda = k * log(p)
+  }
+
+  coupling {
+    heat: connes_heat
+  }
+
+  crossed_product {
+    coupling: log_ladder
+    lambda: 0.5
+    kmax: 12
+    prime_ladder: 10, 50, 100, 500, 1000, 5000
+  }
+
+  diagnostics {
+    connes_crossed: true
+    trace_test: sinc2
+    test_param: 14.134725142
+    sinc2_kappa: 60
+    spectrum_rmse < 0.5
+    spectrum_max_gap < 0.5
+    sinc2_spectral_gap < 20.0
+    spectrum_identified: false
+  }
+
+  lemma ref connes_crossed_product_assembly { status: open }
+
+  expect {
+    local_weil_pass == true
+  }
+}

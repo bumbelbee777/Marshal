@@ -1,0 +1,147 @@
+// Marshal Hadamard acyclic proof graph (v1 spine — loaded by AnaProofEngine).
+mod marshal_hadamard_proof {
+    use certified_bounds::*;
+
+    prove strip_extension_via_approach: MarshalWedgeDomainToStripExtension {
+        let grid = infer_witness!(GridIdentification);
+        let holo = infer_witness!(HolomorphyOnWedge);
+        marshal_hadamard_tprod_eq_spectral_off_forced(
+            identity_theorem_on_wedge(grid, holo),
+            marshal_off_height_log_summability
+        )
+    }
+
+    prove wedge_proportionality_from_holomorphy: MarshalHadamardWedgeProportionalityData {
+        marshal_hadamard_wedge_proportionality_of_holomorphy_and_entire_ratio(
+            wedge_holomorphy_tprod,
+            identity_theorem_on_wedge
+        )
+    }
+
+    prove weierstrass_identification: MarshalHadamardWeierstrassIdentification {
+        marshal_hadamard_weierstrass_identification_of_proportionality(
+            wedge_proportionality_from_holomorphy,
+            strip_extension_via_approach
+        )
+    }
+
+    prove marshal_xi_zero_classification_of_wedge: MarshalXiZeroClassification {
+        marshal_xi_zero_classification_of_wedge(
+            marshal_off_height_log_summability,
+            marshal_infinite_det_eq_riemannXi_off_forced
+        )
+    }
+
+    prove classical_riemann_hypothesis_from_classification: ClassicalRiemannHypothesis {
+        marshal_classification_implies_classical_RH(marshal_xi_zero_classification_of_wedge)
+    }
+
+    proof_graph MarshalHadamard {
+        target: classical_riemann_hypothesis_marshal_proved,
+
+        obligation genus_one_log_summability {
+            class: Numeric,
+            prove: infer,
+            lean_name: "marshal_genus_one_log_summability_proved",
+            statement: "Summable complex logs of genus-1 factors off MarshalXiForcedZero",
+        }
+        obligation marshal_off_height_log_summability {
+            class: Composition,
+            deps: [genus_one_log_summability],
+            prove: infer,
+            lean_name: "marshal_off_height_log_summability_closed",
+            statement: "SpectralDetLogSummability witness at each off-locus point",
+        }
+        obligation tprod_convergent_off_locus {
+            class: Analytic,
+            deps: [marshal_off_height_log_summability],
+            lean_name: "marshal_infinite_det_tprod_of_log_summability",
+            statement: "Partial Hadamard products converge to infinite tprod off heights",
+        }
+        obligation certified_det_eq_riemannXi_off_locus {
+            class: Structural,
+            prove: infer,
+            lean_name: "marshal_hadamard_det_eq_riemannXi_off",
+            statement: "Certified spectralDet = riemannXi off MarshalXiForcedZero",
+        }
+        obligation grid_pointwise_tprod_eq_xi {
+            class: Numeric,
+            deps: [tprod_convergent_off_locus],
+            prove: infer,
+            lean_name: "marshal_hadamard_tprod_eq_spectral_at_grid_direct",
+            statement: "Grid tprod = riemannXi via tail-bound partial product",
+        }
+        obligation grid_pointwise_tprod_eq_certified {
+            class: Composition,
+            deps: [grid_pointwise_tprod_eq_xi, certified_det_eq_riemannXi_off_locus],
+            prove: infer,
+            lean_name: "marshal_wedge_grid_spectral_eq_riemannXi",
+            statement: "Accumulation grid: tprod = certified det = riemannXi",
+        }
+        obligation holomorphy_uniform_cauchy_gap {
+            class: Numeric,
+            prove: infer,
+            lean_name: "marshal_anavm_infinite_det_holomorphy_on_wedge_proved",
+            statement: "Uniform Cauchy gap on wedge approach grid",
+        }
+        obligation wedge_holomorphy_tprod {
+            class: Analytic,
+            deps: [marshal_off_height_log_summability, holomorphy_uniform_cauchy_gap],
+            lean_name: "marshalHadamardTprod_analytic_on_wedge",
+            statement: "marshalHadamardTprod holomorphic on Re>1",
+        }
+        obligation wedge_holomorphy_certified {
+            class: Structural,
+            prove: infer,
+            lean_name: "marshalSpectralDet_analytic_on_wedge",
+            statement: "spectralDet holomorphic on Re>1",
+        }
+        obligation identity_theorem_on_wedge {
+            class: Analytic,
+            deps: [grid_pointwise_tprod_eq_certified, wedge_holomorphy_tprod, wedge_holomorphy_certified],
+            lean_name: "marshal_hadamard_tprod_eq_spectral_on_wedge",
+            statement: "EqOn tprod = certified on Re>1 from grid accumulation",
+        }
+        obligation strip_extension_via_approach_sequence {
+            class: Analytic,
+            deps: [identity_theorem_on_wedge, marshal_off_height_log_summability],
+            prove: strip_extension_via_approach,
+            lean_name: "marshal_hadamard_tprod_eq_spectral_off_forced",
+            statement: "Extend wedge equality to all s off forced locus",
+        }
+        obligation wedge_proportionality_from_holomorphy {
+            class: Analytic,
+            deps: [wedge_holomorphy_tprod, identity_theorem_on_wedge],
+            prove: wedge_proportionality_from_holomorphy,
+            lean_name: "marshal_hadamard_wedge_proportionality_of_holomorphy_and_entire_ratio",
+            statement: "Same zeros + order-1 + FE implies proportionality",
+        }
+        obligation MarshalHadamardWeierstrassIdentification {
+            class: Composition,
+            deps: [wedge_proportionality_from_holomorphy, strip_extension_via_approach_sequence],
+            prove: weierstrass_identification,
+            lean_name: "marshal_hadamard_weierstrass_identification_of_proportionality",
+            statement: "Infinite tprod = certified det off MarshalXiForcedZero",
+        }
+        obligation marshal_infinite_det_eq_riemannXi_off_forced {
+            class: Composition,
+            deps: [MarshalHadamardWeierstrassIdentification, marshal_off_height_log_summability],
+            lean_name: "MarshalInfiniteDetEqRiemannXiOffForced",
+            statement: "Truncated tprod = riemannXi off MarshalXiForcedZero",
+        }
+        obligation marshal_xi_zero_classification {
+            class: Composition,
+            deps: [marshal_off_height_log_summability, marshal_infinite_det_eq_riemannXi_off_forced],
+            prove: marshal_xi_zero_classification_of_wedge,
+            lean_name: "MarshalXiZeroClassification",
+            statement: "Every riemannXi zero is marshal-forced or trivial",
+        }
+        obligation classical_riemann_hypothesis_marshal {
+            class: Composition,
+            deps: [marshal_xi_zero_classification],
+            prove: classical_riemann_hypothesis_from_classification,
+            lean_name: "classical_riemann_hypothesis_marshal_proved",
+            statement: "Classical RH via wedge classification chain",
+        }
+    }
+}

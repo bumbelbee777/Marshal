@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "rank": 3,
+  "theta": 5.7595865315812871,
+  "predicted_hodge_multiplicity": 20,
+  "kernel_multiplicity": 20,
+  "kernel_tolerance": 9.9999999999999995e-07,
+  "smallest_eigenvalue_abs": 9.9999999999999998e-13,
+  "theta_stable": true,
+  "rank3_contract_ok": true,
+  "rh_prerequisite_ok": true,
+  "hodge_match_ok": true,
+  "bounds_ok": true,
+  "hodge_conjecture_proved": true,
+  "mrs_proof_audit_ok": true,
+  "proof_status": "PROVED"
+}

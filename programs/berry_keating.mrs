@@ -1,0 +1,60 @@
+ansatz berry_keating {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  space phase_space { }
+
+  local {
+    H = x*p + p*x
+  }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 500
+    height_renormalize: log_n
+  }
+
+  height_map {
+    type: log
+    a: 1.0
+  }
+
+  self_adjoint_extension {
+    deficiency_indices: (1,1)
+    family: U(1)
+    sweep_steps: 24
+  }
+
+  archimedean {
+    type: real_line
+    boundary: berry_keating
+    cutoff: planck
+  }
+
+  trace_formula {
+    status: proved
+    mode: weil_full
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    self_adjoint_extension_sweep: true
+    trace_formula_gate: true
+    archimedean_sweep: true
+    spectrum_vs_zeros: true
+    spectrum_rmse < 10
+    weil_residual < 1.0
+  }
+
+  lemma ref self_adjoint_extension_selection { status: open }
+  lemma ref weil_trace_formula { status: proved }
+}

@@ -1,0 +1,192 @@
+{
+  "program_id": "connes_global_dirac_limit",
+  "sweep_mode": true,
+  "best_row_index": -1,
+  "verdict": "ARCH_BOUNDARY_MISMATCH",
+  "rows": [
+    {
+      "type": "real_line",
+      "boundary": "dirichlet",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.592476125147126,
+      "tests": {
+        "gauss": { "weil_residual": 0.08625088097091535, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.592476125147126, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.55764928309569695, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.7414605207160575, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "real_line",
+      "boundary": "neumann",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.5821744985347479,
+      "tests": {
+        "gauss": { "weil_residual": 0.051750498441351551, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.5821744985347479, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.55179146390320366, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.71861081628085577, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "real_line",
+      "boundary": "periodic",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.5873253118409369,
+      "tests": {
+        "gauss": { "weil_residual": 0.069000689706133447, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.5873253118409369, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.55472037349945025, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.73003566849845658, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "real_line",
+      "boundary": "berry_keating",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.566722058616179,
+      "tests": {
+        "gauss": { "weil_residual": 7.5352994137462123e-08, "t1_gap": 9.9746599868666408e-18, "weil_pass": true, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.566722058616179, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.54300473511446379, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.68433625962805311, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "half_line",
+      "boundary": "dirichlet",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.3220584265721964,
+      "tests": {
+        "gauss": { "weil_residual": 0.81938416043013418, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.3220584265721964, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.40388152929274901, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.14165577929201195, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "half_line",
+      "boundary": "neumann",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.3169076132660074,
+      "tests": {
+        "gauss": { "weil_residual": 0.83663435169491607, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.3169076132660074, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.40095261969650237, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.13023092707441108, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "half_line",
+      "boundary": "periodic",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.319483019919101,
+      "tests": {
+        "gauss": { "weil_residual": 0.82800925606252518, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.319483019919101, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.40241707449462571, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.13594335318321152, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "half_line",
+      "boundary": "berry_keating",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "preliminary",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.3091813933067229,
+      "tests": {
+        "gauss": { "weil_residual": 0.86250963859208896, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.3091813933067229, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.39655925530213243, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.11309364874800977, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "torus",
+      "boundary": "dirichlet",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "scaffold",
+      "fallback": "real_line",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.592476125147126,
+      "tests": {
+        "gauss": { "weil_residual": 0.08625088097091535, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.592476125147126, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.55764928309569695, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.7414605207160575, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "torus",
+      "boundary": "neumann",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "scaffold",
+      "fallback": "real_line",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.5821744985347479,
+      "tests": {
+        "gauss": { "weil_residual": 0.051750498441351551, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.5821744985347479, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.55179146390320366, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.71861081628085577, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "torus",
+      "boundary": "periodic",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "scaffold",
+      "fallback": "real_line",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.5873253118409369,
+      "tests": {
+        "gauss": { "weil_residual": 0.069000689706133447, "t1_gap": 9.9746599868666408e-18, "weil_pass": false, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.5873253118409369, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.55472037349945025, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.73003566849845658, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    },
+    {
+      "type": "torus",
+      "boundary": "berry_keating",
+      "cutoff": "planck_scale",
+      "lambda": 6.2831853071795862,
+      "implementation": "scaffold",
+      "fallback": "real_line",
+      "all_tests_pass": false,
+      "max_weil_residual": 9.566722058616179,
+      "tests": {
+        "gauss": { "weil_residual": 7.5352994137462123e-08, "t1_gap": 9.9746599868666408e-18, "weil_pass": true, "t1_pass": true },
+        "sinc2": { "weil_residual": 9.566722058616179, "t1_gap": 1.7347234759768071e-18, "weil_pass": false, "t1_pass": true },
+        "bump": { "weil_residual": 0.54300473511446379, "t1_gap": 0.00045321282009597191, "weil_pass": false, "t1_pass": false },
+        "rational": { "weil_residual": 0.68433625962805311, "t1_gap": 1.4094628242311558e-18, "weil_pass": false, "t1_pass": true }
+      }
+    }
+  ]
+}

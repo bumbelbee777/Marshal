@@ -1,0 +1,9 @@
+{
+  "program_id": "connes_assembly_search",
+  "tier": "single",
+  "grid_points": 1,
+  "verdict": "ASSEMBLY_RANKED",
+  "ranked": [
+    { "score": 11.167423519505626, "height_a": 2, "height_b": -5, "connes_lambda": 0, "rmse_mapped": 0, "rmse_raw": 3312.9359087191915, "sinc2_gap": 0, "xi_det_gap": 14.824452777155482, "max_weil": 9.6849782417900769, "weil_residuals": [0.086250880971171451, 9.6849782417900769, 0.58883152442741293, 0.74159323987907944] }
+  ]
+}

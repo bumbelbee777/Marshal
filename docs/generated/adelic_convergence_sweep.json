@@ -1,0 +1,126 @@
+{
+  "phase12_baseline_rmse": 1486.0,
+  "sweet_spot_epsilon": 10,
+  "saturation_epsilon": 12,
+  "best_height_eps10": {
+    "height_a": 0.1,
+    "height_b": 5.0,
+    "epsilon": 10.0,
+    "adelic_limits_only_count": 10,
+    "rmse_adelic_mapped": 14.435763188768,
+    "beats_phase12_baseline": true
+  },
+  "epsilon_sweep": [
+    {
+      "epsilon": 8,
+      "adelic_limits_only_count": 1,
+      "rmse_adelic_mapped": 247.19589499283677
+    },
+    {
+      "epsilon": 10,
+      "adelic_limits_only_count": 10,
+      "rmse_adelic_mapped": 162.488267977733
+    },
+    {
+      "epsilon": 12,
+      "adelic_limits_only_count": 90,
+      "rmse_adelic_mapped": 2618.8455987551483
+    },
+    {
+      "epsilon": 15,
+      "adelic_limits_only_count": 127,
+      "rmse_adelic_mapped": 2571.931012290847
+    },
+    {
+      "epsilon": 20,
+      "adelic_limits_only_count": 133,
+      "rmse_adelic_mapped": 2532.6746087127826
+    },
+    {
+      "epsilon": 30,
+      "adelic_limits_only_count": 193,
+      "rmse_adelic_mapped": 2633.278676980943
+    },
+    {
+      "epsilon": 40,
+      "adelic_limits_only_count": 255,
+      "rmse_adelic_mapped": 2569.327910115247
+    },
+    {
+      "epsilon": 50,
+      "adelic_limits_only_count": 303,
+      "rmse_adelic_mapped": 2572.617114218677
+    }
+  ],
+  "epsilon_sweep_note": "Fixed height a=1, b=0.",
+  "height_transfer_eps50": {
+    "height_a": 0.1,
+    "height_b": 5.0,
+    "epsilon": 50.0,
+    "adelic_limits_only_count": 303,
+    "rmse_adelic_mapped": 173.29353386697844
+  },
+  "prime_sweep_eps10": [
+    {
+      "max_primes": 100,
+      "adelic_limits_only_count": 10,
+      "rmse_adelic_mapped": 14.435763188768,
+      "height_a": 0.1,
+      "height_b": 5
+    },
+    {
+      "max_primes": 200,
+      "adelic_limits_only_count": 27,
+      "rmse_adelic_mapped": 271.19796560666987,
+      "height_a": 0.1,
+      "height_b": 5
+    },
+    {
+      "max_primes": 500,
+      "adelic_limits_only_count": 227,
+      "rmse_adelic_mapped": 271.9175620664547,
+      "height_a": 0.1,
+      "height_b": 5
+    },
+    {
+      "max_primes": 1000,
+      "adelic_limits_only_count": 706,
+      "rmse_adelic_mapped": 657.003058115988,
+      "height_a": 0.1,
+      "height_b": 5
+    }
+  ],
+  "prime_sweep_suboptimal_height": [
+    {
+      "max_primes": 200,
+      "adelic_limits_only_count": 27,
+      "rmse_adelic_mapped": 1449.96,
+      "height_a": 0.5,
+      "height_b": -10
+    },
+    {
+      "max_primes": 500,
+      "adelic_limits_only_count": 227,
+      "rmse_adelic_mapped": 536.6,
+      "height_a": 0.5,
+      "height_b": -10
+    },
+    {
+      "max_primes": 1000,
+      "adelic_limits_only_count": 706,
+      "rmse_adelic_mapped": 703.27,
+      "height_a": 0.5,
+      "height_b": -10
+    }
+  ],
+  "plot": "docs/generated/adelic_rmse_vs_epsilon.png",
+  "rmse_vs_primes_fit": {
+    "model": "RMSE ~ a * P^b",
+    "a": 0.0428,
+    "b": 1.432,
+    "r2_loglog": 0.7549,
+    "verdict": "DIVERGENCE",
+    "note": "b > 0: RMSE grows with prime cutoff; sweet spot at small P is finite-size overfitting.",
+    "plot": "docs/generated/adelic_rmse_vs_primes.png"
+  }
+}

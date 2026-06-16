@@ -25,6 +25,33 @@ struct Sinc2TSweepPoint {
     Real h_at_gamma1 = 0;
 };
 
+struct Sinc2KappaSweepPoint {
+    Real kappa = 0;
+    Real weil_residual = 0;
+    Real zero_sum = 0;
+    Real prime = 0;
+    Real h_at_gamma1 = 0;
+};
+
+struct ConnesStudyPoint {
+    int n_primes = 0;
+    int p_max = 0;
+    Real lambda = 0;
+    Real sinc2_spectral_gap = 0;
+    Real weil_prime_vs_zeros = 0;
+    Real spectrum_rmse = 0;
+};
+
+struct TestFunctionCert {
+    std::string name;
+    bool t1_pass = false;
+    Real t1_gap = 0;
+    Real weil_residual = 0;
+    bool weil_pass = false;
+    bool has_compact_hhat = false;
+    bool arch_ok = true;
+};
+
 struct LogPrimeValidationReport {
     bool t1_pass = false;
     bool weil_identity_pass = false;
@@ -48,11 +75,18 @@ struct LogPrimeValidationReport {
     Real t4_best_lambda = 0;
     Real t5_sinc2_drift_halving = 0;
     Real t6_crossed_sinc2 = 0;
+    Real compact_sinc2_residual = 0;
+    bool compact_falsify_pass = false;
+    std::vector<TestFunctionCert> test_function_catalog;
     Real sinc2_best_T = 0;
+    Real sinc2_best_kappa = 1;
     Real sinc2_best_residual = 0;
     Real sinc2_best_zero_sum = 0;
+    Real sinc2_kappa_used = 1;
     std::vector<PrimeLadderPoint> prime_ladder;
     std::vector<Sinc2TSweepPoint> sinc2_T_sweep;
+    std::vector<Sinc2KappaSweepPoint> sinc2_kappa_sweep;
+    std::vector<ConnesStudyPoint> connes_study;
 };
 
 LogPrimeValidationReport run_log_prime_validation(const Config& cfg,
@@ -64,5 +98,7 @@ LogPrimeValidationReport run_log_prime_validation(const Config& cfg,
 
 bool export_log_prime_validation_json(const std::string& path,
                                       const LogPrimeValidationReport& r);
+
+bool export_connes_study_json(const std::string& path, const LogPrimeValidationReport& r);
 
 }  // namespace Marshal::Heat

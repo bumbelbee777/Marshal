@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "program_id": "spectral_action_selection",
+  "rule_id": "connes_analytic_construction",
+  "overall_verdict": "OPEN_SPECTRAL_DISCRETENESS",
+  "spectrum_rmse": 206.94509756689385,
+  "spectrum_rmse_raw": 206.94509756689385,
+  "spectrum_max_gap": 287.47646583479167,
+  "best_theta": 6.0213859193804371,
+  "log_prime_t1_gap": 9.9746599868666408e-18,
+  "xi_det_gap": 15.025782265201862,
+  "height_map_applied": false,
+  "height_map_formula": "gamma_bk * log(n) / (2*pi)",
+  "continuous_spectrum_present": true,
+  "analytic_shape_verdict": "ANALYTIC_INCONCLUSIVE",
+  "prime_limit": 100000,
+  "trace_gate_verdict": "TRACE_FORMULA_T1_PASS",
+  "trace_t1_verdict": "T1_LOCAL_PASS",
+  "trace_full_weil_verdict": "FULL_WEIL_ARCH_OPEN",
+  "spectral_det_verdict": "XI_DET_MISMATCH",
+  "steps": [
+    {"step": "self_adjoint_extension_sweep", "verdict": "EXTENSION_INCONCLUSIVE", "pass": false},
+    {"step": "trace_formula_gate", "verdict": "TRACE_FORMULA_T1_PASS", "pass": true},
+    {"step": "spectral_determinant", "verdict": "XI_DET_MISMATCH", "pass": false},
+    {"step": "spectral_discreteness", "verdict": "CONTINUOUS_SPECTRUM_PRESENT", "pass": false}
+  ]
+}

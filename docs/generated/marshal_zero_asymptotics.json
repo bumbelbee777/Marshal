@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "cert_id": "marshal_zero_asymptotics",
+  "source": "tests/Fixtures/Zeros/NtzMergedOneLine.txt",
+  "ntz_report": "tests/Fixtures/Zeros/NtzReport.json",
+  "gamma_1": 14.134725141734695,
+  "gamma_max_at_truncation": 74920.827498994,
+  "n_zeros_truncation": 100000,
+  "initial_count": 12,
+  "initial_heights": [
+    14.134725141734695,
+    21.022039638771556,
+    25.01085758014569,
+    30.424876125859512,
+    32.93506158773919,
+    37.586178158825675,
+    40.9187190121475,
+    43.327073280915,
+    48.00515088116716,
+    49.7738324776723,
+    52.970321477714464,
+    56.44624769706339
+  ],
+  "strict_mono_initial": true,
+  "min_consecutive_gap": 1.7686815965051395,
+  "tail_slope_lower_bound": 1.0,
+  "tail_extension_valid": true,
+  "lean_emit_ready": true,
+  "note": "Initial Odlyzko heights pinned in Lean; tail extended with unit slope for StrictMono + Tendsto atTop. \u03be-zero vanishing is separate (RiemannXiZeroCert).",
+  "ntz_gamma_1": 14.134725142,
+  "ntz_merged_count": 100000
+}

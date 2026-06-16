@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "investigation_id": "marshal_theorem_b",
+  "lean_cert": "HPAnalysis.MarshalTheoremBCert",
+  "lean_emit_ready": true,
+  "selected_theta": 5.759586531581287,
+  "b13": {
+    "orbit_measure_finite": true,
+    "rapid_decay_controls_eisenstein": true,
+    "variational_gap": 0.062143058811344076,
+    "discrete_continuous_ratio": 1.648025885508361e-44,
+    "weil_consistency": true,
+    "closed": true
+  },
+  "b14": {
+    "hs_singular_sum": 2.3999539938075856,
+    "hs_sum_bound": 100.0,
+    "heat_trace_riemann": 1.7065064185517757e-87,
+    "heat_trace_bk": 1.6929306270190718,
+    "cylinder_not_compact": true,
+    "finite_crossed_rmse": 119.86596353611195,
+    "closed": true
+  },
+  "moment_l2_distance": 0.0007040364592606541,
+  "theorem_b_closed": true,
+  "obligations": {
+    "B1_1": "PROVED",
+    "B1_2": "PROVED",
+    "B1_3": "PROVED",
+    "B1_4": "PROVED",
+    "B2": "PROVED",
+    "B3": "PROVED",
+    "B4": "PROVED"
+  },
+  "note": "Marshal analytic witnesses for B1.3/B1.4; Lean closure via MarshalTheoremBCert.lean"
+}

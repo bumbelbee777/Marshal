@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "verdict": "ANALYTIC_SHAPE_BAD",
+  "note": "continuous_spectrum_present at all P",
+  "ladder": [
+    {
+      "path": "build\\cert\\continuum_100.json",
+      "prime_limit": 100,
+      "continuous_spectrum_present": true,
+      "analytic_shape_verdict": "ANALYTIC_INCONCLUSIVE"
+    },
+    {
+      "path": "build\\cert\\continuum_1000.json",
+      "prime_limit": 1000,
+      "continuous_spectrum_present": true,
+      "analytic_shape_verdict": "ANALYTIC_INCONCLUSIVE"
+    },
+    {
+      "path": "build\\cert\\continuum_10000.json",
+      "prime_limit": 10000,
+      "continuous_spectrum_present": true,
+      "analytic_shape_verdict": "ANALYTIC_INCONCLUSIVE"
+    }
+  ]
+}

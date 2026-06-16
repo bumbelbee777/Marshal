@@ -1,0 +1,66 @@
+ansatz connes_global_dirac_limit {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  space adele_class(truncation P) { }
+
+  local {
+    spectral_triple(A, H, D)
+  }
+
+  quotient sunit {
+    generators: auto
+  }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 500
+    height_renormalize: none
+  }
+
+  crossed_product {
+    coupling: log_ladder
+    lambda: 0.5
+    kmax: 12
+  }
+
+  archimedean {
+    type: real_line
+    boundary: berry_keating
+    cutoff: planck
+  }
+
+  discretization_limit {
+    kind: global_connes_dirac
+    caps: 120, 240, 400, 600
+    metric: spectrum_rmse
+    limit_target: riemann_zero_heights
+    formal_status: open
+  }
+
+  formal_target {
+    lemma: spectral_discreteness
+    approach: adelic_quotient_limit
+    proof_status: open
+  }
+
+  trace_formula {
+    status: proved
+    mode: weil_full
+  }
+
+  diagnostics {
+    global_dirac_limit: formal
+    trace_formula_gate: sanity
+  }
+
+  lemma ref weil_trace_formula { status: proved }
+  lemma ref spectral_discreteness { status: open }
+  lemma ref self_adjoint_extension_selection { status: open }
+}

@@ -1,0 +1,96 @@
+// AUTO-PORTED (spine) — verify against MrsInfer skip list
+mod MarshalHadamardWeierstrassClosure {
+
+prove marshalHadamardTprod_eq_marshalInfiniteSpectralDet: Prop {
+  infer
+}
+
+prove marshalInfiniteSpectralDet_at_zero: Prop {
+  infer
+}
+
+prove riemannXi_zero_at_zero: Prop {
+  infer
+}
+
+prove riemannXi_zero_at_one: Prop {
+  infer
+}
+
+prove marshal_weierstrass_trivial_zero_obstruction: Prop {
+  infer
+}
+
+prove marshal_certified_eq_riemannXi_off_forced: Prop {
+  infer
+}
+
+prove marshal_weierstrass_identification_iff_infinite_eq_riemannXi: Prop {
+  infer
+}
+
+prove marshalWedgeGridPt_weierstrass_compatible: Prop {
+  infer
+}
+
+prove marshalWedgeIdentityDomain_weierstrass_compatible: Prop {
+  infer
+}
+
+prove marshal_certified_eq_riemannXi_at_two: Prop {
+  infer
+}
+
+prove riemannXi_ne_zero_at_two: Prop {
+  infer
+}
+
+prove marshal_wedge_domain_identification_of_grid_and_holomorphy: Prop {
+  infer
+}
+
+prove marshal_hadamard_wedge_proportionality_of_entire_ratio_data: Prop {
+  infer
+}
+
+prove marshalInfiniteDetEqCertifiedAtTwo_of_wedge_identification: Prop {
+  infer
+}
+
+prove marshal_hadamard_wedge_proportionality_of_holomorphy_and_entire_ratio: Prop {
+  infer
+}
+
+prove marshal_hadamard_weierstrass_identification_proved: Prop {
+  infer
+}
+
+prove classical_riemann_hypothesis_of_weierstrass_witness: Prop {
+  infer
+}
+
+prove marshal_wedge_domain_identification_of_proportionality: Prop {
+  infer
+}
+
+prove marshal_hadamard_weierstrass_identification_of_wedge_and_extension: Prop {
+  infer
+}
+
+prove marshal_hadamard_weierstrass_identification_of_grid_and_holomorphy: Prop {
+  infer
+}
+
+prove marshal_hadamard_weierstrass_identification_of_proportionality: Prop {
+  infer
+}
+
+prove classical_riemann_hypothesis_of_grid_and_holomorphy: Prop {
+  infer
+}
+
+prove classical_riemann_hypothesis_of_proportionality: Prop {
+  infer
+}
+
+}

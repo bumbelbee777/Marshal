@@ -1,0 +1,54 @@
+---
+description: Theorem A/B fortress — prove in Lean, no False/tautology cheating
+globs: docs/Formal/**/*.lean,docs/Analysis/**/*.md
+alwaysApply: false
+---
+
+# Theorems A & B — fortress closure
+
+## Target state (this repo)
+
+| Object | Lean home | Must not stay |
+|--------|-----------|---------------|
+| **Theorem A** | `HPAnalysis.theorem_a_pure_scaling`, global minimizer cert | `TheoremAFortress := False` |
+| **Theorem B** | `HPAnalysis.pinnedMarshal_chain_closed`, B1–B4 spine | `TheoremBFortress := False` |
+| **Fortress** | `Analysis/FortressClosure.lean`, `proof_chain_marshal_default` | `ConnesAnalyticFortressProved := False` |
+
+Closure must come from **proved lemmas in the chain**, not tautologies, axioms, or status-doc edits alone.
+
+When the user or battle plan specifies fortress steps with **numeric certs** (θ₀, T1 gap, moment L², off-spectrum witness), implement those steps — do not substitute a different closure path or skip cert-backed lemmas.
+
+## Proof order (do not skip)
+
+1. Theorem A on supplied hypotheses (`Analysis/TheoremA.lean`) — already Mathlib.
+2. Default off-spectrum (`Analysis/MarshalOffSpectrumDefault.lean`).
+3. Theorem B complete (`theorem_b_complete`, `pinnedMarshal_chain_closed`).
+4. Wire HP routing + HPAnalysis (`proof_chain_marshal_default`).
+5. Set fortress Props to **proved**; remove axioms that deny cert → fortress (`marshal_cert_not_analytic_fortress`).
+
+## When editing fortress modules
+
+- **Replace** `def ... := False` with theorems referencing the closed chain.
+- **Delete** discipline axioms that block closure once the bridge theorem exists.
+- Update `PUBLICATION_STATUS.md` tags from `ANALYTIC_OPEN` to `PROVED` only with theorem citations and matching Lean deps.
+- **Reject** fake closure: `theorem fortress : True := trivial`, circular defs, or props defined equal to their own proof obligation.
+
+## Anti-cheat checklist (fortress edits)
+
+Before marking fortress closed, verify:
+
+- [ ] Implements the **next open step** from user plan / `ConnesAnalyticFortress.md` — not a substitute chain
+- [ ] Proof is not definitional/tautological
+- [ ] No new axioms or `sorry` introduced to pass the build
+- [ ] Cert inputs (θ₀, T1 gap, moment L², off-spectrum witness) match pinned Marshal spine, user plan, and validation
+- [ ] `EmitMarshalLeanCert.py --check` passes when cert numerics are in scope
+- [ ] `PUBLICATION_STATUS.md` theorem names exist in Lean and are actually used in the closure path
+- [ ] No plan steps “closed” in prose only while Lean still stubs them
+
+## Marshal parameters (pinned)
+
+- θ₀ ≈ 5.76, T1 gap ≈ 10⁻¹⁸, moment L² ≈ 7×10⁻⁴, off-spectrum: `defaultMarshalOffSpectrumWitness`.
+
+## Cross-domain work
+
+Fortress closure may require lemmas connecting spectral theory, adelic analysis, and determinant identities. Pursue those routes in `docs/Analysis/` and Lean **when the battle plan names them** — with explicit hypotheses, not hand-waving.

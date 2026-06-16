@@ -1,0 +1,38 @@
+ansatz theorem_a_analytic {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: investigation
+  }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 120
+  }
+
+  investigation {
+    id: theorem_a_analytic
+    cert_root: build/cert/investigations/theorem_a_analytic
+    fixed_theta: 5.76
+    t1_tolerance: 1e-6
+  }
+
+  lemma ref theorem_a_A1 { status: open }
+  lemma ref theorem_a_A2 { status: open }
+  lemma ref theorem_a_A3 { status: open }
+  lemma ref theorem_a_A4 { status: open }
+
+  formal_target {
+    lemma: theorem_a_pure_scaling
+    approach: hurwitz_zeta
+    proof_status: open
+  }
+
+  diagnostics {
+    hurwitz_spectral_action: true
+    investigation_suite: true
+  }
+}

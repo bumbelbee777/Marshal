@@ -24,10 +24,13 @@ struct OperatorCandidateResult {
     std::string ansatz_id;
     std::string registry_status;
     std::string verdict;
+    std::string elimination_reason;
     AnaVM::OperatorTraits traits;
     CandidateMetrics metrics;
     double plausibility_score = 0;
 };
+
+std::string elimination_reason_for(const AnaVM::OperatorTraits& traits);
 
 std::vector<Real> CollectLogpRescaledSpectrum(const Heat::PrimeCatalog& cat, int N);
 

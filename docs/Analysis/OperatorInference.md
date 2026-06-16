@@ -2,6 +2,8 @@
 
 Marshal infers **operator traits** from `.mrs` programs and falsification data, then ranks **plausible candidate operators** for Hilbert–Pólya.
 
+**Operator hunt:** See [GlobalOperatorHunt.md](GlobalOperatorHunt.md) — elimination funnel, `density_growth`, CONNES_SUBTARGETS. Identification score is **0** for `in_C_fin` or density violations.
+
 Registry: `docs/Analysis/OperatorTraitRegistry.json`  
 Output: `docs/generated/operator_candidates.json`
 

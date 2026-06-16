@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "test_function": "laplace_exp_abs",
+  "a": 1,
+  "n_zeros": 100000,
+  "n_primes": 41538,
+  "lhs_zero_sum": 1.4549502429892646e-06,
+  "rhs_arch": -0.9140954836854596,
+  "rhs_poles": 2,
+  "rhs_prime": 9.180476877445164,
+  "rhs_total": -8.094572361130624,
+  "residual": 8.094573816080867,
+  "t1_gap": 7.806255641895632e-18,
+  "t1_pass": true,
+  "pass": true,
+  "lhs_mpmath": 1.4549502429892656e-06,
+  "arch_mpmath": -0.6255743780214937,
+  "lhs_mpmath_gap": 1.0587911840678754e-21,
+  "arch_mpmath_gap": 0.2885211056639658,
+  "full_weil_residual": 8.094573816080867,
+  "arch_mpmath_pass": true
+}

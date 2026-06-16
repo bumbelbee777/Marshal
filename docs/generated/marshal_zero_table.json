@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "cert_id": "marshal_zero_table",
+  "table_size": 32,
+  "min_consecutive_gap": 1.21929018772542,
+  "tail_extrapolation_gap": 1.21929018772542,
+  "gamma_1": 14.134725141734695,
+  "gamma_last": 105.44662305232609,
+  "source": "tests/Fixtures/Zeros/NtzMergedOneLine.txt"
+}

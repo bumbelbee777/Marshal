@@ -1,0 +1,16 @@
+ansatz marshal_wedge_analytic {
+  kind: operator
+  rule_id: marshal_wedge
+
+  diagnostics {
+    wedge_analytics: true
+  }
+
+  expects [
+    "genus_one_log_summability",
+    "marshal_infinite_det_identification"
+  ]
+
+  lemma ref marshal_genus_one_log_summability { status: proved }
+  lemma ref marshal_infinite_det_eq_certified_off_forced { status: open }
+}

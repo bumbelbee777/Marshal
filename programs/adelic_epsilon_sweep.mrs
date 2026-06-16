@@ -1,0 +1,48 @@
+# Lightweight completion sweep (no archimedean block)
+ansatz adelic_epsilon_sweep {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  on circle S¹_log(p) {
+    frequency omega = k * log(p)
+    eigenvalue lambda = k * log(p)
+  }
+
+  completion {
+    method: cauchy
+    constraint: asymptotic
+    tolerance: 1e-6
+    norm: l2
+  }
+
+  adelic_cauchy {
+    metric: mixed
+    search: diophantine_approximation
+    max_denominator: 1000
+    max_primes: 100
+    include_raw_ladder: false
+    target_zeros: 50
+  }
+
+  height_map {
+    type: log
+    a: 1.0
+    b: 0.0
+  }
+
+  crossed_product {
+    coupling: log_ladder
+    kmax: 20
+    prime_ladder: 10, 50, 100
+  }
+
+  diagnostics {
+    trace_test: sinc2
+    test_param: 14.134725142
+    sinc2_kappa: 60
+  }
+}

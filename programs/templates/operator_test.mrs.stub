@@ -1,0 +1,32 @@
+ansatz operator_test {
+
+  meta {
+    uses_gamma: true
+    sym_tier: scaffold
+    kind: operator
+  }
+
+  on circle S¹_log(p) {
+    frequency omega = 2 * pi * n / log(p)
+    eigenvalue lambda = YOUR_SPECTRUM_EXPR
+  }
+
+  # self_adjoint_extension { deficiency_indices: (1,1); family: U(1); sweep_steps: 24 }
+  # trace_formula { status: proved; mode: weil_full }
+  # semiclassical { cutoff: planck; ladder: wkb; log_span: 6.0; max_modes: 500 }
+
+  diagnostics {
+    local_weil_t1: true
+    weil_identity: gauss
+    trace_test: gauss
+    test_param: 14.134725142
+    weil_residual < 1e-6
+    # self_adjoint_extension_sweep: true
+    # trace_formula_gate: true
+    # spectrum_vs_zeros: true
+  }
+
+  expect {
+    local_weil_pass == true
+  }
+}

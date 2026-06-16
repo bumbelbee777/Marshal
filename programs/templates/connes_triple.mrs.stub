@@ -1,3 +1,4 @@
+# Minimal Connes scaffold — see programs/connes_analytic_construction.mrs for full pipeline.
 ansatz connes_adele_quotient {
 
   meta {

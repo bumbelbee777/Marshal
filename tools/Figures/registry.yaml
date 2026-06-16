@@ -1,0 +1,97 @@
+figures:
+  - id: S1_connes_spine
+    section: I
+    tier: MIXED
+    certs: [anavm_xi_hadamard_proof_graph.json]
+  - id: S2_rooted_dag_convergence
+    section: I
+    tier: NUMERIC
+    certs: [rooted_dag_limit.json]
+  - id: S3_global_limit
+    section: I
+    tier: NUMERIC
+    certs: [global_connes_limit.json]
+  - id: S4_weil_convergence
+    section: I
+    tier: NUMERIC
+    certs: [weil_convergence_T8_kappa1.json]
+  - id: S5_theta_sweep
+    section: II
+    tier: PROVED
+    certs: [self_adjoint_extension_sweep.json]
+  - id: S6_t1_gap_curve
+    section: II
+    tier: PROVED
+    certs: [analytic_lemma_demo.json]
+  - id: S7_pinned_constants
+    section: II
+    tier: PROVED
+    certs: [analytic_lemma_demo.json]
+  - id: S8_heat_trace
+    section: II
+    tier: NUMERIC
+    certs: [theorem_b_scaffold.json]
+  - id: S9_spectral_mismatch
+    section: III
+    tier: NUMERIC
+    certs: [connes_spectrum_validation.json]
+  - id: S10_gap_semantics
+    section: III
+    tier: NUMERIC
+    certs: []
+  - id: S11_adelic_epsilon
+    section: III
+    tier: NUMERIC
+    certs: [adelic_epsilon_sweep.json]
+  - id: S12_adelic_height_heatmap
+    section: III
+    tier: NUMERIC
+    certs: [adelic_convergence_sweep.json]
+  - id: S13_measure_limit
+    section: III
+    tier: NUMERIC
+    certs: [measure_limit_sweep.json]
+  - id: S14_xi_det_strip
+    section: III
+    tier: NUMERIC
+    certs: [spectral_determinant.json]
+  - id: S15_pair_correlation
+    section: III
+    tier: NUMERIC
+    certs: [pair_correlation.json]
+  - id: S16_gln_ladder
+    section: IV
+    tier: MIXED
+    certs: []
+  - id: S17_rank_spectra
+    section: IV
+    tier: EVIDENCE
+    certs: [marshal_gln_ladder_sweep.json]
+  - id: S18_spectral_action_by_rank
+    section: IV
+    tier: EVIDENCE
+    certs: [marshal_gln_ladder_sweep.json]
+  - id: S19_bsd_rank2
+    section: IV
+    tier: EVIDENCE
+    certs: [marshal_bsd_37a.json]
+  - id: S20_hodge_k3_kernel
+    section: IV
+    tier: EVIDENCE
+    certs: [marshal_hodge_k3_demo.json]
+  - id: S21_hitchin_moduli_schematic
+    section: IV
+    tier: OUTLOOK
+    certs: []
+  - id: S22_gln4_block_decomposition
+    section: IV
+    tier: OUTLOOK
+    certs: [gln4_physics_outlook.json]
+  - id: S23_holy_function
+    section: IV
+    tier: OUTLOOK
+    certs: [holy_function_demo.json]
+  - id: S24_unification_map
+    section: IV
+    tier: OUTLOOK
+    certs: []

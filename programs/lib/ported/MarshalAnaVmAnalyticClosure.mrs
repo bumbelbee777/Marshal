@@ -1,0 +1,52 @@
+// AUTO-PORTED (spine) — verify against MrsInfer skip list
+mod MarshalAnaVmAnalyticClosure {
+
+prove marshal_anavm_infinite_continuous_off_forced: Prop {
+  infer
+}
+
+prove marshal_anavm_wedge_grid_exact_proved: Prop {
+  infer
+}
+
+prove marshal_anavm_wedge_domain_identification_proved: Prop {
+  infer
+}
+
+prove marshal_hadamard_tprod_eq_spectral_on_wedge: Prop {
+  infer
+}
+
+prove marshal_anavm_strip_extension_of_wedge: Prop {
+  infer
+}
+
+prove marshal_anavm_wedge_domain_to_strip_extension_proved: Prop {
+  infer
+}
+
+prove marshal_anavm_wedge_strip_extension_proved: Prop {
+  infer
+}
+
+prove marshal_anavm_weierstrass_identification_proved: Prop {
+  infer
+}
+
+prove marshal_hadamard_tprod_eq_riemannXi_at_grid_direct: Prop {
+  infer
+}
+
+prove marshal_hadamard_tprod_eq_spectral_at_grid_direct: Prop {
+  infer
+}
+
+prove marshal_hadamard_tprod_eq_spectral_off_forced: Prop {
+  infer
+}
+
+prove classical_riemann_hypothesis_marshal_proved: Prop {
+  infer
+}
+
+}

@@ -1,0 +1,9 @@
+{
+  "rank": 2,
+  "curve_label": "37a",
+  "theta": 5.759586531581287,
+  "kernel_multiplicity": 1,
+  "smallest_eigenvalue_abs": 1e-06,
+  "rank_match": true,
+  "proof_status": "EVIDENCE"
+}

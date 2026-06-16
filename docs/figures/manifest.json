@@ -1,0 +1,244 @@
+{
+  "generated_at": "2026-06-15T11:51:10.538831+00:00",
+  "figures": [
+    {
+      "id": "S10_gap_semantics",
+      "caption": "Falsification gap semantics.",
+      "tier": "NUMERIC",
+      "sources": [
+        "spectral_findings.md"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S10_gap_semantics.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S10_gap_semantics.png"
+    },
+    {
+      "id": "S11_adelic_epsilon",
+      "caption": "Adelic mapped RMSE vs completion tolerance.",
+      "tier": "NUMERIC",
+      "sources": [
+        "adelic_epsilon_sweep.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S11_adelic_epsilon.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S11_adelic_epsilon.png"
+    },
+    {
+      "id": "S12_adelic_height_heatmap",
+      "caption": "RMSE over height renormalization map.",
+      "tier": "NUMERIC",
+      "sources": [
+        "adelic_convergence_sweep.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S12_adelic_height_heatmap.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S12_adelic_height_heatmap.png"
+    },
+    {
+      "id": "S13_measure_limit",
+      "caption": "Stable sinc\u00b2 residual across prime limits.",
+      "tier": "NUMERIC",
+      "sources": [
+        "measure_limit_sweep.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S13_measure_limit.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S13_measure_limit.png"
+    },
+    {
+      "id": "S14_xi_det_strip",
+      "caption": "XiDetGap along the critical strip.",
+      "tier": "NUMERIC",
+      "sources": [
+        "spectral_determinant.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S14_xi_det_strip.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S14_xi_det_strip.png"
+    },
+    {
+      "id": "S15_pair_correlation",
+      "caption": "Zero spacings vs GUE reference.",
+      "tier": "NUMERIC",
+      "sources": [
+        "pair_correlation.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S15_pair_correlation.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S15_pair_correlation.png"
+    },
+    {
+      "id": "S16_gln_ladder",
+      "caption": "Rank ladder: RH, BSD, Hodge, Yang\u2013Mills.",
+      "tier": "MIXED",
+      "sources": [],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S16_gln_ladder.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S16_gln_ladder.png"
+    },
+    {
+      "id": "S17_rank_spectra",
+      "caption": "Eigenvalue spectra ranks 1\u20134.",
+      "tier": "EVIDENCE",
+      "sources": [
+        "marshal_gln_ladder_sweep.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S17_rank_spectra.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S17_rank_spectra.png"
+    },
+    {
+      "id": "S18_spectral_action_by_rank",
+      "caption": "Spectral action curves by GL(n) rank.",
+      "tier": "EVIDENCE",
+      "sources": [
+        "marshal_gln_ladder_sweep.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S18_spectral_action_by_rank.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S18_spectral_action_by_rank.png"
+    },
+    {
+      "id": "S19_bsd_rank2",
+      "caption": "GL(2) BSD rank-2 kernel identification.",
+      "tier": "EVIDENCE",
+      "sources": [
+        "marshal_bsd_37a.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S19_bsd_rank2.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S19_bsd_rank2.png"
+    },
+    {
+      "id": "S1_connes_spine",
+      "caption": "Proof obligation DAG for the Connes\u2013Marshal RH spine.",
+      "tier": "MIXED",
+      "sources": [
+        "anavm_xi_hadamard_proof_graph.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S1_connes_spine.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S1_connes_spine.png"
+    },
+    {
+      "id": "S20_hodge_k3_kernel",
+      "caption": "Rank-3 Hitchin/K3: Hodge classes as ker(D).",
+      "tier": "EVIDENCE",
+      "sources": [
+        "marshal_hodge_k3_demo.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S20_hodge_k3_kernel.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S20_hodge_k3_kernel.png"
+    },
+    {
+      "id": "S21_hitchin_moduli_schematic",
+      "caption": "Hitchin fibration and Hodge\u2013kernel correspondence.",
+      "tier": "OUTLOOK",
+      "sources": [
+        "HodgeK3Outlook.md"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S21_hitchin_moduli_schematic.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S21_hitchin_moduli_schematic.png"
+    },
+    {
+      "id": "S22_gln4_block_decomposition",
+      "caption": "GL(4) block structure / YMH analogy.",
+      "tier": "OUTLOOK",
+      "sources": [
+        "gln4_physics_outlook.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S22_gln4_block_decomposition.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S22_gln4_block_decomposition.png"
+    },
+    {
+      "id": "S23_holy_function",
+      "caption": "Holy Function profile; anchor at t=\u03c0.",
+      "tier": "OUTLOOK",
+      "sources": [
+        "holy_function_demo.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S23_holy_function.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S23_holy_function.png"
+    },
+    {
+      "id": "S24_unification_map",
+      "caption": "Summary: arithmetic/physics problems on the GL(n) ladder.",
+      "tier": "OUTLOOK",
+      "sources": [],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S24_unification_map.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S24_unification_map.png"
+    },
+    {
+      "id": "S2_rooted_dag_convergence",
+      "caption": "DAG discretization RMSE vs mesh.",
+      "tier": "NUMERIC",
+      "sources": [
+        "rooted_dag_limit.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S2_rooted_dag_convergence.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S2_rooted_dag_convergence.png"
+    },
+    {
+      "id": "S3_global_limit",
+      "caption": "Global operator limit convergence.",
+      "tier": "NUMERIC",
+      "sources": [
+        "global_connes_limit.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S3_global_limit.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S3_global_limit.png"
+    },
+    {
+      "id": "S4_weil_convergence",
+      "caption": "Weil explicit formula convergence exponents.",
+      "tier": "NUMERIC",
+      "sources": [
+        "weil_convergence_T8_kappa1.json",
+        "weil_convergence_gamma1_kappa60.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S4_weil_convergence.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S4_weil_convergence.png"
+    },
+    {
+      "id": "S5_theta_sweep",
+      "caption": "Theorem A: unique minimizer at pinned \u03b8\u2080.",
+      "tier": "PROVED",
+      "sources": [
+        "self_adjoint_extension_sweep.json",
+        "theorem_a_fortified.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S5_theta_sweep.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S5_theta_sweep.png"
+    },
+    {
+      "id": "S6_t1_gap_curve",
+      "caption": "T1 gap curve with \u03b8\u2080 in the interior.",
+      "tier": "PROVED",
+      "sources": [
+        "analytic_lemma_demo.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S6_t1_gap_curve.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S6_t1_gap_curve.png"
+    },
+    {
+      "id": "S7_pinned_constants",
+      "caption": "Pinned \u03b8\u2080, T1 gap, moment L\u00b2, variational gap.",
+      "tier": "PROVED",
+      "sources": [
+        "analytic_lemma_demo.json",
+        "marshal_theorem_b_cert.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S7_pinned_constants.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S7_pinned_constants.png"
+    },
+    {
+      "id": "S8_heat_trace",
+      "caption": "Heat trace comparison across models.",
+      "tier": "NUMERIC",
+      "sources": [
+        "theorem_b_scaffold.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S8_heat_trace.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S8_heat_trace.png"
+    },
+    {
+      "id": "S9_spectral_mismatch",
+      "caption": "Operator eigenvalues vs Riemann ordinates.",
+      "tier": "NUMERIC",
+      "sources": [
+        "connes_spectrum_validation.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S9_spectral_mismatch.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S9_spectral_mismatch.png"
+    }
+  ]
+}

@@ -1,45 +1,432 @@
 {
+
   "version": 1,
+
   "rules": [
+
     {
+
       "id": "circle_logp_poisson",
+
       "status": "implemented",
+
       "space": "circle S¹_log(p)",
+
       "omega_ref": "2*pi*n/log(p)",
+
       "coupling_ref": "poisson",
+
       "lean_module": "HPWeil",
+
       "lean_cert": "HP.SpecCert",
+
       "diagnostics": ["pair_correlation_gue", "formal_analytics"]
+
     },
+
     {
+
       "id": "pair_correlation_gue",
+
       "status": "implemented",
+
       "backend": "Marshal::Analysis::PairCorrelation",
+
       "montgomery_r2": "1 - (sin(pi*s)/(pi*s))^2",
+
       "lean_module": "CylinderNoGo",
+
       "lean_cert": "HP.Cylinder.PairCorrelationCert"
+
     },
+
     {
+
       "id": "berry_keating_xp",
-      "status": "placeholder",
+
+      "status": "partial",
+
       "space": "phase_space",
+
       "local": "H = x*p + p*x",
-      "omega_ref": "x*p_classical",
+
+      "omega_ref": "gamma_n_wkb",
+
       "coupling_ref": "berry_keating",
+
+      "backend": "Marshal::Heat::BerryKeatingOperator",
+
+      "diagnostics": [
+
+        "self_adjoint_extension_sweep",
+
+        "archimedean_sweep",
+
+        "spectrum_vs_zeros",
+
+        "trace_formula_gate"
+
+      ],
+
       "lean_module": "AdeleQuotient",
-      "lean_cert": "HP.Global.BerryKeatingScaffoldCert",
+
+      "lean_cert": "HP.Global.BerryKeatingCert",
+
       "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
     },
+
     {
+
       "id": "connes_dirac",
+
       "status": "placeholder",
+
       "space": "adele_class",
+
       "local": "spectral_triple(A,H,D)",
+
       "omega_ref": "D_spectral",
+
       "coupling_ref": "connes_heat",
+
       "lean_module": "AdeleQuotient",
+
       "lean_cert": "HP.Global.ConnesScaffoldCert",
+
       "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
+    },
+
+    {
+
+      "id": "connes_analytic_construction",
+
+      "status": "partial",
+
+      "space": "adele_class",
+
+      "local": "spectral_triple(A,H,D)",
+
+      "omega_ref": "D_spectral",
+
+      "backend": "Marshal::Heat::AnalyticConstructionValidation",
+
+      "diagnostics": [
+
+        "self_adjoint_extension_sweep",
+
+        "trace_formula_gate",
+
+        "spectral_determinant",
+
+        "spectrum_vs_zeros",
+
+        "spectral_discreteness",
+
+        "spectral_action_selection"
+
+      ],
+
+      "lean_module": "AdeleQuotient",
+
+      "lean_cert": "HP.Global.ConnesAnalyticCert",
+
+      "investigation_doc": "docs/Analysis/AnalyticConnesProgram.md"
+
+    },
+
+    {
+
+      "id": "connes_crossed_logp",
+
+      "status": "implemented",
+
+      "space": "circle S¹_log(p)",
+
+      "omega_ref": "k*log(p)",
+
+      "coupling_ref": "connes_heat",
+
+      "backend": "Marshal::Heat::ConnesCrossedProduct",
+
+      "diagnostics": ["connes_crossed", "spectrum_rmse"],
+
+      "lean_module": "AdeleQuotient",
+
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
+    },
+
+    {
+
+      "id": "adelic_cauchy_completion",
+
+      "status": "implemented",
+
+      "space": "circle S¹_log(p)",
+
+      "omega_ref": "k*log(p)",
+
+      "backend": "Marshal::Heat::CompletionValidation",
+
+      "diagnostics": ["completion", "adelic_cauchy"],
+
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
+    },
+
+    {
+
+      "id": "archimedean_boundary_sweep",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::ArchimedeanBoundaryValidation",
+
+      "diagnostics": ["archimedean_sweep"],
+
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
+    },
+
+    {
+
+      "id": "height_map_renormalization",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::HeightMap",
+
+      "diagnostics": ["height_map", "zero_comparison_mapped"],
+
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
+    },
+
+    {
+
+      "id": "spectral_determinant_selection",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::SpectralDeterminant",
+
+      "diagnostics": ["spectral_determinant"],
+
+      "investigation_doc": "docs/Analysis/AnalyticConnesProgram.md"
+
+    },
+
+    {
+
+      "id": "connes_assembly_search",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::AssemblySearchValidation",
+
+      "diagnostics": ["assembly_search", "assembly_grid"],
+
+      "investigation_doc": "docs/Analysis/ConnesBerryKeating.md"
+
+    },
+
+    {
+
+      "id": "self_adjoint_extension_sweep",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::SelfAdjointExtensionSweep",
+
+      "diagnostics": ["self_adjoint_extension_sweep"],
+
+      "lean_cert": "HP.Global.SelfAdjointExtensionCert",
+
+      "investigation_doc": "docs/Analysis/AnalyticConnesProgram.md"
+
+    },
+
+    {
+
+      "id": "spectral_action_selection",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::SpectralActionValidation",
+
+      "diagnostics": ["spectral_action_selection"],
+
+      "lean_module": "SpectralActionSelection",
+
+      "lean_cert": "HP.Global.SpectralActionSelectionCert",
+
+      "investigation_doc": "docs/Analysis/SpectralActionResearchProgram.md",
+
+      "note": "DIAGNOSTIC_ONLY — superseded for proof by connes_global_dirac_limit"
+
+    },
+
+    {
+
+      "id": "connes_global_dirac_limit",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::GlobalDiracLimitValidation",
+
+      "diagnostics": ["global_dirac_limit"],
+
+      "lean_module": "GlobalConnesDiracLimit",
+
+      "lean_cert": "HP.Global.GlobalConnesDiracLimitCert",
+
+      "investigation_doc": "docs/Analysis/FormalConnesProofProgram.md"
+
+    },
+
+    {
+
+      "id": "connes_analytic_lemmas",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::AnalyticLemmaValidation",
+
+      "diagnostics": ["analytic_lemma_demo"],
+
+      "lean_module": "ConnesAnalyticProof",
+
+      "lean_cert": "HP.Global.ConnesAnalyticLemmaCert",
+
+      "investigation_doc": "docs/Analysis/FormalConnesProofProgram.md"
+
+    },
+
+    {
+
+      "id": "trace_formula_gate",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Heat::TraceFormulaGate",
+
+      "diagnostics": ["trace_formula_gate"],
+
+      "investigation_doc": "docs/Analysis/AnalyticConnesProgram.md"
+
+    },
+
+    {
+
+      "id": "theorem_a_analytic",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Investigation::run_investigation",
+
+      "diagnostics": ["hurwitz_spectral_action"],
+
+      "lean_module": "HP.Analysis.TheoremA",
+
+      "lean_cert": "HP.Analysis.TheoremACert",
+
+      "investigation_doc": "docs/Analysis/proofs/TheoremA.md",
+
+      "note": "Pure scaling Hurwitz track; gates in docs/generated/theorem_a_analytic.json"
+
+    },
+
+    {
+
+      "id": "theorem_b",
+
+      "status": "scaffold",
+
+      "backend": "tools/Analysis/EmitTheoremBScaffold.py",
+
+      "diagnostics": ["theorem_b_scaffold"],
+
+      "lean_module": "HP.Analysis.TheoremBScaffold",
+
+      "lean_cert": "HP.Analysis.TheoremBScaffoldCert",
+
+      "investigation_doc": "docs/Analysis/proofs/TheoremBProofTemplate.md",
+
+      "note": "Scaffold only — B1.3/B1.4/B2/B3 open; B1.1/B1.2/B4 conditional"
+
+    },
+
+    {
+
+      "id": "investigation_suite",
+
+      "status": "implemented",
+
+      "backend": "Marshal::Investigation::run_investigation",
+
+      "diagnostics": [
+        "spectral_action_curvature",
+        "t1_admissible_topology",
+        "heat_trace_at_theta",
+        "spectral_spacing",
+        "continuum_persistence"
+      ],
+
+      "investigation_doc": "docs/Analysis/InvestigationFramework.md"
+
+    },
+
+    {
+
+      "id": "gln_rank_generic",
+
+      "status": "active",
+
+      "backend": "Marshal::Heat::GLn::GLnLadderValidation",
+
+      "diagnostics": ["global_dirac_limit", "bsd_proof", "hodge_proof", "goldbach_proof"],
+
+      "lean_module": "HPAnalysis.GLn",
+
+      "note": "v1-extended MRS ladder — programs/marshal_ladder.mrs"
+
+    },
+
+    {
+
+      "id": "gl2_ellipse_heegner",
+
+      "status": "active",
+
+      "backend": "Marshal::Heat::GLn::GL2EllipseHeegnerValidation",
+
+      "diagnostics": ["goldbach_proof"],
+
+      "lean_module": "HPAnalysis.GLn.GL2",
+
+      "note": "MaassEllipseHeegner preset — shared BSD/Goldbach spine"
+
+    },
+
+    {
+
+      "id": "gl3_hitchin_hodge",
+
+      "status": "active",
+
+      "backend": "Marshal::Heat::GLn::GL3HodgeEngine",
+
+      "diagnostics": ["hodge_proof"],
+
+      "lean_module": "HPAnalysis.GLn.GL3",
+
+      "note": "Hodge K3 MRS closure engine"
+
     }
+
   ]
+
 }
+

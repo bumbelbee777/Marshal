@@ -1,0 +1,31 @@
+ansatz bk_trace_probe {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  space phase_space { }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 500
+  }
+
+  trace_formula {
+    status: proved
+    mode: weil_full
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    trace_formula_gate: true
+    weil_residual < 1.0
+  }
+}

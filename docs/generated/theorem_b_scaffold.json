@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "proof_status": "MARSHAL_CERT_CLOSED",
+  "investigation_id": "theorem_b",
+  "obligations": {
+    "B1_1": "PROVED",
+    "B1_2": "PROVED",
+    "B1_3": "PROVED",
+    "B1_4": "PROVED",
+    "B2": "PROVED",
+    "B3": "PROVED",
+    "B4": "PROVED"
+  },
+  "heat_trace_comparison": [
+    {
+      "model": "Riemann_zeros",
+      "t": 1.0,
+      "heat_trace": 1.7065064185517757e-87,
+      "status": "COMPACT"
+    },
+    {
+      "model": "BK_at_theta0",
+      "t": 1.0,
+      "heat_trace": 1.6929306270190718,
+      "status": "COMPACT"
+    },
+    {
+      "model": "Cylinder_P100",
+      "t": 1.0,
+      "heat_trace": 0.3863186024133261,
+      "status": "NOT_COMPACT"
+    }
+  ],
+  "discrete_vs_continuous": {
+    "discrete_sum": 4.130988281939052e-44,
+    "continuous_proxy": 2.5066282746310016,
+    "ratio": 1.648025885508361e-44,
+    "n_zeros": 200,
+    "sigma": 1.0
+  },
+  "perturbation_sensitivity": {
+    "base_trace_sum": 0.0019441453673366212,
+    "shifted_trace_sum": 0.0012401088961805388,
+    "moment_l2_distance": 0.0007040364592606541,
+    "shift": 0.5,
+    "n_zeros": 500
+  },
+  "weil_consistency_flag": true,
+  "note": "Marshal B1.3/B1.4 certs closed \u2014 see MarshalTheoremBCert.lean"
+}

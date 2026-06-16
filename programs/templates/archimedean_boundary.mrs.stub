@@ -1,0 +1,28 @@
+# Archimedean boundary sweep template
+ansatz archimedean_boundary {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  on circle S¹_log(p) {
+    frequency omega = k * log(p)
+    eigenvalue lambda = k * log(p)
+  }
+
+  archimedean {
+    type: real_line
+    boundary: berry_keating
+    cutoff: planck_scale
+  }
+
+  diagnostics {
+    archimedean_sweep: true
+    test_param: 14.134725142
+    sinc2_kappa: 60
+  }
+
+  lemma ref archimedean_boundary_selection { status: open }
+}

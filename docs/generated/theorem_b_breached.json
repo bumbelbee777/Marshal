@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "proof_status": "NUMERICAL_BREACHED",
+  "investigation_id": "theorem_ab",
+  "diagnostics": {
+    "heat_trace_at_theta": {
+      "diagnostic_id": "heat_trace_at_theta",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "heat_trace_series",
+          "gate": "THEOREM_B",
+          "pass": true,
+          "note": "n=3"
+        }
+      ],
+      "metrics": {
+        "ratios": [
+          385.00844755239893,
+          27382651341.85638,
+          3.3773678366295866e+88
+        ]
+      },
+      "note": ""
+    },
+    "spectral_spacing": {
+      "diagnostic_id": "spectral_spacing",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "spacing_exported",
+          "gate": "THEOREM_B",
+          "pass": true,
+          "note": "gue_l2=2.631692516578463"
+        }
+      ],
+      "metrics": {
+        "connes_gue_l2": 2.631692516578463,
+        "zero_gue_l2": 0.09557807788121565
+      },
+      "note": ""
+    },
+    "continuum_persistence": {
+      "diagnostic_id": "continuum_persistence",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "continuum_ladder_complete",
+          "gate": "THEOREM_B",
+          "pass": true,
+          "note": "EXPECTED_TRUNCATION"
+        }
+      ],
+      "metrics": {
+        "verdict": "EXPECTED_TRUNCATION",
+        "flags": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": ""
+    }
+  }
+}

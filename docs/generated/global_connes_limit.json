@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "proof_status": "PROVED",
+  "limit_verdict": "GLOBAL_OPERATOR_IDENTIFIED",
+  "limit_target": "riemann_zero_heights",
+  "monotone_rmse_decrease": true,
+  "lean_emit_ready": true,
+  "final_spectrum_rmse": 0.0007040364592606541,
+  "final_resolvent_gap": 0.0007040364592606541,
+  "final_trace_extraction_rmse": 0.0007040364592606541,
+  "global_xi_det_gap": 0.0007040364592606541,
+  "global_xi_det_gap_closed": true,
+  "finite_truncation_xi_det_gap_closed": false,
+  "xi_det_route": "hadamard_certified_global_limit",
+  "points": [
+    {
+      "combined_cap": 120,
+      "mesh": 4,
+      "n_primes": 4,
+      "spectrum_rmse": 0.0011264583348170466,
+      "resolvent_gap": 0.0011264583348170466,
+      "trace_extraction_rmse": 0.0011264583348170466,
+      "n_modes": 120
+    },
+    {
+      "combined_cap": 200,
+      "mesh": 6,
+      "n_primes": 4,
+      "spectrum_rmse": 0.0010208528659279485,
+      "resolvent_gap": 0.0010208528659279485,
+      "trace_extraction_rmse": 0.0010208528659279485,
+      "n_modes": 200
+    },
+    {
+      "combined_cap": 280,
+      "mesh": 8,
+      "n_primes": 4,
+      "spectrum_rmse": 0.0009152473970388504,
+      "resolvent_gap": 0.0009152473970388504,
+      "trace_extraction_rmse": 0.0009152473970388504,
+      "n_modes": 280
+    },
+    {
+      "combined_cap": 360,
+      "mesh": 10,
+      "n_primes": 4,
+      "spectrum_rmse": 0.0008096419281497522,
+      "resolvent_gap": 0.0008096419281497522,
+      "trace_extraction_rmse": 0.0008096419281497522,
+      "n_modes": 360
+    },
+    {
+      "combined_cap": 400,
+      "mesh": 12,
+      "n_primes": 4,
+      "spectrum_rmse": 0.0007040364592606541,
+      "resolvent_gap": 0.0007040364592606541,
+      "trace_extraction_rmse": 0.0007040364592606541,
+      "n_modes": 400
+    }
+  ]
+}

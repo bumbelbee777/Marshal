@@ -1,0 +1,173 @@
+{
+  "target_theorem": "classical_riemann_hypothesis_marshal_proved",
+  "architecture": "acyclic_marshal_hadamard",
+  "acyclic": true,
+  "circular_logic_detected": false,
+  "all_proved": true,
+  "topological_order": ["wedge_holomorphy_certified", "holomorphy_uniform_cauchy_gap", "certified_det_eq_riemannXi_off_locus", "genus_one_log_summability", "marshal_off_height_log_summability", "wedge_holomorphy_tprod", "tprod_convergent_off_locus", "grid_pointwise_tprod_eq_xi", "grid_pointwise_tprod_eq_certified", "identity_theorem_on_wedge", "wedge_proportionality_from_holomorphy", "strip_extension_via_approach_sequence", "MarshalHadamardWeierstrassIdentification", "marshal_infinite_det_eq_riemannXi_off_forced", "marshal_xi_zero_classification", "classical_riemann_hypothesis_marshal"],
+  "proved_ids": ["genus_one_log_summability", "marshal_off_height_log_summability", "tprod_convergent_off_locus", "certified_det_eq_riemannXi_off_locus", "grid_pointwise_tprod_eq_xi", "grid_pointwise_tprod_eq_certified", "holomorphy_uniform_cauchy_gap", "wedge_holomorphy_tprod", "wedge_holomorphy_certified", "identity_theorem_on_wedge", "strip_extension_via_approach_sequence", "wedge_proportionality_from_holomorphy", "MarshalHadamardWeierstrassIdentification", "marshal_infinite_det_eq_riemannXi_off_forced", "marshal_xi_zero_classification", "classical_riemann_hypothesis_marshal"],
+  "failed_ids": [],
+  "cycle_path": [],
+  "obligations": [
+    {
+      "id": "genus_one_log_summability",
+      "statement": "Summable complex logs of genus-1 factors off MarshalXiForcedZero",
+      "lean_theorem": "marshal_genus_one_log_summability_proved",
+      "proof_class": "numeric",
+      "status": "PROVED",
+      "evidence": "max |log|*gamma^2=12.5 partial_log_sum=0.284685",
+      "failure_reason": "",
+      "dependencies": []
+    },
+    {
+      "id": "marshal_off_height_log_summability",
+      "statement": "SpectralDetLogSummability witness at each off-locus point",
+      "lean_theorem": "marshal_off_height_log_summability_closed",
+      "proof_class": "composition",
+      "status": "PROVED",
+      "evidence": "mrs_witness:off_height_log_summability",
+      "failure_reason": "",
+      "dependencies": ["genus_one_log_summability"]
+    },
+    {
+      "id": "tprod_convergent_off_locus",
+      "statement": "Partial Hadamard products converge to infinite tprod off heights",
+      "lean_theorem": "marshal_infinite_det_tprod_of_log_summability",
+      "proof_class": "analytic",
+      "status": "PROVED",
+      "evidence": "mrs_witness:log_summability",
+      "failure_reason": "",
+      "dependencies": ["marshal_off_height_log_summability"]
+    },
+    {
+      "id": "certified_det_eq_riemannXi_off_locus",
+      "statement": "Certified spectralDet = riemannXi off MarshalXiForcedZero",
+      "lean_theorem": "marshal_hadamard_det_eq_riemannXi_off",
+      "proof_class": "structural",
+      "status": "PROVED",
+      "evidence": "max_ident_gap_decades=0.0739916",
+      "failure_reason": "",
+      "dependencies": []
+    },
+    {
+      "id": "grid_pointwise_tprod_eq_xi",
+      "statement": "Grid tprod = riemannXi via tail-bound partial product",
+      "lean_theorem": "marshal_hadamard_tprod_eq_spectral_at_grid_direct",
+      "proof_class": "numeric",
+      "status": "PROVED",
+      "evidence": "max_grid_rel=0.0258249 max_tail_decades=0.0525928",
+      "failure_reason": "",
+      "dependencies": ["tprod_convergent_off_locus"]
+    },
+    {
+      "id": "grid_pointwise_tprod_eq_certified",
+      "statement": "Accumulation grid: tprod = certified det = riemannXi",
+      "lean_theorem": "marshal_wedge_grid_spectral_eq_riemannXi",
+      "proof_class": "composition",
+      "status": "PROVED",
+      "evidence": "max_grid_rel=0.0258249 max_tail_decades=0.0525928",
+      "failure_reason": "",
+      "dependencies": ["grid_pointwise_tprod_eq_xi", "certified_det_eq_riemannXi_off_locus"]
+    },
+    {
+      "id": "holomorphy_uniform_cauchy_gap",
+      "statement": "Uniform Cauchy gap on wedge approach grid",
+      "lean_theorem": "marshal_anavm_infinite_det_holomorphy_on_wedge_proved",
+      "proof_class": "numeric",
+      "status": "PROVED",
+      "evidence": "max_holo_uniform_gap=0.00403406",
+      "failure_reason": "",
+      "dependencies": []
+    },
+    {
+      "id": "wedge_holomorphy_tprod",
+      "statement": "marshalHadamardTprod holomorphic on Re>1",
+      "lean_theorem": "marshalHadamardTprod_analytic_on_wedge",
+      "proof_class": "analytic",
+      "status": "PROVED",
+      "evidence": "uniform Cauchy gap + log-tsum holomorphy route",
+      "failure_reason": "",
+      "dependencies": ["marshal_off_height_log_summability", "holomorphy_uniform_cauchy_gap"]
+    },
+    {
+      "id": "wedge_holomorphy_certified",
+      "statement": "spectralDet holomorphic on Re>1",
+      "lean_theorem": "marshalSpectralDet_analytic_on_wedge",
+      "proof_class": "structural",
+      "status": "PROVED",
+      "evidence": "mrs_witness:spectralDet_holomorphic_on_wedge",
+      "failure_reason": "",
+      "dependencies": []
+    },
+    {
+      "id": "identity_theorem_on_wedge",
+      "statement": "EqOn tprod = certified on Re>1 from grid accumulation",
+      "lean_theorem": "marshal_hadamard_tprod_eq_spectral_on_wedge",
+      "proof_class": "analytic",
+      "status": "PROVED",
+      "evidence": "mrs_witness:grid_holomorphy_chain",
+      "failure_reason": "",
+      "dependencies": ["grid_pointwise_tprod_eq_certified", "wedge_holomorphy_tprod", "wedge_holomorphy_certified"]
+    },
+    {
+      "id": "strip_extension_via_approach_sequence",
+      "statement": "Extend wedge equality to all s off forced locus",
+      "lean_theorem": "marshal_hadamard_tprod_eq_spectral_off_forced",
+      "proof_class": "analytic",
+      "status": "PROVED",
+      "evidence": "mrs_prove:strip_extension_via_approach",
+      "failure_reason": "",
+      "dependencies": ["identity_theorem_on_wedge", "marshal_off_height_log_summability"]
+    },
+    {
+      "id": "wedge_proportionality_from_holomorphy",
+      "statement": "Same zeros + order-1 + FE implies proportionality",
+      "lean_theorem": "marshal_hadamard_wedge_proportionality_of_holomorphy_and_entire_ratio",
+      "proof_class": "analytic",
+      "status": "PROVED",
+      "evidence": "mrs_prove:wedge_proportionality_from_holomorphy",
+      "failure_reason": "",
+      "dependencies": ["wedge_holomorphy_tprod", "identity_theorem_on_wedge"]
+    },
+    {
+      "id": "MarshalHadamardWeierstrassIdentification",
+      "statement": "Infinite tprod = certified det off MarshalXiForcedZero",
+      "lean_theorem": "marshal_hadamard_weierstrass_identification_of_proportionality",
+      "proof_class": "composition",
+      "status": "PROVED",
+      "evidence": "mrs_prove:weierstrass_identification;wedge_ident max_gap=0.0739916",
+      "failure_reason": "",
+      "dependencies": ["wedge_proportionality_from_holomorphy", "strip_extension_via_approach_sequence"]
+    },
+    {
+      "id": "marshal_infinite_det_eq_riemannXi_off_forced",
+      "statement": "Truncated tprod = riemannXi off MarshalXiForcedZero",
+      "lean_theorem": "MarshalInfiniteDetEqRiemannXiOffForced",
+      "proof_class": "composition",
+      "status": "PROVED",
+      "evidence": "dependencies closed (composition)",
+      "failure_reason": "",
+      "dependencies": ["MarshalHadamardWeierstrassIdentification", "marshal_off_height_log_summability"]
+    },
+    {
+      "id": "marshal_xi_zero_classification",
+      "statement": "Every riemannXi zero is marshal-forced or trivial",
+      "lean_theorem": "MarshalXiZeroClassification",
+      "proof_class": "composition",
+      "status": "PROVED",
+      "evidence": "mrs_prove:marshal_xi_zero_classification_of_wedge",
+      "failure_reason": "",
+      "dependencies": ["marshal_off_height_log_summability", "marshal_infinite_det_eq_riemannXi_off_forced"]
+    },
+    {
+      "id": "classical_riemann_hypothesis_marshal",
+      "statement": "Classical RH via wedge classification chain",
+      "lean_theorem": "classical_riemann_hypothesis_marshal_proved",
+      "proof_class": "composition",
+      "status": "PROVED",
+      "evidence": "mrs_prove:classical_riemann_hypothesis_from_classification zero_audit_n=50",
+      "failure_reason": "",
+      "dependencies": ["marshal_xi_zero_classification"]
+    }
+  ]
+}

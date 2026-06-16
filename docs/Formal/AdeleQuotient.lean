@@ -74,6 +74,19 @@ structure ConnesScaffoldCert where
 
 def connesScaffoldOpen (_ : ConnesScaffoldCert) : Bool := true
 
+/-- Four-gate analytic construction cert (numeric pipeline; not v1 proof). -/
+structure ConnesAnalyticCert where
+  overallVerdict : String := "OPEN_SPECTRAL_DISCRETENESS"
+  analyticShapeVerdict : String := "ANALYTIC_INCONCLUSIVE"
+  spectrumRmse : Float := 0
+  xiDetGap : Float := 0
+  logPrimeT1Gap : Float := 0
+  continuousSpectrumPresent : Bool := true
+  deriving Repr
+
+def connesAnalyticGapMeasured (c : ConnesAnalyticCert) : Bool :=
+  c.overallVerdict = "OPEN_SPECTRAL_DISCRETENESS" && c.continuousSpectrumPresent
+
 structure CylinderFalsificationCert where
   compactSinc2 : HP.CompactSinc2Cert
   lexSortedGapMax : Float

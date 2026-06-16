@@ -51,6 +51,7 @@ def main() -> int:
     ap.add_argument("--skip-build", action="store_true", help="skip cmake build if Marshal.exe exists")
 
     ap.add_argument("--quick", action="store_true", help="smoke+mini+medium only")
+    ap.add_argument("--operator-hunt", action="store_true", help="run operator hunt sanity suite")
 
     args = ap.parse_args()
 
@@ -115,6 +116,10 @@ def main() -> int:
     run([sys.executable, str(ROOT / "tools" / "Validators" / "ValidateAnalyticalWorkload.py")])
 
     steps.append("analytical")
+
+    if args.operator_hunt:
+        run([sys.executable, str(ROOT / "tools" / "Workload" / "RunOperatorHuntSanity.py"), "--quick"])
+        steps.append("operator_hunt")
 
     if not args.quick:
         run([sys.executable, str(ROOT / "tools" / "Workload" / "RunHpAudit.py"), "--quick"])

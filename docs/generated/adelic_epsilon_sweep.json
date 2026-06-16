@@ -1,0 +1,44 @@
+{
+  "phase12_baseline_rmse": 1486.0,
+  "phase12_baseline_sinc2": 0.30,
+  "phase12_baseline_note": "Index-aligned RMSE with raw k log p ladder appended to adelic_limits (CompletionValidation pollution, fixed Phase 3)",
+  "zeros": 5000,
+  "max_primes": 100,
+  "metric": "mixed",
+  "first_nonzero_epsilon": 9.0,
+  "recommended_epsilon": 10.0,
+  "height_sweep_epsilon": 10.0,
+  "beats_phase12_baseline": true,
+  "epsilon_sweep": [
+    { "epsilon": 1e-06, "adelic_limits_only_count": 0 },
+    { "epsilon": 1e-05, "adelic_limits_only_count": 0 },
+    { "epsilon": 0.0001, "adelic_limits_only_count": 0 },
+    { "epsilon": 0.001, "adelic_limits_only_count": 0 },
+    { "epsilon": 0.01, "adelic_limits_only_count": 0 },
+    { "epsilon": 0.1, "adelic_limits_only_count": 0 },
+    { "epsilon": 1.0, "adelic_limits_only_count": 0 },
+    { "epsilon": 5.0, "adelic_limits_only_count": 0 },
+    { "epsilon": 6.0, "adelic_limits_only_count": 0 },
+    { "epsilon": 9.0, "adelic_limits_only_count": 2, "rmse_adelic_mapped": 204.37 },
+    { "epsilon": 10.0, "adelic_limits_only_count": 10, "rmse_adelic_raw": 182.39, "rmse_adelic_mapped": 162.49 },
+    { "epsilon": 50.0, "adelic_limits_only_count": 303 }
+  ],
+  "best_height": {
+    "height_a": 0.5,
+    "height_b": -10.0,
+    "epsilon": 10.0,
+    "adelic_limits_only_count": 10,
+    "rmse_adelic_mapped": 59.60,
+    "rmse_adelic_raw": 182.39,
+    "sinc2_gap_adelic_mapped": 0.0117,
+    "n_matched_adelic": 10
+  },
+  "height_sweep_at_eps_10_summary": {
+    "best_a": 0.5,
+    "best_b": -10.0,
+    "worst_a": 4.0,
+    "worst_b": 10.0,
+    "rmse_range_mapped": [59.6, 756.3]
+  },
+  "interpretation": "Relaxing mixed-metric tolerance epsilon from 1e-6 to ~9-10 yields a sparse adelic limit set (10 frequencies at eps=10). Height map h(omega)=a*omega*log(omega)/(2pi)+b with a<1 and negative b sharply lowers index-aligned RMSE on adelic-only limits (59.6 vs Phase 1-2 baseline 1486). Caveat: n_matched equals adelic limit count (10), not full zero ladder; comparison is not spectrum identification."
+}

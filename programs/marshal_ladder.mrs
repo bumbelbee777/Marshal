@@ -1,0 +1,54 @@
+use lib::marshal_hadamard_proof;
+use lib::gln_spectral_triple;
+use lib::ladder_analytic_lemmas;
+use lib::marshal_bsd_proof;
+use lib::marshal_hodge_proof;
+use lib::marshal_goldbach_proof;
+
+ansatz marshal_ladder {
+
+  meta {
+    uses_gamma: false
+    sym_tier: analytic
+    kind: operator
+  }
+
+  space marshal_spectrum { }
+
+  coupling {
+    heat: connes
+  }
+
+  diagnostics {
+    xi_hadamard_proof
+    gln_ladder_validation
+    bsd_proof
+    hodge_proof
+    goldbach_proof
+  }
+
+  bound_audit {
+    grid_rel_gap_ub: 0.03
+    grid_mult_dev_ub: 0.03
+    tail_bound_decades_ub: 0.15
+    ident_gap_decades_ub: 0.15
+    holomorphy_uniform_gap_ub: 0.01
+    log_partial_sum_ub: 8.0
+    log_majorant_c: 1.05
+    l_function_grid_rel_gap_ub: 0.03
+    sha_resolvent_gap_ub: 2.0
+    kernel_tolerance: 1e-6
+    hodge_h11_target: 20
+    major_arc_threshold: 0.45
+    minor_arc_ub: 0.01
+    goldbach_n0: 4
+  }
+
+  formal_target {
+    lemma classical_riemann_hypothesis_marshal_proved
+    lemma bsd_rank_proved
+    lemma hodge_conjecture_proved
+    lemma goldbach_proved
+    approach acyclic_marshal_ladder
+  }
+}

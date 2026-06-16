@@ -6,6 +6,65 @@
     "gamma_tuned": "n=round(gamma*log(p)/2pi) — CIRCULAR; not comparable to gamma-free gaps",
     "compact_sinc2": "spectral measure falsification gate — decisive"
   },
+  "density_growth": {
+    "required": "logarithmic",
+    "rationale": "Riemann zero density ~ (1/2π) log(γ/2π); any candidate must reproduce this asymptotically",
+    "cylinder_direct_sum": "constant (fails)",
+    "bk_height_map": "inverse_logarithmic (fails)",
+    "connes_dirac_global": "emergent_from_quotient (OPEN)"
+  },
+  "connes_subtargets": [
+    {
+      "id": "connes_algebra_type",
+      "trait": "noncommutative_crossed_product",
+      "marshal_verifiable": false,
+      "status": "SCAFFOLD",
+      "note": "Definition of adele class spectral triple"
+    },
+    {
+      "id": "connes_trace_formula",
+      "trait": "trace_duality",
+      "marshal_verifiable": true,
+      "status": "PASS",
+      "evidence": "log_prime_validation.json, trace_formula_gate.json, duality_gold_standard.json"
+    },
+    {
+      "id": "connes_kms_phase",
+      "trait": "phase_transition_at_beta_1",
+      "marshal_verifiable": "partial",
+      "status": "OPEN"
+    },
+    {
+      "id": "connes_spectral_action",
+      "trait": "discrete_spectrum_selected",
+      "marshal_verifiable": false,
+      "status": "THE_GAP",
+      "note": "Not testable at finite P; analytic proof only"
+    },
+    {
+      "id": "connes_bk_height_map",
+      "trait": "log_n_height_renormalization",
+      "marshal_verifiable": true,
+      "status": "FALSIFIED",
+      "evidence": "berry_keating_validation.json, SpectralDiscretenessTheorem.md",
+      "note": "RMSE 207->229; excluded from connes_analytic_construction scaffold v2"
+    },
+    {
+      "id": "connes_self_adjoint_extension",
+      "trait": "extension_from_spectral_action",
+      "marshal_verifiable": "partial",
+      "status": "OPEN",
+      "depends_on": ["connes_spectral_action"],
+      "note": "0 admissible extensions via height map; selection via spectral action OPEN"
+    },
+    {
+      "id": "connes_critical_line",
+      "trait": "spectrum_on_Re_half",
+      "marshal_verifiable": false,
+      "status": "CIRCULAR",
+      "exclude_from_hunt_scoring": true
+    }
+  ],
   "trait_axes": {
     "space_kind": ["circle_logp", "adelic_truncated", "phase_space", "unknown"],
     "spectrum_merge": [
@@ -15,20 +74,32 @@
       "s_unit_matrix",
       "fixed_low_mode",
       "semiclassical",
+      "crossed_product",
       "unknown"
     ],
     "coupling": ["poisson", "none", "berry_keating", "connes_heat"],
     "spectrum_scale": ["omega_2pi_n_over_logp", "omega_2pi_n", "D_spectral", "unknown"],
+    "density_growth": ["constant", "inverse_logarithmic", "logarithmic", "emergent_from_quotient", "unknown"],
     "symmetry": ["none", "gl1_character", "s_unit_translation", "hecke"],
     "boundedness": ["bounded", "unbounded", "unknown"]
   },
   "inferred_requirements": {
-    "source": "cylinder_falsification + measure_limit_conjecture",
+    "source": "cylinder_falsification + poisson_gue_nogo + global_operator_hunt",
     "traits": [
       {
         "id": "self_adjoint",
         "required": true,
         "rationale": "Hilbert-Pólya real spectrum"
+      },
+      {
+        "id": "not_in_C_fin",
+        "required": true,
+        "rationale": "PoissonGueNoGo Theorem 5 — finite coupling cannot carry {gamma_n}"
+      },
+      {
+        "id": "density_growth_logarithmic",
+        "required": true,
+        "rationale": "Riemann counting ~ (T/π) log(T/2π); cylinder constant, height map inverse_log"
       },
       {
         "id": "discrete_spike_measure",
@@ -46,14 +117,29 @@
         "rationale": "γ-tuned gap 0.61 and idele gamma_locked 1.44 are circular"
       },
       {
+        "id": "gue_level_repulsion",
+        "required": true,
+        "rationale": "Montgomery GUE pair correlation; zeros match, cylinder does not"
+      },
+      {
+        "id": "trace_duality",
+        "required": true,
+        "rationale": "Weil links H_gamma trace to H_log trace via arch + poles"
+      },
+      {
         "id": "not_independent_cylinder_tensor",
         "required": true,
         "rationale": "lex-sorted gap 169; fixed-mode 166"
       },
       {
+        "id": "noncommutative_algebra",
+        "required": true,
+        "rationale": "Only escape from C_fin — crossed product on adele class space"
+      },
+      {
         "id": "adelic_or_global_quotient",
         "likely": true,
-        "rationale": "local blocks pass; global spectrum wrong without constraint"
+        "rationale": "local blocks pass; global spectrum wrong without NC structure"
       },
       {
         "id": "classical_periods_log_p",
@@ -64,17 +150,32 @@
   },
   "synthetic_candidates": [
     {
+      "id": "connes_dirac_global",
+      "status": "TARGET",
+      "marshal_verifiable_subtargets": 2,
+      "subtargets_total": 7,
+      "plausibility_score": null,
+      "traits": {
+        "space_kind": "adelic_truncated",
+        "spectrum_merge": "crossed_product",
+        "spectrum_scale": "D_spectral",
+        "not_in_C_fin": true,
+        "density_growth": "emergent_from_quotient"
+      },
+      "program": "programs/connes_analytic_construction.mrs",
+      "note": "TARGET is hypothesis container; score only testable subtargets"
+    },
+    {
       "id": "idele_unconstrained_direct_sum",
       "status": "FALSIFIED",
       "plausibility_score": 0,
+      "elimination_reason": "C_fin_poisson_gue_nogo",
       "traits": {
         "space_kind": "circle_logp",
         "spectrum_merge": "direct_sum",
-        "uses_gamma": false,
-        "gamma_input": "none",
-        "circular_fit": false,
-        "independent_confirmation": false,
-        "note": "Same heap as cylinder; uncon_lex gap depends on |S| and pairing"
+        "in_C_fin": true,
+        "density_growth": "constant",
+        "uses_gamma": false
       },
       "numeric_backend": "idele_laplacian",
       "doc": "docs/Analysis/OperatorInference.md"
@@ -83,16 +184,15 @@
       "id": "idele_gamma_locked",
       "status": "DIAGNOSTIC_ONLY",
       "plausibility_score": 0,
+      "elimination_reason": "gamma_tuned_circular",
       "traits": {
         "space_kind": "adelic_truncated",
         "spectrum_merge": "gamma_tuned_quotient",
+        "in_C_fin": true,
         "uses_gamma": true,
-        "gamma_input": "mode_selection",
-        "circular_fit": true,
-        "independent_confirmation": false
+        "circular_fit": true
       },
-      "numeric_backend": "idele_laplacian",
-      "doc": "docs/Analysis/OperatorInference.md"
+      "numeric_backend": "idele_laplacian"
     },
     {
       "id": "idele_frequency_locked_scan",
@@ -101,62 +201,62 @@
       "traits": {
         "space_kind": "adelic_truncated",
         "spectrum_merge": "frequency_locked",
-        "uses_gamma": false,
-        "gamma_input": "none",
-        "circular_fit": false,
-        "independent_confirmation": false,
-        "note": "gamma-free but often 0 modes; not identification"
+        "in_C_fin": true,
+        "uses_gamma": false
       },
-      "numeric_backend": "idele_laplacian",
-      "doc": "docs/Analysis/OperatorInference.md"
+      "numeric_backend": "idele_laplacian"
     },
     {
       "id": "idele_s_unit_matrix_quotient",
-      "status": "OPEN",
+      "status": "LIKELY_C_FIN",
       "plausibility_score": 0,
+      "elimination_reason": "likely_C_fin_finite_quotient",
       "traits": {
         "space_kind": "adelic_truncated",
         "spectrum_merge": "s_unit_matrix",
-        "uses_gamma": false,
-        "gamma_input": "none",
-        "circular_fit": false,
-        "independent_confirmation": false
+        "in_C_fin": true,
+        "density_growth": "constant",
+        "uses_gamma": false
       },
       "numeric_backend": "idele_laplacian",
       "doc": "docs/Analysis/ConnesBerryKeating.md"
     },
     {
       "id": "hecke_twisted_adele_laplacian",
-      "status": "THEORETICAL",
+      "status": "LIKELY_C_FIN",
       "plausibility_score": 0,
       "traits": {
         "space_kind": "adelic_truncated",
         "spectrum_merge": "semiclassical",
+        "in_C_fin": true,
         "coupling": "connes_heat",
-        "symmetry": "hecke",
-        "boundedness": "unknown"
+        "symmetry": "hecke"
       },
-      "numeric_backend": "none",
-      "doc": "docs/Analysis/OperatorInference.md"
+      "numeric_backend": "none"
     },
     {
       "id": "berry_keating_logged",
-      "status": "THEORETICAL",
+      "status": "FALSIFIED",
       "plausibility_score": 0,
+      "elimination_reason": "density_growth_inverse_logarithmic",
       "traits": {
         "space_kind": "phase_space",
         "spectrum_merge": "semiclassical",
-        "coupling": "berry_keating",
-        "boundedness": "unbounded"
+        "in_C_fin": true,
+        "density_growth": "inverse_logarithmic",
+        "coupling": "berry_keating"
       },
-      "numeric_backend": "none",
+      "numeric_backend": "berry_keating",
       "doc": "docs/Analysis/ConnesBerryKeating.md"
     }
   ],
   "analytic_gates": {
     "anavm_engine": "AnaVM_FormalAnalytics",
-    "proved_emit_lean_when": ["cylinder_density_divergence", "density_slope_mismatch"],
-    "diagnostic_only": ["zeros_gue_spacing", "scaffold_no_identification"],
+    "sanity": ["local_weil_t1", "trace_formula_gate"],
+    "exclusion": ["pair_correlation_gue", "compact_sinc2", "density_growth"],
+    "analytic_shape": ["spectral_discreteness", "continuum_persistence"],
+    "deprecated_identification": ["spectrum_rmse_vs_P", "adelic_rmse_vs_P"],
+    "shape_verdicts": ["ANALYTIC_SHAPE_OK", "ANALYTIC_SHAPE_BAD", "ANALYTIC_INCONCLUSIVE"],
     "pair_correlation": {
       "montgomery_kernel": "1 - (sin(pi*s)/(pi*s))^2",
       "spacing_pdf": "GUE_Wigner_s^2_exp",
@@ -177,6 +277,12 @@
       "uncon_matched_max_gap",
       "gamma_locked_max_gap_circular",
       "frequency_locked_scan_n_modes"
+    ],
+    "analytic_construction": [
+      "log_prime_t1_gap",
+      "trace_gate_verdict",
+      "continuous_spectrum_present",
+      "analytic_shape_verdict"
     ],
     "none": []
   }

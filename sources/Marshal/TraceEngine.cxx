@@ -212,15 +212,16 @@ Real archimedean_exact(Real sigma, Marshal::SimdLevel simd, bool precision_mode,
     return arch_simpson_adaptive(sigma, n0, arch_pts, sim_tol, simd, precision_mode);
 }
 
-inline Real h_sinc2_at(Real t, Real T) {
+// Arch sinc²: (1/2π) ∫ h_{κ,T}(t) (Re ψ(1/4+it/2) − log π) dt,  h_{κ,T}(t)=sinc²(κt/T).
+inline Real h_sinc2_at(Real t, Real T, Real kappa = 1.0L) {
     if (T <= 0) return 0.0L;
-    const Real x = t / T;
+    const Real x = kappa * t / T;
     if (std::fabsl(x) < 1e-30L) return 1.0L;
     const Real s = std::sinl(x) / x;
     return s * s;
 }
 
-Real arch_sinc2_simpson(Real T, Real L, int n_pts, Marshal::SimdLevel /*simd*/,
+Real arch_sinc2_simpson(Real T, Real kappa, Real L, int n_pts, Marshal::SimdLevel /*simd*/,
                         bool precise_psi = false) {
     const Real dx = 2.0L * L / static_cast<Real>(n_pts - 1);
     const Real log_pi = logl(Marshal::Heat::kPi);
@@ -234,7 +235,7 @@ Real arch_sinc2_simpson(Real T, Real L, int n_pts, Marshal::SimdLevel /*simd*/,
             const Real t = -L + static_cast<Real>(i) * dx;
             const Real y = t * 0.5L;
             const Real psi = precise_psi ? arch_psi_series(y, true) : re_psi_quarter_plus_iy(y);
-            const Real f = h_sinc2_at(t, T) * (psi - log_pi);
+            const Real f = h_sinc2_at(t, T, kappa) * (psi - log_pi);
             Real w = (i == 0 || i == n_pts - 1) ? 1.0L : ((i & 1) ? 4.0L : 2.0L);
             local.add(w * f);
         }
@@ -246,7 +247,7 @@ Real arch_sinc2_simpson(Real T, Real L, int n_pts, Marshal::SimdLevel /*simd*/,
         const Real t = -L + static_cast<Real>(i) * dx;
         const Real y = t * 0.5L;
         const Real psi = precise_psi ? arch_psi_series(y, true) : re_psi_quarter_plus_iy(y);
-        const Real f = h_sinc2_at(t, T) * (psi - log_pi);
+        const Real f = h_sinc2_at(t, T, kappa) * (psi - log_pi);
         Real w = (i == 0 || i == n_pts - 1) ? 1.0L : ((i & 1) ? 4.0L : 2.0L);
         acc.add(w * f);
     }
@@ -254,21 +255,22 @@ Real arch_sinc2_simpson(Real T, Real L, int n_pts, Marshal::SimdLevel /*simd*/,
     return (dx / 3.0L) * acc.total() / (2.0L * Marshal::Heat::kPi);
 }
 
-Real arch_sinc2_simpson_check(Real T, Real L, int n_pts, Marshal::SimdLevel simd,
+Real arch_sinc2_simpson_check(Real T, Real kappa, Real L, int n_pts, Marshal::SimdLevel simd,
                               bool precise_psi) {
-    const Real a1 = arch_sinc2_simpson(T, L, n_pts, simd, precise_psi);
-    const Real a2 = arch_sinc2_simpson(T, L, 2 * n_pts - 1, simd, precise_psi);
+    const Real a1 = arch_sinc2_simpson(T, kappa, L, n_pts, simd, precise_psi);
+    const Real a2 = arch_sinc2_simpson(T, kappa, L, 2 * n_pts - 1, simd, precise_psi);
     return a2 + (a2 - a1) / 15.0L;
 }
 
-Real arch_sinc2_at_window(Real T, Real L, Marshal::SimdLevel simd, bool precision_mode,
-                          int arch_pts, Real eps) {
+Real arch_sinc2_at_window(Real T, Real kappa, Real L, Marshal::SimdLevel simd,
+                          bool precision_mode, int arch_pts, Real eps) {
     const Real sim_tol = precision_mode ? 1e-16L : std::max(eps, 1e-14L);
+    const bool precise_psi = precision_mode;
     int n_pts = 64001;
-    Real prev = arch_sinc2_simpson_check(T, L, n_pts, simd, precision_mode);
+    Real prev = arch_sinc2_simpson_check(T, kappa, L, n_pts, simd, precise_psi);
     while (n_pts < arch_pts) {
         const int n2 = std::min(2 * n_pts - 1, arch_pts);
-        const Real next = arch_sinc2_simpson_check(T, L, n2, simd, precision_mode);
+        const Real next = arch_sinc2_simpson_check(T, kappa, L, n2, simd, precise_psi);
         const Real rel = fabsl(next - prev) / std::max(1.0L, fabsl(next));
         if (rel < sim_tol) {
             return next;
@@ -279,14 +281,16 @@ Real arch_sinc2_at_window(Real T, Real L, Marshal::SimdLevel simd, bool precisio
     return prev;
 }
 
-Real arch_sinc2_adaptive(Real T, Marshal::SimdLevel simd, bool precision_mode, int arch_pts,
-                         Real eps) {
+Real arch_sinc2_adaptive(Real T, Real kappa, Marshal::SimdLevel simd, bool precision_mode,
+                         int arch_pts, Real eps) {
     const Real L_tol = precision_mode ? 1e-14L : 1e-12L;
-    Real L = std::max(80.0L * T, 120.0L);
-    Real prev = arch_sinc2_at_window(T, L, simd, precision_mode, arch_pts, eps);
-    for (int k = 0; k < 5; ++k) {
+    const Real L_scale = precision_mode ? 128.0L : 80.0L;
+    const int L_iters = precision_mode ? 7 : 5;
+    Real L = std::max(L_scale * T / kappa, 120.0L);
+    Real prev = arch_sinc2_at_window(T, kappa, L, simd, precision_mode, arch_pts, eps);
+    for (int k = 0; k < L_iters; ++k) {
         L *= 2.0L;
-        const Real next = arch_sinc2_at_window(T, L, simd, precision_mode, arch_pts, eps);
+        const Real next = arch_sinc2_at_window(T, kappa, L, simd, precision_mode, arch_pts, eps);
         const Real rel = fabsl(next - prev) / std::max(1.0L, fabsl(next));
         if (rel < L_tol) {
             return next;
@@ -296,16 +300,106 @@ Real arch_sinc2_adaptive(Real T, Marshal::SimdLevel simd, bool precision_mode, i
     return prev;
 }
 
+void sinc2_arch_params(const TestFunction& tf, Real sigma, Real& T, Real& kappa) {
+    T = sigma;
+    kappa = 1.0L;
+    if (const auto* s = dynamic_cast<const Sinc2Test*>(&tf)) {
+        T = s->T;
+        kappa = s->kappa;
+    }
+}
+
+Real arch_generic_simpson(const TestFunction& tf, Real L, int n_pts, Marshal::SimdLevel /*simd*/,
+                          bool precise_psi = false) {
+    const Real dx = 2.0L * L / static_cast<Real>(n_pts - 1);
+    const Real log_pi = logl(Marshal::Heat::kPi);
+    Kahan acc;
+#ifdef _OPENMP
+#pragma omp parallel
+    {
+        Kahan local;
+#pragma omp for
+        for (int i = 0; i < n_pts; ++i) {
+            const Real t = -L + static_cast<Real>(i) * dx;
+            const Real y = t * 0.5L;
+            const Real psi = precise_psi ? arch_psi_series(y, true) : re_psi_quarter_plus_iy(y);
+            const Real f = tf.h(t) * (psi - log_pi);
+            const Real w = (i == 0 || i == n_pts - 1) ? 1.0L : ((i & 1) ? 4.0L : 2.0L);
+            local.add(w * f);
+        }
+#pragma omp critical
+        { acc.add(local.total()); }
+    }
+#else
+    for (int i = 0; i < n_pts; ++i) {
+        const Real t = -L + static_cast<Real>(i) * dx;
+        const Real y = t * 0.5L;
+        const Real psi = precise_psi ? arch_psi_series(y, true) : re_psi_quarter_plus_iy(y);
+        const Real f = tf.h(t) * (psi - log_pi);
+        const Real w = (i == 0 || i == n_pts - 1) ? 1.0L : ((i & 1) ? 4.0L : 2.0L);
+        acc.add(w * f);
+    }
+#endif
+    return (dx / 3.0L) * acc.total() / (2.0L * Marshal::Heat::kPi);
+}
+
+Real arch_generic_simpson_check(const TestFunction& tf, Real L, int n_pts,
+                                Marshal::SimdLevel simd, bool precise_psi) {
+    const Real a1 = arch_generic_simpson(tf, L, n_pts, simd, precise_psi);
+    const Real a2 = arch_generic_simpson(tf, L, 2 * n_pts - 1, simd, precise_psi);
+    return a2 + (a2 - a1) / 15.0L;
+}
+
+Real arch_generic_adaptive(const TestFunction& tf, Real L0, Marshal::SimdLevel simd,
+                           bool precision_mode, int arch_pts, Real eps) {
+    const Real sim_tol = precision_mode ? 1e-16L : std::max(eps, 1e-14L);
+    const bool precise_psi = precision_mode;
+    Real L = L0;
+    Real prev = arch_generic_simpson_check(tf, L, 64001, simd, precise_psi);
+    for (int k = 0; k < 6; ++k) {
+        int n_pts = 64001;
+        while (n_pts < arch_pts) {
+            const int n2 = std::min(2 * n_pts - 1, arch_pts);
+            const Real next = arch_generic_simpson_check(tf, L, n2, simd, precise_psi);
+            const Real rel = fabsl(next - prev) / std::max(1.0L, fabsl(next));
+            if (rel < sim_tol) return next;
+            prev = next;
+            n_pts = n2;
+        }
+        L *= 2.0L;
+        prev = arch_generic_simpson_check(tf, L, 64001, simd, precise_psi);
+    }
+    return prev;
+}
+
 Real archimedean_for_tf(const TestFunction& tf, Real sigma, Marshal::SimdLevel simd,
                         bool precision_mode, int arch_pts, Real eps, bool quick_sinc2) {
     if (std::string(tf.name()) == "sinc2") {
+        Real T = sigma;
+        Real kappa = 1.0L;
+        sinc2_arch_params(tf, sigma, T, kappa);
+        const bool precise_psi = precision_mode;
         if (quick_sinc2) {
-            const Real L = std::max(240.0L * sigma, 240.0L);
-            return arch_sinc2_simpson_check(sigma, L, 64001, simd, precision_mode);
+            const Real L = std::max(240.0L * T / kappa, 240.0L);
+            return arch_sinc2_simpson_check(T, kappa, L, 64001, simd, precise_psi);
         }
-        return arch_sinc2_adaptive(sigma, simd, precision_mode, arch_pts, eps);
+        return arch_sinc2_adaptive(T, kappa, simd, precision_mode, arch_pts, eps);
     }
-    return archimedean_exact(sigma, simd, precision_mode, arch_pts, eps);
+    if (std::string(tf.name()) == "gauss") {
+        return archimedean_exact(sigma, simd, precision_mode, arch_pts, eps);
+    }
+    Real L0 = tf.support_radius();
+    if (const auto* b = dynamic_cast<const BumpTest*>(&tf)) {
+        (void)b;
+        L0 = std::max(L0, static_cast<Real>(8.0L));
+    }
+    if (const auto* r = dynamic_cast<const RationalTest*>(&tf)) {
+        L0 = std::max(L0, 30.0L * r->a);
+    }
+    if (const auto* lp = dynamic_cast<const LaplaceTest*>(&tf)) {
+        L0 = std::max(L0, 400.0L / lp->a);
+    }
+    return arch_generic_adaptive(tf, L0, simd, precision_mode, arch_pts, eps);
 }
 
 Real zero_sum_gauss_avx2(Real sigma, const double* gammas, size_t n) {
@@ -447,6 +541,16 @@ Real zero_sum_h(const TestFunction& tf, Real sigma, const std::vector<double>& g
     return zero_sum_h_batched(tf, sigma, gammas.data(), gammas.size(), simd);
 }
 
+Real zero_sum_h_prefix(const TestFunction& tf, Real sigma, const double* gammas, size_t n,
+                       const Real* gammas_ld, size_t n_ld, Marshal::ZeroKernel zk,
+                       Marshal::SimdLevel simd, bool force_ld = false) {
+    if (force_ld || (zk == Marshal::ZeroKernel::LongDouble && gammas_ld && n_ld > 0)) {
+        const size_t use = std::min(n, n_ld);
+        return zero_sum_h_ld_batched(tf, gammas_ld, use);
+    }
+    return zero_sum_h_batched(tf, sigma, gammas, n, simd);
+}
+
 Real trivial_zero_sum(const TestFunction& tf, int k = 500) {
     Real s = 0.0L;
     for (int m = 0; m < k; ++m) {
@@ -545,7 +649,8 @@ namespace Marshal {
 TraceResult EvaluateTrace(const TestFunction& tf, Real sigma, const std::vector<double>& gammas,
                         const std::vector<Real>& gammas_ld, const Heat::PrimeCatalog& cat,
                         ZeroKernel zk, SimdLevel simd, Real eps, bool include_trivial,
-                        bool precision_mode, int arch_pts, bool quick_sinc2_arch) {
+                        bool precision_mode, int arch_pts, bool quick_sinc2_arch,
+                        const Heat::ArchimedeanBoundarySpec* arch_spec) {
     TraceResult r;
     const Real tau = tau_from_sigma(sigma);
     const Real link_n = sigma * sqrtl(2.0L / Marshal::Heat::kPi);
@@ -556,7 +661,11 @@ TraceResult EvaluateTrace(const TestFunction& tf, Real sigma, const std::vector<
         r.lhs += trivial_zero_sum(tf);
     }
     r.poles = pole_terms(tf, sigma);
-    r.arch = archimedean_for_tf(tf, sigma, simd, precision_mode, arch_pts, eps, quick_sinc2_arch);
+    if (arch_spec)
+        r.arch = Heat::archimedean_for_tf_bounded(tf, sigma, *arch_spec, simd, precision_mode,
+                                                  arch_pts, eps, quick_sinc2_arch);
+    else
+        r.arch = archimedean_for_tf(tf, sigma, simd, precision_mode, arch_pts, eps, quick_sinc2_arch);
 
     Real prime_raw = 0;
     Real heat_raw = 0;
@@ -582,6 +691,132 @@ TraceResult EvaluateTrace(const TestFunction& tf, Real sigma, const std::vector<
     r.residual_kahan = bal.total();
     r.trivial = include_trivial ? trivial_zero_sum(tf) : 0;
     return r;
+}
+
+TraceResult EvaluateTracePrefix(const TestFunction& tf, Real sigma, const double* gammas,
+                                size_t n_zeros, const Real* gammas_ld, size_t n_zeros_ld,
+                                const Heat::PrimeCatalog& cat, ZeroKernel zk, SimdLevel simd,
+                                Real eps, bool include_trivial, bool precision_mode, int arch_pts,
+                                bool quick_sinc2_arch,
+                                const Heat::ArchimedeanBoundarySpec* arch_spec) {
+    TraceResult r;
+    const Real tau = tau_from_sigma(sigma);
+    const Real link_n = sigma * sqrtl(2.0L / Marshal::Heat::kPi);
+
+    r.lhs = zero_sum_h_prefix(tf, sigma, gammas, n_zeros, gammas_ld, n_zeros_ld, zk,
+                              precision_mode ? SimdLevel::Scalar : simd, precision_mode);
+    if (include_trivial) r.lhs += trivial_zero_sum(tf);
+    r.poles = pole_terms(tf, sigma);
+    if (arch_spec)
+        r.arch = Heat::archimedean_for_tf_bounded(tf, sigma, *arch_spec, simd, precision_mode,
+                                                  arch_pts, eps, quick_sinc2_arch);
+    else
+        r.arch = archimedean_for_tf(tf, sigma, simd, precision_mode, arch_pts, eps, quick_sinc2_arch);
+
+    Real prime_raw = 0;
+    Real heat_raw = 0;
+    const size_t scale_thr = Marshal::Kernel::kScalePrimeThreshold;
+    const bool scale_gauss = (std::string(tf.name()) == "gauss") && cat.p.size() >= scale_thr;
+    if (scale_gauss) {
+        Marshal::Kernel::AccumulateGaussPrimeBlocks(cat, sigma, tau, eps, prime_raw, heat_raw);
+    } else {
+        accumulate_prime_blocks(cat, tf, tau, link_n, eps, prime_raw, heat_raw, precision_mode);
+    }
+    r.prime = prime_raw / (2.0L * Marshal::Heat::kPi);
+    r.heat_prime_ab = heat_raw * link_n;
+    Kahan geom;
+    geom.add(r.poles);
+    geom.add(r.arch);
+    r.rhs = geom.total() - r.prime;
+    Kahan bal;
+    bal.add(r.lhs);
+    bal.add(-r.poles);
+    bal.add(-r.arch);
+    bal.add(r.prime);
+    r.residual_kahan = bal.total();
+    r.trivial = include_trivial ? trivial_zero_sum(tf) : 0;
+    return r;
+}
+
+Real ArchSinc2Adaptive(Real T, Real kappa, SimdLevel simd, bool precision_mode, int arch_pts,
+                       Real eps) {
+    return arch_sinc2_adaptive(T, kappa, simd, precision_mode, arch_pts, eps);
+}
+
+std::vector<ArchSinc2AuditPoint> AuditArchSinc2(Real T, Real kappa, SimdLevel simd,
+                                                bool precision_mode) {
+    std::vector<ArchSinc2AuditPoint> out;
+    const bool precise_psi = precision_mode;
+    const Real hw = T / kappa;
+    const Real L0 = std::max(120.0L, 8.0L * hw);
+    const Real L_vals[] = {L0, std::max(L0, 16.0L * hw), std::max(L0, 32.0L * hw),
+                           std::max(L0, 64.0L * hw), std::max(L0, 128.0L * hw)};
+    const int n_vals[] = {64001, 128001, 256001, 512001, 1024001};
+    for (Real L : L_vals) {
+        for (int n_pts : n_vals) {
+            ArchSinc2AuditPoint pt;
+            pt.L = L;
+            pt.n_pts = n_pts;
+            pt.arch = arch_sinc2_simpson(T, kappa, L, n_pts, simd, precise_psi);
+            pt.richardson_est = arch_sinc2_simpson_check(T, kappa, L, n_pts, simd, precise_psi);
+            out.push_back(pt);
+        }
+    }
+    return out;
+}
+
+ArchSinc2ConvergeResult ArchSinc2Converge(Real T, Real kappa, Real target, SimdLevel simd,
+                                          bool precision_mode, int arch_pts_max) {
+    ArchSinc2ConvergeResult result;
+    result.T = T;
+    result.kappa = kappa;
+    result.arch_target = target;
+    const bool precise_psi = precision_mode;
+    const Real hw = T / kappa;
+    Real L = std::max(120.0L, 8.0L * hw);
+    const int n_ladder[] = {64001, 128001, 256001, 512001, 1024001, 2048001};
+    Real best = 0;
+    int best_n = 64001;
+    Real best_L = L;
+    bool converged = false;
+
+    for (int pass = 0; pass < 4 && !converged; ++pass) {
+        Real prev = 0;
+        for (int n_pts : n_ladder) {
+            if (n_pts > arch_pts_max) break;
+            const Real arch = arch_sinc2_simpson_check(T, kappa, L, n_pts, simd, precise_psi);
+            ArchSinc2AuditPoint pt;
+            pt.L = L;
+            pt.n_pts = n_pts;
+            pt.arch = arch_sinc2_simpson(T, kappa, L, n_pts, simd, precise_psi);
+            pt.richardson_est = arch;
+            result.ladder.push_back(pt);
+            if (prev != 0 && fabsl(arch - prev) < target) {
+                best = arch;
+                best_n = n_pts;
+                best_L = L;
+                converged = true;
+                break;
+            }
+            prev = arch;
+            best = arch;
+            best_n = n_pts;
+            best_L = L;
+        }
+        if (!converged) L *= 2.0L;
+    }
+
+    result.arch = best;
+    result.n_pts_final = best_n;
+    result.L_final = best_L;
+    result.converged = converged;
+    return result;
+}
+
+Real ArchimedeanBaselineForTestFunction(const TestFunction& tf, Real sigma, SimdLevel simd,
+                                        bool precision_mode, int arch_pts, Real eps,
+                                        bool quick_sinc2) {
+    return archimedean_for_tf(tf, sigma, simd, precision_mode, arch_pts, eps, quick_sinc2);
 }
 
 }  // namespace Marshal

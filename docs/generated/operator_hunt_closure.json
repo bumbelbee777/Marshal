@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "verdict": "OPERATOR_HUNT_CLOSED",
+  "epistemic_note": "Hunt closed means every finite path excluded and open problems catalogued; not RH proved",
+  "target": "connes_analytic_construction",
+  "the_gap": "spectral_discreteness",
+  "checks": {
+    "operator_hunt_sanity": true,
+    "continuum_classified": true,
+    "scaffold_v2_no_height_map": true,
+    "open_spectral_discreteness": true
+  },
+  "continuum_verdict": "ANALYTIC_SHAPE_BAD",
+  "analytic_verdict": "OPEN_SPECTRAL_DISCRETENESS",
+  "trace_t1_verdict": "T1_LOCAL_PASS",
+  "surviving_candidates": [
+    "connes_analytic_construction",
+    "connes_adele_quotient"
+  ],
+  "falsified_count": 7,
+  "remaining_proof_track": [
+    "self_adjoint_extension_selection",
+    "spectral_discreteness",
+    "spectral_det_xi"
+  ]
+}

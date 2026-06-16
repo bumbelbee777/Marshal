@@ -1,0 +1,67 @@
+{
+  "version": 3,
+  "framework": "trace_duality",
+  "operator": "H_log",
+  "correct_weil_weight": "(log p)/p^{k/2}",
+  "n_primes_total": 41538,
+  "n_primes_global": 41538,
+  "tests": {
+    "T1_weil_vs_marshal": {
+      "pass": true,
+      "gap": 9.9746599868666408e-18,
+      "hlog_weil_prime": 0.32561103500807431,
+      "marshal_prime": 0.32561103500807431
+    },
+    "T_full_weil_identity_sinc2": {
+      "pass": false,
+      "zero_sum_lhs": 4.2095995884874697e-09,
+      "marshal_prime": 0.32561103500807431,
+      "arch_plus_poles": 0.32561111457066805,
+      "residual": 7.5352994137462123e-08
+    },
+    "T_full_weil_identity_gauss": {
+      "pass": true,
+      "residual": 7.5352994137462123e-08
+    },
+    "T_duality_diagnostic": {
+      "weil_prime_sinc2_vs_zeros": 7.1608197320635085,
+      "p_weight_sinc2_vs_zeros": 2.2956018769596978,
+      "p_weight_misweight_pct": 229.56018769596977,
+      "cylinder_baseline": 12.67
+    },
+    "T3_density": {"log_prime": 326291, "zeros": 29},
+    "T4_connes_best": {"best_sinc2_gap": 3.6864102607006037, "best_lambda": 0},
+    "T5_sinc2_drift_halving": 3.4726588331615402,
+    "T_compact_falsify": {"residual": 0.014126425643661291, "pass": false},
+    "T6_connes_crossed": {"sinc2": 3.6864102607006037},
+    "T_sinc2_sweep": {
+      "best_T": 0,
+      "best_kappa": 1,
+      "kappa_used": 1,
+      "best_residual": 0,
+      "best_zero_sum": 0,
+      "pass": false,
+      "kappa_sweep": [
+      ],
+      "points": [
+      ]
+    }
+  },
+  "test_function_catalog": [
+    {"name": "gauss", "t1_pass": true, "t1_gap": 9.9746599868666408e-18, "weil_residual": 7.5352994137462123e-08, "weil_pass": true, "has_compact_hhat": false},
+    {"name": "sinc2", "t1_pass": true, "t1_gap": 5.2041704279304213e-18, "weil_residual": 15.894303901642502, "weil_pass": false, "has_compact_hhat": true},
+    {"name": "bump", "t1_pass": false, "t1_gap": 0.00068434226402070146, "weil_residual": 1.7866197582202568, "weil_pass": false, "has_compact_hhat": false},
+    {"name": "rational", "t1_pass": true, "t1_gap": 4.1199682554449168e-18, "weil_residual": 0.69098530968281602, "weil_pass": false, "has_compact_hhat": false}
+  ],
+  "prime_ladder": [
+    {"p_max": 29, "n_primes": 10, "weil_sinc2": 1.6933279712791423, "p_weight_sinc2": 1.6673100906524296},
+    {"p_max": 229, "n_primes": 50, "weil_sinc2": 2.3268361111525251, "p_weight_sinc2": 1.8064213785090439},
+    {"p_max": 541, "n_primes": 100, "weil_sinc2": 2.4185988592877194, "p_weight_sinc2": 1.8226394820397234},
+    {"p_max": 3571, "n_primes": 500, "weil_sinc2": 3.2621025886741291, "p_weight_sinc2": 1.9339053497719578},
+    {"p_max": 7919, "n_primes": 1000, "weil_sinc2": 3.6881608989019679, "p_weight_sinc2": 1.9840447543779474},
+    {"p_max": 48611, "n_primes": 5000, "weil_sinc2": 4.7016695355316642, "p_weight_sinc2": 2.0817933206189339},
+    {"p_max": 104729, "n_primes": 10000, "weil_sinc2": 6.2132668640777045, "p_weight_sinc2": 2.2171404805446611},
+    {"p_max": 287117, "n_primes": 25000, "weil_sinc2": 6.9497562275313038, "p_weight_sinc2": 2.2793460182988574},
+    {"p_max": 499979, "n_primes": 41538, "weil_sinc2": 7.1608197320635085, "p_weight_sinc2": 2.2956018769596978}
+  ]
+}

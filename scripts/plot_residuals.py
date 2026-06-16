@@ -3,14 +3,19 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-FIG = ROOT / "figures"
-FIG.mkdir(exist_ok=True)
+sys.path.insert(0, str(ROOT))
+
+from tools.Figures.style import apply_publication_style, save_figure  # noqa: E402
+
+FIG_STEM_DECOMP = "fig_residual_decomposition"
+FIG_STEM_SCALE = "fig_residual_scaling"
 
 
 def plot_from_trace(trace_path: Path) -> None:
@@ -20,29 +25,28 @@ def plot_from_trace(trace_path: Path) -> None:
     vals = [abs(bounds.get(k, 0)) for k in labels]
     obs = abs(data.get("residual", 0))
 
-    fig, ax = plt.subplots(figsize=(8, 4))
+    apply_publication_style()
+    fig, ax = plt.subplots(figsize=(3.5, 2.6))
     ax.bar(labels, vals, alpha=0.7, label="bound components")
-    ax.axhline(obs, color="green", ls="--", label=f"observed {obs:.2e}")
+    ax.axhline(obs, color="#009E73", ls="--", label=f"observed {obs:.2e}")
     ax.set_yscale("log")
-    ax.set_title(f"Residual decomposition sigma={data.get('sigma')} test={data.get('test')}")
-    ax.legend()
-    fig.savefig(FIG / "fig_residual_decomposition.png", dpi=150, bbox_inches="tight")
-    plt.close()
-    print(f"Saved {FIG / 'fig_residual_decomposition.png'}")
+    ax.set_title(f"Residual decomposition σ={data.get('sigma')}")
+    ax.legend(fontsize=8)
+    save_figure(fig, FIG_STEM_DECOMP)
+    print(f"Saved fig_{FIG_STEM_DECOMP}")
 
 
-def plot_scaling():
+def plot_scaling() -> None:
     sigmas = np.linspace(1, 10, 50)
-    # illustrative arch floor model after GH512-only path
     arch = 1e-6 * (2.236 / sigmas) ** 2
-    fig, ax = plt.subplots(figsize=(8, 4))
+    apply_publication_style()
+    fig, ax = plt.subplots(figsize=(3.5, 2.6))
     ax.semilogy(sigmas, arch, label="arch floor (est)")
-    ax.set_xlabel("sigma")
+    ax.set_xlabel("σ")
     ax.set_ylabel("error scale")
-    ax.set_title("Residual scaling (GH512 arch floor model)")
+    ax.set_title("Residual scaling (GH512 arch floor)")
     ax.grid(True, alpha=0.3)
-    fig.savefig(FIG / "fig_residual_scaling.png", dpi=150, bbox_inches="tight")
-    plt.close()
+    save_figure(fig, FIG_STEM_SCALE)
 
 
 if __name__ == "__main__":

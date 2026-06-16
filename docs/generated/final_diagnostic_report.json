@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "investigation_id": "theorem_ab",
+  "manifest": {
+    "version": 1,
+    "investigation_id": "theorem_ab",
+    "diagnostics": [
+      {
+        "id": "spectral_action_curvature",
+        "pass": false
+      },
+      {
+        "id": "t1_admissible_topology",
+        "pass": true
+      },
+      {
+        "id": "heat_trace_at_theta",
+        "pass": true
+      },
+      {
+        "id": "spectral_spacing",
+        "pass": true
+      },
+      {
+        "id": "continuum_persistence",
+        "pass": true
+      }
+    ]
+  },
+  "analysis": {
+    "spectral_action_curvature": {
+      "diagnostic_id": "spectral_action_curvature",
+      "proof_status": "NUMERICAL_FORTIFIED",
+      "analysis_status": "ANALYSIS_INCOMPLETE",
+      "gates": [
+        {
+          "id": "theta0_window",
+          "gate": "THEOREM_A",
+          "pass": false,
+          "note": "best=6.26"
+        },
+        {
+          "id": "strict_convexity_proxy",
+          "gate": "THEOREM_A",
+          "pass": true,
+          "note": "d2=0.02977430174525824"
+        },
+        {
+          "id": "quadratic_fit",
+          "gate": "THEOREM_A",
+          "pass": false,
+          "note": "r2=-3.289640007344204e+17"
+        }
+      ],
+      "metrics": {
+        "d2_lambda_proxy": 0.02977430174525824,
+        "r2": -3.289640007344204e+17,
+        "best_theta": 6.26,
+        "theta0": 5.76
+      },
+      "note": ""
+    },
+    "t1_admissible_topology": {
+      "diagnostic_id": "t1_admissible_topology",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "t1_interval_nonempty",
+          "gate": "THEOREM_A",
+          "pass": true,
+          "note": "[0.0,6.283185307179586]"
+        },
+        {
+          "id": "theta0_interior",
+          "gate": "THEOREM_A",
+          "pass": true,
+          "note": "theta0=5.76"
+        }
+      ],
+      "metrics": {},
+      "note": ""
+    },
+    "heat_trace_at_theta": {
+      "diagnostic_id": "heat_trace_at_theta",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "heat_trace_series",
+          "gate": "THEOREM_B",
+          "pass": true,
+          "note": "n=3"
+        }
+      ],
+      "metrics": {
+        "ratios": [
+          385.00844755239893,
+          27382651341.85638,
+          3.3773678366295866e+88
+        ]
+      },
+      "note": ""
+    },
+    "spectral_spacing": {
+      "diagnostic_id": "spectral_spacing",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "spacing_exported",
+          "gate": "THEOREM_B",
+          "pass": true,
+          "note": "gue_l2=2.631692516578463"
+        }
+      ],
+      "metrics": {
+        "connes_gue_l2": 2.631692516578463,
+        "zero_gue_l2": 0.09557807788121565
+      },
+      "note": ""
+    },
+    "continuum_persistence": {
+      "diagnostic_id": "continuum_persistence",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "continuum_ladder_complete",
+          "gate": "THEOREM_B",
+          "pass": true,
+          "note": "EXPECTED_TRUNCATION"
+        }
+      ],
+      "metrics": {
+        "verdict": "EXPECTED_TRUNCATION",
+        "flags": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": ""
+    }
+  },
+  "theorem_a_fortified": {
+    "version": 1,
+    "proof_status": "NUMERICAL_FORTIFIED",
+    "investigation_id": "theorem_ab",
+    "diagnostics": {
+      "spectral_action_curvature": {
+        "diagnostic_id": "spectral_action_curvature",
+        "proof_status": "NUMERICAL_FORTIFIED",
+        "analysis_status": "ANALYSIS_INCOMPLETE",
+        "gates": [
+          {
+            "id": "theta0_window",
+            "gate": "THEOREM_A",
+            "pass": false,
+            "note": "best=6.26"
+          },
+          {
+            "id": "strict_convexity_proxy",
+            "gate": "THEOREM_A",
+            "pass": true,
+            "note": "d2=0.02977430174525824"
+          },
+          {
+            "id": "quadratic_fit",
+            "gate": "THEOREM_A",
+            "pass": false,
+            "note": "r2=-3.289640007344204e+17"
+          }
+        ],
+        "metrics": {
+          "d2_lambda_proxy": 0.02977430174525824,
+          "r2": -3.289640007344204e+17,
+          "best_theta": 6.26,
+          "theta0": 5.76
+        },
+        "note": ""
+      },
+      "t1_admissible_topology": {
+        "diagnostic_id": "t1_admissible_topology",
+        "proof_status": "NUMERICAL",
+        "analysis_status": "EVIDENCE_SUPPORTS",
+        "gates": [
+          {
+            "id": "t1_interval_nonempty",
+            "gate": "THEOREM_A",
+            "pass": true,
+            "note": "[0.0,6.283185307179586]"
+          },
+          {
+            "id": "theta0_interior",
+            "gate": "THEOREM_A",
+            "pass": true,
+            "note": "theta0=5.76"
+          }
+        ],
+        "metrics": {},
+        "note": ""
+      }
+    }
+  },
+  "theorem_b_breached": {
+    "version": 1,
+    "proof_status": "NUMERICAL_BREACHED",
+    "investigation_id": "theorem_ab",
+    "diagnostics": {
+      "heat_trace_at_theta": {
+        "diagnostic_id": "heat_trace_at_theta",
+        "proof_status": "NUMERICAL",
+        "analysis_status": "EVIDENCE_SUPPORTS",
+        "gates": [
+          {
+            "id": "heat_trace_series",
+            "gate": "THEOREM_B",
+            "pass": true,
+            "note": "n=3"
+          }
+        ],
+        "metrics": {
+          "ratios": [
+            385.00844755239893,
+            27382651341.85638,
+            3.3773678366295866e+88
+          ]
+        },
+        "note": ""
+      },
+      "spectral_spacing": {
+        "diagnostic_id": "spectral_spacing",
+        "proof_status": "NUMERICAL",
+        "analysis_status": "EVIDENCE_SUPPORTS",
+        "gates": [
+          {
+            "id": "spacing_exported",
+            "gate": "THEOREM_B",
+            "pass": true,
+            "note": "gue_l2=2.631692516578463"
+          }
+        ],
+        "metrics": {
+          "connes_gue_l2": 2.631692516578463,
+          "zero_gue_l2": 0.09557807788121565
+        },
+        "note": ""
+      },
+      "continuum_persistence": {
+        "diagnostic_id": "continuum_persistence",
+        "proof_status": "NUMERICAL",
+        "analysis_status": "EVIDENCE_SUPPORTS",
+        "gates": [
+          {
+            "id": "continuum_ladder_complete",
+            "gate": "THEOREM_B",
+            "pass": true,
+            "note": "EXPECTED_TRUNCATION"
+          }
+        ],
+        "metrics": {
+          "verdict": "EXPECTED_TRUNCATION",
+          "flags": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "note": ""
+      }
+    }
+  }
+}

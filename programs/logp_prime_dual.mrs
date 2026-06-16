@@ -1,0 +1,30 @@
+ansatz logp_prime_dual {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  on circle S¹_log(p) {
+    frequency omega = k * log(p)
+    eigenvalue lambda = k * log(p)
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    local_weil_t1: true
+    weil_identity: gauss
+    trace_test: sinc2
+    test_param: 14.134725142
+    sinc2_kappa: 60
+    weil_residual < 1e-6
+  }
+
+  expect {
+    local_weil_pass == true
+  }
+}

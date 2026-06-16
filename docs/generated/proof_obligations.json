@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "track": "global_operator_v1",
+  "proof_status": "V1_OPEN",
+  "lean_cert": "HP.Global.ProofObligationRegistry",
+  "lean_emit_ready": true,
+  "v1_finish": [
+    "self_adjoint_extension_selection",
+    "spectral_discreteness",
+    "spectrum_equals_zeros"
+  ],
+  "proved": [
+    "connes_analytic_lemma_demo",
+    "poisson_gue_finite_coupling_nogo",
+    "weil_trace_duality",
+    "weil_trace_formula",
+    "weil_weighted_trace_match"
+  ],
+  "proved_conditional": [
+    "spectral_det_xi"
+  ],
+  "open_obligations": [
+    "self_adjoint_extension_selection",
+    "spectral_discreteness"
+  ],
+  "formal_track_open": [],
+  "falsified": [],
+  "deprecated": [
+    "quotient_spectrum",
+    "resolvent_limit",
+    "trace_mode_extraction",
+    "convergence_tail_bound",
+    "convergence_spectral_measure",
+    "spectral_determinant_selection",
+    "assembly_search"
+  ],
+  "resolved_ambiguities": [
+    {
+      "topic": "spectral_det_xi vs spectrum_equals_zeros",
+      "resolution": "Same v1 obligation: det(s-D)=xi(s) is the determinant form of spectrum_equals_zeros; LemmaManifest uses id spectral_det_xi"
+    },
+    {
+      "topic": "ANALYTIC_INCONCLUSIVE vs ANALYTIC_SHAPE_BAD",
+      "resolution": "INCONCLUSIVE = shape undecided at finite P (expect_finite_spectrum_mismatch); BAD = scaffold falsified; neither is a proof"
+    },
+    {
+      "topic": "OPEN_SPECTRAL_DISCRETENESS vs hunt failure",
+      "resolution": "Overall verdict at finite truncation; hunt is CLOSED; this verdict documents THE GAP measurement only"
+    },
+    {
+      "topic": "finite RMSE / DISCRETIZATION_IDENTIFICATION_FAILS",
+      "resolution": "Monotone RMSE growth documents that finite D_{P,K} cannot identify global D; pushes to analytic proof"
+    },
+    {
+      "topic": "OPERATOR_HUNT_CLOSED vs RH",
+      "resolution": "Hunt closed means C_fin excluded and target locked; RH not claimed until spectral_discreteness proved"
+    },
+    {
+      "topic": "logp_prime_dual NUMERICAL_PENDING",
+      "resolution": "Superseded by weil_trace_duality PROVED; duality is trace-level not spectral identity"
+    },
+    {
+      "topic": "cylinder_class_nogo OPEN",
+      "resolution": "Reduction PROVED via cylinder_density_divergence + falsification + pair_correlation; full Sobolev d_s formalization remains rigorous_gap"
+    },
+    {
+      "topic": "legacy OPEN lemmas (quotient_spectrum, resolvent_limit, trace_mode_extraction)",
+      "resolution": "Deprecated for v1 track \u2014 cylinder/quotient hunt ended; see track=legacy_cylinder"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "weil_weighted_trace_match",
+      "proof_status": "PROVED",
+      "track": "v1_global",
+      "depends_on": [
+        "cylinder_poisson_duality"
+      ],
+      "approach": "",
+      "note": "T1 vs Marshal prime; NOT tautological p^{-k/2} rescaling",
+      "evidence": "docs/generated/log_prime_validation.json",
+      "gate_verdict": null,
+      "alias_of": null,
+      "lean": "docs/Formal/AdeleQuotient.lean"
+    },
+    {
+      "id": "weil_trace_formula",
+      "proof_status": "PROVED",
+      "track": "v1_global",
+      "depends_on": [
+        "weil_weighted_trace_match"
+      ],
+      "approach": "",
+      "note": "Connes trace formula; Marshal verifies numerically via trace_formula_gate",
+      "evidence": "docs/generated/duality_gold_standard.json",
+      "gate_verdict": null,
+      "alias_of": null,
+      "lean": "docs/Formal/AdeleQuotient.lean"
+    },
+    {
+      "id": "weil_trace_duality",
+      "proof_status": "PROVED",
+      "track": "v1_global",
+      "depends_on": [
+        "cylinder_direct_sum_falsified"
+      ],
+      "approach": "",
+      "note": "Trace duality not spectrum identity",
+      "evidence": "",
+      "gate_verdict": null,
+      "alias_of": null,
+      "lean": "docs/Formal/AdeleQuotient.lean"
+    },
+    {
+      "id": "poisson_gue_finite_coupling_nogo",
+      "proof_status": "PROVED",
+      "track": "v1_global",
+      "depends_on": [
+        "cylinder_density_divergence",
+        "cylinder_direct_sum_falsified",
+        "pair_correlation_gue",
+        "poisson_superposition_statistics",
+        "height_map_preserves_phase",
+        "finite_rank_bulk_poisson",
+        "connes_crossed_product_assembly"
+      ],
+      "approach": "",
+      "note": "C_fin class closed",
+      "evidence": "",
+      "gate_verdict": null,
+      "alias_of": null,
+      "lean": "docs/Formal/PoissonGueNoGo.lean"
+    },
+    {
+      "id": "self_adjoint_extension_selection",
+      "proof_status": "ANALYTIC_OPEN",
+      "track": "v1_global",
+      "depends_on": [
+        "weil_trace_formula"
+      ],
+      "approach": "spectral_action_on_global_D",
+      "note": "Theorem A \u2014 numeric witness only; analytic proof required",
+      "evidence": "docs/generated/analytic_lemma_demo.json",
+      "gate_verdict": "SPECTRAL_ACTION_SELECTED",
+      "alias_of": null,
+      "lean": "docs/Formal/ConnesAnalyticFortress.lean"
+    },
+    {
+      "id": "spectral_discreteness",
+      "proof_status": "ANALYTIC_OPEN",
+      "track": "v1_global",
+      "depends_on": [
+        "self_adjoint_extension_selection",
+        "weil_trace_formula"
+      ],
+      "approach": "crossed_product_quotient_topology",
+      "note": "Theorem B \u2014 compact resolvent on true D; deepest gap",
+      "evidence": "docs/generated/analytic_construction.json",
+      "gate_verdict": "DISCRETIZATION_IDENTIFICATION_FAILS",
+      "alias_of": null,
+      "lean": "docs/Formal/ConnesAnalyticFortress.lean"
+    },
+    {
+      "id": "spectral_det_xi",
+      "proof_status": "PROVED_CONDITIONAL",
+      "track": "v1_global",
+      "depends_on": [
+        "self_adjoint_extension_selection",
+        "spectral_discreteness"
+      ],
+      "approach": "v1_proof_chain_conditional",
+      "note": "Lemma 3 PROVED in Lean given Theorems A+B",
+      "evidence": "docs/Formal/V1ProofChain.lean",
+      "gate_verdict": "det_eq_xi_from_lemmas_one_and_two",
+      "alias_of": "spectrum_equals_zeros",
+      "lean": "docs/Formal/V1ProofChain.lean"
+    },
+    {
+      "id": "global_connes_dirac_limit",
+      "proof_status": "NUMERICAL",
+      "track": "v1_global",
+      "depends_on": [
+        "weil_trace_formula"
+      ],
+      "approach": "adelic_quotient_limit",
+      "note": "FORMAL_LIMIT_CLOSED \u2014 DISCRETIZATION_IDENTIFICATION_FAILS; monotone RMSE documents non-identification",
+      "evidence": "docs/generated/global_dirac_limit.json",
+      "gate_verdict": null,
+      "alias_of": null,
+      "lean": "docs/Formal/GlobalConnesDiracLimit.lean"
+    },
+    {
+      "id": "connes_analytic_lemma_demo",
+      "proof_status": "PROVED",
+      "track": "v1_global",
+      "depends_on": [
+        "weil_trace_formula"
+      ],
+      "approach": "four_gate_demonstration",
+      "note": "Numeric witness for Theorem A; does not prove analytic fortress",
+      "evidence": "docs/generated/analytic_lemma_demo.json",
+      "gate_verdict": "FORMAL_ROUTING_COMPLETE",
+      "alias_of": null,
+      "lean": "docs/Formal/ConnesAnalyticProof.lean"
+    }
+  ],
+  "certificates": {
+    "analytic_lemma_demo": {
+      "path": "docs/generated/analytic_lemma_demo.json",
+      "v1_chain_status": "V1_PROVED",
+      "lean_emit_ready": true
+    },
+    "global_dirac_limit": {
+      "path": "docs/generated/global_dirac_limit.json",
+      "limit_verdict": "DISCRETIZATION_IDENTIFICATION_FAILS",
+      "monotone_rmse_increase": true
+    }
+  },
+  "next_proof_steps": [
+    {
+      "priority": 1,
+      "lemma": "self_adjoint_extension_selection",
+      "action": "Theorem A: prove unique \u039b_D(\u03b8) minimizer on true Connes D_\u03b8",
+      "status": "ANALYTIC_OPEN"
+    },
+    {
+      "priority": 2,
+      "lemma": "spectral_discreteness",
+      "action": "Theorem B: prove compact resolvent and \u03c3(D_{\u03b8\u2080})={\u03b3\u2099}",
+      "status": "ANALYTIC_OPEN"
+    },
+    {
+      "priority": 3,
+      "lemma": "spectral_det_xi",
+      "action": "Lemma 3: PROVED_CONDITIONAL in V1ProofChain.lean given A+B",
+      "status": "PROVED_CONDITIONAL"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "T": 8,
+  "kappa": 41,
+  "adaptive_arch": -0.44292374667278156,
+  "arch_converged": true,
+  "n_pts_final": 128001,
+  "L_final": 120,
+  "arch_target": 9.9999999999999998e-13,
+  "kappa_verify": [
+  ],
+  "points": [
+    {"L": 120, "n_pts": 64001, "arch": -0.44292374667277828, "richardson_est": -0.44292374667278162},
+    {"L": 120, "n_pts": 128001, "arch": -0.44292374667278139, "richardson_est": -0.44292374667278156}
+  ]
+}

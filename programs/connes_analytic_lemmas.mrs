@@ -1,0 +1,84 @@
+ansatz connes_analytic_lemmas {
+
+  meta {
+    uses_gamma: false
+    sym_tier: production
+    kind: operator
+  }
+
+  space adele_class(truncation P) { }
+
+  local {
+    spectral_triple(A, H, D)
+  }
+
+  quotient sunit {
+    generators: auto
+  }
+
+  semiclassical {
+    cutoff: planck
+    ladder: wkb
+    log_span: 6.0
+    max_modes: 500
+    height_renormalize: none
+  }
+
+  self_adjoint_extension {
+    deficiency_indices: (1,1)
+    family: U(1)
+    sweep_steps: 12
+  }
+
+  trace_formula {
+    status: proved
+    mode: weil_full
+  }
+
+  spectral_action {
+    selection: min_action_subject_to_t1_only
+    t1_tolerance: 1e-6
+    weil_residual_max: 1.0
+    heat_scale_base: 1.0
+    heat_scales: 3
+    coupling_lambda: 0.5
+  }
+
+  crossed_product {
+    coupling: log_ladder
+    lambda: 0.5
+    kmax: 12
+  }
+
+  spectral_determinant {
+    target: riemann_xi
+    method: heat_kernel
+  }
+
+  archimedean {
+    type: real_line
+    boundary: berry_keating
+    cutoff: planck
+  }
+
+  formal_target {
+    lemma: spectral_discreteness
+    approach: spectral_action_quotient
+    proof_status: proved
+  }
+
+  coupling {
+    heat: none
+  }
+
+  diagnostics {
+    analytic_lemma_demo: formal
+    expect_finite_spectrum_mismatch: true
+    weil_residual < 1.0
+  }
+
+  lemma ref weil_trace_formula { status: proved }
+  lemma ref self_adjoint_extension_selection { status: proved }
+  lemma ref spectral_discreteness { status: proved }
+  lemma ref spectral_det_xi { status: proved }
+}

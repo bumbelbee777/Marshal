@@ -89,8 +89,30 @@ CandidateMetrics evaluate_candidate_metrics(const AnaVM::OperatorTraits& traits,
     return m;
 }
 
+std::string elimination_reason_for(const AnaVM::OperatorTraits& traits) {
+    if (traits.in_C_fin) return "C_fin_poisson_gue_nogo";
+    if (traits.density_growth == AnaVM::DensityGrowthClass::Constant)
+        return "density_growth_constant";
+    if (traits.density_growth == AnaVM::DensityGrowthClass::InverseLogarithmic)
+        return "density_growth_inverse_logarithmic";
+    if (traits.uses_gamma) return "gamma_tuned_circular";
+    return {};
+}
+
 double score_plausibility(const AnaVM::OperatorTraits& traits, const CandidateMetrics& m) {
-    if (traits.scaffold || traits.placeholder) return 0.5;
+    const std::string elim = elimination_reason_for(traits);
+    if (!elim.empty()) return 0.0;
+
+    if (traits.rule_id == "connes_analytic_construction" || traits.rule_id == "connes_dirac") {
+        double s = 0.0;
+        for (const auto& st : traits.connes_subtarget_status) {
+            if (st.find("connes_trace_formula:PASS") != std::string::npos) s += 25.0;
+        }
+        if (traits.scaffold || traits.placeholder) s += 5.0;
+        return s;
+    }
+
+    if (traits.scaffold || traits.placeholder) return 0.0;
     double s = 0;
     if (!m.compact_sinc2_mismatch_proved) s += 40;
     if (m.gamma_free_gap_max < 1.0) s += 30;

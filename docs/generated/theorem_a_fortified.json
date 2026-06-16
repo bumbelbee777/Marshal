@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "proof_status": "NUMERICAL_FORTIFIED",
+  "investigation_id": "theorem_ab",
+  "diagnostics": {
+    "spectral_action_curvature": {
+      "diagnostic_id": "spectral_action_curvature",
+      "proof_status": "NUMERICAL_FORTIFIED",
+      "analysis_status": "ANALYSIS_INCOMPLETE",
+      "gates": [
+        {
+          "id": "theta0_window",
+          "gate": "THEOREM_A",
+          "pass": false,
+          "note": "best=6.26"
+        },
+        {
+          "id": "strict_convexity_proxy",
+          "gate": "THEOREM_A",
+          "pass": true,
+          "note": "d2=0.02977430174525824"
+        },
+        {
+          "id": "quadratic_fit",
+          "gate": "THEOREM_A",
+          "pass": false,
+          "note": "r2=-3.289640007344204e+17"
+        }
+      ],
+      "metrics": {
+        "d2_lambda_proxy": 0.02977430174525824,
+        "r2": -3.289640007344204e+17,
+        "best_theta": 6.26,
+        "theta0": 5.76
+      },
+      "note": ""
+    },
+    "t1_admissible_topology": {
+      "diagnostic_id": "t1_admissible_topology",
+      "proof_status": "NUMERICAL",
+      "analysis_status": "EVIDENCE_SUPPORTS",
+      "gates": [
+        {
+          "id": "t1_interval_nonempty",
+          "gate": "THEOREM_A",
+          "pass": true,
+          "note": "[0.0,6.283185307179586]"
+        },
+        {
+          "id": "theta0_interior",
+          "gate": "THEOREM_A",
+          "pass": true,
+          "note": "theta0=5.76"
+        }
+      ],
+      "metrics": {},
+      "note": ""
+    }
+  }
+}

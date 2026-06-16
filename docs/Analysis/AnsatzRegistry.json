@@ -115,6 +115,17 @@
       "notes": "Trace duality T1+Weil identity; spectrum identification false; exact Weil weights (log p)/p^{k/2}"
     },
     {
+      "id": "connes_crossed_product",
+      "status": "FALSIFIED",
+      "program": "programs/connes_crossed_product.mrs",
+      "falsification": "spectrum_vs_zeros",
+      "falsification_residual": 120,
+      "doc": "docs/Analysis/PoissonGueNoGo.md",
+      "sym_registry": "connes_crossed_logp",
+      "lemma": "connes_crossed_product_assembly",
+      "notes": "Finite crossed product in C_fin; RMSE ~120; excluded by poisson_gue_finite_coupling_nogo"
+    },
+    {
       "id": "connes_adele_quotient",
       "status": "OPEN",
       "program": "programs/templates/connes_triple.mrs.stub",
@@ -134,7 +145,27 @@
       "sym_registry": "berry_keating_xp",
       "lean_cert": "HP.Global.BerryKeatingScaffoldCert",
       "verdict_when_scaffold": "ANSATZ_SCAFFOLD_CALIBRATION",
-      "notes": "Scaffold — x*p Hamiltonian numerics TBD"
+      "notes": "Scaffold — see programs/berry_keating.mrs for partial numerics"
+    },
+    {
+      "id": "berry_keating",
+      "status": "OPEN",
+      "program": "programs/berry_keating.mrs",
+      "falsification": "spectrum_vs_zeros",
+      "doc": "docs/Analysis/AnalyticConnesProgram.md",
+      "sym_registry": "berry_keating_xp",
+      "lean_cert": "HP.Global.BerryKeatingCert",
+      "notes": "BK WKB ladder + self-adjoint extension sweep (partial v1)"
+    },
+    {
+      "id": "connes_analytic_construction",
+      "status": "TARGET",
+      "program": "programs/connes_analytic_construction.mrs",
+      "falsification": "spectral_discreteness",
+      "doc": "docs/Analysis/AnalyticConnesProgram.md",
+      "sym_registry": "connes_analytic_construction",
+      "lean_cert": "HP.Global.ConnesAnalyticCert",
+      "notes": "4-step analytic pipeline; spectral discreteness OPEN"
     }
   ]
 }

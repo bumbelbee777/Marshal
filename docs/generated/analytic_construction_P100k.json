@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "program_id": "connes_analytic_construction",
+  "rule_id": "connes_analytic_construction",
+  "overall_verdict": "ANALYTIC_PIPELINE_INCONCLUSIVE",
+  "spectrum_rmse": 206.98627129370755,
+  "spectrum_rmse_raw": 206.98627129370755,
+  "spectrum_max_gap": 287.52009906609152,
+  "best_theta": 5.759586531581288,
+  "log_prime_t1_gap": 2.328254949064644,
+  "xi_det_gap": 15.025782265201862,
+  "height_map_applied": false,
+  "height_map_formula": "gamma_bk * log(n) / (2*pi)",
+  "continuous_spectrum_present": true,
+  "analytic_shape_verdict": "ANALYTIC_INCONCLUSIVE",
+  "prime_limit": 100000,
+  "trace_gate_verdict": "TRACE_FORMULA_MISMATCH",
+  "trace_t1_verdict": "T1_LOCAL_FAIL",
+  "trace_full_weil_verdict": "FULL_WEIL_ARCH_OPEN",
+  "spectral_det_verdict": "XI_DET_MISMATCH",
+  "steps": [
+    {"step": "self_adjoint_extension_sweep", "verdict": "EXTENSION_INCONCLUSIVE", "pass": false},
+    {"step": "trace_formula_gate", "verdict": "TRACE_FORMULA_MISMATCH", "pass": false},
+    {"step": "spectral_determinant", "verdict": "XI_DET_MISMATCH", "pass": false},
+    {"step": "spectral_discreteness", "verdict": "CONTINUOUS_SPECTRUM_PRESENT", "pass": false}
+  ]
+}

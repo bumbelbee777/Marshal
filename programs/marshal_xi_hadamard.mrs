@@ -1,0 +1,80 @@
+use lib::marshal_hadamard_proof;
+
+ansatz marshal_hadamard_identification {
+
+  meta {
+
+    uses_gamma: false
+
+    sym_tier: analytic
+
+    kind: operator
+
+  }
+
+
+
+  space marshal_spectrum { }
+
+
+
+  coupling {
+
+    heat: connes
+
+  }
+
+
+
+  diagnostics {
+
+    xi_hadamard_proof
+
+    wedge_analytics
+
+  }
+
+
+
+  bound_audit {
+
+    grid_rel_gap_ub: 0.03
+
+    grid_mult_dev_ub: 0.03
+
+    tail_bound_decades_ub: 0.15
+
+    ident_gap_decades_ub: 0.15
+
+    holomorphy_uniform_gap_ub: 0.01
+
+    log_partial_sum_ub: 8.0
+
+    log_majorant_c: 1.05
+
+  }
+
+
+
+  genus_one_log_bounds {
+
+    small_z_threshold: 0.5
+
+    head_majorant_margin: 0.01
+
+    lemma: marshal_genus_one_log_summability_closed
+
+  }
+
+
+
+  formal_target {
+
+    lemma classical_riemann_hypothesis_marshal_proved
+
+    approach acyclic_marshal_hadamard
+
+  }
+
+}
+

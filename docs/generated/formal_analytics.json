@@ -17,12 +17,12 @@
     "montgomery_r2_l2": 0,
     "separates_from_gue": true
   },
-  "proved_gates": ["cylinder_density_divergence", "density_slope_mismatch", "pair_correlation_vs_gue", "cylinder_class_membership"],
-  "diagnostic_gates": ["zeros_gue_spacing", "discrete_spike_measure", "not_independent_cylinder_tensor"],
+  "proved_gates": ["cylinder_density_divergence", "pair_correlation_vs_gue", "cylinder_class_membership"],
+  "diagnostic_gates": ["density_slope_mismatch", "zeros_gue_spacing", "not_in_C_fin", "density_growth_logarithmic", "gue_level_repulsion", "noncommutative_algebra"],
   "failed_gates": [],
   "traits": {
     "space": "circle_logp",
-    "merge": "direct_sum",
+    "merge": "semiclassical",
     "uses_gamma": false
   }
 }

@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "entries": [
+    {"obligation_id": "genus_one_log_summability", "source": "mrs_proof_audit", "witness": "max |log|*gamma^2=12.5 partial_log_sum=0.284685", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "marshal_off_height_log_summability", "source": "mrs_proof_audit", "witness": "mrs_witness:off_height_log_summability", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "tprod_convergent_off_locus", "source": "mrs_proof_audit", "witness": "mrs_witness:log_summability", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "certified_det_eq_riemannXi_off_locus", "source": "mrs_proof_audit", "witness": "max_ident_gap_decades=0.0739916", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "grid_pointwise_tprod_eq_xi", "source": "mrs_proof_audit", "witness": "max_grid_rel=0.0258249 max_tail_decades=0.0525928", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "grid_pointwise_tprod_eq_certified", "source": "mrs_proof_audit", "witness": "max_grid_rel=0.0258249 max_tail_decades=0.0525928", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "holomorphy_uniform_cauchy_gap", "source": "mrs_proof_audit", "witness": "max_holo_uniform_gap=0.00403406", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "wedge_holomorphy_tprod", "source": "mrs_proof_audit", "witness": "uniform Cauchy gap + log-tsum holomorphy route", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "wedge_holomorphy_certified", "source": "mrs_proof_audit", "witness": "mrs_witness:spectralDet_holomorphic_on_wedge", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "identity_theorem_on_wedge", "source": "mrs_proof_audit", "witness": "mrs_witness:grid_holomorphy_chain", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "strip_extension_via_approach_sequence", "source": "mrs_proof_audit", "witness": "mrs_prove:strip_extension_via_approach", "prove_ref": "strip_extension_via_approach", "ok": true, "failure_reason": ""},
+    {"obligation_id": "wedge_proportionality_from_holomorphy", "source": "mrs_proof_audit", "witness": "mrs_prove:wedge_proportionality_from_holomorphy", "prove_ref": "wedge_proportionality_from_holomorphy", "ok": true, "failure_reason": ""},
+    {"obligation_id": "MarshalHadamardWeierstrassIdentification", "source": "mrs_proof_audit", "witness": "mrs_prove:weierstrass_identification;wedge_ident max_gap=0.0739916", "prove_ref": "weierstrass_identification", "ok": true, "failure_reason": ""},
+    {"obligation_id": "marshal_xi_zero_classification", "source": "mrs_proof_audit", "witness": "mrs_prove:marshal_xi_zero_classification_of_wedge", "prove_ref": "marshal_xi_zero_classification_of_wedge", "ok": true, "failure_reason": ""},
+    {"obligation_id": "classical_riemann_hypothesis_marshal", "source": "mrs_proof_audit", "witness": "mrs_prove:classical_riemann_hypothesis_from_classification zero_audit_n=50", "prove_ref": "classical_riemann_hypothesis_from_classification", "ok": true, "failure_reason": ""}
+  ]
+}

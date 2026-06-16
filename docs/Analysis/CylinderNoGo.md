@@ -2,6 +2,8 @@
 
 **Goal:** Prove that no operator in the cylinder class 𝒞 can carry the Riemann zero spectral measure. See [CylinderClass.md](CylinderClass.md) for definitions.
 
+**Superseded scope:** The stronger [PoissonGueNoGo.md](PoissonGueNoGo.md) theorem covers 𝒞 and all finite-coupling assemblies (adelic completion, height maps, finite crossed products). Cylinder no-go is the counting + sinc² special case.
+
 ---
 
 ## Theorem 1 (Counting divergence — PROVED)

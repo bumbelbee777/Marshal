@@ -33,12 +33,15 @@ std::unique_ptr<TestFunction> MakeTestFunction(const Config& cfg) {
         case TestKind::Sinc2: {
             Real T = cfg.test_param;
             if (T <= 0) T = std::log(static_cast<Real>(cfg.prime_limit));
-            return std::make_unique<Sinc2Test>(T);
+            const Real kappa = cfg.sinc2_kappa > 0 ? cfg.sinc2_kappa : 1.0L;
+            return std::make_unique<Sinc2Test>(T, kappa);
         }
         case TestKind::Bump:
             return std::make_unique<BumpTest>(cfg.test_param > 0 ? cfg.test_param : 1.0L);
         case TestKind::Rational:
             return std::make_unique<RationalTest>(cfg.test_param > 0 ? cfg.test_param : 1.0L);
+        case TestKind::Laplace:
+            return std::make_unique<LaplaceTest>(cfg.duality_a > 0 ? cfg.duality_a : 1.0L);
         default:
             return std::make_unique<GaussTest>(cfg.sigma);
     }
@@ -59,6 +62,14 @@ TraceResult RunEvaluate(const Config& cfg, const TestFunction& tf,
     const Real sigma = TraceSigma(cfg, tf);
     return EvaluateTrace(tf, sigma, gammas, gammas_ld, cat, cfg.zero_kernel, cfg.simd, cfg.eps,
                          cfg.trivial_zeros, cfg.precision_mode, cfg.arch_pts);
+}
+
+TraceResult RunEvaluateView(const Config& cfg, const TestFunction& tf,
+                            const IO::ZeroView& zeros, const Heat::PrimeCatalog& cat) {
+    const Real sigma = TraceSigma(cfg, tf);
+    return EvaluateTracePrefix(tf, sigma, zeros.ptr(), zeros.size(), zeros.ld_ptr(),
+                               zeros.ld_count(), cat, cfg.zero_kernel, cfg.simd, cfg.eps,
+                               cfg.trivial_zeros, cfg.precision_mode, cfg.arch_pts);
 }
 
 Real GammaSupportRadius(Real sigma, Real thresh = 1e-16L) {

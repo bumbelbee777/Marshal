@@ -22,11 +22,16 @@ const ProgramEntry kPrograms[] = {
     {"../programs/quotient_sunit_lowmode.mrs", "FALSIFIED"},
     {"../programs/logp_frequency.mrs", "CANDIDATE"},
     {"../programs/exponent_klogp.mrs", "DIAGNOSTIC"},
+    {"../programs/berry_keating.mrs", "OPEN"},
+    {"../programs/connes_analytic_construction.mrs", "TARGET"},
     {"../programs/templates/berry_keating.mrs.stub", "OPEN"},
     {"../programs/templates/connes_triple.mrs.stub", "OPEN"},
 };
 
 std::string verdict_from(const AnaVM::OperatorTraits& t, const CandidateMetrics& m) {
+    if (!elimination_reason_for(t).empty()) return "FALSIFIED";
+    if (t.rule_id == "connes_analytic_construction" || t.rule_id == "connes_dirac")
+        return t.scaffold || t.placeholder ? "TARGET_SCAFFOLD" : "TARGET";
     if (t.scaffold || t.placeholder) return "OPEN_SCAFFOLD";
     if (m.compact_sinc2_mismatch_proved) return "FALSIFIED";
     if (!t.violated_requirements.empty()) return "REQUIREMENTS_VIOLATED";
@@ -55,6 +60,9 @@ void ExportOperatorCandidatesJson(const std::string& path,
         out << "      \"registry_status\": \"" << r.registry_status << "\",\n";
         out << "      \"verdict\": \"" << r.verdict << "\",\n";
         out << "      \"plausibility_score\": " << r.plausibility_score << ",\n";
+        if (!r.elimination_reason.empty()) {
+            out << "      \"elimination_reason\": \"" << r.elimination_reason << "\",\n";
+        }
         out << "      \"traits\": {\n";
         out << "        \"rule_id\": \"" << t.rule_id << "\",\n";
         out << "        \"space_kind\": \"" << AnaVM::space_kind_string(t.space) << "\",\n";
@@ -64,8 +72,19 @@ void ExportOperatorCandidatesJson(const std::string& path,
         out << "        \"weil_poisson_compatible\": " << (t.weil_poisson_compatible ? "true" : "false")
             << ",\n";
         out << "        \"uses_gamma\": " << (t.uses_gamma ? "true" : "false") << ",\n";
+        out << "        \"in_C_fin\": " << (t.in_C_fin ? "true" : "false") << ",\n";
+        out << "        \"density_growth\": \"" << AnaVM::density_growth_string(t.density_growth)
+            << "\",\n";
         out << "        \"scaffold\": " << (t.scaffold ? "true" : "false") << "\n";
         out << "      },\n";
+        if (!t.connes_subtarget_status.empty()) {
+            out << "      \"connes_subtargets\": [";
+            for (size_t j = 0; j < t.connes_subtarget_status.size(); ++j) {
+                if (j) out << ", ";
+                out << "\"" << t.connes_subtarget_status[j] << "\"";
+            }
+            out << "],\n";
+        }
         out << "      \"requirements\": {\n";
         out << "        \"satisfied\": [";
         for (size_t j = 0; j < t.satisfied_requirements.size(); ++j) {
@@ -131,6 +150,7 @@ void RunOperatorCandidates(const Config& cfg, const TestFunction& /*tf*/,
         r.traits = std::move(traits);
         r.metrics = metrics;
         r.verdict = verdict_from(r.traits, metrics);
+        r.elimination_reason = elimination_reason_for(r.traits);
         r.plausibility_score = score_plausibility(r.traits, metrics);
         results.push_back(std::move(r));
 

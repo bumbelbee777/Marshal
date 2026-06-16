@@ -1,14 +1,17 @@
 {
-  "engine": "mpmath_siegelz_batched",
-  "dps": 80,
-  "workers": 16,
-  "batch_size": 128,
-  "count": 2000,
+  "engine": "marshal_native_riemann_siegel",
+  "n_refined": 10000,
   "merged_count": 100000,
+  "count": 10000,
   "pad_to": 100000,
-  "input": "tests\\Fixtures\\Zeros\\odlyzko_zeros100k.txt",
-  "output": "tests\\Fixtures\\Zeros\\NtzIm.txt",
-  "output_one_line": "tests\\Fixtures\\Zeros\\NtzImOneLine.txt",
-  "output_merged_one_line": "tests\\Fixtures\\Zeros\\NtzMergedOneLine.txt",
-  "gamma_1": 14.134725141734695
+  "batch_size": 256,
+  "wall_s": 2.7679344000000001,
+  "max_abs_Z_after": 0.39871594581389092,
+  "max_gamma_shift": 6.8873100297097736,
+  "converged_count": 8623,
+  "throughput_per_s": 3612.8023843339638,
+  "gamma_1": 14.134729609061784,
+  "input": "C:\Users\bumbe\Downloads\schizo riemann hypothesis stuff\tests\Fixtures\Zeros\NtzMergedOneLine.txt",
+  "output": "C:\Users\bumbe\Downloads\schizo riemann hypothesis stuff\docs\generated\NtzRefinedVerify.txt",
+  "cache_path": "C:\Users\bumbe\Downloads\schizo riemann hypothesis stuff\docs\generated\NtzRefinedVerify.zerocache"
 }

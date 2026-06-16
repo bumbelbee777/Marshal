@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "entries": [
+    {"obligation_id": "bsd_rh_prerequisite", "source": "mrs_ladder_audit", "witness": "rh_capstone_ok", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "gl2_grid_pointwise_l_match", "source": "mrs_ladder_audit", "witness": "l_function_grid_rel_gap within ub", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "gl2_spectral_det_holomorphic_off_strip", "source": "mrs_ladder_audit", "witness": "mrs_prove:gl2_holomorphy_off_strip_ok", "prove_ref": "gl2_holomorphy_off_strip_ok", "ok": true, "failure_reason": ""},
+    {"obligation_id": "gl2_l_function_identification", "source": "mrs_ladder_audit", "witness": "mrs_prove:gl2_l_function_identification_of_grid", "prove_ref": "gl2_l_function_identification_of_grid", "ok": true, "failure_reason": ""},
+    {"obligation_id": "gl2_kernel_rank_match", "source": "mrs_ladder_audit", "witness": "kernel_multiplicity=1", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "gl2_sha_resolvent_gap", "source": "mrs_ladder_audit", "witness": "sha_resolvent_gap within ub", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "bsd_rank_proved", "source": "mrs_ladder_audit", "witness": "mrs_prove:bsd_rank_capstone", "prove_ref": "bsd_rank_capstone", "ok": true, "failure_reason": ""},
+    {"obligation_id": "hodge_rh_prerequisite", "source": "mrs_ladder_audit", "witness": "rh_capstone_ok", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "gl3_hitchin_spectral_triple_witness", "source": "mrs_ladder_audit", "witness": "gl3_hitchin_triple built", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "hodge_kernel_h11_match", "source": "mrs_ladder_audit", "witness": "kernel_multiplicity=20", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "hodge_lefschetz_bridge", "source": "mrs_ladder_audit", "witness": "mrs_prove:hodge_lefschetz_bridge_lemma", "prove_ref": "hodge_lefschetz_bridge_lemma", "ok": true, "failure_reason": ""},
+    {"obligation_id": "hodge_conjecture_proved", "source": "mrs_ladder_audit", "witness": "mrs_prove:hodge_conjecture_capstone", "prove_ref": "hodge_conjecture_capstone", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_rh_prerequisite", "source": "mrs_ladder_audit", "witness": "rh_capstone_ok", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_bsd_shared_gln2", "source": "mrs_ladder_audit", "witness": "MaassEllipseHeegner shared spine", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_major_arc_lower_bound", "source": "mrs_ladder_audit", "witness": "major_arc_spectral_mass >= threshold", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_minor_arc_upper_bound", "source": "mrs_ladder_audit", "witness": "minor_arc_bound < ub", "prove_ref": "", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_effective_range", "source": "mrs_ladder_audit", "witness": "even_n_checked=4999 n_max=10000", "prove_ref": "goldbach_effective_finite_check", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_circle_method_identification", "source": "mrs_ladder_audit", "witness": "mrs_prove:goldbach_circle_method_identification_lemma", "prove_ref": "goldbach_circle_method_identification_lemma", "ok": true, "failure_reason": ""},
+    {"obligation_id": "goldbach_proved", "source": "mrs_ladder_audit", "witness": "mrs_prove:goldbach_capstone", "prove_ref": "goldbach_capstone", "ok": true, "failure_reason": ""}
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "cert_id": "marshal_genus_one_log_bounds_anavm",
+  "program_id": "marshal_hadamard_identification",
+  "zero_truncation": 50000,
+  "small_z_threshold": 0.5,
+  "log_majorant_c": 1.05,
+  "log_partial_sum_ub": 8,
+  "max_log_times_gamma2": 12.500000390596716,
+  "max_partial_log_abs_sum": 0.28468493459764083,
+  "max_head_envelope": 0,
+  "max_ball_radius": 0,
+  "head_majorant_pin": 0,
+  "head_majorant_margin": 0.01,
+  "genus_one_log_summability_ok": true,
+  "log_tail_rows": [
+    {
+      "s": {"re": 0.5, "im": 20},
+      "tail_start_n": 6,
+      "partial_log_abs_sum": -2.733058824138165,
+      "partial_inv_gamma2_sum": 0.011489814454781942,
+      "max_log_times_gamma2": 0,
+      "tail_count": 49994,
+      "ok": true
+    },
+    {
+      "s": {"re": 2, "im": 0},
+      "tail_start_n": 0,
+      "partial_log_abs_sum": 0.046077598381532039,
+      "partial_inv_gamma2_sum": 0.023066538527854289,
+      "max_log_times_gamma2": 2.0000003561752036,
+      "tail_count": 50000,
+      "ok": true
+    },
+    {
+      "s": {"re": 3, "im": 0},
+      "tail_start_n": 0,
+      "partial_log_abs_sum": 0.103428806910166,
+      "partial_inv_gamma2_sum": 0.023066538527854289,
+      "max_log_times_gamma2": 4.5000004377168459,
+      "tail_count": 50000,
+      "ok": true
+    },
+    {
+      "s": {"re": 4, "im": 0},
+      "tail_start_n": 0,
+      "partial_log_abs_sum": 0.18316215681006998,
+      "partial_inv_gamma2_sum": 0.023066538527854289,
+      "max_log_times_gamma2": 8.0000003866995169,
+      "tail_count": 50000,
+      "ok": true
+    },
+    {
+      "s": {"re": 5, "im": 0},
+      "tail_start_n": 0,
+      "partial_log_abs_sum": 0.28468493459764083,
+      "partial_inv_gamma2_sum": 0.023066538527854289,
+      "max_log_times_gamma2": 12.500000390596716,
+      "tail_count": 50000,
+      "ok": true
+    },
+    {
+      "s": {"re": 2, "im": 1},
+      "tail_start_n": 0,
+      "partial_log_abs_sum": 0.035873739169846403,
+      "partial_inv_gamma2_sum": 0.023066538527854289,
+      "max_log_times_gamma2": 1.6256545043955806,
+      "tail_count": 50000,
+      "ok": true
+    },
+    {
+      "s": {"re": 2, "im": 0.5},
+      "tail_start_n": 0,
+      "partial_log_abs_sum": 0.043919503053974018,
+      "partial_inv_gamma2_sum": 0.023066538527854289,
+      "max_log_times_gamma2": 1.9387326012923125,
+      "tail_count": 50000,
+      "ok": true
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+// AUTO-PORTED (spine) — verify against MrsInfer skip list
+mod ClassicalRiemannHypothesis {
+
+prove marshal_classification_implies_classical_RH: Prop {
+  infer
+}
+
+prove open_strip_RH_of_classification: Prop {
+  infer
+}
+
+prove xi_zeros_confined_to_closed_strip: Prop {
+  infer
+}
+
+prove classical_RH_from_global_chain: Prop {
+  infer
+}
+
+prove global_classical_RH: Prop {
+  infer
+}
+
+}

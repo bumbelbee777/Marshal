@@ -1,0 +1,18 @@
+{
+  "scenarios": [
+    {
+      "file": "weil_convergence_T8_kappa1.json",
+      "T": 8.0,
+      "kappa": 1.0,
+      "b_zeros": 0.8065712221648741,
+      "b_primes": -2.690065527677889e-15
+    },
+    {
+      "file": "weil_convergence_gamma1_kappa60.json",
+      "T": 14.134725142,
+      "kappa": 60.0,
+      "b_zeros": -4.958495328493312e-07,
+      "b_primes": -0.16323390243131924
+    }
+  ]
+}

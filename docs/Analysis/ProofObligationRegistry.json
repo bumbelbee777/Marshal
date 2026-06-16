@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "track": "global_operator_v1",
+  "v1_finish": [
+    "self_adjoint_extension_selection",
+    "spectral_discreteness",
+    "spectrum_equals_zeros"
+  ],
+  "resolved_ambiguities": [
+    {
+      "topic": "spectral_det_xi vs spectrum_equals_zeros",
+      "resolution": "Same v1 obligation: det(s-D)=xi(s) is the determinant form of spectrum_equals_zeros; LemmaManifest uses id spectral_det_xi"
+    },
+    {
+      "topic": "ANALYTIC_INCONCLUSIVE vs ANALYTIC_SHAPE_BAD",
+      "resolution": "INCONCLUSIVE = shape undecided at finite P (expect_finite_spectrum_mismatch); BAD = scaffold falsified; neither is a proof"
+    },
+    {
+      "topic": "OPEN_SPECTRAL_DISCRETENESS vs hunt failure",
+      "resolution": "Overall verdict at finite truncation; hunt is CLOSED; this verdict documents THE GAP measurement only"
+    },
+    {
+      "topic": "finite RMSE / DISCRETIZATION_IDENTIFICATION_FAILS",
+      "resolution": "Monotone RMSE growth documents that finite D_{P,K} cannot identify global D; pushes to analytic proof"
+    },
+    {
+      "topic": "OPERATOR_HUNT_CLOSED vs RH",
+      "resolution": "Hunt closed means C_fin excluded and target locked; RH not claimed until spectral_discreteness proved"
+    },
+    {
+      "topic": "logp_prime_dual NUMERICAL_PENDING",
+      "resolution": "Superseded by weil_trace_duality PROVED; duality is trace-level not spectral identity"
+    },
+    {
+      "topic": "cylinder_class_nogo OPEN",
+      "resolution": "Reduction PROVED via cylinder_density_divergence + falsification + pair_correlation; full Sobolev d_s formalization remains rigorous_gap"
+    },
+    {
+      "topic": "legacy OPEN lemmas (quotient_spectrum, resolvent_limit, trace_mode_extraction)",
+      "resolution": "Deprecated for v1 track — cylinder/quotient hunt ended; see track=legacy_cylinder"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "weil_weighted_trace_match",
+      "status": "PROVED",
+      "track": "v1_global",
+      "depends_on": ["cylinder_poisson_duality"],
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "evidence": "docs/generated/log_prime_validation.json"
+    },
+    {
+      "id": "weil_trace_formula",
+      "status": "PROVED",
+      "track": "v1_global",
+      "depends_on": ["weil_weighted_trace_match"],
+      "lean": "docs/Formal/AdeleQuotient.lean",
+      "evidence": "docs/generated/duality_gold_standard.json"
+    },
+    {
+      "id": "weil_trace_duality",
+      "status": "PROVED",
+      "track": "v1_global",
+      "depends_on": ["cylinder_direct_sum_falsified"],
+      "note": "Trace duality not spectrum identity"
+    },
+    {
+      "id": "poisson_gue_finite_coupling_nogo",
+      "status": "PROVED",
+      "track": "v1_global",
+      "note": "C_fin class closed"
+    },
+    {
+      "id": "self_adjoint_extension_selection",
+      "status": "ANALYTIC_OPEN",
+      "track": "v1_global",
+      "depends_on": ["weil_trace_formula"],
+      "approach": "spectral_action_on_global_D",
+      "evidence": "docs/generated/analytic_lemma_demo.json",
+      "gate_verdict": "SPECTRAL_ACTION_SELECTED",
+      "note": "Theorem A — numeric witness only; analytic proof required"
+    },
+    {
+      "id": "spectral_discreteness",
+      "status": "ANALYTIC_OPEN",
+      "track": "v1_global",
+      "depends_on": ["self_adjoint_extension_selection", "weil_trace_formula"],
+      "approach": "crossed_product_quotient_topology",
+      "evidence": "docs/generated/analytic_construction.json",
+      "gate_verdict": "DISCRETIZATION_IDENTIFICATION_FAILS",
+      "note": "Theorem B — compact resolvent on true D; deepest gap"
+    },
+    {
+      "id": "spectral_det_xi",
+      "status": "PROVED_CONDITIONAL",
+      "track": "v1_global",
+      "alias_of": "spectrum_equals_zeros",
+      "depends_on": ["self_adjoint_extension_selection", "spectral_discreteness"],
+      "approach": "v1_proof_chain_conditional",
+      "evidence": "docs/Formal/V1ProofChain.lean",
+      "gate_verdict": "det_eq_xi_from_lemmas_one_and_two",
+      "note": "Lemma 3 PROVED in Lean given Theorems A+B"
+    },
+    {
+      "id": "global_connes_dirac_limit",
+      "status": "NUMERICAL",
+      "track": "v1_global",
+      "depends_on": ["weil_trace_formula"],
+      "approach": "adelic_quotient_limit",
+      "evidence": "docs/generated/global_dirac_limit.json",
+      "note": "FORMAL_LIMIT_CLOSED — DISCRETIZATION_IDENTIFICATION_FAILS; monotone RMSE documents non-identification"
+    },
+    {
+      "id": "connes_analytic_lemma_demo",
+      "status": "NUMERICAL",
+      "track": "v1_global",
+      "depends_on": ["weil_trace_formula"],
+      "approach": "four_gate_demonstration",
+      "evidence": "docs/generated/analytic_lemma_demo.json",
+      "gate_verdict": "FORMAL_ROUTING_COMPLETE",
+      "note": "Numeric witness for Theorem A; does not prove analytic fortress"
+    }
+  ],
+  "deprecated_obligations": [
+    {"id": "quotient_spectrum", "reason": "Cylinder falsified; not v1 global track"},
+    {"id": "resolvent_limit", "reason": "Cylinder class; norm-resolvent not target for global D"},
+    {"id": "trace_mode_extraction", "reason": "Prony diagnostic only; not identification"},
+    {"id": "convergence_tail_bound", "reason": "Cylinder heat tail; superseded by v1 trace certs"},
+    {"id": "convergence_spectral_measure", "reason": "Cylinder measure; falsified"},
+    {"id": "spectral_determinant_selection", "reason": "Finite assembly selection; falsified"},
+    {"id": "assembly_search", "reason": "Finite grid search; hunt closed"}
+  ]
+}

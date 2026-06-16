@@ -19,6 +19,7 @@ struct FormalCalibration {
     bool formal_analytics = false;
     bool lean_emit_ready = false;
     std::string lean_module;  // HPWeil | AdeleQuotient | CylinderNoGo
+    std::string lean_cert;
 };
 
 FormalCalibration build_formal_calibration(const MrsProgram& prog);

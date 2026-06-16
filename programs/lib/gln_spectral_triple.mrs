@@ -1,0 +1,15 @@
+// Shared GL(n) spectral triple pins for MRS ladder (ranks 2–3).
+mod gln_spectral_triple {
+    use certified_bounds::*;
+
+    pub const GLN2_RANK: Rational = Rational(2, 1);
+    pub const GLN3_RANK: Rational = Rational(3, 1);
+    pub const KERNEL_TOLERANCE: Real = 1e-6;
+    pub const BSD_ALGEBRAIC_RANK: Integer = 1;
+    pub const HODGE_H11_TARGET: Integer = 20;
+    pub const GOLDBACH_N0: Integer = 4;
+    pub const MAJOR_ARC_THRESHOLD: Real = 0.45;
+    pub const MINOR_ARC_UB: Real = 0.01;
+    pub const L_GRID_REL_GAP_UB: Real = 0.03;
+    pub const SHA_RESOLVENT_GAP_UB: Real = 2.0;
+}

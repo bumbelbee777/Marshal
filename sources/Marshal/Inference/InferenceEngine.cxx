@@ -22,12 +22,12 @@ bool run_inference(const InferenceConfig& cfg, std::string& err) {
     }
     const std::string cert_text = cfg.cert_path.empty() ? std::string{} : read_text_file(cfg.cert_path);
 
-    const ProofGraph graph = build_proof_graph(manifest_text, ansatz_text, cert_text);
+    const ProofGraph graph =
+        build_proof_graph(manifest_text, ansatz_text, cert_text, cfg.manifest_path);
     const AnalysisResult analysis = analyze_dependencies(graph);
     const std::vector<NextAction> actions = suggest_actions(graph, analysis);
 
-    const std::string verdict =
-        cert_text.empty() ? std::string{} : json_get_string(cert_text, "verdict");
+    const std::string verdict = inference_verdict(graph);
     export_next_actions_json(cfg.export_next_actions_path, verdict, actions);
 
     std::cout << "Inference: " << actions.size() << " next action(s) -> "

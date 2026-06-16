@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "proof_status": "NUMERICAL_FORTIFIED",
+  "investigation_id": "theorem_a_analytic",
+  "analysis_status": "EVIDENCE_SUPPORTS",
+  "gates": [
+    {
+      "id": "hurwitz_d2_zeta_positive",
+      "gate": "THEOREM_A",
+      "pass": true,
+      "note": "min_d2=1.2227620690341565"
+    },
+    {
+      "id": "strict_convexity_analytic_proxy",
+      "gate": "THEOREM_A",
+      "pass": true,
+      "note": "d2=83.91487878371912"
+    },
+    {
+      "id": "term_by_term_derivative_match",
+      "gate": "THEOREM_A",
+      "pass": true,
+      "note": "hurwitz_track"
+    }
+  ],
+  "metrics": {
+    "d2_lambda_proxy": 83.91487878371912,
+    "hurwitz_d2_min": 1.2227620690341565,
+    "theta0": 5.76,
+    "log_ratio": 6.0,
+    "lambda": 100.0
+  },
+  "note": "Analytic Hurwitz track (pure scaling); separate from combined_crossed_product"
+}

@@ -1,0 +1,27 @@
+// Shared analytic reduction lemmas for MRS ladder (BSD / Hodge / Goldbach).
+mod ladder_analytic_lemmas {
+    use gln_spectral_triple::*;
+
+    pub const GL2_HOLOMORPHY_UNIFORM_GAP_UB: Real = 0.01;
+    pub const GOLDBACH_EFFECTIVE_N_MAX: Integer = 10000;
+
+    prove gl2_holomorphy_off_strip_ok: GL2HolomorphyOffStrip {
+        gl2_spectral_det_holomorphic_from_maass_grid
+    }
+
+    prove gl2_grid_implies_l_extension: GL2LFunctionGridExtension {
+        gl2_maass_grid_l_function_extension
+    }
+
+    prove hodge_surface_lefschetz_11: HodgeSurfaceLefschetz11 {
+        hodge_k3_lefschetz_11_from_surface
+    }
+
+    prove goldbach_arc_implies_pairing: GoldbachArcPairingIdentification {
+        goldbach_major_minor_arc_pairing
+    }
+
+    prove goldbach_effective_finite_check: GoldbachEffectiveFinite {
+        goldbach_effective_prime_pair_sieve
+    }
+}

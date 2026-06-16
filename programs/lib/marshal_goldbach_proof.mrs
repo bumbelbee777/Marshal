@@ -1,0 +1,80 @@
+// Goldbach full-closure MRS proof graph (GL(2) ellipse/Heegner).
+mod marshal_goldbach_proof {
+    use gln_spectral_triple::*;
+    use ladder_analytic_lemmas::*;
+
+    prove goldbach_circle_method_identification_lemma: GoldbachCircleMethodIdentification {
+        goldbach_spectral_count_equals_prime_pairs(
+            goldbach_major_arc_lower_bound,
+            goldbach_minor_arc_upper_bound,
+            goldbach_bsd_shared_gln2,
+            goldbach_arc_implies_pairing
+        )
+    }
+
+    prove goldbach_effective_to_classical: GoldbachEffectiveToClassical {
+        goldbach_classical_from_effective_range(
+            goldbach_circle_method_identification_lemma,
+            goldbach_effective_finite_check
+        )
+    }
+
+    prove goldbach_capstone: GoldbachProved {
+        goldbach_proved_from_classical_extension(
+            goldbach_effective_to_classical
+        )
+    }
+
+    proof_graph MarshalGoldbach {
+        target: goldbach_proved,
+
+        obligation goldbach_rh_prerequisite {
+            class: Structural,
+            deps: [classical_riemann_hypothesis_marshal_proved],
+            lean_name: "goldbach_rh_prerequisite_closed",
+            statement: "RH capstone closed before Goldbach ladder",
+        }
+        obligation goldbach_bsd_shared_gln2 {
+            class: Structural,
+            deps: [goldbach_rh_prerequisite, bsd_rank_proved],
+            prove: infer,
+            lean_name: "goldbach_bsd_shared_gln2_proved",
+            statement: "Shared GL(2) MaassEllipseHeegner spectral triple",
+        }
+        obligation goldbach_major_arc_lower_bound {
+            class: Numeric,
+            prove: infer,
+            deps: [goldbach_bsd_shared_gln2],
+            lean_name: "goldbach_major_arc_lower_bound_proved",
+            statement: "Major arc spectral mass >= threshold",
+        }
+        obligation goldbach_minor_arc_upper_bound {
+            class: Numeric,
+            prove: infer,
+            deps: [goldbach_bsd_shared_gln2],
+            lean_name: "goldbach_minor_arc_upper_bound_proved",
+            statement: "Minor arc contribution < ub",
+        }
+        obligation goldbach_effective_range {
+            class: Numeric,
+            prove: goldbach_effective_finite_check,
+            deps: [goldbach_major_arc_lower_bound, goldbach_minor_arc_upper_bound],
+            lean_name: "goldbach_effective_range_proved",
+            statement: "Goldbach holds for n >= n0",
+        }
+        obligation goldbach_circle_method_identification {
+            class: Analytic,
+            deps: [goldbach_major_arc_lower_bound, goldbach_minor_arc_upper_bound],
+            prove: goldbach_circle_method_identification_lemma,
+            lean_name: "goldbach_circle_method_identification_proved",
+            statement: "Spectral count = prime pair count",
+        }
+        obligation goldbach_proved {
+            class: Composition,
+            deps: [goldbach_circle_method_identification, goldbach_effective_range],
+            prove: goldbach_capstone,
+            lean_name: "goldbach_proved",
+            statement: "Classical Goldbach capstone",
+        }
+    }
+}

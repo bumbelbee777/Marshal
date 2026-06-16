@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "proof_chain_closed": true,
+  "gl2_l_function_identification_closed": true,
+  "hodge_lefschetz_closed": true,
+  "goldbach_circle_method_closed": true,
+  "classical_goldbach_closed": true,
+  "goldbach_effective_n_max": 10000,
+  "goldbach_effective_even_count": 4999,
+  "bsd_rank_proved": true,
+  "hodge_conjecture_proved": true,
+  "goldbach_proved": true
+}

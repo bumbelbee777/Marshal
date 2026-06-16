@@ -8,8 +8,6 @@
 *.pdb
 *.ilk
 *.exp
-
-# CMake (out-of-tree build only)
 /build/
 
 # Python
@@ -26,10 +24,12 @@ lake-packages/
 # IDE / OS
 .vscode/
 .idea/
+.cursor/
 *.swp
 *~
 .DS_Store
 Thumbs.db
+AGENTS.md
 
 # Local certs (regenerate via tools/Workload)
 # Uncomment to track golden certs in git:

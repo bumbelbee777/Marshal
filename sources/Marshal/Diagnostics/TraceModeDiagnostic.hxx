@@ -14,7 +14,7 @@ struct PronyResult {
 inline Real prony_predicted_error(Real gamma_n, Real tail_bound_at_P) {
     if (gamma_n <= 0.0L) return 0.0L;
     const Real t_n = 2.0L / (gamma_n * gamma_n);
-    return tail_bound_at_P * std::expl(t_n * gamma_n * gamma_n) / (2.0L * kM3TailConstant);
+    return tail_bound_at_P * MarshalExp(t_n * gamma_n * gamma_n) / (2.0L * kM3TailConstant);
 }
 
 inline PronyResult extract_leading_eigenvalues_sq(
@@ -42,7 +42,7 @@ inline PronyResult extract_leading_eigenvalues_sq(
     std::sort(rates.begin(), rates.end());
     rates.erase(std::unique(rates.begin(), rates.end(),
                             [](Real a, Real b) {
-                                return std::fabsl(a - b) < 1e-4L * std::max(a, b);
+                                return MarshalFabs(a - b) < 1e-4L * std::max(a, b);
                             }),
                 rates.end());
 

@@ -17,6 +17,9 @@ inline Real MarshalExp(Real x) {
 inline Real MarshalSqrt(Real x) { return static_cast<Real>(sqrtl(static_cast<long double>(x))); }
 inline Real MarshalLog(Real x) { return static_cast<Real>(logl(static_cast<long double>(x))); }
 inline Real MarshalFabs(Real x) { return static_cast<Real>(fabsl(static_cast<long double>(x))); }
+inline Real MarshalSin(Real x) { return static_cast<Real>(sinl(static_cast<long double>(x))); }
+inline Real MarshalCos(Real x) { return static_cast<Real>(cosl(static_cast<long double>(x))); }
+inline Real MarshalCeil(Real x) { return static_cast<Real>(ceill(static_cast<long double>(x))); }
 inline const char* MarshalRealName() { return "float128"; }
 #else
 using Real = long double;
@@ -25,6 +28,9 @@ inline Real MarshalExp(Real x) { return expl(x); }
 inline Real MarshalSqrt(Real x) { return sqrtl(x); }
 inline Real MarshalLog(Real x) { return logl(x); }
 inline Real MarshalFabs(Real x) { return fabsl(x); }
+inline Real MarshalSin(Real x) { return sinl(x); }
+inline Real MarshalCos(Real x) { return cosl(x); }
+inline Real MarshalCeil(Real x) { return ceill(x); }
 inline const char* MarshalRealName() { return "long-double"; }
 #endif
 

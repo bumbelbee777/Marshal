@@ -73,7 +73,7 @@ WeilQuadraticSectorBreakdown weil_rayleigh_sector_breakdown(
             for (int k = 0; k <= n_quad; ++k) {
                 const Real xj = -a + dx * static_cast<Real>(k);
                 const Real vy = std::sin(scale * (xj + a));
-                const Real d = std::fabsl(xi - xj);
+                const Real d = MarshalFabs(xi - xj);
                 if (d >= 1e-8L) q_pf += 0.5L / d * vx * vy * dx * dx;
                 if (opts.include_zero) {
                     q_zero += kernel_zero_cos(xi, xj, zero_T, gammas) * vx * vy * dx * dx;
@@ -89,7 +89,7 @@ WeilQuadraticSectorBreakdown weil_rayleigh_sector_breakdown(
                     const Real coeff = lp / ppow;
                     for (int sign : {1, -1}) {
                         const Real y = xi - static_cast<Real>(sign) * u;
-                        if (std::fabsl(y) <= a) {
+                        if (MarshalFabs(y) <= a) {
                             const Real vy = std::sin(scale * (y + a));
                             q_prime += coeff * vx * vy * dx;
                         }

@@ -20,11 +20,13 @@ struct TestFunction {
 struct GaussTest : TestFunction {
     Real sigma;
     explicit GaussTest(Real s) : sigma(s) {}
-    Real h(Real t) const override { return std::expl(-t * t / (2.0L * sigma * sigma)); }
+    Real h(Real t) const override { return MarshalExp(-t * t / (2.0L * sigma * sigma)); }
     Real h_hat(Real u) const override {
-        return sigma * kSqrt2Pi * std::expl(-0.5L * sigma * sigma * u * u);
+        return sigma * kSqrt2Pi * MarshalExp(-0.5L * sigma * sigma * u * u);
     }
-    Real support_radius() const override { return sigma * std::sqrtl(-2.0L * std::logl(1e-16L)); }
+    Real support_radius() const override {
+        return sigma * MarshalSqrt(-2.0L * MarshalLog(1e-16L));
+    }
     Real hhat_support() const override { return 1e300L; }
     const char* name() const override { return "gauss"; }
 };
@@ -34,8 +36,8 @@ struct Sinc2Test : TestFunction {
     Real kappa;
     explicit Sinc2Test(Real t, Real k = 1.0L) : T(t), kappa(k > 0 ? k : 1.0L) {}
     static Real sinc(Real x) {
-        if (std::fabsl(x) < 1e-12L) return 1.0L;
-        return std::sinl(x) / x;
+        if (MarshalFabs(x) < 1e-12L) return 1.0L;
+        return MarshalSin(x) / x;
     }
     static Real sinc_sq_weil(Real x) {
         const Real s = sinc(x);
@@ -46,7 +48,7 @@ struct Sinc2Test : TestFunction {
         return sinc_sq_weil(x);
     }
     Real h_hat(Real u) const override {
-        const Real au = std::fabsl(u);
+        const Real au = MarshalFabs(u);
         const Real sup = kPi * kappa / T;
         if (au >= sup) return 0.0L;
         const Real w = (T / kappa) * (1.0L - au * T / (kPi * kappa));
@@ -60,8 +62,8 @@ struct Sinc2Test : TestFunction {
 
 inline Real suggest_sinc2_kappa(Real T, int p_max) {
     if (T <= 0 || p_max <= 1) return 1.0L;
-    const Real lp = std::log(static_cast<Real>(p_max));
-    return std::ceill(T * lp / kPi);
+    const Real lp = MarshalLog(static_cast<Real>(p_max));
+    return MarshalCeil(T * lp / kPi);
 }
 
 struct BumpTest : TestFunction {
@@ -69,11 +71,11 @@ struct BumpTest : TestFunction {
     explicit BumpTest(Real s = 1.0L) : scale(s) {}
     Real h(Real t) const override {
         const Real x = t / scale;
-        if (std::fabsl(x) >= 1.0L) return 0.0L;
-        return std::expl(-1.0L / (1.0L - x * x));
+        if (MarshalFabs(x) >= 1.0L) return 0.0L;
+        return MarshalExp(-1.0L / (1.0L - x * x));
     }
     Real h_hat(Real u) const override {
-        if (std::fabsl(u) > 200.0L / scale) return 0.0L;
+        if (MarshalFabs(u) > 200.0L / scale) return 0.0L;
         const int n_pts = 2001;
         const Real L = scale;
         const Real dx = 2.0L * L / static_cast<Real>(n_pts - 1);
@@ -81,7 +83,7 @@ struct BumpTest : TestFunction {
         for (int i = 0; i < n_pts; ++i) {
             const Real t = -L + static_cast<Real>(i) * dx;
             const Real w = (i == 0 || i == n_pts - 1) ? 1.0L : ((i & 1) ? 4.0L : 2.0L);
-            sum += w * h(t) * std::cosl(u * t);
+            sum += w * h(t) * MarshalCos(u * t);
         }
         return (dx / 3.0L) * sum;
     }
@@ -95,7 +97,7 @@ struct RationalTest : TestFunction {
     explicit RationalTest(Real a_) : a(a_) {}
     Real h(Real t) const override { return 1.0L / (t * t + a * a); }
     Real h_hat(Real u) const override {
-        return (kPi / a) * std::expl(-a * std::fabsl(u));
+        return (kPi / a) * MarshalExp(-a * MarshalFabs(u));
     }
     Real support_radius() const override { return 20.0L * a; }
     Real hhat_support() const override { return 1e300L; }
@@ -105,7 +107,7 @@ struct RationalTest : TestFunction {
 struct LaplaceTest : TestFunction {
     Real a;
     explicit LaplaceTest(Real a_) : a(a_) {}
-    Real h(Real t) const override { return std::expl(-a * std::fabsl(t)); }
+    Real h(Real t) const override { return MarshalExp(-a * MarshalFabs(t)); }
     Real h_hat(Real u) const override { return 2.0L * a / (a * a + u * u); }
     Real support_radius() const override { return 20.0L / a; }
     Real hhat_support() const override { return 1e300L; }

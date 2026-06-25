@@ -217,8 +217,8 @@ Real archimedean_exact(Real sigma, Marshal::SimdLevel simd, bool precision_mode,
 inline Real h_sinc2_at(Real t, Real T, Real kappa = 1.0L) {
     if (T <= 0) return 0.0L;
     const Real x = kappa * t / T;
-    if (std::fabsl(x) < 1e-30L) return 1.0L;
-    const Real s = std::sinl(x) / x;
+    if (MarshalFabs(x) < 1e-30L) return 1.0L;
+    const Real s = MarshalSin(x) / x;
     return s * s;
 }
 

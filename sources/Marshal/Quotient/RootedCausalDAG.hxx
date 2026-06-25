@@ -2,6 +2,7 @@
 
 #include "Numerics/Real.hxx"
 
+#include <string>
 #include <vector>
 
 namespace Marshal::Quotient {

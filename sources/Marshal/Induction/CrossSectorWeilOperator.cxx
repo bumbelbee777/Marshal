@@ -9,7 +9,7 @@ namespace Marshal::Induction {
 namespace {
 
 Real kernel_pf(Real x, Real y) {
-    const Real d = std::fabsl(x - y);
+    const Real d = MarshalFabs(x - y);
     if (d < 1e-10L) return 0;
     return 0.5L / d;
 }
@@ -48,7 +48,7 @@ Real rayleigh_on_modes(Real a, const Heat::PrimeCatalog& cat, Real log_cutoff, R
             for (int k = 0; k <= n_quad; ++k) {
                 const Real xj = -a + dx * static_cast<Real>(k);
                 const Real vy = std::sin(scale * (xj + a));
-                const Real d = std::fabsl(xi - xj);
+                const Real d = MarshalFabs(xi - xj);
                 if (d >= 1e-8L) q += 0.5L / d * vx * vy * dx * dx;
             }
             for (size_t pi = 0; pi < cat.p.size(); ++pi) {
@@ -61,7 +61,7 @@ Real rayleigh_on_modes(Real a, const Heat::PrimeCatalog& cat, Real log_cutoff, R
                     const Real coeff = lp / ppow;
                     for (int sign : {1, -1}) {
                         const Real y = xi - static_cast<Real>(sign) * u;
-                        if (std::fabsl(y) <= a) {
+                        if (MarshalFabs(y) <= a) {
                             const Real vy = std::sin(scale * (y + a));
                             q += coeff * vx * vy * dx;
                         }
@@ -121,7 +121,7 @@ Real kernel_prime_at_pair(Real x, Real y, const Heat::PrimeCatalog& cat, Real lo
             const Real u = static_cast<Real>(kk) * lp;
             if (u > log_cutoff) break;
             const Real coeff = lp / ppow;
-            if (std::fabsl(dxy - u) < 1e-6L || std::fabsl(dxy + u) < 1e-6L) s += coeff;
+            if (MarshalFabs(dxy - u) < 1e-6L || MarshalFabs(dxy + u) < 1e-6L) s += coeff;
             ppow *= cat.sqrtp[pi];
             if (eps > 0 && coeff < eps) break;
         }

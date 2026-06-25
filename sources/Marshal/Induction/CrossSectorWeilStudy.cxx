@@ -85,7 +85,7 @@ CrossSectorWeilPoint evaluate_at_a(Real a, Real sigma, const Config& cfg,
         pt.zero_prefix = ztr.lhs;
     }
     pt.zero_tail = pt.zero - pt.zero_prefix;
-    pt.zero_tail_abs = std::fabsl(pt.zero_tail);
+    pt.zero_tail_abs = MarshalFabs(pt.zero_tail);
 
     WeilOperatorRayleighOpts partial_opts{3, 32, 24, 512, false};
     WeilOperatorRayleighOpts full_opts{6, 40, 24, 512, true};
@@ -248,8 +248,8 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
     const Real arch_hi =
         ArchimedeanBaselineForTestFunction(gt, result.sigma, cfg.simd, cfg.precision_mode,
                                            cfg.arch_pts * 2, cfg.eps, false);
-    result.arch_richardson_drift = std::fabsl(arch_hi - arch_lo);
-    result.arch_envelope_pinned_A = std::fabsl(arch_lo);
+    result.arch_richardson_drift = MarshalFabs(arch_hi - arch_lo);
+    result.arch_envelope_pinned_A = MarshalFabs(arch_lo);
 
     std::cout << "=== Cross-sector Weil battle plan (Gauss sigma=1) ===\n";
     std::cout << "  real_type=" << result.real_type << " bits=" << result.precision_bits
@@ -262,7 +262,7 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
     result.full_scale =
         evaluate_at_a(4.0L, result.sigma, cfg, gammas, gammas_ld, cat, result.arch_envelope_pinned_A);
     std::cout << "  full |weil_res|="
-              << static_cast<double>(std::fabsl(result.full_scale.weil_residual_full))
+              << static_cast<double>(MarshalFabs(result.full_scale.weil_residual_full))
               << " arch=" << static_cast<double>(result.full_scale.arch)
               << " prime=" << static_cast<double>(result.full_scale.prime_full)
               << " zero=" << static_cast<double>(result.full_scale.zero) << "\n";
@@ -370,7 +370,7 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
         result.screw_Ba_eq25_max_rel_gap =
             std::max(result.screw_Ba_eq25_max_rel_gap, pt.screw_Ba_eq25_rel_gap);
         result.screw_Ba_discretization_max_abs =
-            std::max(result.screw_Ba_discretization_max_abs, std::fabsl(pt.screw_Ba_discretization_gap));
+            std::max(result.screw_Ba_discretization_max_abs, MarshalFabs(pt.screw_Ba_discretization_gap));
         result.screw_Ba_pin_margin_min_on_grid =
             std::min(result.screw_Ba_pin_margin_min_on_grid, pt.screw_Ba_pin_margin_rayleigh);
         result.screw_Ba_pin_analytic_min_on_grid =
@@ -389,10 +389,10 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
             result.screw_Ba_r_higher_kernel_plancherel_all_a_ok = false;
         }
         result.screw_Ba_r_higher_artifact_max_abs = std::max(
-            result.screw_Ba_r_higher_artifact_max_abs, std::fabsl(pt.screw_Ba_r_higher_artifact_gap));
+            result.screw_Ba_r_higher_artifact_max_abs, MarshalFabs(pt.screw_Ba_r_higher_artifact_gap));
         result.screw_Ba_pin_kernel_spectral_gap_max_abs = std::max(
             result.screw_Ba_pin_kernel_spectral_gap_max_abs,
-            std::fabsl(pt.screw_Ba_pin_kernel_spectral_gap));
+            MarshalFabs(pt.screw_Ba_pin_kernel_spectral_gap));
         if (!pt.screw_Ba_pin_split_discharge_ok) result.screw_Ba_pin_split_discharge_all_a_ok = false;
         if (!pt.screw_Ba_pin_kernel_eq25_ok) result.screw_Ba_pin_kernel_eq25_all_a_ok = false;
         if (!pt.screw_Ba_r_higher_kernel_nonpos_ok) {
@@ -414,14 +414,14 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
                 result.screw_Ba_dense_lambda_min_on_grid, pt.lambda_screw_Ba_spectral_dense);
         }
         result.screw_Ba_r_higher_max_abs =
-            std::max(result.screw_Ba_r_higher_max_abs, std::fabsl(pt.screw_Ba_r_higher_pp_rayleigh));
+            std::max(result.screw_Ba_r_higher_max_abs, MarshalFabs(pt.screw_Ba_r_higher_pp_rayleigh));
         const Real eq25_identity_residual =
             pt.screw_Ba_arch_mass_rayleigh - pt.screw_Ba_prime_rayleigh -
             pt.screw_Ba_r_full_pp_rayleigh - pt.screw_Ba_pin_margin_rayleigh;
-        if (std::fabsl(eq25_identity_residual) > 1e-6L) {
+        if (MarshalFabs(eq25_identity_residual) > 1e-6L) {
             result.screw_Ba_eq25_identity_ok = false;
         }
-        if (std::fabsl(pt.screw_Ba_discretization_gap) > 50.0L) {
+        if (MarshalFabs(pt.screw_Ba_discretization_gap) > 50.0L) {
             result.screw_Ba_eq25_full_decomposition_ok = false;
         }
         if (!std::isfinite(static_cast<double>(pt.screw_Ba_full_eq25_rayleigh)) ||
@@ -443,7 +443,7 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
             result.yoshida_window_cs_domination_ok = false;
         }
         if (a <= kBaBattleFocusA) {
-            if (std::fabsl(pt.coupling_identity_residual) > 1e-6L) {
+            if (MarshalFabs(pt.coupling_identity_residual) > 1e-6L) {
                 result.pf_zero_coupling_identity_ok = false;
             }
             if (!pt.pf_sin_mode_positive_ok) result.pf_sin_mode_positive_all_ok = false;
@@ -523,7 +523,7 @@ CrossSectorWeilResult RunCrossSectorWeilStudy(const Config& cfg,
             result.screw_Ba_eq25_kernel_mesh_monotone_ok = false;
         }
         result.screw_Ba_artifact_gap_finest_max =
-            std::max(result.screw_Ba_artifact_gap_finest_max, std::fabsl(mesh.artifact_gap_finest));
+            std::max(result.screw_Ba_artifact_gap_finest_max, MarshalFabs(mesh.artifact_gap_finest));
         std::cout << "  mesh a=" << static_cast<double>(a) << " coarse="
                   << static_cast<double>(mesh.lambda_coarsest) << " fine="
                   << static_cast<double>(mesh.lambda_finest) << " eq25_k="

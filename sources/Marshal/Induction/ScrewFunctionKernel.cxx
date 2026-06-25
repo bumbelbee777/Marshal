@@ -22,7 +22,7 @@ Real hurwitz_lerch_phi(Real z, Real s, Real a, int max_n) {
         const Real an = a + static_cast<Real>(n);
         sum += zp / std::pow(an, s);
         zp *= z;
-        if (std::fabsl(zp) < 1e-40L) break;
+        if (MarshalFabs(zp) < 1e-40L) break;
     }
     return sum;
 }
@@ -79,7 +79,7 @@ Real screw_La_form(Real a, int n_quad, Real scale) {
             if (i == k) continue;
             const Real xj = -a + dx * static_cast<Real>(k);
             const Real vj = sin_mode(xj, a, scale);
-            const Real d = std::fabsl(xi - xj);
+            const Real d = MarshalFabs(xi - xj);
             if (d < 1e-10L) continue;
             la += 0.25L * (vi - vj) * (vi - vj) / d * dx * dx;
         }
@@ -133,7 +133,7 @@ Real mode_l2(Real a, int n_quad, Real scale) {
 Real gershgorin_row_sum(const std::vector<std::vector<Real>>& mat, int row) {
     Real s = 0;
     for (size_t j = 0; j < mat[static_cast<size_t>(row)].size(); ++j) {
-        s += std::fabsl(mat[static_cast<size_t>(row)][j]);
+        s += MarshalFabs(mat[static_cast<size_t>(row)][j]);
     }
     return s;
 }
@@ -193,10 +193,10 @@ std::pair<Real, std::vector<Real>> dense_smallest_eigenpair(const std::vector<st
     for (int i = 0; i < n; ++i) v[static_cast<size_t>(i)][static_cast<size_t>(i)] = 1.0L;
     for (int sweep = 0; sweep < 6 * n * n; ++sweep) {
         int p = 0, q = 1;
-        Real mx = std::fabsl(a[0][1]);
+        Real mx = MarshalFabs(a[0][1]);
         for (int i = 0; i < n; ++i) {
             for (int j = i + 1; j < n; ++j) {
-                const Real off = std::fabsl(a[static_cast<size_t>(i)][static_cast<size_t>(j)]);
+                const Real off = MarshalFabs(a[static_cast<size_t>(i)][static_cast<size_t>(j)]);
                 if (off > mx) {
                     mx = off;
                     p = i;
@@ -204,7 +204,7 @@ std::pair<Real, std::vector<Real>> dense_smallest_eigenpair(const std::vector<st
                 }
             }
         }
-        if (mx < 1e-14L * std::max(1.0L, std::fabsl(a[static_cast<size_t>(p)][static_cast<size_t>(p)])))
+        if (mx < 1e-14L * std::max(1.0L, MarshalFabs(a[static_cast<size_t>(p)][static_cast<size_t>(p)])))
             break;
         const Real app = a[static_cast<size_t>(p)][static_cast<size_t>(p)];
         const Real aqq = a[static_cast<size_t>(q)][static_cast<size_t>(q)];
@@ -258,7 +258,7 @@ Real screw_r1pp_fourier_hat_abs(Real z) {
     if (z < 1e-12L) return 0;
     const Real t = 0.5L * z;
     const Real hat = -screw_re_psi_quarter_plus_it(t) + std::log(z) - std::log(2.0L);
-    return std::fabsl(hat);
+    return MarshalFabs(hat);
 }
 
 Real screw_La_on_grid(Real a, const std::vector<Real>& v, Real dx) {
@@ -298,7 +298,7 @@ Real screw_r1_double_prime(Real t_abs) {
     const Real eh = std::exp(-0.5L * t_abs);
     const Real em2 = std::exp(-2.0L * t_abs);
     const Real denom = 1.0L - em2;
-    if (std::fabsl(denom) < 1e-30L) return 0;
+    if (MarshalFabs(denom) < 1e-30L) return 0;
     return eh / denom - 0.5L / t_abs;
 }
 
@@ -309,7 +309,7 @@ Real screw_r0_double_prime(Real t_abs) {
 }
 
 Real screw_g_double_prime_numerical(Real t, const Heat::PrimeCatalog& cat, Real eps) {
-    const Real h = 1e-4L * (1.0L + std::fabsl(t));
+    const Real h = 1e-4L * (1.0L + MarshalFabs(t));
     const Real gp = (screw_function_g(t + h, cat, eps) - screw_function_g(t - h, cat, eps)) / (2.0L * h);
     const Real gm = (screw_function_g(t + h, cat, eps) + screw_function_g(t - h, cat, eps) -
                      2.0L * screw_function_g(t, cat, eps)) /
@@ -319,7 +319,7 @@ Real screw_g_double_prime_numerical(Real t, const Heat::PrimeCatalog& cat, Real 
 }
 
 Real screw_r_remainder_double_prime(Real t, const Heat::PrimeCatalog& cat, Real eps) {
-    const Real ta = std::fabsl(t);
+    const Real ta = MarshalFabs(t);
     return screw_g_double_prime_numerical(t, cat, eps) - screw_r0_double_prime(ta) -
            screw_r1_double_prime(ta);
 }
@@ -335,7 +335,7 @@ Real screw_kernel_pp_bilinear_on_grid(Real a, const std::vector<Real>& v, Real d
         for (int k = 0; k < m; ++k) {
             const Real xj = -a + dx * static_cast<Real>(k + 1);
             const Real vj = v[static_cast<size_t>(k)];
-            q += kernel_pp(std::fabsl(xi - xj)) * vi * vj * dx * dx;
+            q += kernel_pp(MarshalFabs(xi - xj)) * vi * vj * dx * dx;
         }
     }
     return q;
@@ -502,8 +502,8 @@ Real screw_r01_compact_uniform_rayleigh_bound() {
         // Avoid small-t digamma/Lerch blow-up; battle bound is uniform O(1) on compact screw kernels.
         for (int i = 1; i <= 400; ++i) {
             const Real t = 0.5L + 19.5L * static_cast<Real>(i) / 400.0L;
-            mx = std::max(mx, std::fabsl(screw_r0_double_prime(t)));
-            mx = std::max(mx, std::fabsl(screw_r1_double_prime(t)));
+            mx = std::max(mx, MarshalFabs(screw_r0_double_prime(t)));
+            mx = std::max(mx, MarshalFabs(screw_r1_double_prime(t)));
         }
         return std::min(4.0L * mx, 50.0L);
     }();
@@ -591,7 +591,7 @@ ScrewBaSpectralAudit screw_Ba_audit_from_eigenvector(Real a, Real mu, const std:
     out.eq25_rayleigh = eq25 / out.l2;
     out.remainder_rayleigh = out.spectral_lambda - out.eq25_rayleigh;
     out.eq25_rel_gap =
-        std::fabsl(out.remainder_rayleigh) / std::max(std::fabsl(out.spectral_lambda), 1e-12L);
+        MarshalFabs(out.remainder_rayleigh) / std::max(MarshalFabs(out.spectral_lambda), 1e-12L);
     const Real full_eq25 = out.L_a - out.mass_term - out.prime_shift - out.r01_pp;
     out.full_eq25_rayleigh = full_eq25 / out.l2;
     out.discretization_gap = out.spectral_lambda - out.full_eq25_rayleigh;
@@ -767,16 +767,16 @@ ScrewBaMeshRefinement screw_Ba_kernel_mesh_refinement_study(
             if (pt.eq25_kernel_rayleigh > prev.eq25_kernel_rayleigh + 1e-6L) {
                 out.eq25_kernel_mesh_monotone_ok = false;
             }
-            const Real scale = std::max(1.0L, std::fabsl(pt.lambda_dense));
+            const Real scale = std::max(1.0L, MarshalFabs(pt.lambda_dense));
             out.max_lambda_jump =
-                std::max(out.max_lambda_jump, std::fabsl(pt.lambda_dense - prev.lambda_dense));
+                std::max(out.max_lambda_jump, MarshalFabs(pt.lambda_dense - prev.lambda_dense));
             out.max_kernel_pp_jump = std::max(
                 out.max_kernel_pp_jump,
-                std::fabsl(pt.r_higher_kernel_pp_rayleigh - prev.r_higher_kernel_pp_rayleigh));
+                MarshalFabs(pt.r_higher_kernel_pp_rayleigh - prev.r_higher_kernel_pp_rayleigh));
             out.max_artifact_gap_jump = std::max(
                 out.max_artifact_gap_jump,
-                std::fabsl(pt.r_higher_artifact_gap - prev.r_higher_artifact_gap));
-            if (std::fabsl(pt.lambda_dense - prev.lambda_dense) > 0.05L * scale) {
+                MarshalFabs(pt.r_higher_artifact_gap - prev.r_higher_artifact_gap));
+            if (MarshalFabs(pt.lambda_dense - prev.lambda_dense) > 0.05L * scale) {
                 out.monotone_converged = false;
             }
         }
@@ -810,15 +810,15 @@ ScrewBaSpectralCrosscheck screw_Ba_spectral_dense_crosscheck(Real a, const Heat:
     out.lambda_dense = mu_dense;
     const auto [mu_iter, v_iter] = jacobi_smallest_eigenpair(b_mat, 320);
     out.lambda_iterative = mu_iter;
-    const Real scale = std::max(1.0L, std::fabsl(mu_dense));
-    out.agrees = std::fabsl(mu_dense - mu_iter) <= 0.05L * scale + 1e-8L;
+    const Real scale = std::max(1.0L, MarshalFabs(mu_dense));
+    out.agrees = MarshalFabs(mu_dense - mu_iter) <= 0.05L * scale + 1e-8L;
     (void)v_dense;
     (void)v_iter;
     return out;
 }
 
 Real screw_function_g(Real t, const Heat::PrimeCatalog& cat, Real eps) {
-    const Real ta = std::fabsl(t);
+    const Real ta = MarshalFabs(t);
     const Real poly = screw_poly_term(ta);
     const Real prime = screw_prime_term(ta, cat, eps);
     const Real arch_linear = -0.5L * ta * kPsiQuarterMinusLogPi;
@@ -895,7 +895,7 @@ Real screw_kernel_hilbert_schmidt_on_interval(Real a, Real (*kernel)(Real)) {
     Real integral = 0;
     for (int i = 0; i <= n; ++i) {
         const Real t = -2.0L * a + dt * static_cast<Real>(i);
-        const Real k = kernel(std::fabsl(t));
+        const Real k = kernel(MarshalFabs(t));
         const Real w = (i == 0 || i == n) ? 0.5L : 1.0L;
         integral += w * k * k * dt;
     }

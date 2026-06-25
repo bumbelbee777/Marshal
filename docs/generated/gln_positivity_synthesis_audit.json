@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "purpose": "GL(n) positivity synthesis \u2014 four analogies + rank ladder \u2192 one wall",
+  "gln_positivity_synthesis_audit_ok": true,
+  "rank_ladder_pattern_ok": true,
+  "unified_open_pin": "weil_localized_form_positivity_all_a",
+  "recommended_push": "screw_function_discrete_bridge (Suzuki finite-a + CCM det_reg limit)",
+  "rank_ladder": {
+    "GL1_RH": {
+      "positivity": "lambda_a >= 0 (Weil)",
+      "status": "OPEN"
+    },
+    "GL2_BSD": {
+      "positivity": "rank = ker dim",
+      "status": "PROVED",
+      "audit_ok": true
+    },
+    "GL3_Hodge": {
+      "positivity": "(1,1) cycle map",
+      "status": "PROVED",
+      "audit_ok": true
+    },
+    "GL4_YM": {
+      "positivity": "OS reflection",
+      "status": "REDUCTION"
+    }
+  },
+  "analogy_map": [
+    {
+      "name": "function_field_blueprint",
+      "proved_side": "intersection form positivity on curves (Weil 1948)",
+      "open_side": "Weil distribution positivity on Q (= lambda_a >= 0)",
+      "marshal_artifact": "function_field_weil_blueprint"
+    },
+    {
+      "name": "screw_function_suzuki",
+      "proved_side": "finite-a Friedrichs A_a, lambda_a continuous (Suzuki 2606.09096)",
+      "open_side": "a -> infinity positivity / det_reg -> Xi (CCM Sec 7)",
+      "marshal_artifact": "screw_function_discrete_bridge"
+    },
+    {
+      "name": "yakaboylu_intertwining",
+      "proved_side": "W >= 0 intertwining ENFORCES RH (2408.15135) \u2014 equivalence",
+      "open_side": "construct W unconditionally without assuming critical line",
+      "marshal_artifact": "yakaboylu_intertwining_positivity"
+    },
+    {
+      "name": "li_coefficients",
+      "proved_side": "lambda_n >= 0 iff RH; GL(2)/GL(3) analogs closed in ladder",
+      "open_side": "GL(1) Li / Weil positivity",
+      "marshal_artifact": "li_coefficients_gln_ladder"
+    }
+  ],
+  "verdict": "GL(2) and GL(3) close positivity via algebra (Gross-Zagier, Lefschetz). GL(1) lacks that interpretation \u2014 all routes terminate at lambda_a >= 0 for all a = RH."
+}

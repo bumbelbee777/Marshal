@@ -33,7 +33,6 @@ MrsKernelReport check_compilation_bundle(MrsCompilationBundle& bundle) {
                 ProofObligation o;
                 o.id = ob.id;
                 o.statement = ob.statement;
-                o.lean_theorem = ob.lean_theorem;
                 o.proof_class = ob.proof_class;
                 o.dependencies = ob.dependencies;
                 if (ob.prove_kind == MrsProofBodyKind::Infer)

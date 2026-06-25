@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "obligation_id": "t1_admissibility_infinite",
+  "title": "Uniform resolvent lower bound inf_p R_p(theta0) >= delta > 0",
+  "theta0": {
+    "num": 144,
+    "den": 25,
+    "value": 5.76,
+    "rational": "144/25"
+  },
+  "two_theta0": 11.52,
+  "p_star_real": 100709.96186695223,
+  "regime_tail": {
+    "condition": "log p >= 2*theta0  (equivalently p >= e^{2 theta0})",
+    "lower_bound": 5.76,
+    "argument": "spectrum one-sided {j>=1}: j*log p >= log p >= 2 theta0 => |j log p - theta0| >= theta0 and |j log p + theta0| >= theta0; elementary, no effective constant needed",
+    "samples": [
+      {
+        "p": 100733,
+        "log_p": 11.520228731080348,
+        "log_p_ge_two_theta0": true,
+        "R_p": 5.760228731080349,
+        "R_p_ge_theta0": true
+      },
+      {
+        "p": 100741,
+        "log_p": 11.520308145793951,
+        "log_p_ge_two_theta0": true,
+        "R_p": 5.760308145793951,
+        "R_p_ge_theta0": true
+      },
+      {
+        "p": 100747,
+        "log_p": 11.520367702690658,
+        "log_p_ge_two_theta0": true,
+        "R_p": 5.760367702690657,
+        "R_p_ge_theta0": true
+      },
+      {
+        "p": 100769,
+        "log_p": 11.52058604763684,
+        "log_p_ge_two_theta0": true,
+        "R_p": 5.760586047636839,
+        "R_p_ge_theta0": true
+      },
+      {
+        "p": 100787,
+        "log_p": 11.520764658048316,
+        "log_p_ge_two_theta0": true,
+        "R_p": 5.760764658048316,
+        "R_p_ge_theta0": true
+      }
+    ]
+  },
+  "regime_finite": {
+    "p_max": 100709,
+    "num_primes_checked": 9651,
+    "delta_fin_measured": 0.0010982261227193858,
+    "minimizing_prime": 317,
+    "minimizing_j": 1,
+    "positivity_basis": "Hermite-Lindemann (1882): log p transcendental for every prime p; theta0 = 144/25 rational => j*log p != theta0 for j>=1 => each R_p>0; finite minimum over primes < e^{2 theta0} is attained and positive"
+  },
+  "delta_uniform_measured": 0.0010982261227193858,
+  "delta_uniform_rational_lb": {
+    "num": 1098,
+    "den": 1000000,
+    "value": 0.001098
+  },
+  "uniform_claim": "for ALL primes p:  R_p(theta0) >= delta_uniform_rational_lb > 0",
+  "precision_dps": 60,
+  "circular_logic_detected": false,
+  "uses_zeta_zeros": false,
+  "depends_on_baker_effective_constant": false
+}

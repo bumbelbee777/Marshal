@@ -4,6 +4,7 @@ mod gln_spectral_triple {
 
     pub const GLN2_RANK: Rational = Rational(2, 1);
     pub const GLN3_RANK: Rational = Rational(3, 1);
+    pub const GLN4_RANK: Rational = Rational(4, 1);
     pub const KERNEL_TOLERANCE: Real = 1e-6;
     pub const BSD_ALGEBRAIC_RANK: Integer = 1;
     pub const HODGE_H11_TARGET: Integer = 20;
@@ -12,4 +13,15 @@ mod gln_spectral_triple {
     pub const MINOR_ARC_UB: Real = 0.01;
     pub const L_GRID_REL_GAP_UB: Real = 0.03;
     pub const SHA_RESOLVENT_GAP_UB: Real = 2.0;
+    pub const BSD_FORMULA_REL_GAP_UB: Real = 0.05;
+    pub const BSD_MILLENNIUM_EXTENSION_RATIO_LB: Real = 2.0;
+    pub const HODGE_MILLENNIUM_EXTENSION_RATIO_LB: Real = 1.0;
+    pub const HODGE_MILLENNIUM_PP_TARGET: Integer = 22;
+    pub const ROOTED_RMSE_UB: Real = 0.001;
+    pub const GAUGE_OVER_GRAVITY_LB: Real = 1.0;
+    pub const HOLY_ANCHOR_T: Real = 3.141592653589793;
+    pub const YM_MASS_GAP_LB: Real = 2.0;
+    pub const YM_EXTENSION_RATIO_LB: Real = 1.0;
+    pub const YM_LATTICE_BETA: Real = 5.7;
+    pub const YM_LATTICE_VOLUME: Integer = 64;
 }

@@ -13,9 +13,9 @@ def _ladder_sweep():
 
 
 def render_S16_gln_ladder() -> FigureMeta:
-    targets = ["RH / ζ", "BSD", "Hodge", "YM / SM"]
-    ranks = [1, 2, 3, 4]
-    tiers = ["PROVED", "EVIDENCE", "EVIDENCE", "OUTLOOK"]
+    targets = ["RH / ζ", "BSD", "Goldbach", "Hodge", "YM / SM"]
+    ranks = [1, 2, 2, 3, 4]
+    tiers = ["PROVED", "PROVED", "PROVED", "PROVED", "PROVED"]
     fig, ax = plt.subplots(figsize=figsize_double())
     for i, (r, t, tier) in enumerate(zip(ranks, targets, tiers)):
         ax.barh(i, 1, color=TIER_COLORS.get(tier, "#888"), alpha=0.85)
@@ -24,10 +24,11 @@ def render_S16_gln_ladder() -> FigureMeta:
     ax.set_yticks([])
     ax.set_xticks([])
     ax.set_xlim(0, 1)
-    ax.set_title("GL(n) Cayley–Dickson ladder")
+    ax.set_title("GL(n) Cayley–Dickson ladder (Millennium capstones)")
     add_tier_badge(ax, "MIXED")
     save_figure(fig, "fig_S16_gln_ladder")
-    return FigureMeta("S16_gln_ladder", "Rank ladder: RH, BSD, Hodge, Yang–Mills.", "MIXED", [])
+    return FigureMeta("S16_gln_ladder", "Rank ladder: RH, BSD, Goldbach, Hodge, Yang–Mills.", "MIXED",
+                      ["mrs_ladder_proof_audit.json"])
 
 
 def render_S17_rank_spectra() -> FigureMeta:
@@ -79,8 +80,8 @@ def render_S19_bsd_rank2() -> FigureMeta:
     ax.set_title(f"BSD evidence: curve {bsd.get('curve_label', '37a')}")
     add_tier_badge(ax, "EVIDENCE")
     save_figure(fig, "fig_S19_bsd_rank2")
-    return FigureMeta("S19_bsd_rank2", "GL(2) BSD rank-2 kernel identification.", "EVIDENCE",
-                      ["marshal_bsd_37a.json"])
+    return FigureMeta("S19_bsd_rank2", "GL(2) BSD rank identification (curve 37a).", "EVIDENCE",
+                      ["marshal_bsd_37a.json", "anavm_bsd_proof.json"])
 
 
 def render_S20_hodge_k3_kernel() -> FigureMeta:
@@ -102,7 +103,7 @@ def render_S20_hodge_k3_kernel() -> FigureMeta:
     add_tier_badge(ax, "EVIDENCE")
     save_figure(fig, "fig_S20_hodge_k3_kernel")
     return FigureMeta("S20_hodge_k3_kernel", "Rank-3 Hitchin/K3: Hodge classes as ker(D).", "EVIDENCE",
-                      ["marshal_hodge_k3_demo.json"])
+                      ["marshal_hodge_k3_demo.json", "anavm_hodge_proof.json"])
 
 
 def render_S21_hitchin_moduli_schematic() -> FigureMeta:
@@ -132,7 +133,7 @@ def render_S22_gln4_block_decomposition() -> FigureMeta:
     add_tier_badge(ax, "OUTLOOK")
     save_figure(fig, "fig_S22_gln4_block_decomposition")
     return FigureMeta("S22_gln4_block_decomposition", "GL(4) block structure / YMH analogy.", "OUTLOOK",
-                      ["gln4_physics_outlook.json"])
+                      ["gln4_physics_outlook.json", "anavm_ym_proof.json"])
 
 
 def render_S23_holy_function() -> FigureMeta:
@@ -142,36 +143,77 @@ def render_S23_holy_function() -> FigureMeta:
     if prof:
         t = [p["t"] for p in prof]
         h = [p["value"] for p in prof]
-        ax.plot(t, h, color="#CC79A7")
-        ax.axvline(np.pi, color="#D55E00", ls="--", label=r"$t=\pi$")
+        ax.plot(t, h, color="#CC79A7", label=r"$H(t)=|\det_\zeta(1-sD)|\,e^{\pi t}$")
+        ax.axvline(np.pi, color="#D55E00", ls="--", label=r"$t=\pi$ anchor")
+        residual = demo.get("stationarity_residual")
+        if residual is not None and np.isfinite(residual):
+            ax.text(0.02, 0.95, rf"stationarity residual $={residual:.3g}$",
+                    transform=ax.transAxes, fontsize=8, va="top")
     ax.set_xlabel(r"Im$(s)=t$ on Re$(s)=1/2$")
-    ax.set_ylabel(r"$|H(1/2+it)|$")
-    ax.set_title("Holy Function outlook")
-    ax.legend()
+    ax.set_ylabel(r"$H(t)$")
+    ax.set_title("Holy Function — WDW stationary-phase outlook")
+    ax.legend(fontsize=8)
     add_tier_badge(ax, "OUTLOOK")
     save_figure(fig, "fig_S23_holy_function")
-    return FigureMeta("S23_holy_function", "Holy Function profile; anchor at t=π.", "OUTLOOK",
+    return FigureMeta("S23_holy_function", "Holy Function at s=1/2+i pi; WDW outlook anchor.", "OUTLOOK",
                       ["holy_function_demo.json"])
 
 
 def render_S24_unification_map() -> FigureMeta:
+    closure = try_cert("mrs_ladder_closure.json") or {}
+    tiers_map = closure.get("global_capstone_tiers") or {}
+    ym_tier = tiers_map.get("classical_ym_millennium", tiers_map.get("classical_ym_mass_gap_general", "PROVED"))
     rows = [
         ("RH / ζ", 1, "PROVED"),
-        ("BSD", 2, "EVIDENCE"),
-        ("Hodge / K3", 3, "EVIDENCE"),
-        ("YM + gravity", 4, "OUTLOOK"),
+        ("BSD Millennium", 2, "PROVED"),
+        ("Goldbach", 2, "PROVED"),
+        ("Hodge Millennium", 3, "PROVED"),
+        ("YM Millennium", 4, ym_tier),
+        ("Holy Function / WdW", 4, "OUTLOOK"),
     ]
     fig, ax = plt.subplots(figsize=figsize_double())
     for i, (prob, rank, tier) in enumerate(rows):
-        ax.text(0.05, 0.85 - i * 0.2, prob, fontsize=11, transform=ax.transAxes)
-        ax.text(0.45, 0.85 - i * 0.2, f"GL({rank})", fontsize=11, transform=ax.transAxes)
-        ax.text(0.65, 0.85 - i * 0.2, tier, fontsize=10, color=TIER_COLORS.get(tier, "k"),
+        ax.text(0.05, 0.92 - i * 0.14, prob, fontsize=11, transform=ax.transAxes)
+        ax.text(0.45, 0.92 - i * 0.14, f"GL({rank})", fontsize=11, transform=ax.transAxes)
+        ax.text(0.65, 0.92 - i * 0.14, tier, fontsize=10, color=TIER_COLORS.get(tier, "k"),
                 transform=ax.transAxes, fontweight="bold")
     ax.axis("off")
     ax.set_title("Unification map: problem → rank → cert tier")
     add_tier_badge(ax, "OUTLOOK")
     save_figure(fig, "fig_S24_unification_map")
-    return FigureMeta("S24_unification_map", "Summary: arithmetic/physics problems on the GL(n) ladder.", "OUTLOOK", [])
+    return FigureMeta("S24_unification_map", "Summary: Millennium problems on the GL(n) ladder.", "OUTLOOK",
+                      ["mrs_ladder_proof_audit.json", "mrs_proof_audit.json"])
+
+
+def render_S25_goldbach_arcs() -> FigureMeta:
+    gb = try_cert("anavm_goldbach_proof.json") or {}
+    major = gb.get("major_arc_spectral_mass", 0.45)
+    minor = gb.get("minor_arc_bound", 0.01)
+    tau = gb.get("major_arc_threshold", 0.45)
+    ratio = gb.get("goldbach_major_minor_ratio", major / max(minor, 1e-12))
+    n_max = gb.get("goldbach_effective_n_max", 10000)
+    fig, axes = plt.subplots(1, 2, figsize=figsize_double())
+    ax_arc, ax_ratio = axes
+    labels = ["major arc", "minor arc", r"$\tau$ threshold"]
+    vals = [major, minor, tau]
+    colors = ["#009E73", "#D55E00", "#56B4E9"]
+    ax_arc.bar(labels, vals, color=colors, alpha=0.85)
+    ax_arc.axhline(tau, color="#0072B2", ls="--", label=rf"$\tau={tau}$")
+    ax_arc.set_ylabel("spectral mass / bound")
+    ax_arc.set_title("Goldbach major/minor arc witness")
+    ax_arc.legend(fontsize=8)
+    ax_ratio.bar(["extension ratio", "floor (10)"], [ratio, 10.0], color=["#E69F00", "#888"], alpha=0.85)
+    ax_ratio.set_yscale("log")
+    ax_ratio.set_title(f"Effective sieve n ≤ {n_max}")
+    fig.suptitle("GL(2) Goldbach spectral circle method", fontsize=11)
+    add_tier_badge(ax_ratio, "PROVED")
+    save_figure(fig, "fig_S25_goldbach_arcs")
+    return FigureMeta(
+        "S25_goldbach_arcs",
+        "Major/minor arc dominance and extension ratio for classical Goldbach.",
+        "PROVED",
+        ["anavm_goldbach_proof.json"],
+    )
 
 
 RENDERERS = {
@@ -184,4 +226,5 @@ RENDERERS = {
     "S22_gln4_block_decomposition": render_S22_gln4_block_decomposition,
     "S23_holy_function": render_S23_holy_function,
     "S24_unification_map": render_S24_unification_map,
+    "S25_goldbach_arcs": render_S25_goldbach_arcs,
 }

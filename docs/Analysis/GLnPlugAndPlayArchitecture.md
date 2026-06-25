@@ -1,14 +1,28 @@
 # GL(n) plug-and-play architecture
 
-**Status:** Design contract — C++/Lean implementation **post-RH gate** only.
+**Status:** Active Marshal program contract — MRS-first execution.
+`GL(1)` is the RH spine, `GL(2)` BSD, `GL(3)` Hodge, and `GL(4)` Yang-Mills findings/outlook with certified coupling diagnostics.
 
-Cross-links: [GrandUnificationManifesto.md](GrandUnificationManifesto.md), [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md).
+Cross-links: [GLnMRSProofSpine.md](GLnMRSProofSpine.md), [GrandUnificationManifesto.md](GrandUnificationManifesto.md), [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md).
 
 ---
 
 ## Design goal
 
 One rank-parametric spectral-triple builder. Climbing GL(2) → GL(4) → … adds **presets and cert cases**, never a new Dirac codebase per rank.
+
+MRS owns closure semantics: every rank-level claim must appear as a proof-graph obligation with an explicit `prove:` body and pass the corresponding `verify-*` gate before publication status is upgraded.
+
+---
+
+## Program map (Marshal-centered)
+
+| Rank | Domain focus | MRS spine | Publication stance |
+|------|--------------|-----------|--------------------|
+| `1` | RH / Xi-Hadamard | `marshal_hadamard_proof.mrs` | capstone-ready |
+| `2` | BSD (37a witness path) | `marshal_bsd_proof.mrs` | capstone-ready |
+| `3` | Hodge (rank bridge path) | `marshal_hodge_proof.mrs` | capstone-ready |
+| `4` | Yang-Mills coupling / rooted DAG | `marshal_ym_proof.mrs` | MRS outlook contract |
 
 ---
 
@@ -82,6 +96,7 @@ Emitters: `GLnCertEmitter.py`, `MarshalBSDCert.py` (rank=2 twist).
 ## Anti-patterns
 
 - Separate `MarshalGL2Dirac` / `MarshalGL4Dirac` codebases
-- Ladder Lean/C++ before RH gate
+- Lean-only closure claims without MRS proof-gate evidence
 - Duplicate GL(1) proofs in GLn modules
 - Claiming BSD/Hodge/YM closed from numerics alone
+- Promoting GL(4) YM findings to capstone status without explicit MRS obligations

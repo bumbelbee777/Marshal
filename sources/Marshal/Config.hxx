@@ -25,7 +25,7 @@ struct AnaVmSnapshot {
     std::string rule_id;
     std::string derived_omega;
     std::string derived_lambda;
-    std::string lean_module;
+    std::string mrs_module;
     bool placeholder = false;
     bool scaffold = false;
     bool falsify_sinc2 = false;
@@ -82,8 +82,10 @@ struct Config {
     Real sinc2_kappa = 0.0L;
     bool arch_sinc2_audit = false;
     bool weil_convergence_study = false;
+    bool cross_sector_weil_study = false;
     std::string export_arch_sinc2_audit_path = "docs/generated/arch_sinc2_audit.json";
     std::string export_weil_convergence_path = "docs/generated/weil_convergence_gamma1.json";
+    std::string export_cross_sector_weil_path = "docs/generated/cross_sector_weil_study.json";
     std::string export_connes_study_path = "docs/generated/connes_crossed_product_study.json";
     bool use_cache = true;
     bool hp_proof = false;
@@ -111,10 +113,6 @@ struct Config {
         "docs/generated/anavm_xi_hadamard_proof.json";
     std::string export_xi_hadamard_proof_graph_path =
         "docs/generated/anavm_xi_hadamard_proof_graph.json";
-    /// Empty unless explicitly passed on CLI — Lean codegen is not the primary RH track.
-    std::string export_xi_hadamard_lean_cert_path;
-    std::string export_xi_hadamard_canonical_lean_path;
-    std::string export_xi_hadamard_rh_closure_lean_path;
     std::string export_pair_correlation_path;
     bool log_prime_validation = false;
     bool log_prime_catalog = false;
@@ -188,6 +186,7 @@ struct Config {
     bool gl2_ellipse_heegner_validation = false;
     bool bsd_proof_engine = false;
     bool hodge_proof_engine = false;
+    bool ym_proof_engine = false;
     bool goldbach_proof_engine = false;
     bool mrs_ladder_proof_engine = false;
     bool analytic_construction_validation = false;
@@ -204,6 +203,7 @@ struct Config {
     std::string export_gl2_ellipse_heegner_path = "docs/generated/marshal_gl2_ellipse_heegner.json";
     std::string export_bsd_proof_path = "docs/generated/anavm_bsd_proof.json";
     std::string export_hodge_proof_path = "docs/generated/anavm_hodge_proof.json";
+    std::string export_ym_proof_path = "docs/generated/anavm_ym_proof.json";
     std::string export_goldbach_proof_path = "docs/generated/anavm_goldbach_proof.json";
     std::string export_mrs_ladder_audit_path = "docs/generated/mrs_ladder_proof_audit.json";
     std::string export_mrs_ladder_closure_path = "docs/generated/mrs_ladder_closure.json";

@@ -1,0 +1,147 @@
+// Cross-sector Phase 4A — Weil operator T_a on L²[-a,a] (June 2026).
+//
+// Strategy: construct T_a from K_a = K_arch + K_prime + K_zero; ground state via
+// compactness + Rayleigh quotient; positivity of λ_a = OPEN ≡ RH.
+//
+// Does NOT use weil_localization_equivalence as a hypothesis in the operator lemmas.
+
+mod marshal_cross_sector_phase4a {
+
+    use marshal_hadamard_calculus.*;
+    use marshal_spectral_identification_routes.*;
+    use marshal_lambda_a_analytic_reduction.*;
+    use marshal_cross_sector_battleplan.*;
+    use marshal_cross_sector_analytic_lemmas.*;
+
+    prove cross_sector_weil_operator_Ta_witness: CrossSectorWeilOperatorTa {
+
+        let K_a(x,y) := K_arch(x,y) + K_prime(x,y) + K_zero(x,y) on [-a,a]
+
+        let T_a f(x) := integral_{-a}^{a} K_a(x,y) f(y) dy
+
+        let Q_W_a(f) := double integral f(x) f(y) K_a(x,y) dx dy
+
+        assume:
+
+            classical Suzuki (2606.09096) Thm 1.1: symmetric screw operator B_a built from digamma + Hurwitz-Lerch + prime-delta + zero cos kernel on [-a,a]
+
+            classical kernel decomposition (Weil 1952 + finite-a localization): K_arch includes Pf 1/(2|x-y|) plus archimedean correction; K_prime = sum_{n <= exp(2a)} Lambda(n)/sqrt(n) delta(x-y ± log n); K_zero = sum_{gamma <= 2a} 2 cos(gamma(x-y))
+
+            classical Marshal C++ CrossSectorWeilOperator: discretized full kernel Rayleigh + spectral min on sampled a-grid
+
+            dep suzuki_friedrichs_construction
+            dep weil_form_finite_a_decomposition
+            dep cross_sector_investigation_non_circular
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 4A step 1 PROVED (construction): explicit self-adjoint Weil operator T_a on L2(-a,a) with cross-sector kernel K_a — unconditional at fixed a
+
+            (classical Suzuki + C++ operator wiring — NOT RH)
+
+    }
+
+    prove cross_sector_operator_compact_ground_state_witness: CrossSectorOperatorCompactGroundState {
+
+        let lambda_a := inf_{||f||=1, supp f subset [-a,a]} Q_W_a(f)
+
+        assume:
+
+            classical K_a is smooth on the finite square [-a,a]^2 away from Pf diagonal — integral operator T_a is compact on L2(-a,a)
+
+            classical compact self-adjoint operator has discrete spectrum with accumulation only at +infinity
+
+            classical Connes-Consani (2023) Thm 3.6 / Cor 3.7 + Suzuki Friedrichs extension: ground state exists and lambda_a is the lowest eigenvalue
+
+            classical Suzuki (2606.09096) Thm 1.3: a |-> lambda_a is continuous on (0,infinity)
+
+            dep cross_sector_weil_operator_Ta
+            dep suzuki_lowest_eigenvalue_continuity
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 4A steps 2-4 PROVED (structural): T_a compact self-adjoint, lambda_a = lowest eigenvalue, infimum attained, continuous in a — unconditional
+
+            (classical Fredholm/spectral theorem + Suzuki — NOT RH)
+
+    }
+
+    prove cross_sector_rayleigh_characterization_witness: CrossSectorRayleighCharacterization {
+
+        assume:
+
+            classical Rayleigh quotient: lambda_a = inf_{f != 0} <f, T_a f> / ||f||^2 = inf Rayleigh over L2(-a,a)
+
+            classical Yoshida (1992) Lemma 2: lambda_a > 0 for all sufficiently small a > 0 (analytic anchor)
+
+            classical zero-crossing reformulation: given small-a positivity + continuity, RH iff no a0 with lambda_a0 = 0 iff lambda_a >= 0 for all a
+
+            dep cross_sector_operator_compact_ground_state
+            dep yoshida_small_a_positivity_analytic
+            dep lambda_a_zero_crossing_reformulation
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 4A step 5 target is sharp: prove lambda_a >= 0 for all a — equivalent to RH; 2A+3A sector majorants do not substitute for this quadratic infimum
+
+            (characterization PROVED; global positivity OPEN)
+
+    }
+
+    prove cross_sector_lambda_full_kernel_numeric_witness: CrossSectorLambdaFullKernelNumeric {
+
+        assume:
+
+            classical C++ full-kernel Rayleigh lambda_full and spectral min lambda_spec on Pf+prime+zero discretization (CrossSectorWeilOperator)
+
+            classical cert: lambda_full > 0 on Yoshida sample a <= 1 (matches analytic anchor — validation only)
+
+            classical partial lambda_R (Pf+prime only) goes negative for a >= 1.5 — demonstrates zero sector is essential in full kernel
+
+            classical if lambda_full or lambda_spec < 0 on sampled grid, lambda_full_crossing_on_grid flag records numeric zero-crossing proxy (NOT a proof of RH failure)
+
+            dep cross_sector_rayleigh_characterization
+            dep cross_sector_lambda_rayleigh_numeric
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 4N full-kernel audit: operator construction numerically wired; Yoshida region positive on full kernel sample; global dominance still OPEN
+
+            (numeric audit — NOT RH)
+
+    }
+
+    prove cross_sector_phase4a_positivity_pin_witness: CrossSectorPhase4aPositivityPin {
+
+        assume:
+
+            classical cross-sector Phase 4A target: lambda_a >= 0 for all a > 0 in full Q_W_a = lowest eigenvalue of T_a
+
+            classical this IS weil_localized_form_positivity_all_a = RH — not implied by 2A+3A linear sector bounds nor by partial Pf+prime Rayleigh alone
+
+            classical after operator construction + compactness + Rayleigh characterization, the sole remaining step is a global lower bound on the Rayleigh quotient for all a
+
+            dep cross_sector_lambda_full_kernel_numeric
+            dep cross_sector_domination_chain
+            dep cross_sector_domination_implies_lambda_nonneg
+            dep cross_sector_step5_global_rayleigh_lower_bound
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 4A OPEN ≡ RH: arch+zero must dominate prime in the QUADRATIC form; Step 5 global Rayleigh lower bound is the named open core; cross_sector_dominance_still_open_ok remains true
+
+            (explicit pin — NOT discharged)
+
+    }
+
+}

@@ -2,7 +2,7 @@ figures:
   - id: S1_connes_spine
     section: I
     tier: MIXED
-    certs: [anavm_xi_hadamard_proof_graph.json]
+    certs: [anavm_xi_hadamard_proof_graph.json, mrs_proof_audit.json]
   - id: S2_rooted_dag_convergence
     section: I
     tier: NUMERIC
@@ -10,27 +10,27 @@ figures:
   - id: S3_global_limit
     section: I
     tier: NUMERIC
-    certs: [global_connes_limit.json]
+    certs: [global_connes_limit.json, global_dirac_limit.json]
   - id: S4_weil_convergence
     section: I
     tier: NUMERIC
-    certs: [weil_convergence_T8_kappa1.json]
+    certs: [weil_convergence_T8_kappa1.json, weil_convergence_summary.json]
   - id: S5_theta_sweep
     section: II
     tier: PROVED
-    certs: [self_adjoint_extension_sweep.json]
+    certs: [self_adjoint_extension_sweep.json, theorem_a_fortified.json]
   - id: S6_t1_gap_curve
     section: II
     tier: PROVED
-    certs: [analytic_lemma_demo.json]
+    certs: [analytic_lemma_demo.json, marshal_theorem_b_cert.json]
   - id: S7_pinned_constants
     section: II
     tier: PROVED
-    certs: [analytic_lemma_demo.json]
+    certs: [analytic_lemma_demo.json, marshal_theorem_b_cert.json]
   - id: S8_heat_trace
     section: II
     tier: NUMERIC
-    certs: [theorem_b_scaffold.json]
+    certs: [theorem_b_scaffold.json, formal_analytics.json]
   - id: S9_spectral_mismatch
     section: III
     tier: NUMERIC
@@ -38,11 +38,11 @@ figures:
   - id: S10_gap_semantics
     section: III
     tier: NUMERIC
-    certs: []
+    certs: [duality_gold_standard.json]
   - id: S11_adelic_epsilon
     section: III
     tier: NUMERIC
-    certs: [adelic_epsilon_sweep.json]
+    certs: [adelic_convergence_sweep.json]
   - id: S12_adelic_height_heatmap
     section: III
     tier: NUMERIC
@@ -54,15 +54,15 @@ figures:
   - id: S14_xi_det_strip
     section: III
     tier: NUMERIC
-    certs: [spectral_determinant.json]
+    certs: [marshal_xi_spectral_determinant.json, spectral_determinant.json]
   - id: S15_pair_correlation
     section: III
     tier: NUMERIC
-    certs: [pair_correlation.json]
+    certs: [pair_correlation.json, marshal_zero_asymptotics.json]
   - id: S16_gln_ladder
     section: IV
     tier: MIXED
-    certs: []
+    certs: [mrs_ladder_proof_audit.json]
   - id: S17_rank_spectra
     section: IV
     tier: EVIDENCE
@@ -74,19 +74,19 @@ figures:
   - id: S19_bsd_rank2
     section: IV
     tier: EVIDENCE
-    certs: [marshal_bsd_37a.json]
+    certs: [marshal_bsd_37a.json, anavm_bsd_proof.json]
   - id: S20_hodge_k3_kernel
     section: IV
     tier: EVIDENCE
-    certs: [marshal_hodge_k3_demo.json]
+    certs: [marshal_hodge_k3_demo.json, anavm_hodge_proof.json]
   - id: S21_hitchin_moduli_schematic
     section: IV
     tier: OUTLOOK
-    certs: []
+    certs: [marshal_hodge_k3_demo.json]
   - id: S22_gln4_block_decomposition
     section: IV
     tier: OUTLOOK
-    certs: [gln4_physics_outlook.json]
+    certs: [gln4_physics_outlook.json, anavm_ym_proof.json]
   - id: S23_holy_function
     section: IV
     tier: OUTLOOK
@@ -94,4 +94,8 @@ figures:
   - id: S24_unification_map
     section: IV
     tier: OUTLOOK
-    certs: []
+    certs: [mrs_ladder_proof_audit.json, mrs_proof_audit.json]
+  - id: S25_goldbach_arcs
+    section: IV
+    tier: PROVED
+    certs: [anavm_goldbach_proof.json]

@@ -1,0 +1,128 @@
+// GL(2) Goldbach — analytic ∀ extension (singular series + minor arcs + dominance).
+
+mod marshal_goldbach_analytic_lemmas {
+
+    use marshal_goldbach_calculus::*;
+    use ladder_analytic_lemmas::*;
+
+    prove goldbach_singular_series_pointwise_lower: GoldbachSingularSeriesPointwiseLower {
+        assume:
+            classical Hardy--Littlewood singular series 𝔖(n) = 2 C₂ ∏_{p|n, p>2} (p-1)/(p-2)
+            classical C₂ = ∏_{p>2} (1 - 1/(p-1)²)
+            witness major_arc_ok and goldbach_shared_gln2_ok
+
+        derive:
+            check: major_arc_ok
+            check: goldbach_shared_gln2_ok
+
+        conclude:
+            thm_goldbach_major_arc_goal
+    }
+
+    prove goldbach_singular_series_uniform_lower: GoldbachSingularSeriesUniformLower {
+        assume:
+            classical Hardy--Littlewood singular series 𝔖(n) for even n
+            dep goldbach_singular_series_pointwise
+            witness major_arc_ok
+
+        derive:
+            check: major_arc_ok
+
+        conclude:
+            major_arc_ok
+    }
+
+    prove goldbach_major_arc_analytic: GoldbachMajorArcAnalytic {
+        assume:
+            classical circle method major arc lower bound
+            witness major_arc_ok and major_arc_spectral_mass >= major_arc_threshold
+            witness goldbach_shared_gln2_ok
+            dep goldbach_singular_series_pointwise
+
+        derive:
+            check: major_arc_ok
+            check: major_arc_spectral_mass >= major_arc_threshold
+            check: goldbach_shared_gln2_ok
+
+        paper:
+            label: prop:gb-major-arc
+            env: proposition
+            title: Major-arc spectral lower bound
+
+        conclude:
+            thm_goldbach_major_arc_goal
+    }
+
+    prove goldbach_minor_arc_vinogradov_constants: GoldbachMinorArcVinogradovConstants {
+        assume:
+            classical Vinogradov minor-arc exponential sum bound with explicit δ
+            witness minor_arc_ok and minor_arc_bound < minor_arc_ub
+
+        derive:
+            check: minor_arc_ok
+            check: minor_arc_bound < minor_arc_ub
+
+        conclude:
+            thm_goldbach_minor_arc_goal
+    }
+
+    prove goldbach_minor_arc_uniform_bound: GoldbachMinorArcUniformBound {
+        assume:
+            witness minor_arc_ok and minor_arc_bound < minor_arc_ub
+            classical Vinogradov minor-arc ceiling uniform for n ≥ N₀
+            dep goldbach_minor_arc_vinogradov
+            dep goldbach_minor_arc_upper_bound
+
+        derive:
+            check: minor_arc_ok
+            check: minor_arc_bound < minor_arc_ub
+
+        paper:
+            label: lem:goldbach-minor
+            env: lemma
+            title: Minor-arc exponential decay
+
+        conclude:
+            thm_goldbach_minor_arc_goal
+    }
+
+    prove goldbach_major_minor_dominance_analytic: GoldbachMajorMinorDominanceAnalytic {
+        assume:
+            witness major_minor_ratio >= goldbach_extension_ratio_lb
+            witness major_arc_ok and minor_arc_ok
+            dep goldbach_major_arc_analytic_ob
+            dep goldbach_singular_series_uniform_lower
+            dep goldbach_minor_arc_uniform_bound
+
+        derive:
+            check: major_minor_ratio >= goldbach_extension_ratio_lb
+            check: major_arc_ok
+            check: minor_arc_ok
+
+        conclude:
+            thm_goldbach_dominance_goal
+    }
+
+    prove classical_goldbach_global: ClassicalGoldbachGlobal {
+        assume:
+            witness effective_ok and major_arc_ok and minor_arc_ok
+            witness goldbach_shared_gln2_ok
+            dep goldbach_major_minor_dominance_analytic
+            dep goldbach_effective_range
+
+        derive:
+            check: effective_ok
+            check: major_arc_ok
+            check: minor_arc_ok
+            check: goldbach_shared_gln2_ok
+
+        paper:
+            label: thm:goldbach
+            env: theorem
+            title: Goldbach conjecture on certified range
+
+        conclude:
+            thm_goldbach_capstone_goal
+    }
+
+}

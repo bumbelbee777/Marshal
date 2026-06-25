@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "purpose": "Classical/asymptotic symbol bounds for Lerch Lemmas 1-2",
+  "sigma_higher_min": -2984.7332360333658,
+  "sigma_higher_max": -2235.01053929606,
+  "sigma_higher_universal_nonpos_ok": true,
+  "sigma_higher_small_z_min": -2235.01053929606,
+  "sigma_higher_small_z_margin_ok": true,
+  "sigma_higher_tail_max": -2242.832205527244,
+  "sigma_higher_asymptotic_tail_nonpos_ok": true,
+  "sigma_higher_tail_ol2_constant_c": 191231.3896070835,
+  "sigma_higher_tail_ol2_ratio_max": 42179080.89495372,
+  "sigma_01_min": -461508.37793536705,
+  "sigma_01_max": 28082.629711846686,
+  "sigma_01_ol2_C_pinned": 22036351.457241885,
+  "sigma_01_plancherel_C_a_pinned": 7014388.524260675,
+  "lerch_symbol_classical_bounds_audit_ok": true,
+  "sigma_higher_classical_asymptotic_ok": true,
+  "fast_mode": true,
+  "z_grid_points": 121,
+  "cosine_quadrature_n": 800
+}

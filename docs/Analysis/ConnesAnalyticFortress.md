@@ -1,8 +1,20 @@
-# The Connes analytic fortress
+# The Connes analytic closure program (Theorems A and B)
 
 **Status:** **ANALYTIC_OPEN** — siege engines built; walls not stormed.
 
-Cross-links: [AnalyticConnesProgram.md](AnalyticConnesProgram.md), [GlobalOperatorProof.lean](../Formal/GlobalOperatorProof.lean), [MarshalV1Closure.md](MarshalV1Closure.md), [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md).
+Cross-links: [GLnMRSProofSpine.md](GLnMRSProofSpine.md), [FormalConnesProofProgram.md](FormalConnesProofProgram.md), [MRSLadderMethodology.md](MRSLadderMethodology.md), [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md), [AnalyticConnesProgram.md](AnalyticConnesProgram.md), [GlobalOperatorProof.lean](../Formal/GlobalOperatorProof.lean), [MarshalV1Closure.md](MarshalV1Closure.md), [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md).
+
+---
+
+## Program center (Marshal-first)
+
+This document sits inside the GL(n) Marshal program:
+
+- `GL(1)` MRS (`marshal_hadamard_proof.mrs`) carries the RH / Xi-Hadamard closure spine.
+- `GL(2)` and `GL(3)` MRS ladder tracks carry BSD/Hodge closure spines.
+- `GL(4)` holds Yang-Mills coupling findings as an explicit outlook track.
+
+The Theorems A/B obligations below remain the analytic core for the global operator layer and are interpreted through MRS proof-gate discipline, not standalone finite numerics.
 
 ---
 
@@ -14,7 +26,7 @@ Cross-links: [AnalyticConnesProgram.md](AnalyticConnesProgram.md), [GlobalOperat
 | **Marshal numerics** | $\Lambda_D(\theta)$ unique minimum at $\theta_0\approx 5.76$ on discretization; trace T1 gap $\ll 1$ | Evidence only |
 | **Lean formal routing** | If (1) extension selected ∧ (2) discrete spectrum ∧ (3) $=\{\gamma_n\}$, then $\det(s-D)=\xi(s)$ | Conditional logic |
 | **HPAnalysis Mathlib** | Theorem A/B + Hadamard on **formal hypotheses** (zero sorries) | [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md) |
-| **Analytic fortress** | Prove (1) and (2) on the **true** operator on $X=\mathbb{A}_\mathbb{Q}/\mathbb{Q}^\times$ | **This is the war** |
+| **Analytic closure** | Prove (1) and (2) on the **true** operator on $X=\mathbb{A}_\mathbb{Q}/\mathbb{Q}^\times$ | **Core analytic layer** |
 
 Lean explicitly axiomatizes the gap:
 
@@ -31,7 +43,7 @@ Marshal `V1_PROVED` means **formal routing + numeric witness emitted**. It does 
 
 ---
 
-## Target theorems (the fortress)
+## Target theorems (Theorems A and B)
 
 ### Theorem A — Unique spectral-action minimizer
 
@@ -200,7 +212,7 @@ This is years of work by a specialist. Marshal has done its job: **the path is c
 ```bash
 python tools/Analysis/RunAnalyticLemmaDemo.py   # θ₀, uniqueness witness
 python tools/Analysis/RunDualityGoldStandard.py  # trace formula
-python tools/Analysis/EmitMarshalLeanCert.py --check
-cd docs/Formal && lake build HP              # cert routing (CI)
-cd docs/Formal && lake build HPAnalysis      # full Mathlib chain
+python tools/Analysis/EmitMarshalCert.py --check
+cmake --build build --target verify-mrs-proof verify-clay-dossier
+python tools/Analysis/MrsChainHardening.py --check
 ```

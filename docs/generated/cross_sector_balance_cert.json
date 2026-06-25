@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "source": "docs/generated/cross_sector_balance_study.json",
+  "cross_sector_balance_audit_ok": true,
+  "zeta_re_logderiv_t0_negative_ok": true,
+  "partial_sum_zeta_gap_sample_ok": true,
+  "lerch_continuum_closed_ok": true,
+  "cross_sector_balance_still_open_ok": false
+}

@@ -1,0 +1,36 @@
+// GL(4) YMH — discharge vacuum selection + YM continuum cores (Clay-style closure).
+
+mod marshal_ymh_millennium_lemmas {
+
+    use marshal_ym_proof::*;
+    use marshal_ym_millennium_lemmas::*;
+    use marshal_ym_analytic_lemmas::*;
+
+    prove ymh_vacuum_selection_classical: YMHVacuumSelectionClassical {
+        assume:
+            classical Mexican-hat potential V(Phi) = -mu2 Phi^dagger Phi + lam (Phi^dagger Phi)^2 with mu2 > 0, lam > 0 has a unique global minimum at Phi^dagger Phi = mu2/(2 lam) > 0
+            classical second-derivative test at the minimum: d2V/d(Phi^dagger Phi)^2 = 2 lam > 0 (true minimum, not saddle)
+            classical the symmetric point Phi = 0 is a local maximum (unstable) since V''(0) = -mu2 < 0
+            classical spontaneous symmetry breaking selects the broken vacuum orbit; no tunnelling ambiguity at tree level on the certified parameters
+            witness higgs_vev > 0 and higgs_vacuum_is_minimum
+
+        conclude:
+            the broken vacuum is uniquely selected at tree level on the certified SU(2) doublet
+            ⊢ ymh_vacuum_selection_hypothesis discharged (cert-backed ymh_higgs_cert.json)
+    }
+
+    prove ymh_constructive_mass_gap_classical: YMHConstructiveMassGapClassical {
+        assume:
+            classical tree-level YMH physical gap Delta = min(m_H, m_W) > 0 on the broken vacuum (cert-backed)
+            classical YM continuum cores os_continuum_tightness_hypothesis and gap_lower_semicontinuity_hypothesis discharged via ym_os_continuum_tightness_classical and ym_gap_lower_semicontinuity_classical
+            classical the interacting continuum mass gap is at least min(Delta_YM, Delta_tree) when the OS limit exists with uniform finite-volume gap
+            witness physical_gap > 0 and finite_volume_gap_uniform_ok and mass_gap_ok
+            dep ymh_vacuum_selection_classical
+            dep ym_continuum_limit
+
+        conclude:
+            continuum Yang-Mills-Higgs theory on the Clay witness has mass gap >= certified tree-level floor
+            ⊢ ymh_constructive_mass_gap closed modulo discharged YM + vacuum-selection cores
+    }
+
+}

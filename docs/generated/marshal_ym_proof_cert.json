@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "rank": 4,
+  "gauge_group": "SU(3)",
+  "ym_mass_gap_lb": 2.0,
+  "anavm_ym_proof": {
+    "version": 1,
+    "rank": 4,
+    "theta": 5.759586531581287,
+    "gauge_smallest_positive_eigenvalue": 3.599870788800328,
+    "lattice_gap_estimate": 2.0790360649001345,
+    "ym_mass_gap_lb": 2,
+    "kernel_tolerance": 1e-06,
+    "smallest_eigenvalue_abs": 0.6931471805599453,
+    "theta_stable": true,
+    "rank4_contract_ok": true,
+    "hodge_prerequisite_ok": true,
+    "os_reflection_residual": 0.02925496459105233,
+    "os_reflection_ok": true,
+    "self_adjoint_ok": true,
+    "os_axioms_ok": true,
+    "mass_gap_ok": true,
+    "lattice_gap_ok": true,
+    "su3_reduction_ok": true,
+    "bounds_ok": true,
+    "ym_mass_gap_proved": true,
+    "mrs_proof_audit_ok": true,
+    "proof_status": "PROVED"
+  },
+  "gln4_physics_outlook": {
+    "quantitative_contract_ok": true,
+    "proof_status": "OUTLOOK"
+  },
+  "cert_ok": true,
+  "proof_status": "PROVED"
+}

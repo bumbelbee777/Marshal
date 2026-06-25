@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "purpose": "Finite-a Suzuki screw kernel vs Marshal p-circle Weil prime side",
+  "sigma_gauss": 1.0,
+  "prime_match_tol": 1e-06,
+  "screw_marshal_prime_side_match_ok": true,
+  "lambda_a_small_a_positive_ok": true,
+  "small_a_yoshida_region": [
+    {
+      "a": 0.25,
+      "nmax": 1,
+      "marshal_prime": 0.0,
+      "suzuki_prime": 0.0,
+      "rel_err": 0.0,
+      "lambda_proxy": 1.4096176198487373,
+      "psi_error_over_x": -1.0,
+      "n_prime_powers": 0
+    },
+    {
+      "a": 0.5,
+      "nmax": 2,
+      "marshal_prime": 0.3075540697937261,
+      "suzuki_prime": 0.3075540697937262,
+      "rel_err": 1.8049233186375548e-16,
+      "lambda_proxy": 1.579594482343267,
+      "psi_error_over_x": -0.6534264097200273,
+      "n_prime_powers": 1
+    },
+    {
+      "a": 0.75,
+      "nmax": 4,
+      "marshal_prime": 0.6901201722357632,
+      "suzuki_prime": 0.6901201722357633,
+      "rel_err": 1.6087386940572942e-16,
+      "lambda_proxy": 1.112949278286409,
+      "psi_error_over_x": -0.3787733375529999,
+      "n_prime_powers": 3
+    },
+    {
+      "a": 1.0,
+      "nmax": 7,
+      "marshal_prime": 0.93575661944628,
+      "suzuki_prime": 0.9357566194462802,
+      "rel_err": 2.372888423235765e-16,
+      "lambda_proxy": 0.6889792734953863,
+      "psi_error_over_x": -0.13710646981751232,
+      "n_prime_powers": 5
+    }
+  ],
+  "convergence_proxy_vs_a": [
+    {
+      "a": 1.0,
+      "nmax": 7,
+      "marshal_prime": 0.93575661944628,
+      "suzuki_prime": 0.9357566194462802,
+      "rel_err": 2.372888423235765e-16,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": -0.13710646981751232,
+      "n_prime_powers": 5
+    },
+    {
+      "a": 2.0,
+      "nmax": 54,
+      "marshal_prime": 1.0694610205660036,
+      "suzuki_prime": 1.0694610205660038,
+      "rel_err": 2.0762290598260046e-16,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": -0.010080135074620508,
+      "n_prime_powers": 24
+    },
+    {
+      "a": 3.0,
+      "nmax": 403,
+      "marshal_prime": 1.0699501463058174,
+      "suzuki_prime": 1.0699501463058176,
+      "rel_err": 2.0752799155332386e-16,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": 0.0020466678944069906,
+      "n_prime_powers": 98
+    },
+    {
+      "a": 5.0,
+      "nmax": 22026,
+      "marshal_prime": 1.0699501880555913,
+      "suzuki_prime": 1.0699501880555897,
+      "rel_err": 1.4526958841886403e-15,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": -0.0008712369718250631,
+      "n_prime_powers": 2532
+    },
+    {
+      "a": 8.0,
+      "nmax": 200000,
+      "marshal_prime": 1.0699501880555913,
+      "suzuki_prime": 1.0699501880555897,
+      "rel_err": 1.4526958841886403e-15,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": 0.00013469398852728774,
+      "n_prime_powers": 18120
+    },
+    {
+      "a": 10.0,
+      "nmax": 200000,
+      "marshal_prime": 1.0699501880555913,
+      "suzuki_prime": 1.0699501880555897,
+      "rel_err": 1.4526958841886403e-15,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": 0.00013469398852728774,
+      "n_prime_powers": 18120
+    },
+    {
+      "a": 12.0,
+      "nmax": 200000,
+      "marshal_prime": 1.0699501880555913,
+      "suzuki_prime": 1.0699501880555897,
+      "rel_err": 1.4526958841886403e-15,
+      "lambda_proxy": NaN,
+      "psi_error_over_x": 0.00013469398852728774,
+      "n_prime_powers": 18120
+    }
+  ],
+  "verdict": "Finite-a bridge: Suzuki cutoff exp(2a) matches Marshal Weil prime sum at sigma=1. lambda_a proxy > 0 on sampled small a (partial kernel; Yoshida region). Large-a psi error oscillates \u2014 does NOT certify global positivity."
+}

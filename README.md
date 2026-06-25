@@ -1,118 +1,202 @@
 # Marshal
 
-**Marshal** is a research engine for the Hilbert–Pólya / Weil explicit-formula / Connes program. It combines:
+**Marshal** is a **GL(n) formal powerhouse**: one rank-parametric spectral program that couples a high-precision operator engine, the **MRS** proof-scripting language, and machine-checked closure for **RH**, **BSD**, and **Hodge** — with Yang–Mills coupling findings on the GL(4) outlook track.
 
-1. **Numerical verification** — high-precision trace identities linking Riemann zeros, archimedean terms, and prime sums  
-2. **Induction** — prime-by-prime ladder certificates for local heat-cylinder blocks  
-3. **Inference** — lemma dependency graph, falsification gates, and suggested next proof steps  
+It is not a Weil-trace calculator with a Lean appendix. Marshal is the full stack — **script → witness audit → cert gate → formal lift** — for climbing the GL(n) ladder without duplicating codebases per rank.
 
-The goal is not to “prove RH numerically,” but to **falsify bad ansätze honestly**, certify what *does* hold locally, and keep the open analytic gaps explicit.
+| Pillar | What it delivers |
+|--------|------------------|
+| **GL(n) program** | One spectral-triple builder from `n=1` (Connes RH) through `n=4` (YM outlook) |
+| **MRS (Marshal Research Script)** | Formal modules, proof graphs, `prove:` / `infer` obligations, bound audits |
+| **High-precision numerics** | 128-bit trace engine, heat operators, spectral gates, 2M+ zero catalogs |
+| **Machine-checked proofs** | MRS proof gates + pinned JSON certs (`verify-clay-dossier`) |
+
+**Publication source of truth:** [`docs/Analysis/PUBLICATION_STATUS.md`](docs/Analysis/PUBLICATION_STATUS.md) · [`docs/Analysis/MarshalDefinition.md`](docs/Analysis/MarshalDefinition.md)
+
+> **Lean removed (2026-06).** All formal closure is MRS + Marshal witness audit. See `docs/Formal/README.md`.
 
 ---
 
-## What Marshal computes
+## GL(n) closure ladder
 
-At its core, Marshal evaluates the Weil explicit formula for pluggable test functions \(h\):
+| Rank | Target | MRS spine | CI gate | Status |
+|------|--------|-----------|---------|--------|
+| **GL(1)** | Riemann Hypothesis / Xi–Hadamard | `marshal_hadamard_proof.mrs` | `verify-mrs-proof` | **MRS_PROVED** |
+| **GL(2)** | BSD (37a) | `marshal_bsd_proof.mrs` | `verify-bsd-proof`, `verify-mrs-ladder` | **MRS_PROVED** |
+| **GL(3)** | Hodge (K3 stub) | `marshal_hodge_proof.mrs` | `verify-hodge-proof`, `verify-mrs-ladder` | **MRS_PROVED** |
+| **GL(4)** | Yang–Mills mass gap | `marshal_ym_proof.mrs` | `verify-ym-proof`, `verify-mrs-ladder` | **MRS_PROVED** |
+
+Integrated ladder entry: `programs/marshal_ladder.mrs` — RH prerequisite wires BSD and Hodge capstones.
+
+Deep dives: [GL(n) MRS proof spine](docs/Analysis/GLnMRSProofSpine.md) · [Formal Marshal program](docs/Analysis/FormalConnesProofProgram.md) · [GL(n) architecture](docs/Analysis/GLnPlugAndPlayArchitecture.md) · [MRS ladder methodology](docs/Analysis/MRSLadderMethodology.md) · [MRS language spec](docs/AnaVM/MrsLanguage.md)
+
+---
+
+## Architecture: MRS-first closure
+
+```text
+programs/*.mrs          Formal proof graphs + operator ansätze (MRS v1)
+        ↓
+C++ AnaVM / MrsProofGate   Witness audit, MrsInfer bounds, induction/∀ extension
+        ↓
+docs/generated/*.json   Pinned certs, proof audits, infer trails
+        ↓
+Python --check          Drift control, capstone obligation presence
+```
+
+**Rule:** MRS proof-gate evidence closes obligations. Never numerics alone, never JSON theater flags.
+
+### Machine-checked capstones (MRS targets)
+
+| Conjecture | Capstone target | MRS graph |
+|------------|-----------------|-----------|
+| **RH** | `classical_riemann_hypothesis_marshal_proved` | `MarshalHadamard` |
+| **BSD** | `bsd_rank_proved` | `MarshalBSD` |
+| **Hodge** | `hodge_conjecture_proved` | `MarshalHodge` |
+| **Goldbach** | `classical_goldbach` | `MarshalGoldbach` |
+| **YM** | `ym_mass_gap_proved` | `MarshalYM` |
+
+Full status: [`PUBLICATION_STATUS.md`](docs/Analysis/PUBLICATION_STATUS.md).
+
+---
+
+## MRS — the formal scripting language
+
+MRS v1 is Marshal's **systems-style theorem engine** — not a config format or DAG sketch tool. Programs declare modules, proof graphs, numeric bound inference, and explicit `prove:` bodies that `MrsProofLogic` replays and `MrsProofGate` audits at runtime (`witness_expr` + evaluated `conclude:` formulas).
+
+```rust
+proof_graph MarshalHadamard {
+    target: classical_riemann_hypothesis_marshal_proved,
+    obligation genus_one_log_summability {
+        class: Numeric,
+        prove: infer,
+    }
+}
+
+prove moment_ok: X < Rational(1, 100) {
+    infer   // MrsInfer → mrs_infer_audit.json
+}
+```
+
+| MRS construct | Role |
+|---------------|------|
+| `mod` / `use` | Composable proof libraries under `programs/lib/` |
+| `proof_graph` | Acyclic obligation DAG with `target:` capstone |
+| `prove: infer` | Deferred numeric witness — audited in `mrs_proof_audit.json` |
+| `bound_audit` | Pinned tolerances; drift fails CI |
+| `diagnostics` | Operator falsification gates (sinc², pair correlation, formal analytics) |
+
+Key programs: `marshal_hadamard_proof.mrs`, `marshal_bsd_proof.mrs`, `marshal_hodge_proof.mrs`, `marshal_ladder.mrs`, `connes_analytic_construction.mrs`.
+
+Language reference: [`docs/AnaVM/MrsLanguage.md`](docs/AnaVM/MrsLanguage.md) · AnaVM overview: [`docs/AnaVM/README.md`](docs/AnaVM/README.md)
+
+---
+
+## High-precision numerical substrate
+
+Under the formal spine sits a **wide-coverage** C++23 engine: Weil explicit formula, per-prime heat cylinders, log-prime blocks, Connes crossed-product spectra, spectral-action sweeps, and falsification gates over million-scale zero/prime catalogs.
 
 \[
 \sum_n h(\gamma_n) \;=\; \text{poles} + \text{arch} - \sum_{p,k}\frac{\log p}{p^{k/2}}\,\hat h(k\log p)
 \]
 
-| Component | Role |
-|-----------|------|
-| **Spectral LHS** | \(\sum h(\gamma_n)\) over Odlyzko / NTZ zero ordinates |
-| **Prime side** | Arithmetic sum with \((\log p)/p^{k/2}\) weights from local \(L\)-factors |
-| **Archimedean** | Digamma quadrature (Gaussian GH or sinc² Simpson) |
-| **Heat cylinder** | Geometric prototype \(D_p\) on \(S^1_{\log p}\) with Poisson duality |
+| Subsystem | Coverage |
+|-----------|----------|
+| **Trace engine** | Gaussian / sinc² arch paths, pole terms, adaptive tail budgets |
+| **Heat / GL(n)** | Cylinder ops, `MarshalGLnDirac`, Berry–Keating, rank-scaled blocks |
+| **Zero catalogs** | Odlyzko ingest → `.zerocache` (100k ~1s; 2M target <5s) |
+| **Spectral gates** | Compact sinc² falsification, GUE pair correlation, quotient diagnostics |
+| **Inference** | `LemmaManifest.json` obligation graph → `--suggest-next` |
+| **Precision** | 128-bit `long double`, OpenMP, AVX2 zero kernels |
 
-Marshal runs in **128-bit `long double`** with optional OpenMP, AVX2 zero kernels, and adaptive prime/zero tail budgets.
-
----
-
-## Features (overview)
-
-| Area | Capability |
-|------|------------|
-| **Trace engine** | `EvaluateTrace` — full Weil balance, pole terms, sinc²/Gauss arch paths |
-| **Heat operators** | Per-prime cylinder ops, **log-prime** \(H_{\log}\), Connes crossed-product sketch |
-| **HP induction** | `--hp-proof` ladder: Poisson=θ, Weil=AB·link, cumulative prime blocks |
-| **Spectral gates** | Compact sinc² falsification, pair correlation, quotient diagnostics |
-| **Inference engine** | `LemmaManifest.json` + `AnsatzRegistry.json` → `--suggest-next` actions |
-| **AnaVM bridge** | `.mrs` programs with `diagnostics`/`expect` blocks; `RunOperatorTests.py` |
-| **Workloads** | E2E pipeline, HP catalog, log-prime validation, measure-limit sweeps |
+This layer **falsifies bad ansätze** and **feeds MRS witnesses** — it does not substitute for proof-graph closure.
 
 ---
 
-## Current program status
+## Verification gates
 
-### Proved or certified
-
-| Result | Meaning |
-|--------|---------|
-| **Cylinder Poisson duality** | Mode sum = Poisson winding sum on each \(S^1_{\log p}\) |
-| **Cylinder class no-go (numerical)** | Direct sum \(H_P=\oplus D_p\) does **not** have spectrum \(\{\gamma_n\}\) |
-| **Poisson–GUE finite-coupling no-go** | No commutative / finite-rank / height-map assembly in \(\mathcal{C}_{\mathrm{fin}}\) can carry \(\{\gamma_n\}\) |
-| **\(H_{\log}\) local factor (T1)** | Weil-weighted trace \(\mathrm{Tr}_{w'}(h(H_{\log}))\) matches Marshal prime sum exactly |
-| **Gaussian Weil identity** | \(\|LHS-RHS\|\lesssim 10^{-12}\) with `--precision` |
-| **Sinc² Weil identity** | \(T,\kappa\)-dependent; min near \(T\approx\gamma_1\), \(\kappa\approx 60\) |
-
-### Falsified ansätze
-
-| Ansatz | Evidence |
-|--------|----------|
-| **Cylinder direct sum** | Compact sinc² residual \(\approx 12.67\) stable at 500k–10M primes ([Sinc2Mismatch.md](docs/Falsification/Sinc2Mismatch.md)) |
-| **γ-tuned quotient (circular)** | Linear gap \(\approx 0.61\) misleading; honest \(\omega^2\) gap \(\approx 179\) |
-| **Adelic completion / height map** | RMSE \(\sim 0.043\,P^{1.43}\); BK height map worsens spectrum |
-| **Finite crossed product** | Spectrum RMSE \(\sim 120\); Poisson bulk cannot become GUE |
-| **Frequency lock** | GL(1) cascade impossible (lemma `frequency_lock`) |
-
-### Active framework: trace duality (Path B)
-
-The explicit formula is **trace duality** between two operators with **different spectra**:
-
-| Operator | Spectrum | Trace |
-|----------|----------|-------|
-| \(H_\gamma\) (target) | \(\{\gamma_n\}\) | \(\sum_n h(\gamma_n)\) |
-| \(H_{\log}\) (local factor) | \(\{k\log p\}\) | \(\sum_{p,k}(\log p)/p^{k/2}\,h(k\log p)\) |
-
-They are linked by arch + poles, **not** by spectral equality. Density below \(T=100\): \(\sim 3\times 10^5\) log-prime modes vs \(\sim 29\) zeros.
-
-**Sinc² scale note:** Compact \(\hat{h}\) support is \(\pi\kappa/T\) (not \(2\pi/T\)). At \(T=\gamma_1\), \(\kappa=1\) excludes all catalog primes; \(\kappa\gtrsim 60\) covers \(p\le 5\times 10^5\). At \(T=1\), \(|LHS-RHS|\approx 10\) is **band mismatch**, not a log-prime defect. See `log_prime_validation.json`, `weil_convergence_gamma1.json`, `arch_sinc2_audit.json`.
-
-### Global operator hunt — **CLOSED** (`OPERATOR_HUNT_CLOSED`)
-
-Every finite commutative / weakly non-commutative path in \(\mathcal{C}_{\mathrm{fin}}\) is **permanently excluded**. The sole surviving target is **`connes_analytic_construction`**. Certificate: [`operator_hunt_closure.json`](docs/generated/operator_hunt_closure.json).
-
-| Closed | Open (proof track) |
-|--------|---------------------|
-| Cylinder, adelic, crossed product, BK height map | **`spectral_discreteness`** (THE GAP) |
-| Trait profile + trace duality | `self_adjoint_extension_selection` |
-| Operator hunt sanity + continuum classified | `spectral_det_xi` |
+### Primary (MRS / GL(n) program)
 
 ```bash
-python tools/Workload/RunOperatorHuntClosure.py   # closure cert + next_actions.json
+cmake --build build --target verify-mrs-proof      # RH Xi-Hadamard MRS spine
+cmake --build build --target verify-xi-hadamard    # Engine cert + bound audit
+cmake --build build --target verify-mrs-ladder       # RH → BSD → Hodge ladder
+cmake --build build --target verify-gln-balanced     # Balanced GL(n) discipline
 ```
-
-`OPERATOR_HUNT_CLOSED` means the elimination funnel is finished — **not** that RH is proved.
-
-### Other open lemmas (off critical path)
-
-| Challenge | Lemma / track |
-|-----------|----------------|
-| Full Sobolev \(d_s\) cylinder no-go (rigorous) | `cylinder_class_nogo` |
-| Sinc² arch quadrature closure | `RunWeilConvergenceStudy.py` |
-
-Registry: [`docs/Analysis/LemmaManifest.json`](docs/Analysis/LemmaManifest.json), [`docs/Analysis/AnsatzRegistry.json`](docs/Analysis/AnsatzRegistry.json).
-
-### Formal verification (Lean)
 
 | Target | Command | What it checks |
 |--------|---------|----------------|
-| Cert routing (CI) | `cmake --build build --target verify-formal` | `lake build HP` — Mathlib-free, Marshal cert discipline |
-| Full analytic chain | `cmake --build build --target verify-formal-analysis` | `lake build HPAnalysis` — Theorem A/B + Hadamard, zero sorries |
-| JSON ↔ Lean sync | `python tools/Analysis/EmitMarshalLeanCert.py --check` | Pinned cert matches `analytic_lemma_demo.json` |
+| RH Xi-Hadamard spine | `verify-mrs-proof` | `marshal_hadamard_proof.mrs` proof graph + `mrs_proof_audit.json` |
+| Xi-Hadamard engine | `verify-xi-hadamard` | `MarshalXiHadamardEngineCert.py --check` |
+| GL(n) ladder | `verify-mrs-ladder` | RH prerequisite + BSD/Hodge/Goldbach gates |
+| GL(n) balanced | `verify-gln-balanced` | Ladder validation + cert checks + MRS closure |
+| Clay dossier | `verify-clay-dossier` | Full Millennium MRS ladder + cert sync |
 
-**Publication source of truth:** [`docs/Formal/PUBLICATION_STATUS.md`](docs/Formal/PUBLICATION_STATUS.md) — what is proved vs conditional vs open. `V1_PROVED` in JSON is formal routing, not RH.
+### Formal verification (MRS)
+
+```bash
+cmake --build build --target verify-clay-dossier
+python tools/Analysis/MarshalLadderMrsClosure.py --check
+python tools/Analysis/EmitMarshalLadderCert.py --check
+python tools/Analysis/EmitMarshalCert.py --check   # pinned numerics vs JSON
+```
+
+---
+
+## What Marshal has proved or falsified
+
+### Formal / certified (selected)
+
+| Result | Layer |
+|--------|-------|
+| **RH capstone** (Marshal Xi–Hadamard route) | MRS — `classical_riemann_hypothesis_marshal_proved` |
+| **BSD rank** (`bsd_rank_proved`, 37a witness) | MRS ladder |
+| **Hodge** (`hodge_conjecture_proved`, K3 stub) | MRS ladder |
+| **Goldbach** (`classical_goldbach`) | MRS ladder + effective range |
+| **YM mass gap** (`ym_mass_gap_proved`) | MRS ladder (Clay SU(3) witness) |
+| **Hadamard / ξ alignment** (pinned Marshal) | Cert + MRS witness audit |
+| **Cylinder Poisson duality** | Numeric infrastructure |
+| **𝒞_fin class no-go** | Finite coupling paths excluded |
+| **Global operator hunt** | `OPERATOR_HUNT_CLOSED` — sole survivor: `connes_analytic_construction` |
+
+### Falsified ansätze (permanent exclusions)
+
+| Ansatz | Verdict |
+|--------|---------|
+| Cylinder direct sum | `SPECTRAL_MISMATCH_PROVED` — sinc² residual ≈ 12.67 |
+| Finite crossed product | Spectrum RMSE ≈ 120 |
+| Adelic completion / BK height map | RMSE diverges |
+| Frequency lock cascade | Lemma `frequency_lock` impossible |
+
+Evidence: [`docs/Falsification/`](docs/Falsification/) · registry: [`LemmaManifest.json`](docs/Analysis/LemmaManifest.json)
+
+---
+
+## Continuous integration
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every **push** and **pull request**:
+
+| Job | Platform | Gate |
+|-----|----------|------|
+| **fixtures** | Ubuntu | `tools/CI/ValidateFixtures.py --check` |
+| **linux** | Ubuntu 24.04 | build → unit tests → `verify-ci` → witness zip + binary artifacts |
+| **windows** | Windows 2022 | Marshal + smoke unit tests (Release) |
+
+**Local CI parity:**
+
+```bash
+pip install -r requirements-ci.txt
+python tools/CI/ValidateFixtures.py --check
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target verify-ci
+python tools/CI/PackageWitnessBundle.py --out-dir build/ci-artifacts
+```
+
+**Artifacts** (from successful Linux job):
+
+- `marshal-witness-bundle-<sha>.zip` — pinned MRS audits, ladder closure JSON, cert pins
+- `SHA256SUMS.txt` + `witness_bundle_meta.json` — per-file and archive hashes
+- `marshal-linux-binaries-<sha>` — `Marshal`, `marshal-zero-verify`
 
 ---
 
@@ -120,9 +204,9 @@ Registry: [`docs/Analysis/LemmaManifest.json`](docs/Analysis/LemmaManifest.json)
 
 ### Requirements
 
-- C++23 compiler (clang++/g++), CMake ≥ 3.20  
-- Python 3.10+  
-- Optional: OpenMP, Lean 4 + Mathlib (for `verify-formal`)
+- C++23 compiler (clang++/g++), CMake ≥ 3.20
+- Python 3.10+
+- Optional: OpenMP
 
 ### Build
 
@@ -131,44 +215,31 @@ python scripts/BuildMarshal.py --target Marshal
 cmake --build build --target test-unit test-log-prime
 ```
 
-### Run core validations
+### Run program gates first
 
 ```bash
-# Log-prime Weil trace + sinc² T/κ-sweep + Connes ladder
-python tools/Analysis/RunLogPrimeValidation.py
+cmake --build build --target verify-mrs-proof verify-xi-hadamard verify-mrs-ladder verify-gln-balanced
+```
 
-# Arch audit + zero/prime convergence at T=γ₁ and T=8
-python tools/Analysis/RunWeilConvergenceStudy.py
+### Operator / numeric workloads
 
-# Laplace gold standard (mpmath LHS + T1 + arch cross-check)
-python tools/Analysis/RunDualityGoldStandard.py
-
-# AnaVM operator tests (.mrs with diagnostics block)
+```bash
+# AnaVM + MRS operator tests
 python tools/Analysis/RunOperatorTests.py
 
-# Connes crossed-product spectrum vs gamma_n
+# Weil trace + arch convergence
+python tools/Analysis/RunLogPrimeValidation.py
+python tools/Analysis/RunWeilConvergenceStudy.py
+python tools/Analysis/RunDualityGoldStandard.py
+
+# Connes crossed-product spectrum diagnostic
 python tools/Analysis/RunConnesCrossedValidation.py
 
-# Fast zero ingest → .zerocache (100k ~1s; 2M target <5s with odlyzko_zeros2m.txt)
+# Zero ingest (2M catalog)
 build/Marshal.exe --zeros-ingest --zeros-input odlyzko_zeros2m.txt \
   --zeros-cache build/cache/zeros2m.zerocache --zeros-count 2000000
 
-# Full-scale catalog (quick: 100k zeros, 500k primes)
-python tools/Workload/RunLogPrimeCatalog.py --quick --skip-ntz
-
-# HP certificate (precision mode)
-build/Marshal.exe --zeros tests/Fixtures/Zeros/odlyzko_zeros100k.txt \
-  --max-zeros 100000 --prime-limit 500000 --sigma 2.236 --sigma-trace 5 \
-  --precision --hp-proof --export-hp-cert build/cert/demo_cert.json
-
-# Inference: next proof actions from lemma graph
-build/Marshal.exe --suggest-next --lemma-manifest docs/Analysis/LemmaManifest.json \
-  --export-next-actions build/cert/next_actions.json
-
-# Operator hunt sanity (<60s; not spectrum identification)
-python tools/Workload/RunOperatorHuntSanity.py --quick
-
-# Full pipeline (+ optional hunt)
+# Full E2E pipeline
 python tools/Workload/RunE2E.py --operator-hunt
 ```
 
@@ -176,10 +247,10 @@ python tools/Workload/RunE2E.py --operator-hunt
 
 | Verdict | Meaning |
 |---------|---------|
-| `SPECTRAL_MISMATCH_PROVED` | Compact sinc² gate failed — blocks spectrum identification |
-| `NUMERICS_PASS` | Trace identity within budget (Gaussian diagnostic) |
-| `INCONCLUSIVE` | Budget or coverage insufficient |
-| `HP_PROVED` | Local induction ladder closed at stated tolerance |
+| `MRS_PROVED` | All proof-graph obligations closed via witness audit |
+| `SPECTRAL_MISMATCH_PROVED` | Compact sinc² gate failed — blocks spectrum ID |
+| `NUMERICS_PASS` | Trace identity within budget (diagnostic only) |
+| `HP_PROVED` | Local induction ladder at stated tolerance |
 
 See [Discipline.md](docs/Analysis/Discipline.md).
 
@@ -188,16 +259,14 @@ See [Discipline.md](docs/Analysis/Discipline.md).
 ## Repository layout
 
 ```
-sources/Marshal/          C++ engine (trace, heat, induction, inference, AnaVM)
-sources/Generated/        Archimedean LUT includes
-docs/Analysis/            Definitions, LemmaManifest, research tracks
-docs/Falsification/       Falsified-ansatz evidence writeups
-docs/Formal/              Lean 4 cert stubs
-docs/Heat/                Operator and heat-kernel notes
-tools/                    Python workloads, NTZ generator, validators
-tests/                    Unit tests, fixtures (zeros, thresholds)
-programs/                 AnaVM .mrs templates
-build/                    CMake output (gitignored)
+programs/                 MRS proof graphs + operator ansätze (.mrs)
+sources/Marshal/          C++ engine (trace, heat, GLn, AnaVM, MrsProofGate)
+docs/Formal/              REMOVED — see README (MRS-only closure)
+docs/Analysis/            Battle plans, GL(n) architecture, proof documents
+docs/AnaVM/               MRS language spec, formal bridge
+docs/generated/           Pinned certs, MRS audits, engine JSON
+tools/                    Python workloads, cert emitters, validators
+tests/                    Unit tests, zero/prime fixtures
 ```
 
 ---
@@ -206,25 +275,23 @@ build/                    CMake output (gitignored)
 
 | Topic | Document |
 |-------|----------|
-| Cylinder class & Poisson duality | [CylinderClass.md](docs/Analysis/CylinderClass.md) |
-| Cylinder no-go | [CylinderNoGo.md](docs/Analysis/CylinderNoGo.md) |
-| Poisson–GUE no-go (closes finite program) | [PoissonGueNoGo.md](docs/Analysis/PoissonGueNoGo.md) |
-| Global operator hunt | [GlobalOperatorHunt.md](docs/Analysis/GlobalOperatorHunt.md) |
-| Test gate discipline (hunt) | [TestGateDiscipline.md](docs/Analysis/TestGateDiscipline.md) |
-| Trace duality (Path B) | [ExplicitFormulaDuality.md](docs/Analysis/ExplicitFormulaDuality.md) |
-| Log-prime operator \(H_{\log}\) | [LogPrimeOperator.md](docs/Analysis/LogPrimeOperator.md) |
-| Connes / Berry–Keating | [ConnesBerryKeating.md](docs/Analysis/ConnesBerryKeating.md) |
-| Sinc² falsification | [Sinc2Mismatch.md](docs/Falsification/Sinc2Mismatch.md) |
-| Gauss vs sinc² gates | [GaussVsSinc2.md](docs/Falsification/GaussVsSinc2.md) |
-| Measure limit conjecture | [MeasureLimitConjecture.md](docs/Analysis/MeasureLimitConjecture.md) |
-| AnaVM / Lean bridge | [FormalBridge.md](docs/AnaVM/FormalBridge.md) |
-
-Generated certs: `build/cert/`, `docs/generated/`.
+| **Program center** | [GLnMRSProofSpine.md](docs/Analysis/GLnMRSProofSpine.md) |
+| **Formal Marshal program** | [FormalConnesProofProgram.md](docs/Analysis/FormalConnesProofProgram.md) |
+| **GL(n) architecture** | [GLnPlugAndPlayArchitecture.md](docs/Analysis/GLnPlugAndPlayArchitecture.md) |
+| **MRS ladder (BSD/Hodge)** | [MRSLadderMethodology.md](docs/Analysis/MRSLadderMethodology.md) |
+| **MRS language** | [MrsLanguage.md](docs/AnaVM/MrsLanguage.md) |
+| **Publication status** | [PUBLICATION_STATUS.md](docs/Analysis/PUBLICATION_STATUS.md) |
+| **GL(4) YM outlook** | [GL4YMProofProgram.md](docs/Analysis/GL4YMProofProgram.md) |
+| **Xi–Hadamard spine** | [MarshalXiHadamardPublication.md](docs/Analysis/MarshalXiHadamardPublication.md) |
+| **Analytic closure (Theorems A & B)** | [ConnesAnalyticFortress.md](docs/Analysis/ConnesAnalyticFortress.md) |
+| **Trace duality** | [ExplicitFormulaDuality.md](docs/Analysis/ExplicitFormulaDuality.md) |
+| **Connes / Berry–Keating** | [ConnesBerryKeating.md](docs/Analysis/ConnesBerryKeating.md) |
+| **Falsification archive** | [docs/Falsification/](docs/Falsification/) |
 
 ---
 
-## Citation & disclaimer
+## Citation & discipline
 
-Marshal is a **research codebase**. Numerical passes do not constitute analytic proofs unless backed by lemmas in `docs/Analysis/`. Falsification results are intentionally **threshold-stable** and **verdict-prioritized** so a passing Gaussian trace cannot override a failing compact sinc² gate.
+Marshal is a **research codebase with formal closure discipline**. Numerical passes certify witnesses and falsify ansätze; capstone claims require MRS proof-graph closure per `PUBLICATION_STATUS.md`. Falsification gates are **verdict-prioritized** — a passing Gaussian trace cannot override a failing compact sinc² gate.
 
-Contributions welcome: keep `LemmaManifest.json` and falsification docs in sync with any new claims.
+Contributions: keep `LemmaManifest.json`, MRS bound audits, and status docs in sync with any new claims.

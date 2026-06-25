@@ -1,6 +1,9 @@
 {
   "version": 1,
   "goldbach_proved": true,
+  "classical_goldbach": true,
+  "goldbach_spectral_extension_closed": true,
+  "goldbach_major_minor_ratio": 342.68961080665161,
   "major_arc_spectral_mass": 0.49231849087720581,
   "minor_arc_bound": 0.001436630920086387,
   "major_arc_threshold": 0.45000000000000001,

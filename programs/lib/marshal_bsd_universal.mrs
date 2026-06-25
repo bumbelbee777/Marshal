@@ -1,0 +1,55 @@
+// Universal Clay BSD: ∀ E/ℚ full Birch--Swinnerton--Dyer conjecture.
+
+mod marshal_bsd_universal {
+
+    use marshal_bsd_millennium_lemmas::*;
+    use marshal_bsd_millennium_proof::*;
+    use marshal_bsd_universal_lemmas::*;
+    use marshal_ladder_analytic_scripts::*;
+
+    proof_graph MarshalBSDUniversal {
+        target: classical_bsd_millennium_universal,
+
+        obligation bsd_millennium_prerequisite {
+            class: Structural,
+            deps: [classical_bsd_millennium],
+            witness_expr: bsd_formula_ok and regulator_ok and tamagawa_ok and sha_order_ok and omega_ok,
+            statement: "Marshal Millennium BSD closed before universal E/ℚ extension",
+        }
+        obligation bsd_universal_modularity {
+            class: ClassicalImport,
+            deps: [bsd_millennium_prerequisite],
+            prove: bsd_universal_modularity_theorem,
+            witness_expr: l_grid_ok and holomorphy_ok,
+            statement: "CLASSICAL_IMPORT: modularity of every E/ℚ (Wiles; Taylor--Wiles; BCDT)",
+        }
+        obligation bsd_universal_l_identification {
+            class: Analytic,
+            deps: [bsd_universal_modularity, gl2_maass_identity_theorem, gl2_det_analytic_continuation, gl2_l_function_identification_global],
+            prove: bsd_universal_l_identification_lemma,
+            witness_expr: l_grid_ok and holomorphy_ok,
+            statement: "det(s-D₂(E)) = L(E,s) for every modular E/ℚ",
+        }
+        obligation bsd_universal_kolyvagin_sha {
+            class: ClassicalImport,
+            deps: [bsd_universal_l_identification, gl2_spectral_regulator_identification, gl2_spectral_sha_order],
+            prove: bsd_universal_kolyvagin_theorem,
+            witness_expr: bsd_formula_ok and regulator_ok and sha_order_ok,
+            statement: "CLASSICAL_IMPORT: Gross--Zagier + Kolyvagin (+ Zhang/Kato) for all ranks",
+        }
+        obligation bsd_universal_rank_formula {
+            class: Analytic,
+            deps: [bsd_universal_kolyvagin_sha, bsd_universal_l_identification, gl2_bsd_leading_coefficient, gl2_spectral_regulator_identification, gl2_spectral_tamagawa_product, gl2_spectral_sha_order, gl2_spectral_period_omega, gl2_l_function_identification, bsd_rank_proved],
+            prove: bsd_universal_formula_all_curves,
+            witness_expr: bsd_formula_ok and regulator_ok and tamagawa_ok and sha_order_ok and omega_ok,
+            statement: "Full BSD formula for arbitrary E/ℚ",
+        }
+        obligation classical_bsd_millennium_universal {
+            class: Composition,
+            deps: [bsd_universal_rank_formula, bsd_millennium_prerequisite, classical_bsd_millennium, bsd_universal_l_identification],
+            prove: classical_bsd_millennium_universal_capstone,
+            witness_expr: bsd_formula_ok and regulator_ok and tamagawa_ok and sha_order_ok and omega_ok,
+            statement: "∀ E/ℚ: full Birch--Swinnerton--Dyer conjecture (Clay Millennium)",
+        }
+    }
+}

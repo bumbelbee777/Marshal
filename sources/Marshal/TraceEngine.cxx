@@ -14,6 +14,7 @@
 #include "Heat/Common.hxx"
 #include "Heat/HeatCylinderOperator.hxx"
 #include "Kernel/ScaleHotPaths.hxx"
+#include "Kernel/SoaStreaming.hxx"
 #include "Numerics/TestFunctions.hxx"
 
 namespace {
@@ -402,63 +403,6 @@ Real archimedean_for_tf(const TestFunction& tf, Real sigma, Marshal::SimdLevel s
     return arch_generic_adaptive(tf, L0, simd, precision_mode, arch_pts, eps);
 }
 
-Real zero_sum_gauss_avx2(Real sigma, const double* gammas, size_t n) {
-#if defined(WEIL_HAVE_AVX2)
-    const double inv_2ss = 1.0 / (2.0 * static_cast<double>(sigma * sigma));
-    const int nchunks = static_cast<int>((n + kZeroChunk - 1) / kZeroChunk);
-    std::vector<Real> parts;
-#ifdef _OPENMP
-    parts.resize(omp_get_max_threads(), 0.0L);
-    #pragma omp parallel
-    {
-        const int tid = omp_get_thread_num();
-        Real local = 0.0L;
-        #pragma omp for schedule(static)
-        for (int c = 0; c < nchunks; ++c) {
-            const size_t off = static_cast<size_t>(c) * kZeroChunk;
-            const size_t len = std::min(static_cast<size_t>(kZeroChunk), n - off);
-            const double* src = gammas + off;
-            size_t i = 0;
-            for (; i + 4 <= len; i += 4) {
-                __m256d g = _mm256_loadu_pd(src + i);
-                __m256d e = exp_neg_sq4_avx2(g, inv_2ss);
-                alignas(32) double t[4];
-                _mm256_storeu_pd(t, e);
-                local += static_cast<Real>(t[0] + t[1] + t[2] + t[3]);
-            }
-            for (; i < len; ++i) {
-                local += static_cast<Real>(std::exp(-inv_2ss * src[i] * src[i]));
-            }
-        }
-        parts[static_cast<size_t>(tid)] = local;
-    }
-#else
-    Real local = 0.0L;
-    for (size_t off = 0; off < n; off += kZeroChunk) {
-        const size_t len = std::min(static_cast<size_t>(kZeroChunk), n - off);
-        const double* src = gammas + off;
-        for (size_t i = 0; i + 4 <= len; i += 4) {
-            __m256d g = _mm256_loadu_pd(src + i);
-            __m256d e = exp_neg_sq4_avx2(g, inv_2ss);
-            alignas(32) double t[4];
-            _mm256_storeu_pd(t, e);
-            local += static_cast<Real>(t[0] + t[1] + t[2] + t[3]);
-        }
-        for (size_t i = (len / 4) * 4; i < len; ++i) {
-            local += static_cast<Real>(std::exp(-inv_2ss * src[i] * src[i]));
-        }
-    }
-    parts.push_back(local);
-#endif
-    return 2.0L * pairwise_sum(parts);
-#else
-    (void)sigma;
-    (void)gammas;
-    (void)n;
-    return 0.0L;
-#endif
-}
-
 Real zero_sum_h_ld_batched(const TestFunction& tf, const Real* gammas, size_t n) {
     if (n == 0) {
         return 0.0L;
@@ -503,7 +447,9 @@ Real zero_sum_h_batched(const TestFunction& tf, Real sigma, const double* gammas
         return 0.0L;
     }
     if (std::string(tf.name()) == "gauss" && simd == Marshal::SimdLevel::AVX2) {
-        return zero_sum_gauss_avx2(sigma, gammas, n);
+        const double heat_t = 1.0 / (2.0 * static_cast<double>(sigma * sigma));
+        return static_cast<Real>(
+            Marshal::Kernel::FusedZeroGaussianSumScale(gammas, n, heat_t));
     }
     const int nchunks = static_cast<int>((n + kZeroChunk - 1) / kZeroChunk);
     std::vector<Real> parts;
@@ -568,78 +514,9 @@ Real pole_terms(const TestFunction& tf, Real sigma) {
 
 void accumulate_prime_blocks(const Marshal::Heat::PrimeCatalog& cat, const TestFunction& tf,
                              Real tau, Real /*link_n*/, Real eps, Real& prime_out, Real& heat_out,
-                             bool use_kahan = false) {
-    const size_t n = cat.p.size();
-    const int nbatches = static_cast<int>((n + kPrimeBatch - 1) / kPrimeBatch);
-    std::vector<Real> wp;
-    std::vector<Real> hp;
-#ifdef _OPENMP
-    wp.resize(omp_get_max_threads(), 0.0L);
-    hp.resize(omp_get_max_threads(), 0.0L);
-    #pragma omp parallel
-    {
-        const int tid = omp_get_thread_num();
-        Kahan wl;
-        Kahan hl;
-        Real wl_plain = 0.0L;
-        Real hl_plain = 0.0L;
-        #pragma omp for schedule(static, kPrimeBatch)
-        for (int b = 0; b < nbatches; ++b) {
-            const size_t i0 = static_cast<size_t>(b) * kPrimeBatch;
-            const size_t i1 = std::min(i0 + kPrimeBatch, n);
-            for (size_t i = i0; i < i1; ++i) {
-                HeatCylinderOp op(cat, i);
-                const int km = cat.kmax_adaptive[i];
-                const Real w = op.prime_block_raw(tf, km, eps);
-                const Real h = op.ab_heat_block(tau, km, eps);
-                if (use_kahan) {
-                    wl.add(w);
-                    hl.add(h);
-                } else {
-                    wl_plain += w;
-                    hl_plain += h;
-                }
-            }
-        }
-        wp[static_cast<size_t>(tid)] = use_kahan ? wl.total() : wl_plain;
-        hp[static_cast<size_t>(tid)] = use_kahan ? hl.total() : hl_plain;
-    }
-    if (use_kahan) {
-        Kahan wm;
-        Kahan hm;
-        for (Real v : wp) {
-            wm.add(v);
-        }
-        for (Real v : hp) {
-            hm.add(v);
-        }
-        prime_out = wm.total();
-        heat_out = hm.total();
-    } else {
-        prime_out = pairwise_sum(wp);
-        heat_out = pairwise_sum(hp);
-    }
-#else
-    if (use_kahan) {
-        Kahan wl;
-        Kahan hl;
-        for (size_t i = 0; i < n; ++i) {
-            HeatCylinderOp op(cat, i);
-            const int km = cat.kmax_adaptive[i];
-            wl.add(op.prime_block_raw(tf, km, eps));
-            hl.add(op.ab_heat_block(tau, km, eps));
-        }
-        prime_out = wl.total();
-        heat_out = hl.total();
-    } else {
-        for (size_t i = 0; i < n; ++i) {
-            HeatCylinderOp op(cat, i);
-            const int km = cat.kmax_adaptive[i];
-            prime_out += op.prime_block_raw(tf, km, eps);
-            heat_out += op.ab_heat_block(tau, km, eps);
-        }
-    }
-#endif
+                             bool use_kahan = false, bool force_scale = false) {
+    Marshal::Kernel::AccumulatePrimeBlocksStreaming(cat, tf, tau, eps, use_kahan, force_scale,
+                                                    prime_out, heat_out);
 }
 
 }  // namespace
@@ -650,7 +527,7 @@ TraceResult EvaluateTrace(const TestFunction& tf, Real sigma, const std::vector<
                         const std::vector<Real>& gammas_ld, const Heat::PrimeCatalog& cat,
                         ZeroKernel zk, SimdLevel simd, Real eps, bool include_trivial,
                         bool precision_mode, int arch_pts, bool quick_sinc2_arch,
-                        const Heat::ArchimedeanBoundarySpec* arch_spec) {
+                        const Heat::ArchimedeanBoundarySpec* arch_spec, bool scale_mode) {
     TraceResult r;
     const Real tau = tau_from_sigma(sigma);
     const Real link_n = sigma * sqrtl(2.0L / Marshal::Heat::kPi);
@@ -669,14 +546,8 @@ TraceResult EvaluateTrace(const TestFunction& tf, Real sigma, const std::vector<
 
     Real prime_raw = 0;
     Real heat_raw = 0;
-    const size_t scale_thr = Marshal::Kernel::kScalePrimeThreshold;
-    const bool scale_gauss = (std::string(tf.name()) == "gauss")
-        && cat.p.size() >= scale_thr;
-    if (scale_gauss) {
-        Marshal::Kernel::AccumulateGaussPrimeBlocks(cat, sigma, tau, eps, prime_raw, heat_raw);
-    } else {
-        accumulate_prime_blocks(cat, tf, tau, link_n, eps, prime_raw, heat_raw, precision_mode);
-    }
+    accumulate_prime_blocks(cat, tf, tau, link_n, eps, prime_raw, heat_raw, precision_mode,
+                           scale_mode);
     r.prime = prime_raw / (2.0L * Marshal::Heat::kPi);
     r.heat_prime_ab = heat_raw * link_n;
     Kahan geom;
@@ -698,7 +569,8 @@ TraceResult EvaluateTracePrefix(const TestFunction& tf, Real sigma, const double
                                 const Heat::PrimeCatalog& cat, ZeroKernel zk, SimdLevel simd,
                                 Real eps, bool include_trivial, bool precision_mode, int arch_pts,
                                 bool quick_sinc2_arch,
-                                const Heat::ArchimedeanBoundarySpec* arch_spec) {
+                                const Heat::ArchimedeanBoundarySpec* arch_spec,
+                                bool scale_mode) {
     TraceResult r;
     const Real tau = tau_from_sigma(sigma);
     const Real link_n = sigma * sqrtl(2.0L / Marshal::Heat::kPi);
@@ -715,13 +587,8 @@ TraceResult EvaluateTracePrefix(const TestFunction& tf, Real sigma, const double
 
     Real prime_raw = 0;
     Real heat_raw = 0;
-    const size_t scale_thr = Marshal::Kernel::kScalePrimeThreshold;
-    const bool scale_gauss = (std::string(tf.name()) == "gauss") && cat.p.size() >= scale_thr;
-    if (scale_gauss) {
-        Marshal::Kernel::AccumulateGaussPrimeBlocks(cat, sigma, tau, eps, prime_raw, heat_raw);
-    } else {
-        accumulate_prime_blocks(cat, tf, tau, link_n, eps, prime_raw, heat_raw, precision_mode);
-    }
+    accumulate_prime_blocks(cat, tf, tau, link_n, eps, prime_raw, heat_raw, precision_mode,
+                           scale_mode);
     r.prime = prime_raw / (2.0L * Marshal::Heat::kPi);
     r.heat_prime_ab = heat_raw * link_n;
     Kahan geom;

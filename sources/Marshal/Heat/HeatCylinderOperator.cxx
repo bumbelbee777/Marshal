@@ -1,5 +1,7 @@
 #include "HeatCylinderOperator.hxx"
 
+#include "Kernel/FusedHotPaths.hxx"
+#include "Kernel/ScaleHotPaths.hxx"
 #include "Numerics/Support.hxx"
 
 namespace Marshal::Heat {
@@ -14,10 +16,7 @@ HeatCylinderOp::HeatCylinderOp(const PrimeCatalog& cat, size_t idx)
 Real HeatCylinderOp::heat_trace_modes(Real t, int nmax) const {
     Kahan acc;
     acc.add(1.0L);
-    for (int n = 1; n <= nmax; ++n) {
-        const Real lam = 2.0L * kPi * static_cast<Real>(n) * inv_logp;
-        acc.add(2.0L * std::exp(-t * lam * lam));
-    }
+    acc.add(2.0L * Kernel::FusedHeatTracePoisson(t, inv_logp, nmax));
     return acc.total() * inv_logp;
 }
 
@@ -33,19 +32,7 @@ Real HeatCylinderOp::heat_trace_theta(Real t, int kmax) const {
 }
 
 Real HeatCylinderOp::ab_heat_block(Real t, int kmax, Real eps) const {
-    Kahan acc;
-    const Real inv4t = 1.0L / (4.0L * t);
-    Real ppow = sqrtp;
-    for (int k = 1; k <= kmax; ++k) {
-        const Real u = static_cast<Real>(k) * logp;
-        const Real term = (logp / ppow) * std::exp(-u * u * inv4t);
-        acc.add(term);
-        if (term < eps) {
-            break;
-        }
-        ppow *= sqrtp;
-    }
-    return acc.total();
+    return Kernel::FusedAbHeatBlock(t, logp, kmax, eps);
 }
 
 Real HeatCylinderOp::prime_block_raw(const TestFunction& tf, int kmax, Real eps) const {

@@ -12,7 +12,12 @@ struct MrsInferAuditEntry {
     std::string source;
     std::string rational_num;
     std::string rational_den;
-    std::string emitted_lean_theorem;
+    std::string emitted_theorem_id;
+    /// Provenance: which JSON file and field the bound came from (empty = compile-time heuristic).
+    std::string provenance_engine;
+    std::string provenance_field;
+    /// If true, the rational was resolved from the cert manifest rather than a name heuristic.
+    bool from_manifest = false;
     bool ok = false;
 };
 

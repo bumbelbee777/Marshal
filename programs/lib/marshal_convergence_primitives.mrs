@@ -1,0 +1,10 @@
+// MRS v1 convergence combinator — mesh / sequence limits + one- and two-sided bounds.
+// Runtime: MrsConvergenceExtension + MrsMath array/sequence builtins.
+
+mod marshal_convergence_primitives {
+
+    use marshal_math_primitives::*;
+
+    pub const CONVERGENCE_MESH_TAIL_TOL := 0.34
+
+}

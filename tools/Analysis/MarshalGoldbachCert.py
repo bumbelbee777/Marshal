@@ -12,6 +12,8 @@ AUDIT = ROOT / "docs" / "generated" / "mrs_ladder_proof_audit.json"
 
 PINNED = {
     "goldbach_proved": True,
+    "classical_goldbach": True,
+    "goldbach_spectral_extension_closed": True,
     "major_arc_threshold": 0.45,
     "minor_arc_ub": 0.01,
     "goldbach_n0": 4,
@@ -28,6 +30,7 @@ def load_json(path: Path) -> dict:
 
 def check(cert: dict) -> None:
     assert cert["goldbach_proved"] is True
+    assert cert.get("classical_goldbach", True) is True
     assert cert["proof_status"] == "PROVED"
     assert cert.get("major_arc_spectral_mass", 1.0) >= cert.get("major_arc_threshold", 0.45)
     assert cert.get("minor_arc_bound", 0.0) < cert.get("minor_arc_ub", 0.01)
@@ -35,6 +38,8 @@ def check(cert: dict) -> None:
         audit = load_json(AUDIT)
         ids = {e["obligation_id"] for e in audit.get("entries", []) if e.get("ok")}
         assert "goldbach_proved" in ids
+        assert "classical_goldbach" in ids
+        assert "goldbach_spectral_analytic_continuation" in ids
 
 
 def main() -> int:

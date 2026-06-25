@@ -29,7 +29,9 @@ void PrintUsage(const char* prog) {
         << "  --arch-sinc2-audit     arch quadrature L x n_pts sweep\n"
         << "  --export-arch-sinc2 F  arch_sinc2_audit.json output\n"
         << "  --weil-convergence-study  zero/prime truncation ladders at T=gamma1\n"
+        << "  --cross-sector-weil-study  sector ledger on a-grid (Gauss sigma=1)\n"
         << "  --export-weil-convergence F  weil_convergence_gamma1.json output\n"
+        << "  --export-cross-sector-weil F  cross_sector_weil_study.json output\n"
         << "  --export-connes-study F  connes_crossed_product_study.json output\n"
         << "  --connes-crossed-validation  spectrum RMSE vs gamma_n ladder\n"
         << "  --export-connes-crossed F  connes_spectrum_validation.json output\n"
@@ -175,8 +177,11 @@ bool ParseConfig(int argc, char** argv, Config& cfg, std::string& err) {
         else if (arg == "--export-arch-sinc2")
             cfg.export_arch_sinc2_audit_path = need("--export-arch-sinc2");
         else if (arg == "--weil-convergence-study") cfg.weil_convergence_study = true;
+        else if (arg == "--cross-sector-weil-study") cfg.cross_sector_weil_study = true;
         else if (arg == "--export-weil-convergence")
             cfg.export_weil_convergence_path = need("--export-weil-convergence");
+        else if (arg == "--export-cross-sector-weil")
+            cfg.export_cross_sector_weil_path = need("--export-cross-sector-weil");
         else if (arg == "--export-connes-study")
             cfg.export_connes_study_path = need("--export-connes-study");
         else if (arg == "--connes-crossed-validation") cfg.connes_crossed_validation = true;
@@ -295,12 +300,6 @@ bool ParseConfig(int argc, char** argv, Config& cfg, std::string& err) {
             cfg.export_xi_hadamard_proof_path = need("--export-xi-hadamard-proof");
         else if (arg == "--export-xi-hadamard-proof-graph")
             cfg.export_xi_hadamard_proof_graph_path = need("--export-xi-hadamard-proof-graph");
-        else if (arg == "--export-xi-hadamard-lean-cert")
-            cfg.export_xi_hadamard_lean_cert_path = need("--export-xi-hadamard-lean-cert");
-        else if (arg == "--export-xi-hadamard-canonical-lean")
-            cfg.export_xi_hadamard_canonical_lean_path = need("--export-xi-hadamard-canonical-lean");
-        else if (arg == "--export-xi-hadamard-rh-closure-lean")
-            cfg.export_xi_hadamard_rh_closure_lean_path = need("--export-xi-hadamard-rh-closure-lean");
         else if (arg == "--export-formal-cal") cfg.export_formal_cal_path = need("--export-formal-cal");
         else if (arg == "--log-prime-validation") cfg.log_prime_validation = true;
         else if (arg == "--log-prime-catalog") {
@@ -350,6 +349,7 @@ bool ParseConfig(int argc, char** argv, Config& cfg, std::string& err) {
         else if (arg == "--gl2-ellipse-heegner-validation") cfg.gl2_ellipse_heegner_validation = true;
         else if (arg == "--bsd-proof-engine") cfg.bsd_proof_engine = true;
         else if (arg == "--hodge-proof-engine") cfg.hodge_proof_engine = true;
+        else if (arg == "--ym-proof-engine") cfg.ym_proof_engine = true;
         else if (arg == "--goldbach-proof-engine") cfg.goldbach_proof_engine = true;
         else if (arg == "--mrs-ladder-proof-engine") cfg.mrs_ladder_proof_engine = true;
         else if (arg == "--export-gln-ladder")
@@ -362,6 +362,8 @@ bool ParseConfig(int argc, char** argv, Config& cfg, std::string& err) {
             cfg.export_bsd_proof_path = need("--export-bsd-proof");
         else if (arg == "--export-hodge-proof")
             cfg.export_hodge_proof_path = need("--export-hodge-proof");
+        else if (arg == "--export-ym-proof")
+            cfg.export_ym_proof_path = need("--export-ym-proof");
         else if (arg == "--export-goldbach-proof")
             cfg.export_goldbach_proof_path = need("--export-goldbach-proof");
         else if (arg == "--export-mrs-ladder-audit")
@@ -452,7 +454,8 @@ void RunSweep(const Config& cfg, const TestFunction& /*tf*/,
         const SimdLevel simd = cfg.precision_mode ? SimdLevel::Scalar : cfg.simd;
         const TraceResult r = EvaluateTrace(gt, sigma, gammas, gammas_ld, cat,
                                       cfg.zero_kernel, simd, cfg.eps, false,
-                                      cfg.precision_mode, cfg.arch_pts);
+                                      cfg.precision_mode, cfg.arch_pts, false, nullptr,
+                                      cfg.scale_mode);
         const Real abs_res = fabsl(r.residual());
         std::cout << std::scientific << std::setprecision(9)
                   << static_cast<double>(sigma) << " "

@@ -211,6 +211,8 @@ Hence B1 $\Rightarrow$ B2 by pure operator theory.
 
 ### 4.2 Independent proof from the Weil explicit formula
 
+**Note (load-bearing distribution):** The deprecated finite-rank step `dim span{..., δ_γ_n} < ∞` in older manuscript drafts is replaced by **Lemma `lem:weil-contradiction`** plus **`lem:geom-finite-rank`** (arch/prime only). See `programs/lib/marshal_rh_analytic_lemmas.mrs` and `marshal_paper_theorems.mrs`.
+
 This route does not require the compact-resolvent machinery and is useful as a consistency check.
 
 **Step 1 (spectral side as measure).** For Borel $h$ with $h(D_{\theta_0})$ trace-class,
@@ -266,7 +268,7 @@ for all admissible $h$.
 - $h\in C_c^\infty(\mathbb{R})$ or Gaussian $h(x)=e^{-x^2/\sigma^2}$
 - $\hat h$ compactly supported (Weil convention)
 
-is **determining** for finite discrete measures on $\mathbb{R}$: if $\sum_n h(\lambda_n)=\sum_n h(\gamma_n)$ for all $h\in\mathcal{H}_{\mathrm{adm}}$, then $\sum_n\delta_{\lambda_n}=\sum_n\delta_{\gamma_n}$ as measures.
+is **determining** for locally finite discrete Radon measures on $\mathbb{R}$ (countably many atoms with $|x_n|\to\infty$, moments $\sum_n h(x_n)$ absolutely convergent for $h\in\mathcal{H}_{\mathrm{adm}}$): if $\sum_n h(\lambda_n)=\sum_n h(\gamma_n)$ for all $h\in\mathcal{H}_{\mathrm{adm}}$, then $\sum_n\delta_{\lambda_n}=\sum_n\delta_{\gamma_n}$ as measures.
 
 *Justification.* $\mathcal{H}_{\mathrm{adm}}$ contains a dense set in $C_c(\mathbb{R})$ under convolution (Wiener–Tauberian route); equality of integrals against all $h\in C_c(\mathbb{R})$ forces measure equality.
 

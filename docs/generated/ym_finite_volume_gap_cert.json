@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "obligation_id": "ym_finite_volume_gap_uniform",
+  "title": "Volume-uniform finite-volume Yang-Mills transfer-gap lower bound",
+  "gauge_group": "SU(3)",
+  "beta": 5.7,
+  "gauge_spectral_gap_g": 3.599870788800328,
+  "ym_mass_gap_lb": 2.0,
+  "uniform_floor": {
+    "formula": "heat_kernel = beta * g / pi^2 (volume-independent)",
+    "value": 2.0790360649001345
+  },
+  "uniform_floor_rational_lb": {
+    "num": 2079036,
+    "den": 1000000,
+    "value": 2.079036
+  },
+  "volume_table": [
+    {
+      "volume_sites": 16,
+      "L": 2.0,
+      "torus_plaquette": 0.7125,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    },
+    {
+      "volume_sites": 64,
+      "L": 2.8284271247461903,
+      "torus_plaquette": 0.35624999999999996,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    },
+    {
+      "volume_sites": 256,
+      "L": 4.0,
+      "torus_plaquette": 0.178125,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    },
+    {
+      "volume_sites": 1296,
+      "L": 6.0,
+      "torus_plaquette": 0.07916666666666668,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    },
+    {
+      "volume_sites": 4096,
+      "L": 8.0,
+      "torus_plaquette": 0.04453125,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    },
+    {
+      "volume_sites": 50625,
+      "L": 15.0,
+      "torus_plaquette": 0.012666666666666668,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    },
+    {
+      "volume_sites": 1000000,
+      "L": 31.622776601683793,
+      "torus_plaquette": 0.00285,
+      "gap_estimate": 2.0790360649001345,
+      "ge_uniform_floor": true
+    }
+  ],
+  "plaquette_channel_decays_with_volume": true,
+  "uniform_claim": "for ALL lattice volumes V:  Delta(V) = max(torus_plaquette(L), heat_kernel) >= heat_kernel = beta*g/pi^2 > 0  (volume-uniform)",
+  "crosscheck_half_mass_gap_lb": {
+    "floor": 2.0790360649001345,
+    "half_mass_gap_lb": 1.0,
+    "floor_ge_half": true
+  },
+  "closes_continuum_limit": false,
+  "open_named_cores": [
+    "os_continuum_tightness_hypothesis",
+    "gap_lower_semicontinuity_hypothesis"
+  ],
+  "uses_continuum_limit_assumption": false
+}

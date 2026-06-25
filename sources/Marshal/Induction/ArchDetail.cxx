@@ -5,6 +5,7 @@
 #include "Cert/Verdict.hxx"
 #include "Diagnostics/TraceModeDiagnostic.hxx"
 #include "Heat/HeatCylinderOperator.hxx"
+#include "Kernel/ScaleHotPaths.hxx"
 #include "Heat/HeatTraceSweep.hxx"
 #include "Quotient/QuotientToy.hxx"
 #include <fstream>
@@ -193,59 +194,6 @@ Real arch_quadrature_floor(Real sigma, SimdLevel simd, bool precision_mode, int 
 // Zero sum (fused, thread-array reduction)
 // =============================================================================
 
-Real zero_sum_gauss_avx2(Real sigma, const double* gammas, size_t n) {
-#if defined(WEIL_HAVE_AVX2)
-    const double inv_2ss = 1.0 / (2.0 * static_cast<double>(sigma * sigma));
-    const int nchunks = static_cast<int>((n + kZeroChunk - 1) / kZeroChunk);
-    std::vector<Real> parts;
-    #ifdef _OPENMP
-    parts.resize(omp_get_max_threads(), 0.0L);
-    #pragma omp parallel
-    {
-        const int tid = omp_get_thread_num();
-        Real local = 0.0L;
-        #pragma omp for schedule(static)
-        for (int c = 0; c < nchunks; ++c) {
-            const size_t off = static_cast<size_t>(c) * kZeroChunk;
-            const size_t len = std::min(static_cast<size_t>(kZeroChunk), n - off);
-            const double* src = gammas + off;
-            size_t i = 0;
-            for (; i + 4 <= len; i += 4) {
-                __m256d g = _mm256_loadu_pd(src + i);
-                __m256d e = exp_neg_sq4_avx2(g, inv_2ss);
-                alignas(32) double t[4];
-                _mm256_storeu_pd(t, e);
-                local += static_cast<Real>(t[0] + t[1] + t[2] + t[3]);
-            }
-            for (; i < len; ++i)
-                local += static_cast<Real>(std::exp(-inv_2ss * src[i] * src[i]));
-        }
-        parts[static_cast<size_t>(tid)] = local;
-    }
-    #else
-    Real local = 0.0L;
-    for (size_t off = 0; off < n; off += kZeroChunk) {
-        const size_t len = std::min(static_cast<size_t>(kZeroChunk), n - off);
-        const double* src = gammas + off;
-        for (size_t i = 0; i + 4 <= len; i += 4) {
-            __m256d g = _mm256_loadu_pd(src + i);
-            __m256d e = exp_neg_sq4_avx2(g, inv_2ss);
-            alignas(32) double t[4];
-            _mm256_storeu_pd(t, e);
-            local += static_cast<Real>(t[0] + t[1] + t[2] + t[3]);
-        }
-        for (size_t i = (len / 4) * 4; i < len; ++i)
-            local += static_cast<Real>(std::exp(-inv_2ss * src[i] * src[i]));
-    }
-    parts.push_back(local);
-    #endif
-    return 2.0L * pairwise_sum(parts);
-#else
-    (void)sigma; (void)gammas; (void)n;
-    return 0.0L;
-#endif
-}
-
 Real zero_sum_h_ld_batched(const TestFunction& tf, const Real* gammas, size_t n) {
     if (n == 0) return 0.0L;
     const int nchunks = static_cast<int>((n + kZeroChunk - 1) / kZeroChunk);
@@ -281,8 +229,11 @@ Real zero_sum_h_ld_batched(const TestFunction& tf, const Real* gammas, size_t n)
 Real zero_sum_h_batched(const TestFunction& tf, Real sigma,
                                const double* gammas, size_t n, SimdLevel simd) {
     if (n == 0) return 0.0L;
-    if (std::string(tf.name()) == "gauss" && simd == SimdLevel::AVX2)
-        return zero_sum_gauss_avx2(sigma, gammas, n);
+    if (std::string(tf.name()) == "gauss" && simd == SimdLevel::AVX2) {
+        const double heat_t = 1.0 / (2.0 * static_cast<double>(sigma * sigma));
+        return static_cast<Real>(
+            Kernel::FusedZeroGaussianSumScale(gammas, n, heat_t));
+    }
     const int nchunks = static_cast<int>((n + kZeroChunk - 1) / kZeroChunk);
     std::vector<Real> parts;
     #ifdef _OPENMP

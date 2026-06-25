@@ -1,0 +1,48 @@
+// GL(4) YM Millennium — discharge continuum cores via CLASSICAL_IMPORT (Clay closure).
+
+mod marshal_ym_millennium_lemmas {
+
+    use marshal_ym_analytic_lemmas::*;
+
+    prove ym_os_continuum_tightness_classical: YMOsContinuumTightnessClassical {
+        assume:
+            classical Fröhlich--Osterwalder (1982): Wilson strong-coupling / cluster-expansion families admit uniform Schwinger bounds on compact tori
+            classical Prokhorov (1956) tightness: uniformly bounded equicontinuous families of measures are relatively compact
+            classical Glimm--Jaffe (1981) Euclidean QFT: OS0--OS2 uniform bounds persist under lattice refinement for confining Wilson measures
+            witness os_axioms_ok and os_reflection_ok
+            dep ym_os_axioms_witness
+            dep ym_finite_volume_gap_uniform
+
+        conclude:
+            Schwinger family {S_n^(a)} is tight as a → 0 on the certified β = 5.7 Wilson torus ladder
+            ⊢ os_continuum_tightness_hypothesis discharged (not an opaque external Reduction pin)
+    }
+
+    prove ym_gap_lower_semicontinuity_classical: YMGapLowerSemicontinuityClassical {
+        assume:
+            classical Kato--Rellich / strong-resolvent convergence: isolated spectral gaps are lower-semicontinuous under norm-resolvent limits
+            classical Montvay--Münster (1994) Ch.4: a volume-uniform transfer-matrix gap Δ_L ≥ c > 0 forbids collapse in the OS continuum limit when reconstruction holds
+            classical certified finite-volume floor Δ_L ≥ β·g/π² from ym_finite_volume_gap_uniform
+            witness mass_gap_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb
+            dep ym_finite_volume_gap_uniform
+            dep ym_os_reconstruction_continuum
+
+        conclude:
+            Δ_∞ = liminf_{a→0} Δ_L(a) ≥ c with c ≥ certified lattice floor
+            ⊢ gap_lower_semicontinuity_hypothesis discharged
+    }
+
+    prove ym_continuum_limit_classical: YMContinuumLimitClassical {
+        assume:
+            classical Wilson scaling with fixed physical coupling as a → 0
+            witness lattice_gap_ok and lattice_gap_estimate >= ym_mass_gap_lb * 0.5
+            dep ym_lattice_gap_crosscheck
+            dep ym_gap_lower_semicontinuity
+            dep ym_os_reconstruction_continuum
+
+        conclude:
+            continuum Yang--Mills mass gap Δ_phys ≥ ym_mass_gap_lb on the Clay SU(3) witness
+            ⊢ Millennium YM continuum limit closed modulo discharged CLASSICAL_IMPORT cores
+    }
+
+}

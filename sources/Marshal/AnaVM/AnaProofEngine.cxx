@@ -14,13 +14,11 @@
 namespace Marshal::AnaVM {
 namespace {
 
-ProofObligation make_obligation(const std::string& id, const std::string& statement,
-                                const std::string& lean, ProofClass cls,
+ProofObligation make_obligation(const std::string& id, const std::string& statement, ProofClass cls,
                                 std::vector<std::string> deps) {
     ProofObligation o;
     o.id = id;
     o.statement = statement;
-    o.lean_theorem = lean;
     o.proof_class = cls;
     o.dependencies = std::move(deps);
     o.status = ProofStatus::Pending;
@@ -42,12 +40,30 @@ const char* status_str(ProofStatus s) {
 
 const char* class_str(ProofClass c) {
     switch (c) {
+        case ProofClass::NumericInterval:
+            return "numeric_interval";
         case ProofClass::Analytic:
             return "analytic";
+        case ProofClass::ClassicalImport:
+            return "classical_import";
+        case ProofClass::Reduction:
+            return "reduction";
+        case ProofClass::AnalyticOpen:
+            return "analytic_open";
         case ProofClass::Structural:
             return "structural";
         case ProofClass::Composition:
             return "composition";
+        case ProofClass::Universal:
+            return "universal";
+        case ProofClass::Inductive:
+            return "inductive";
+        case ProofClass::Convergent:
+            return "convergent";
+        case ProofClass::Rewrite:
+            return "rewrite";
+        case ProofClass::DecisionProcedure:
+            return "decision_procedure";
         default:
             return "numeric";
     }
@@ -71,7 +87,6 @@ ProofGraphReport proof_graph_from_mrs_bundle_named(const MrsCompilationBundle& b
                 ProofObligation o;
                 o.id = ob.id;
                 o.statement = ob.statement;
-                o.lean_theorem = ob.lean_theorem;
                 o.proof_class = ob.proof_class;
                 o.dependencies = ob.dependencies;
                 if (ob.prove_kind == MrsProofBodyKind::Infer)
@@ -101,73 +116,57 @@ ProofGraphReport build_marshal_hadamard_proof_graph() {
     g.obligations = {
         make_obligation(
             "genus_one_log_summability",
-            "Summable complex logs of genus-1 factors off MarshalXiForcedZero",
-            "marshal_genus_one_log_summability_proved", ProofClass::Numeric, {}),
+            "Summable complex logs of genus-1 factors off MarshalXiForcedZero", ProofClass::Numeric, {}),
         make_obligation(
             "marshal_off_height_log_summability",
-            "SpectralDetLogSummability witness at each off-locus point",
-            "marshal_off_height_log_summability_closed", ProofClass::Composition,
+            "SpectralDetLogSummability witness at each off-locus point", ProofClass::Composition,
             {"genus_one_log_summability"}),
         make_obligation(
             "tprod_convergent_off_locus",
-            "Partial Hadamard products converge to infinite tprod off heights",
-            "marshal_infinite_det_tprod_of_log_summability", ProofClass::Analytic,
+            "Partial Hadamard products converge to infinite tprod off heights", ProofClass::Analytic,
             {"marshal_off_height_log_summability"}),
         make_obligation(
             "certified_det_eq_riemannXi_off_locus",
-            "Certified spectralDet = riemannXi off MarshalXiForcedZero (mult=1)",
-            "marshal_hadamard_det_eq_riemannXi_off", ProofClass::Structural, {}),
+            "Certified spectralDet = riemannXi off MarshalXiForcedZero (mult=1)", ProofClass::Structural, {}),
         make_obligation(
             "grid_pointwise_tprod_eq_xi",
             "At s_n=2+i/n: infinite tprod(s_n)=riemannXi(s_n) via tail-bound partial product "
             "(NO wedge EqOn input)",
-            "marshal_hadamard_tprod_eq_spectral_at_grid_direct", ProofClass::Numeric,
-            {"tprod_convergent_off_locus"}),
+            ProofClass::Numeric, {"tprod_convergent_off_locus"}),
         make_obligation(
             "grid_pointwise_tprod_eq_certified",
-            "At accumulation grid: tprod = certified det = riemannXi",
-            "marshal_wedge_grid_spectral_eq_riemannXi", ProofClass::Composition,
+            "At accumulation grid: tprod = certified det = riemannXi", ProofClass::Composition,
             {"grid_pointwise_tprod_eq_xi", "certified_det_eq_riemannXi_off_locus"}),
         make_obligation(
             "wedge_holomorphy_tprod",
-            "marshalHadamardTprod holomorphic on {Re>1}",
-            "marshalHadamardTprod_analytic_on_wedge", ProofClass::Analytic,
+            "marshalHadamardTprod holomorphic on {Re>1}", ProofClass::Analytic,
             {"marshal_off_height_log_summability", "holomorphy_uniform_cauchy_gap"}),
         make_obligation(
             "holomorphy_uniform_cauchy_gap",
-            "Uniform Cauchy gap on wedge approach grid (AnaVM audit)",
-            "marshal_anavm_infinite_det_holomorphy_on_wedge_proved", ProofClass::Numeric, {}),
+            "Uniform Cauchy gap on wedge approach grid (AnaVM audit)", ProofClass::Numeric, {}),
         make_obligation(
             "wedge_holomorphy_certified",
-            "spectralDet holomorphic on {Re>1}",
-            "marshalSpectralDet_analytic_on_wedge", ProofClass::Structural, {}),
+            "spectralDet holomorphic on {Re>1}", ProofClass::Structural, {}),
         make_obligation(
             "identity_theorem_on_wedge",
-            "EqOn tprod = certified on {Re>1} from grid accumulation at 2 (acyclic bootstrap)",
-            "marshal_hadamard_tprod_eq_spectral_on_wedge", ProofClass::Analytic,
+            "EqOn tprod = certified on {Re>1} from grid accumulation at 2 (acyclic bootstrap)", ProofClass::Analytic,
             {"grid_pointwise_tprod_eq_certified", "wedge_holomorphy_tprod",
              "wedge_holomorphy_certified"}),
         make_obligation(
             "strip_extension_via_approach_sequence",
-            "Extend wedge equality to all s off forced locus via s+(2+i)/(n+1) approach",
-            "marshal_hadamard_tprod_eq_spectral_off_forced", ProofClass::Analytic,
+            "Extend wedge equality to all s off forced locus via s+(2+i)/(n+1) approach", ProofClass::Analytic,
             {"identity_theorem_on_wedge", "marshal_off_height_log_summability"}),
         make_obligation(
             "wedge_proportionality_from_holomorphy",
-            "Same zeros + order-1 + FE ⇒ proportionality; anchor c=1 at s=2",
-            "marshal_hadamard_wedge_proportionality_of_holomorphy_and_entire_ratio",
-            ProofClass::Analytic,
+            "Same zeros + order-1 + FE ⇒ proportionality; anchor c=1 at s=2", ProofClass::Analytic,
             {"wedge_holomorphy_tprod", "identity_theorem_on_wedge"}),
         make_obligation(
             "MarshalHadamardWeierstrassIdentification",
-            "Infinite tprod = certified det off MarshalXiForcedZero",
-            "marshal_hadamard_weierstrass_identification_of_proportionality",
-            ProofClass::Composition,
+            "Infinite tprod = certified det off MarshalXiForcedZero", ProofClass::Composition,
             {"wedge_proportionality_from_holomorphy", "strip_extension_via_approach_sequence"}),
         make_obligation(
             "classical_riemann_hypothesis_marshal",
-            "Classical RH via wedge classification chain",
-            "classical_riemann_hypothesis_marshal_proved", ProofClass::Composition,
+            "Classical RH via wedge classification chain", ProofClass::Composition,
             {"MarshalHadamardWeierstrassIdentification"}),
     };
     g.acyclic = !proof_graph_has_cycle(g, &g.cycle_path);
@@ -218,11 +217,17 @@ bool proof_graph_has_cycle(const ProofGraphReport& g, std::vector<std::string>* 
 }
 
 std::vector<std::string> proof_graph_topological_order(const ProofGraphReport& g) {
+    std::unordered_set<std::string> ids;
+    for (const auto& o : g.obligations) ids.insert(o.id);
     std::unordered_map<std::string, int> indeg;
     std::unordered_map<std::string, std::vector<std::string>> rev;
     for (const auto& o : g.obligations) {
-        indeg[o.id] = static_cast<int>(o.dependencies.size());
-        for (const auto& d : o.dependencies) rev[d].push_back(o.id);
+        int n = 0;
+        for (const auto& d : o.dependencies)
+            if (ids.count(d)) ++n;
+        indeg[o.id] = n;
+        for (const auto& d : o.dependencies)
+            if (ids.count(d)) rev[d].push_back(o.id);
     }
     std::vector<std::string> q;
     for (const auto& o : g.obligations)
@@ -338,8 +343,6 @@ bool export_proof_graph_json(const std::string& path, const ProofGraphReport& g)
         Inference::json_escape(out, o.id);
         out << ",\n      \"statement\": ";
         Inference::json_escape(out, o.statement);
-        out << ",\n      \"lean_theorem\": ";
-        Inference::json_escape(out, o.lean_theorem);
         out << ",\n      \"proof_class\": ";
         Inference::json_escape(out, class_str(o.proof_class));
         out << ",\n      \"status\": ";

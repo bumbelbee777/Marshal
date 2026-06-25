@@ -78,7 +78,7 @@ FormalAnalyticsRunResult RunFormalAnalytics(const Config& cfg, const std::vector
 
     std::cout << "\n=== AnaVM formal analytics ===\n";
     std::cout << "  ansatz: " << out.result.ansatz_id << "\n";
-    std::cout << "  lean_emit_ready: " << (out.result.lean_emit_ready ? "yes" : "no") << "\n";
+    std::cout << "  mrs_emit_ready: " << (out.result.mrs_emit_ready ? "yes" : "no") << "\n";
     std::cout << "  cylinder_class_excluded: "
               << (out.result.cylinder_class_excluded ? "yes" : "no") << "\n";
     std::cout << "  proved gates: " << out.result.proved_gates.size() << "\n";
@@ -89,7 +89,7 @@ FormalAnalyticsRunResult RunFormalAnalytics(const Config& cfg, const std::vector
                                  ? cfg.export_formal_cal_path
                                  : cfg.export_formal_analytics_path;
     if (!path.empty()) {
-        out.calibration.lean_emit_ready = out.result.lean_emit_ready;
+        out.calibration.mrs_emit_ready = out.result.mrs_emit_ready;
         AnaVM::export_formal_analytics_json(path, out.result, out.calibration);
     }
     return out;

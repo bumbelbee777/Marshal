@@ -10,7 +10,6 @@ namespace Marshal::AnaVM {
 struct ProofObligation {
     std::string id;
     std::string statement;
-    std::string lean_theorem;
     std::vector<std::string> dependencies;
     ProofClass proof_class = ProofClass::Numeric;
     ProofStatus status = ProofStatus::Pending;

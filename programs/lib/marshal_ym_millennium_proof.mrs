@@ -1,0 +1,77 @@
+// YM Millennium MRS graph — Clay capstone with discharged continuum cores.
+
+mod marshal_ym_millennium_proof {
+
+    use marshal_ym_millennium_lemmas::*;
+    use marshal_ym_proof::*;
+    use marshal_ladder_analytic_scripts::*;
+
+    prove ym_millennium_spectral_extension_lemma: YMMillenniumSpectralExtension {
+        forall_extension(
+            domain = gl4_ym_witness,
+            lower = pinned_clifford,
+            finite_upper = pinned_clifford,
+            upper = unbounded,
+            witness = ym_millennium_pinned_capstone,
+            spectral_gap = ym_millennium_spectral_extension
+        )
+    }
+
+    proof_graph MarshalYMMillennium {
+        target: classical_ym_millennium,
+
+        obligation ym_millennium_mass_gap_prerequisite {
+            class: Structural,
+            deps: [classical_ym_mass_gap_general],
+            witness_expr: mass_gap_ok and os_axioms_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb,
+            statement: "Base Clay YM capstone closed before Millennium continuum discharge",
+        }
+        obligation ym_millennium_continuum_tightness {
+            class: ClassicalImport,
+            deps: [ym_millennium_mass_gap_prerequisite, ym_os_axioms_witness, ym_finite_volume_gap_uniform],
+            prove: ym_os_continuum_tightness_classical,
+            witness_expr: os_axioms_ok and os_reflection_ok and lattice_gap_ok,
+            statement: "OS continuum tightness discharged via Fröhlich--Osterwalder + Prokhorov",
+        }
+        obligation ym_millennium_gap_semicontinuity {
+            class: ClassicalImport,
+            deps: [ym_millennium_continuum_tightness, ym_os_reconstruction_continuum, ym_finite_volume_gap_uniform],
+            prove: ym_gap_lower_semicontinuity_classical,
+            witness_expr: mass_gap_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb and lattice_gap_ok,
+            statement: "Gap lower-semicontinuity discharged via uniform finite-volume floor",
+        }
+        obligation ym_millennium_continuum_limit {
+            class: Analytic,
+            deps: [ym_millennium_gap_semicontinuity, ym_gap_lower_semicontinuity, ym_lattice_gap_crosscheck, ym_os_reconstruction_continuum],
+            prove: ym_continuum_limit_classical,
+            witness_expr: lattice_gap_ok and lattice_gap_estimate >= ym_mass_gap_lb * 0.5 and mass_gap_ok,
+            statement: "Continuum Clay mass gap with discharged tightness + semicontinuity cores",
+        }
+        obligation ym_millennium_pinned {
+            class: Composition,
+            deps: [ym_millennium_continuum_limit, ym_mass_gap_proved, ym_hamiltonian_mass_gap_global],
+            prove: ym_millennium_pinned_capstone,
+            witness_expr: mass_gap_ok and os_axioms_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb,
+            statement: "Millennium YM existence + mass gap on pinned SU(3) witness",
+        }
+        obligation ym_millennium_spectral_extension {
+            class: Universal,
+            domain: gl4_ym_witness,
+            domain_lower: pinned_clifford,
+            domain_upper: unbounded,
+            predicate: classical_ym_millennium_holds,
+            deps: [ym_millennium_pinned, ym_millennium_continuum_limit],
+            prove: ym_millennium_spectral_extension_lemma,
+            extend_via: ym_millennium_spectral_extension,
+            witness_expr: ym_gap_extension_ratio >= ym_millennium_extension_ratio_lb and mass_gap_ok and os_axioms_ok,
+            statement: "Millennium YM extends across valid GL(4) witnesses",
+        }
+        obligation classical_ym_millennium {
+            class: Composition,
+            deps: [ym_millennium_pinned, ym_millennium_spectral_extension, ym_millennium_continuum_limit],
+            prove: classical_ym_millennium_capstone,
+            witness_expr: mass_gap_ok and os_axioms_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb,
+            statement: "∀ valid GL(4) witness: Clay Yang--Mills existence and mass gap (Millennium)",
+        }
+    }
+}

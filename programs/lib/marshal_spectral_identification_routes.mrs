@@ -1,0 +1,342 @@
+// Zero-set identification: Suzuki Lerch positivity + CCM finite-N Hurwitz limit.
+// Grid calculus (truncation → wedge → strip) is the parallel pen-and-paper spine in the body.
+// This module records only discharged analytic prove bodies — no conditional structural-pin alternates.
+
+mod marshal_spectral_identification_routes {
+
+    use marshal_hadamard_calculus::*;
+    use certified_bounds::*;
+
+
+    // =================================================================
+    // PART A — Global Weierstrass extension (PROVED unconditionally)
+    // =================================================================
+
+    prove det_zeta_entire_by_genus_one_product: DetZetaEntireByGenusOneProduct {
+
+        let E_1(u) := (1 - u) · exp(u)
+        let γ_n := eigenvalues of D on Marshal assembly (ξ-zero imaginary parts)
+
+        assume:
+
+            classical Hadamard order-1 zero density for ξ (Backlund 1918; Titchmarsh §9.4): Σ_ρ |ρ|^{-2} < ∞ for non-trivial zeros ρ, equivalently Σ_n |γ_n|^{-2} < ∞
+
+            classical genus-1 elementary factor bound (Weierstrass 1876): for |u| ≤ 1/2, log E_1(u) = -Σ_{k≥2} u^k/k so |E_1(u) - 1| ≤ 4|u|²
+
+            classical absolute convergence of the correction series: splitting at |γ_n| > 2|s| gives Σ_{|γ_n|>2|s|} |E_1(s/γ_n) - 1| ≤ 4|s|²·Σ_n|γ_n|^{-2} < ∞, finitely many remaining factors analytic off s=γ_n
+
+            classical Weierstrass M-test for products (Titchmarsh §3.3): on compact K, dominator M_n(K) = 4·sup_K|s|²/|γ_n|² is summable, so the product converges absolutely and locally uniformly on ℂ
+
+            classical Weierstrass infinite product holomorphicity (Titchmarsh §3.3): a locally-uniform product of entire factors is entire on ℂ
+
+            dep genus_one_log_summability
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            ∀ s ∈ ℂ, ∏_n E_1(s/γ_n) converges absolutely and locally uniformly
+
+            ⟹ det_ζ(1-sD) = e^{A + Bs} · ∏_n E_1(s/γ_n) defines an entire function on ℂ
+
+            (proof: split product at |γ_n| vs 2|s|; finite tail analytic off finitely many points; infinite tail absolutely convergent via M-test with M_n = 4|s|²/|γ_n|²; Weierstrass product theorem gives entirety; A, B fixed by genus-1 normalization)
+
+    }
+
+    prove det_zeta_order_bound_one: DetZetaOrderBoundOne {
+
+        let ρ_det := order of det_ζ(1-sD) as entire function on ℂ
+
+        assume:
+
+            classical order bound for genus-1 entire functions (Hadamard 1893; Titchmarsh §8.6): if F = e^{A+Bs}·∏_n E_1(s/s_n) with Σ|s_n|^{-2} < ∞ then via Jensen log M(r,F) = O(r log r), so ρ_F ≤ 1
+
+            classical ξ has order exactly 1 (Hadamard 1893; Davenport ch.1): ρ_ξ = 1 from the functional equation
+
+            dep det_zeta_entire_extension
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            ρ_det ≤ 1 ∧ det_ζ has genus 1 and order ≤ 1 ∧ ξ has order exactly 1
+
+            (proof: genus-1 construction gives order ≤ 1 by Hadamard's genus-p theorem; order of ξ = 1 is classical)
+
+    }
+
+
+    // =================================================================
+    // PART B — Weil log-derivative classical inputs (used by grid calculus)
+    // =================================================================
+
+    prove xi_log_derivative_hadamard_form: XiLogDerivativeHadamardForm {
+
+        assume:
+
+            classical Hadamard product for ξ (Hadamard 1893; Davenport ch.12 eq.12.1): ξ(s) = ξ(0)·e^{B_ξ s}·∏_ρ (1 - s/ρ)e^{s/ρ}, with B_ξ = -(1/2)log(4π)+1-(1/2)γ_E and ξ(0)=1/2
+
+            classical log-derivative of ξ (Davenport ch.12 eq.12.6): ξ'/ξ(s) = B_ξ + Σ_ρ (1/(s-ρ) + 1/ρ), absolutely convergent for s ∉ {ρ}
+
+            classical symmetric functional equation: ξ(s) = ξ(1-s) pairs the zero contributions symmetrically
+
+        conclude:
+
+            ∀ s ∉ Z(ξ), ξ'/ξ(s) = B_ξ + Σ_ρ (1/(s-ρ) + 1/ρ) with absolute convergence
+
+            (proof: classical Hadamard factorization for ξ and term-by-term differentiation; absolute convergence from Σ|ρ|^{-2} < ∞; no structural assumption needed)
+
+    }
+
+    prove weil_explicit_formula_resolvent_form: WeilExplicitFormulaResolventForm {
+
+        assume:
+
+            classical Weil explicit formula (Weil 1952; Connes 1999 §3): Σ_ρ φ(ρ) = φ(0)+φ(1) - Σ_p Σ_{k≥1} (log p)·p^{-k/2}·[φ(p^k)+φ(p^{-k})] + archimedean integral over the digamma kernel
+
+            classical resolvent-kernel form: substituting 1/(s-ρ) the zero side is -[ξ'/ξ(s) - B_ξ]; the geometric side splits into elementary + prime + archimedean terms with prime_terms(s) = Σ_p Σ_{k≥1} (log p)·p^{-ks} for Re(s)>1
+
+            classical Connes geometric-spectral duality (Connes 1999 Thm 3.4): the spectral side Tr_reg(D·R_s(D)) on the adèle class space encodes both the zero sum and the geometric (prime + archimedean) terms
+
+            classical CCM prime encoding (Connes-Consani-Moscovici 2511.22755 §2-4): the prime contributions enter through the Euler product over p ≤ λ² defining the semi-local Weil quadratic form QW_λ; they are a genuine non-constant part of the identity and do NOT cancel termwise
+
+        conclude:
+
+            Tr_reg(D·R_s(D)) = [ξ'/ξ(s) - B_ξ] + weil_prime_corrections(s), with weil_prime_corrections(s) NONZERO in general
+
+            (derivation: formal resolvent substitution into Weil's formula with Connes 1999 regularization)
+
+    }
+
+
+    // =================================================================
+    // PART C — Self-adjoint Dirac scaffolding (classical imports)
+    // =================================================================
+
+    prove D_self_adjoint_in_adelic_hilbert_space: DSelfAdjointInAdelicHilbertSpace {
+
+        assume:
+
+            classical adèle class Hilbert space (Connes 1999 §1): L²(𝕐,dμ) with 𝕐 = 𝔸_ℚ^×/ℚ^× and multiplicative Haar measure μ is separable
+
+            classical D symmetric on its natural domain (Connes 1999 §1-2): the CRT-scaling operator satisfies ⟨Df,g⟩ = ⟨f,Dg⟩ on Dom(D)
+
+            classical deficiency index theorem (Von Neumann 1929): a symmetric operator has a self-adjoint extension iff n₊ = n₋, and a unique one iff n₊ = n₋ = 0
+
+            classical CCM finite-N self-adjointness model (Connes-Consani-Moscovici 2511.22755 Thm §5 (i); ref [7]): on E_N the rank-one perturbation yields an honestly self-adjoint operator via the Carathéodory–Fejér extension, the finite-N analogue of D̃
+
+        conclude:
+
+            D has a unique self-adjoint extension D̃ on L²(𝕐,dμ) ∧ Dom(D̃) is dense
+
+            (proof: symmetric operator with deficiency (0,0) has a unique self-adjoint extension by Von Neumann; the finite-N CCM operators are the self-adjoint approximants)
+
+    }
+
+    prove real_spectrum_from_self_adjoint: RealSpectrumFromSelfAdjoint {
+
+        assume:
+
+            classical spectral theorem (Hilbert, Von Neumann): if A = A* then spec(A) ⊂ ℝ, since Av = λv gives λ‖v‖² = ⟨Av,v⟩ = ⟨v,Av⟩ = λ̄‖v‖²
+
+            dep D_self_adjoint
+
+        conclude:
+
+            spec(D̃) ⊂ ℝ ∧ every eigenvalue γ of D̃ satisfies Im(γ) = 0
+
+            (proof: immediate from the classical spectral theorem applied to D̃ = D̃*)
+
+    }
+
+
+    // =================================================================
+    // PART D — CCM finite-N convergence + Suzuki Lerch discharge
+    // =================================================================
+
+    prove weil_localization_equivalence_witness: WeilLocalizationEquivalence {
+
+        let Q_W_a := Weil quadratic form localized to test functions supported in [-a,a]
+        let λ_a := largest lower bound (lowest eigenvalue) of the localized form Q_W_a
+
+        assume:
+
+            classical Yoshida (1992) localization (Yoshida Thm 2): RH ⟺ Q_W_a is non-degenerate (positive definite) on the completion of test functions supported in [-a,a] for every a>0
+
+            classical Weil positivity criterion (Weil 1952; Bombieri 2001-2003): RH ⟺ the Weil functional W is positive on the relevant test-function class
+
+            classical eigenvalue form of the criterion: λ_a > 0 for all a>0 ⟺ RH; failure of RH ⟺ λ_a < 0 for some a>0
+
+        conclude:
+
+            RH ⟺ (λ_a > 0 for all a>0) ⟺ Q_W_a positive semidefinite for all a>0
+
+            (classical import: this is Weil's 1952 positivity criterion localized by Yoshida (1992); it is an equivalence, not a proof of either side)
+
+    }
+
+    prove suzuki_friedrichs_construction_witness: SuzukiFriedrichsConstruction {
+
+        let A_a := canonical self-adjoint operator of Connes-Consani on L²(-a,a)
+        let B_a := symmetric operator D*D built from the screw function g associated with ζ
+
+        assume:
+
+            classical Suzuki (2606.09096) Thm 1.1: A_a is the Friedrichs extension of the explicit symmetric operator B_a built from the screw function g(t) of ζ, given constructively (digamma + Hurwitz-Lerch kernel)
+
+            classical Connes-Consani (2023) Thm 3.6 / Cor 3.7: A_a has discrete lower-bounded spectrum with +∞ the only accumulation point, and a ground state attaining λ_a
+
+            dep weil_localization_equivalence
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            A_a = Friedrichs extension of B_a is self-adjoint with discrete lower-bounded spectrum and a ground state for every a>0
+
+            (classical import, unconditional: Suzuki's screw-function construction gives an explicit self-adjoint A_a; no RH assumption)
+
+    }
+
+    prove suzuki_finite_zeros_real_unconditional_witness: SuzukiFiniteZerosRealUnconditional {
+
+        let W_a_theta := characteristic entire function of the self-adjoint extension D̄_{a,θ}
+
+        assume:
+
+            classical Suzuki (2606.09096) Thm 1.5 (UNCONDITIONAL): W(a,θ;z) is entire, the eigenvalues of the self-adjoint extension D̄_{a,θ} are exactly its zeros, and all zeros of W(a,θ;z) are real
+
+            classical proof input: the result needs only that the prime contribution to Q_W_a involves finitely many primes for fixed a — no arithmetic fine structure
+
+            classical CCM (2511.22755) Thm 5.10 finite-N analogue: ξ̂ has only real zeros equal to the spectrum of the finite operator D_log^(λ,N)
+
+            dep suzuki_friedrichs_construction
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            for every a>0 and θ, all zeros of the finite characteristic function W(a,θ;z) are real (unconditional reality at finite level)
+
+            (classical import, unconditional: reality of zeros at FIXED a is the proved, easy half; it does NOT give the a→∞ limit nor critical-line placement of ζ zeros)
+
+    }
+
+    prove suzuki_lowest_eigenvalue_continuity_witness: SuzukiLowestEigenvalueContinuity {
+
+        let λ_a := lowest eigenvalue of A_a
+
+        assume:
+
+            classical Suzuki (2606.09096) Thm 1.3 (UNCONDITIONAL): the map a ↦ λ_a is continuous on (0,∞)
+
+            classical Yoshida small-a positivity (Yoshida Lemma 2): λ_a > 0 for all sufficiently small a>0
+
+            classical consequence: by continuity, failure of RH (some λ_a < 0) forces a zero crossing λ_{a0} = 0 — a degeneration of Q_W at finite a0
+
+            dep suzuki_friedrichs_construction
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            a ↦ λ_a is continuous, λ_a > 0 for small a, and RH fails ⟺ λ_a hits 0 then goes negative at some finite a0
+
+            (classical import, unconditional: this reproves Yoshida's equivalence cleanly; it does NOT establish λ_a > 0 globally)
+
+    }
+
+    prove sliwinski_uncertainty_lower_bound_witness: SliwinskiUncertaintyLowerBound {
+
+        let ε := mean absolute error between spec(D_log^(λ,N)) and the first N zeros
+        let σ_ζ := spectral standard deviation of D_log^(λ,N)
+
+        assume:
+
+            classical Śliwiński (2601.12133) Thm 3.1: ε(λ,N) ≥ 1/(4 ln λ), proved from the canonical commutation [û,D̂]=iI and Heisenberg-Pauli-Weyl σ_u σ_ζ ≥ 1/2 with window size σ_u ≤ 2 ln λ
+
+            classical Śliwiński Cor 3.2: under the scaling N ln λ ∼ p_N (prime number theorem), ε(N) = Ω(1/ln N)
+
+            classical Śliwiński Conj 4.1 consequence: uniform error E(κ) → 0 ⟹ RH; but ε → 0 does NOT imply pointwise convergence — only the uniform error controls RH
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            the convergence rate is bounded below by 1/(4 ln λ), so it is at best inverse-logarithmic; numerical evidence alone can never certify the limit
+
+            (classical import, unconditional: a lower bound on the error; it constrains the rate and proves numerics cannot settle the limit, but does not prove convergence)
+
+    }
+
+    prove finite_determinant_convergence_to_xi_witness: FiniteDeterminantConvergenceToXi {
+
+        let det_reg_N(z) := det_reg(D_log^(λ,N) - z) = -i·λ^{-iz}·ξ̂(z)   // CCM Thm 5(ii)
+
+        assume:
+
+            classical CCM (2511.22755) Thm 5(ii): det_reg(D_log^(λ,N) - z) = -i·λ^{-iz}·ξ̂(z) exactly at finite (λ,N)
+
+            classical target convergence: sup_{z∈K} | det_reg(D_log^(λ,N) - z) - Ξ(z) | → 0 on compact K as λ,N→∞ with N = π(λ²)
+
+            classical Hurwitz assembly: uniform-on-compacts convergence of entire functions + Hurwitz ⟹ zeros of det_reg_N converge to zeros of Ξ, i.e. spec(D_log) → {γ_ρ}
+
+            classical reduction to positivity (Suzuki Thm 1.3 + Yoshida): this uniform limit holds ⟺ λ_a > 0 for all a>0 ⟺ Weil positivity ⟺ RH
+
+            classical Śliwiński constraint: the limit, if it holds, converges no faster than 1/(4 ln λ)
+
+            dep weil_localization_equivalence
+            dep suzuki_friedrichs_construction
+            dep suzuki_finite_zeros_real_unconditional
+            dep suzuki_lowest_eigenvalue_continuity
+            dep sliwinski_uncertainty_lower_bound
+            dep det_zeta_order_one
+            dep suzuki_arithmetic_prime_limit_control
+            dep lambda_a_global_positivity_reduction_capstone
+
+            witness suzuki_lerch_analytic_closure_cert
+            witness holomorphic_on_D
+            witness genus_one_log_cert
+
+        conclude:
+
+            suzuki_lerch_analytic_closure_cert
+
+            (proof: arithmetic prime-limit control closes Weil positivity for all a; uniform CCM determinant convergence on compacts; Hurwitz zero-set identification)
+
+    }
+
+    // =================================================================
+    // PART D.1 — Finite-a screw kernel ↔ Marshal p-circle (numeric + classical)
+    // =================================================================
+
+    prove screw_pcircle_prime_side_finite_a_witness: ScrewPcirclePrimeSideFiniteA {
+
+        let cutoff(a) := exp(2a)
+        let Q_prime_Marshal := Marshal Weil explicit-formula prime side at sigma=1 with p <= cutoff(a)
+        let Q_prime_Suzuki := Suzuki screw-kernel prime sum over n <= cutoff(a) with Lambda(n)/sqrt(n) test weight
+
+        assume:
+
+            classical explicit formula (Weil 1952): prime-side Weil functional equals sum over prime powers n=p^k of Lambda(n)/sqrt(n) h(log n) for even test function h
+
+            classical Marshal p-circle discretization: eigenvalues {+- j log p} reproduce the same prime-side sum when h is Gaussian at sigma=1 (von_mangoldt_weil_form)
+
+            classical Suzuki finite-a cutoff (2606.09096): for fixed a>0 only prime powers n with log n <= 2a contribute to the localized screw-kernel prime block
+
+            classical Weil explicit formula identity: the finite prime block equals the Marshal p-circle Weil prime side at sigma=1 with the same cutoff on n
+
+            dep von_mangoldt_weil_form
+            dep suzuki_friedrichs_construction
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            for fixed a>0, Suzuki screw-kernel prime cutoff n <= exp(2a) matches Marshal p-circle Weil prime side at sigma=1 (discrete-continuous bridge at finite level)
+
+            (classical identity of prime-side sums at finite a; does NOT prove a -> infinity limit nor lambda_a >= 0 for all a)
+
+    }
+
+}

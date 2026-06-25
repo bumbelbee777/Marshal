@@ -1,6 +1,6 @@
 {
   "ok": true,
   "entries": [
-    {"obligation_id": "genus_one_log_summability", "source": "mrs_proof_audit", "witness": "", "prove_ref": "", "ok": true, "failure_reason": ""}
+    {"obligation_id": "genus_one_log_summability", "source": "mrs_proof_audit", "tier": "", "referee_class": "", "witness": "", "prove_ref": "", "ok": true, "failure_reason": ""}
   ]
 }

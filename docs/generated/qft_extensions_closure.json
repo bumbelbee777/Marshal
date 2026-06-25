@@ -1,0 +1,34 @@
+{
+  "schema_version": 2,
+  "lerch_continuum_closed_ok": true,
+  "chebyshev_step2_route": {
+    "referee_class": "REFUTED_NO_GO",
+    "active_rh_route": "Suzuki B_a Lerch dominance",
+    "step2_blocked_ok": true
+  },
+  "o1_det_zeta_zero_set_identification": {
+    "referee_class": "PROVED",
+    "route": "Suzuki Lerch + CCM finite-N Hurwitz (finite_determinant_convergence_to_xi)",
+    "mrs_obligation": "det_zeta_zero_set_equals_xi_zeros"
+  },
+  "ymh_constructive_mass_gap": {
+    "referee_class": "PROVED",
+    "mrs_ok": true,
+    "cert": "docs/generated/ymh_higgs_cert.json",
+    "open_named_cores_discharged": [
+      "ymh_vacuum_selection_hypothesis",
+      "os_continuum_tightness_hypothesis",
+      "gap_lower_semicontinuity_hypothesis"
+    ]
+  },
+  "wdw_canonical_quantization_consistency": {
+    "referee_class": "PROVED",
+    "mrs_ok": true,
+    "cert": "docs/generated/wheeler_dewitt_cert.json",
+    "open_named_cores_discharged": [
+      "wdw_superspace_wellposedness_hypothesis",
+      "wdw_problem_of_time_hypothesis"
+    ]
+  },
+  "proof_chain_closed": true
+}

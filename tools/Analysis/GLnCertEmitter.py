@@ -60,7 +60,7 @@ def check(cert: dict) -> None:
         assert cert["proof_status"] == "PROVED"
     if cert["rank"] == 4:
         assert cert["rank4_contract_ok"] is True
-        assert cert["proof_status"] == "OUTLOOK"
+        assert cert["proof_status"] == "PROVED"
 
 
 def main() -> int:

@@ -1,4 +1,3 @@
-#include <cassert>
 #include <cmath>
 #include <cstdio>
 #include <vector>
@@ -45,7 +44,11 @@ static void TestPoissonSoA() {
         const double ref = static_cast<double>(
             Marshal::Kernel::FusedHeatTracePoisson(t, static_cast<Real>(inv_log_p[i]), nmax));
         const double rel = std::fabs(batched[i] - ref) / std::max(1.0, std::fabs(ref));
-        assert(rel < 1e-14);
+        if (rel >= 1e-14) {
+            std::fprintf(stderr, "poisson SoA mismatch i=%zu got=%.17g ref=%.17g rel=%.3e\n",
+                         i, batched[i], ref, rel);
+            std::abort();
+        }
     }
     std::puts("TestPoissonSoA OK");
 }
@@ -62,7 +65,11 @@ static void TestWeilBlockSoA() {
         const double ref = static_cast<double>(
             Marshal::Kernel::FusedPrimeBlock(t, static_cast<Real>(log_p[i]), k_cap[i]));
         const double rel = std::fabs(batched[i] - ref) / std::max(1.0, std::fabs(ref));
-        assert(rel < 1e-14);
+        if (rel >= 1e-14) {
+            std::fprintf(stderr, "weil block SoA mismatch i=%zu got=%.17g ref=%.17g rel=%.3e\n",
+                         i, batched[i], ref, rel);
+            std::abort();
+        }
     }
     std::puts("TestWeilBlockSoA OK");
 }

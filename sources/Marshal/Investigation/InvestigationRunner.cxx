@@ -7,6 +7,7 @@
 #include "../Heat/BerryKeatingOperator.hxx"
 #include "../Heat/LogPrimeGlobal.hxx"
 #include "../Heat/T1TopologyValidation.hxx"
+#include "../Heat/PrimeArchCancelBudgetValidation.hxx"
 #include "../Kernel/CombinedDiracFast.hxx"
 #include "../Numerics/TestFunctions.hxx"
 #include "../TraceApi.hxx"
@@ -195,6 +196,11 @@ DiagnosticReport run_diagnostic(DiagnosticId id, const InvestigationSpec& spec, 
                                                                      grid, t1_tol);
         const std::string t1_path = spec.cert_root + "/t1_gap_curve.json";
         Marshal::Heat::export_t1_topology_validation_json(t1_path, t1rep);
+
+        const auto pac_rep = Marshal::Heat::run_prime_arch_cancel_budget_validation(
+            cfg, gammas_ld, cat, primes);
+        const std::string pac_path = "docs/generated/prime_arch_cancel_budget_cert.json";
+        Marshal::Heat::export_prime_arch_cancel_budget_json(pac_path, pac_rep);
 
         Real lo = -1, hi = -1;
         bool theta0_inside = false;

@@ -1,0 +1,281 @@
+// Phase 5.6 — Suzuki arithmetic domination attack (June 2026).
+//
+// PROVED: Gaussian prime saturation, Yoshida-window margins, Pf+zero coupling identity.
+// OPEN: cross_sector_pf_zero_arch_coupling_lower_bound = suzuki_arithmetic_prime_limit_control = lambda_a >= 0 = RH.
+
+mod marshal_cross_sector_step5_suzuki {
+
+    use marshal_hadamard_calculus.*;
+    use marshal_lambda_a_analytic_reduction.*;
+    use marshal_cross_sector_step5.*;
+    use marshal_cross_sector_analytic_lemmas.*;
+
+    prove cross_sector_gaussian_prime_saturated_all_a_witness: CrossSectorGaussianPrimeSaturatedAllA {
+
+        let L := limit of W_prime^{fin}(a) as a approaches infinity at Gaussian sigma equals one
+
+        assume:
+
+            classical Gaussian decay: each prime-power term Lambda(n)/sqrt(n) h(log n) decays exponentially in log n
+
+            classical monotone cutoff: W_prime^{fin}(a) is non-decreasing in a and converges to finite L approximately 1.070
+
+            classical hence for all a > 0: W_prime^{fin}(a) <= L — unconditional, no RH
+
+            dep weil_gaussian_prime_sum_convergent
+            dep weil_gaussian_prime_block_monotone
+
+            witness prime_tail_limit_closed_cert
+
+        conclude:
+
+            Suzuki arithmetic tail is saturated: Gaussian weighted prime block never exceeds L for any localization a
+
+            (classical convergence — NOT RH)
+
+    }
+
+    prove cross_sector_step5_yoshida_window_domination_witness: CrossSectorStep5YoshidaWindowDomination {
+
+        assume:
+
+            classical Yoshida (1992): lambda_a > 0 for all sufficiently small a > 0 — unconditional analytic anchor
+
+            classical domination chain sector bounds compose; in the Yoshida window the audited margin A - S_fin - Z is non-negative on the C++ a-grid for a at most 0.5
+
+            classical this is consistent with lambda_a > 0 but is NOT a proof of global domination — only the small-a compatibility check
+
+            dep cross_sector_domination_chain
+            dep yoshida_small_a_positivity_analytic
+            dep cross_sector_step5_sector_decomposition
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Yoshida window: sampled domination margin non-negative for a <= 0.5; global domination still fails beyond the window on the same grid
+
+            (Yoshida consistency + numeric audit — NOT global closure)
+
+    }
+
+    prove cross_sector_pf_sin_mode_positive_witness: CrossSectorPfSinModePositive {
+
+        assume:
+
+            classical Pf screw kernel 1/(2|x-y|) is positive definite on L2(-a,a); the lowest Rayleigh mode is sin(pi x / (2a)) with strictly positive quadratic Pf contribution q_pf > 0
+
+            classical C++ audit CrossSectorPfZeroCoupling: pf_sin_mode_positive_all_ok on sampled a-grid
+
+            dep cross_sector_step5_sector_decomposition
+            dep cross_sector_weil_operator_Ta
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Pf sector is strictly positive at the Rayleigh-min sin mode for every sampled a > 0 — unconditional anchor for Pf+zero coupling attack
+
+            (classical kernel positivity + numeric audit — NOT RH)
+
+    }
+
+    prove cross_sector_pf_zero_coupling_identity_witness: CrossSectorPfZeroCouplingIdentity {
+
+        let cross_balance := q_pf + q_zero - q_prime at Rayleigh-min mode
+        let lambda_a := q_pf + q_zero + q_prime at the same mode
+
+        assume:
+
+            classical exact algebra at the audited mode: lambda_a = cross_balance + 2 q_prime
+
+            classical arch-coupled margin: suzuki_coupling_margin = q_pf + q_zero - A(a) + q_prime = lambda_a - A(a) with A from 2A triangle envelope
+
+            classical C++ audit: coupling_identity_residual below tolerance on grid (CrossSectorPfZeroCoupling)
+
+            dep cross_sector_pf_sin_mode_positive
+            dep cross_sector_step5_sector_decomposition
+            dep cross_sector_arch_triangle_envelope
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Pf+zero+prime coupling identity PROVED at Rayleigh-min mode: lambda = cross_balance + 2 q_prime; Suzuki coupling margin = lambda - A tracks arch-aligned discharge
+
+            (exact sector algebra + audit — NOT global lambda positivity)
+
+    }
+
+    prove cross_sector_coupling_lambda_nonneg_equivalence_witness: CrossSectorCouplingLambdaNonnegEquivalence {
+
+        let cross_balance := q_pf + q_zero - q_prime at Rayleigh-min mode
+        let bare_lambda := q_pf + q_zero + q_prime at the same mode
+
+        assume:
+
+            classical exact coupling identity (PROVED): bare_lambda = cross_balance + 2 q_prime
+
+            classical when q_prime <= 0 at the minimizing mode: bare_lambda >= 0 if and only if q_pf + q_zero >= |q_prime| equivalently cross_balance >= 2|q_prime|
+
+            classical when q_prime > 0: bare_lambda >= cross_balance >= 0 suffices for positivity at that mode
+
+            classical hence the Phase 5.6 / Suzuki pin at the audited Rayleigh-min mode is exactly bare_lambda >= 0 — NOT the arch-shifted margin bare_lambda - A(a) which is strictly stronger once A(a) > 0
+
+            dep cross_sector_pf_zero_coupling_identity
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Suzuki Pf+zero+prime coupling pin at Rayleigh-min mode = bare_lambda >= 0 = cross_balance + 2 q_prime >= 0; arch-shift margin lambda - A is diagnostic only
+
+            (algebraic equivalence — PROVED, NOT RH)
+
+    }
+
+    prove cross_sector_bare_lambda_yoshida_window_witness: CrossSectorBareLambdaYoshidaWindow {
+
+        assume:
+
+            classical Yoshida (1992) Lemma 2: lambda_a > 0 for all sufficiently small a > 0 — unconditional analytic proof on the full localized Weil form
+
+            classical coupling identity: at the Rayleigh-min sin mode bare_lambda equals the sector sum q_pf + q_zero + q_prime and matches lambda_full_rayleigh on the C++ Pf+prime+zero proxy
+
+            classical C++ audit: bare_lambda_at_mode > 0 and cross_sector_lambda_full_yoshida_ok on a <= 1 sample grid
+
+            dep cross_sector_coupling_lambda_nonneg_equivalence
+            dep yoshida_small_a_positivity_analytic
+            dep cross_sector_pf_zero_coupling_identity
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Yoshida window PROVED: bare_lambda > 0 at Rayleigh-min mode for sampled a <= 1 consistent with Yoshida anchor — global bare_lambda >= 0 for all a remains the RH pin
+
+            (Yoshida + cert — NOT global closure)
+
+    }
+
+    prove cross_sector_pf_zero_arch_coupling_lower_bound_witness: CrossSectorPfZeroArchCouplingLowerBound {
+
+        let bare_lambda(a) := q_pf + q_zero + q_prime at Rayleigh-min mode on Q_W^a
+
+        assume:
+
+            classical RH pin (Suzuki Eq 1.12 / Weil 1952): bare_lambda(a) >= 0 for all a > 0 at the true Rayleigh minimizer of the full screw kernel Q_W^a
+
+            classical coupling equivalence (PROVED): bare_lambda = cross_balance + 2 q_prime; when q_prime <= 0 this is q_pf + q_zero >= |q_prime|
+
+            classical Yoshida anchor (PROVED): bare_lambda > 0 for small a; Suzuki 1.3 continuity: RH iff no zero crossing of lambda_a
+
+            classical full kernel still missing digamma K_arch bilinear piece in C++ proxy — audit tracks Pf+prime+zero sin-mode proxy until K_arch wired
+
+            dep cross_sector_coupling_lambda_nonneg_equivalence
+            dep cross_sector_bare_lambda_yoshida_window
+            dep cross_sector_pf_zero_coupling_identity
+            dep cross_sector_quadratic_prime_cs_bound
+            dep cross_sector_quadratic_arch_lower_bound
+            dep cross_sector_quadratic_zero_lower_bound
+            dep cross_sector_gaussian_prime_saturated_all_a
+            dep yoshida_small_a_positivity_analytic
+            dep lambda_a_zero_crossing_reformulation
+
+            classical OPEN: prove bare_lambda(a) >= 0 for all a > 0 on the full Q_W^a — Suzuki arithmetic prime control = suzuki_arithmetic_prime_limit_control = RH
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 5.6 discharge = global bare_lambda >= 0 at Rayleigh minimum = Weil positivity = RH; Yoshida window and coupling algebra closed; global pin remains Suzuki Conjecture 1.12
+
+            (AnalyticOpen — RH)
+
+    }
+
+    prove cross_sector_step5_linear_domination_obstruction_witness: CrossSectorStep5LinearDominationObstruction {
+
+        let A(a) := arch triangle envelope from Phase 2A
+        let L := saturated Gaussian prime limit approximately 1.070
+
+        assume:
+
+            classical 2A: A(a) increases to a plateau approximately 0.83 as a grows
+
+            classical Gaussian prime saturation: W_prime^{fin}(a) approaches L approximately 1.070 > A(a) for large a
+
+            classical hence the linear template W_prime + Z <= A(a) cannot hold for all a using the 2A envelope alone — zeros and Pf quadratic coupling are essential
+
+            classical raw CS weight S_fin(a) grows with cutoff and is even larger than W_prime^{fin}; the S_fin + Z <= A template fails even earlier on the audit grid
+
+            dep cross_sector_gaussian_prime_saturated_all_a
+            dep cross_sector_arch_triangle_envelope
+            dep cross_sector_quadratic_prime_cs_bound
+
+            witness cross_sector_weil_battleplan_cert and prime_tail_limit_closed_cert
+
+        conclude:
+
+            Linear domination against A(a) alone is obstructed once W_prime^{fin} exceeds A — explaining why Phase 5.6 cannot close from prime tail bounds only; the open Suzuki pin is intrinsically quadratic cross-sector
+
+            (proved obstruction — NOT RH)
+
+    }
+
+    prove cross_sector_suzuki_quadratic_rayleigh_pin_witness: CrossSectorSuzukiQuadraticRayleighPin {
+
+        assume:
+
+            classical Rayleigh characterization: lambda_a = inf unit f Q_W^a(f) = minimum of q_pf + q_prime + q_zero at the optimizing mode
+
+            classical suzuki_arithmetic_prime_limit_control after finite-a decomposition: control the full quadratic cross-sector form as a widens so lambda_a never crosses zero
+
+            classical equivalent to cross_balance at the Rayleigh-min mode: q_pf + q_zero + q_prime >= 0 for all a > 0
+
+            classical Pf+zero coupling identity (PROVED): lambda = cross_balance + 2 q_prime; suzuki_coupling_margin = lambda - A — direct Phase 5.6 attack target via cross_sector_pf_zero_arch_coupling_lower_bound
+
+            dep cross_sector_rayleigh_characterization
+            dep cross_sector_step5_sector_decomposition
+            dep cross_sector_pf_zero_coupling_identity
+            dep cross_sector_pf_zero_arch_coupling_lower_bound
+            dep lambda_a_zero_crossing_reformulation
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Refined Suzuki pin: prove quadratic Rayleigh nonnegativity lambda_a >= 0 for all a — the honest discharge target for suzuki_arithmetic_prime_limit_control
+
+            (explicit quadratic pin — OPEN = RH)
+
+    }
+
+    prove cross_sector_step5_suzuki_attack_spine_witness: CrossSectorStep5SuzukiAttackSpine {
+
+        assume:
+
+            classical PROVED attack inputs: Yoshida small-a anchor; zero-crossing reformulation; Gaussian prime saturation; sector bounds 2A/3A/CS; Pf sin-mode positivity; Pf+zero coupling identity; domination chain composition
+
+            classical OPEN discharge identical to cross_sector_pf_zero_arch_coupling_lower_bound and suzuki_arithmetic_prime_limit_control: lambda_a >= 0 for all a
+
+            dep cross_sector_step5_yoshida_window_domination
+            dep cross_sector_pf_sin_mode_positive
+            dep cross_sector_pf_zero_coupling_identity
+            dep cross_sector_pf_zero_arch_coupling_lower_bound
+            dep cross_sector_suzuki_quadratic_rayleigh_pin
+            dep cross_sector_domination_implies_lambda_nonneg
+            dep cross_sector_step5_zero_crossing_propagation
+            dep suzuki_prime_tail_numeric_audit
+
+            witness cross_sector_weil_battleplan_cert and prime_tail_limit_closed_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 5.6 attack spine PROVED (reduction): unconditional scaffolding including Pf+zero+arch coupling identity closed; sole remaining step = cross_sector_pf_zero_arch_coupling_lower_bound = suzuki_arithmetic_prime_limit_control = lambda_a >= 0 = RH
+
+            (attack spine — NOT unconditional RH)
+
+    }
+
+}

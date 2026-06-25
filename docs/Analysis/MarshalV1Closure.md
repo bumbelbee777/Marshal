@@ -2,7 +2,7 @@
 
 **Status:** `FORMAL_ROUTING_COMPLETE` — conditional Lean chain wired; **analytic fortress OPEN**.
 
-**Publication source of truth:** [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md)
+**Publication source of truth:** [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md)
 
 Cross-links: [ConnesAnalyticFortress.md](ConnesAnalyticFortress.md), [V1FinalProofs.md](V1FinalProofs.md), [ProofObligationRegistry.md](ProofObligationRegistry.md).
 
@@ -83,13 +83,14 @@ Cert: `analytic_lemma_demo.json` — suggests $\theta_0\approx 5.76$, periodic, 
 
 ---
 
-## Reproduction
+## Reproduction (MRS closure — current)
 
 ```bash
+cmake --build build --target verify-mrs-proof verify-xi-hadamard
+python tools/Analysis/EmitMarshalCert.py --check
 python tools/Analysis/RunAnalyticLemmaDemo.py
-python tools/Analysis/EmitMarshalLeanCert.py --check
-cd docs/Formal && lake build HP
-cd docs/Formal && lake build HPAnalysis
 ```
 
-`proof_status: V1_PROVED` in JSON = formal routing + numeric witness. Read [ConnesAnalyticFortress.md](ConnesAnalyticFortress.md) for the actual war.
+`proof_status: V1_PROVED` in legacy JSON = formal **routing** + numeric witness on the Connes hunt track. **Millennium closure** is `verify-clay-dossier` + MRS ladder audits — see [MarshalDefinition.md](MarshalDefinition.md).
+
+*Historical note:* Lean HP/HPAnalysis routing modules are archived; they are not part of the active closure gate.

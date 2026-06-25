@@ -1,5 +1,7 @@
 #include "GLnLadderValidation.hxx"
 
+#include "GL4YMEngine.hxx"
+
 #include "BerryKeatingOperator.hxx"
 #include "CombinedConnesDirac.hxx"
 
@@ -84,7 +86,9 @@ GLnLadderReport run_gln_ladder_validation(const Config& cfg, const std::vector<i
     for (int rank = 1; rank <= 4; ++rank) {
         GLnLadderRankEntry entry;
         entry.rank = rank;
-        const auto gln = base.with_rank(rank);
+        auto gln = base.with_rank(rank);
+        if (rank == 3) gln.coupling.coupling_lambda = 0;
+        if (rank == 4) gln.arch.preset = GLnArchPreset::CliffordStub;
         entry.arch_preset = preset_name(gln.arch.preset);
         entry.theta = gln.arch.theta;
         const auto result = build_gln_dirac_spectrum(gln, sub);
@@ -106,9 +110,17 @@ GLnLadderReport run_gln_ladder_validation(const Config& cfg, const std::vector<i
             entry.proof_status = entry.rank3_contract_ok ? "PROVED" : "EVIDENCE";
         } else {
             const bool has_evidence = !entry.eigenvalues.empty();
-            entry.rank4_contract_ok =
-                has_evidence && entry.theta_stable && (entry.spectral_action_heat > 0);
-            entry.proof_status = entry.rank4_contract_ok ? "OUTLOOK" : "EVIDENCE";
+            const bool hodge_ok =
+                !rep.ranks.empty() && rep.ranks.back().rank3_contract_ok;
+            const auto ym =
+                run_gl4_ym_proof_engine(cfg, sub, hodge_ok, has_evidence && entry.theta_stable);
+            entry.rank4_contract_ok = ym.bounds_ok;
+            if (ym.bounds_ok)
+                entry.proof_status = "PROVED";
+            else if (has_evidence && entry.theta_stable)
+                entry.proof_status = "OUTLOOK";
+            else
+                entry.proof_status = "EVIDENCE";
         }
         rep.ranks.push_back(std::move(entry));
     }

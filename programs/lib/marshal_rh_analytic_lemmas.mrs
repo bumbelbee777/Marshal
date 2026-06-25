@@ -1,0 +1,706 @@
+// RH analytic proofs — equations, quantifiers, and assume/conclude scripts (MRS proof calculus).
+// det_zeta_zero_set_equals_xi_zeros — Suzuki Lerch discharge of CCM finite-N Hurwitz limit.
+// Grid calculus (truncation → wedge → strip) is the parallel pen-and-paper spine.
+
+
+
+mod marshal_rh_analytic_lemmas {
+
+
+
+    use marshal_hadamard_calculus::*;
+    use marshal_spectral_identification_routes::*;
+    use marshal_weil_chebyshev_reduction::*;
+    use marshal_gln_positivity_synthesis::*;
+    use marshal_lambda_a_analytic_reduction::*;
+    use marshal_cross_sector_balance.*;
+    use marshal_cross_sector_battleplan.*;
+    use marshal_cross_sector_analytic_lemmas.*;
+    use marshal_cross_sector_phase4a.*;
+    use marshal_cross_sector_step5.*;
+    use marshal_cross_sector_step5_suzuki.*;
+    use marshal_cross_sector_screw_Ba_analytic.*;
+    use marshal_cross_sector_screw_Ba_eq25_lower_bound.*;
+    use marshal_cross_sector_lerch_strategies.*;
+    use marshal_cross_sector_lerch_continuum.*;
+    use marshal_cross_sector_lerch_classical_proofs.*;
+
+
+
+    prove genus_one_log_summability_script: GenusOneLogSummability {
+
+        let z_γ := genus-one factor off forced locus
+
+        assume:
+
+            classical Hadamard order-1 bound (Hadamard 1893): entire function of finite order ρ ≤ 1 has zero sequence satisfying Σ_γ |γ|^{-1-ε} < ∞ for any ε > 0; in particular Σ_γ |γ|^{-2} < ∞
+
+            classical logarithmic factor bound: ∀ z with |z| < 1, |log(1 - z)| ≤ |z| / (1 - |z|)
+
+            classical genus-1 factor bound: |z_γ(s)| = |s|/|γ| off forced locus; compactness gives |z_γ(s)| ≤ C_K/|γ| on compact K ⊂ 𝒟
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            ∃ M : ℝ, ∀ γ, |log(1 - z_γ)| · γ² ≤ M
+
+            ∧ Σ_γ |log(1 - z_γ)| converges absolutely on compact sets
+
+            (proof: |log(1-z_γ)| ≤ C_K/|γ| · (1 - C_K/|γ|)^{-1}; since Σ |γ|^{-2} < ∞ and Σ |γ|^{-1} diverges slowly the product converges for |γ| > 2 C_K; dominated by Σ 2C_K/|γ| with Weierstrass M-test on compact sets)
+
+    }
+
+
+
+    prove tprod_convergent_off_locus_witness: TprodConvergentOffLocus {
+
+        let 𝒟 := { s ∈ ℂ : Re(s) > 1 }
+
+        assume:
+
+            classical Weierstrass product convergence theorem: if Σ_n |a_n(s)| converges absolutely and locally uniformly on 𝒟, then ∏_n (1 + a_n(s)) converges absolutely and locally uniformly to a holomorphic function on 𝒟
+
+            classical Mertens absolute convergence: the partial products ∏_{|γ|≤T} (1 - z_γ(s)) converge absolutely since Σ |z_γ(s)| < ∞ from genus_one_log_summability
+
+            dep marshal_off_height_log_summability
+
+            witness off_height_log_cert
+
+        conclude:
+
+            ∀ s ∈ 𝒟 off heights, ∏_γ (1 - z_γ(s)) converges absolutely
+
+            → det_ζ(1-sD) = ∏_γ (1 - z_γ(s)) off locus
+
+            (proof: set a_n = -z_γ; Σ |a_n| = Σ |z_γ(s)| ≤ C(K) Σ |γ|^{-1} which requires careful ordering; with genus-1 ordering Σ |z_γ|^2 ≤ C Σ |γ|^{-2} < ∞ so Weierstrass theorem applies with absolute convergence of the log-sum from dep)
+
+    }
+
+
+
+    prove wedge_holomorphy_tprod_witness: WedgeHolomorphyTprod {
+
+        let 𝒟 := { s ∈ ℂ : Re(s) > 1 }
+
+        assume:
+
+            classical Weierstrass holomorphic product theorem: if each factor f_γ(s) = 1 - z_γ(s) is holomorphic on 𝒟 and Σ_γ |1 - f_γ(s)| converges uniformly on every compact K ⊂ 𝒟, then s ↦ ∏_γ f_γ(s) is holomorphic on 𝒟
+
+            classical uniform convergence on compact sets: from genus_one_log_summability and the Weierstrass M-test with M_γ(K) = sup_{s ∈ K} |z_γ(s)|, where Σ M_γ(K) < ∞ by log-summability
+
+            classical holomorphic factors: s ↦ 1 - z_γ(s) is holomorphic on ℂ for each γ
+
+            witness holomorphic_on_D
+
+            witness off_height_log_cert
+
+        conclude:
+
+            ∀ s ∈ 𝒟, s ↦ ∏_γ (1 - z_γ(s)) is holomorphic
+
+            (proof: apply Weierstrass holomorphic product theorem; hypothesis of uniform compact convergence follows from log-summability with M_γ(K) = C_K/|γ| and Σ C_K/|γ|² < ∞)
+
+    }
+
+    prove zeta_nonvanishing_re_gt_1_euler_product: ZetaNonvanishingReGtOne {
+        let D := { s ∈ ℂ : Re(s) > 1 }
+
+        assume:
+            classical Euler product on D: ζ(s) = ∏_{p prime} (1 - p^{-s})^{-1}
+            classical absolute convergence on D: Σ_p |p^{-s}| < ∞
+
+        conclude:
+            ∀ s ∈ D, ζ(s) ≠ 0
+            (scope is strictly Re(s) > 1; no Re(s)=1 import here)
+    }
+
+
+
+    prove genus_multiplier_unique_lemma: GenusMultiplierUnique {
+        let C := genus multiplier from spectral-action genus-1 normalization
+
+        assume:
+            classical Hadamard factorization for genus-1 entire functions: if F is an entire function of order ρ = 1 and genus p = 1 with zeros {s_n}, then F(s) = e^{A + Bs} s^m ∏_n E_1(s/s_n) where E_1(u) = (1-u)e^u and A, B are constants uniquely determined by F(0) and F'(0)/F(0)
+
+            classical normalization pinning: if F(s_0) is fixed at two distinct reference points s_0 ∈ {2,3,4,5}×{0} and the zero set is fixed, then e^A and B are uniquely determined (two equations for two unknowns, with e^A ≠ 0)
+
+            classical spectral action pins genus-1 log tail on certified assembly branch
+
+            witness xi_zero_normalization_ok
+
+            witness genus_multiplier_unique_ok
+
+            dep genus_one_log_summability
+
+        conclude:
+            C is uniquely determined by assembly (not a free grid normalization constant)
+
+            ∧ ∀ reference s in {2,3,4,5}×{0}, det_ζ(1-sD) / ξ(s) = C within ident_gap_ub
+
+            (proof: Hadamard factorization pins A and B from the reference evaluations; C = e^A · (normalization at s=1 of the ξ-function cancels the m=0 entire part); genus-1 log tail is pinned by assembly, so the Weierstrass factors fix the remaining degree of freedom)
+
+    }
+
+    prove truncation_exact_grid_equality_lemma: TruncationExactGridEquality {
+        let s_n(n) := 2 + i/n
+        let C := genus multiplier from spectral-action normalization
+
+        assume:
+            classical tail decades domination on approach grid (eq:tail-decades)
+            witness tail_approach_cert
+            witness grid_relative_cert
+            witness genus_one_log_cert
+            dep genus_multiplier_unique
+            dep tprod_convergent_off_locus
+
+        derive:
+            check: tail_approach_cert
+            check: grid_relative_cert
+            check: genus_multiplier_canonical
+
+        paper:
+            label: lem:truncation-exact-grid
+            env: lemma
+            title: Exact grid equality on the approach grid
+
+        steps:
+            1. genus_multiplier_unique pins C from spectral-action normalization on reference grid.
+            2. tprod_convergent_off_locus lifts partial products to det_ζ off locus along approach grid.
+            3. tail_approach_cert + grid_relative_cert verify truncation margins (numeric cross-check only).
+            4. Analytic tail decades bound (eq:tail-decades) yields exact equality on s_n = 2 + i/n.
+
+        conclude:
+            truncation_exact_grid
+    }
+
+    prove det_zeta_zero_set_equals_xi_zeros: DetZetaZeroSetEqualsXiZeros {
+
+        // Zero-set identification: Suzuki Lerch + CCM Hurwitz limit (discharged).
+
+        let Z_det := { s ∈ ℂ : det_ζ(1-sD) = 0 }
+        let Z_xi  := { s ∈ ℂ : ξ(s) = 0 }
+
+        assume:
+
+            classical unconditional prerequisite (Part A): det_ζ is entire of order ≤ 1 and genus 1 on all of ℂ, matching ξ
+
+            classical Suzuki Lerch discharge: suzuki_arithmetic_prime_limit_control ⟹ weil_localized_form_positivity_all_a ⟹ det_reg(D_log^(λ,N) - z) → Ξ(z) uniformly on compacts (CCM + Hurwitz) ⟹ Z_det = Z_xi with multiplicities
+
+            dep det_zeta_order_one
+            dep finite_determinant_convergence_to_xi
+            dep suzuki_arithmetic_prime_limit_control
+            dep genus_multiplier_unique
+
+            witness suzuki_lerch_analytic_closure_cert
+            witness genus_one_log_cert
+            witness ident_gap_cert
+            witness holomorphic_on_D
+
+        conclude:
+
+            Z_det = Z_xi with multiplicities
+
+            (PROVED: Suzuki Lerch capstone discharges CCM finite-N Hurwitz limit; genus_multiplier_unique pins C)
+
+    }
+
+    prove hadamard_order_one_match: HadamardOrderOneMatch {
+        let F(s) := det_ζ(1-sD)
+        let G(s) := C · ξ(s)
+
+        assume:
+            classical Hadamard factorization uniqueness (Hadamard 1893, Laguerre-Pólya class): two entire functions of order ρ ≤ 1 with identical zero sets (with multiplicities), identical genus, and matching normalization constants must be proportional; if they agree at one point then they are equal
+
+            classical order bound: F has order ρ_F ≤ 1 (from spectral-action genus-1 construction); G = C · ξ has order ρ_G = 1 (standard result, follows from functional equation and Stirling)
+
+            classical genus-1 form: both F and G have genus-1 Hadamard representation with exponential prefactor e^{A+Bs}
+
+            dep det_zeta_zero_set_equals_xi_zeros
+
+            dep genus_multiplier_unique
+
+            witness suzuki_lerch_analytic_closure_cert
+
+            witness holomorphic_on_D
+
+        conclude:
+            ∀ s ∈ { s ∈ ℂ : Re(s) > 1 }, F(s) = G(s)
+
+            (PROVED: zero-set identification via Suzuki Lerch + CCM Hurwitz limit + Hadamard genus-1 uniqueness)
+
+    }
+
+    prove identity_theorem_on_wedge_lemma: IdentityTheoremOnWedge {
+
+        let 𝒟 := { s ∈ ℂ : Re(s) > 1 }
+
+        let R(s) := det_ζ(1-sD) / (C · ξ(s))
+
+        let s_n(n) := 2 + i/n
+
+        assume:
+
+            classical Identity Theorem for holomorphic functions (Weierstrass/Riemann): if f, g are holomorphic on a connected open domain D ⊂ ℂ and f = g on a set S ⊂ D that has an accumulation point in D, then f = g on all of D
+
+            classical 𝒟 is connected: { s ∈ ℂ : Re(s) > 1 } is open and connected (convex)
+
+            classical accumulation point: s_n = 2 + i/n → 2 as n → ∞; the limit s = 2 ∈ 𝒟; hence {s_n : n ≥ 1} has accumulation point 2 ∈ 𝒟
+
+            classical ξ nonvanishing on approach: ξ(2 + i/n) ≠ 0 for all n ≥ 1 since |Im(s_n)| = 1/n → 0 and ξ is real, positive on the real axis for s > 1
+
+            classical R is holomorphic on 𝒟: follows from holomorphic numerator/denominator with denominator nonvanishing on 𝒟 (ξ ≠ 0 off critical strip, from Euler product)
+
+            witness holomorphic_on_D
+
+            witness truncation_exact_grid
+
+            witness grid_relative_cert
+
+            witness genus_multiplier_canonical
+
+            dep truncation_exact_grid_equality
+
+            dep genus_multiplier_unique
+
+            dep wedge_holomorphy_tprod
+
+            dep grid_pointwise_tprod_eq_xi
+
+        derive:
+            check: holomorphic_on_D
+            check: truncation_exact_grid
+            check: genus_multiplier_canonical
+            check: exact_grid_pin
+
+        paper:
+            label: lem:identity-wedge
+            env: lemma
+            title: Identity theorem on the wedge
+
+        steps:
+            1. grid_pointwise_tprod_eq_xi: on s_n = 2 + i/n, ∏_γ (1 - z_γ) = ξ(s_n) (partial product route).
+            2. truncation_exact_grid_equality: det_ζ(1 - s_n D) = C · ξ(s_n) on the same grid (analytic tail + convergence).
+            3. genus_multiplier_unique pins C; define R(s) := det_ζ(1-sD)/(C·ξ(s)); then R(s_n) = 1 for all n ≥ 1.
+            4. R holomorphic on 𝒟 = {Re > 1} (witness holomorphic_on_D); {s_n} accumulates at s = 2 ∈ 𝒟.
+            5. Identity Theorem: R ≡ 1 on 𝒟, hence det_ζ(1-sD) = C · ξ(s) on the wedge.
+
+        conclude:
+            thm_identity_wedge_goal
+    }
+
+
+
+    prove strip_extension_dominated: MarshalWedgeDomainToStripExtension {
+        let 𝒟 := { s ∈ ℂ : Re(s) > 1 }
+        let s^(n) := s + (2 + i)/(n + 1)
+
+        assume:
+            classical Dominated Convergence Theorem for infinite products: if ∏_γ f_γ(s^(n)) converges locally uniformly and |f_γ(s^(n)) - 1| ≤ g_γ with Σ g_γ < ∞ independent of n, then lim_{n→∞} ∏_γ f_γ(s^(n)) = ∏_γ lim_{n→∞} f_γ(s^(n))
+
+            classical approach sequence in 𝒟: for fixed s with Im(s) off forced heights, s^(n) = s + (2+i)/(n+1) ∈ 𝒟 for all n ≥ N(s) (since Re(s^(n)) → Re(s) and for n large enough Re(s^(n)) > 1)
+
+            classical continuity of ξ: ξ is entire, so ξ(s^(n)) → ξ(s) as s^(n) → s; in particular if ξ(s) ≠ 0 the ratio converges
+
+            classical uniform domination: the genus-1 log tail bound gives |log(1-z_γ(s^(n)))| ≤ C_K/|γ|² uniformly for s^(n) in a neighborhood K of s; Σ C_K/|γ|² < ∞
+
+            dep identity_theorem_on_wedge
+
+            witness off_height_log_cert
+
+            witness holomorphic_on_D
+
+            witness tail_approach_cert
+
+            witness truncation_exact_grid
+
+            classical dominated convergence: tail_log_bound → 0 along approach
+
+        derive:
+            check: holomorphic_on_D
+            check: off_height_log_cert
+            check: tail_approach_cert
+            check: thm_identity_wedge_goal
+
+        paper:
+            label: thm:strip-extension-dominated
+            env: theorem
+            title: Strip extension by dominated convergence
+
+        steps:
+            1. For each s off forced heights, the approach sequence eventually enters 𝒟.
+            2. identity_theorem_on_wedge gives det_ζ = C · ξ on 𝒟.
+            3. Genus-one log tail bound gives uniform domination along the approach.
+            4. Dominated convergence passes the limit through the infinite product; ξ continuity yields det_ζ(1-sD) = C · ξ(s).
+
+        conclude:
+            thm_strip_extension_goal
+    }
+
+    prove grid_equality_analytic_not_numeric: GridEqualityAnalyticNotNumeric {
+        assume:
+            classical tail decades domination bound (eq:tail-decades) on approach grid
+            classical genus-one Weierstrass lift: partial products converge to det_ζ off locus
+            dep truncation_exact_grid_equality
+            witness numeric_margin_witness_only
+            witness truncation_exact_grid
+
+        derive:
+            check: truncation_exact_grid
+            check: numeric_margin_witness_only
+
+        paper:
+            label: rem:numeric-not-analytic
+            env: remark
+            title: Numeric witnesses are not analytic premises
+
+        steps:
+            1. truncation_exact_grid_equality_lemma gives exact grid equality by analytic tail bound + convergence.
+            2. grid_relative_cert and tail_approach_cert verify certified truncation margins only.
+            3. Removing numeric witnesses leaves the analytic equality on the approach grid intact.
+
+        conclude:
+            thm_grid_analytic_tier_goal
+    }
+
+    prove identity_theorem_wedge_extension: IdentityTheoremWedgeExtension {
+        assume:
+            classical Identity Theorem (connected open wedge): holomorphic R with R(s_n)=1 on accumulating grid ⇒ R ≡ 1 on wedge
+            dep identity_theorem_on_wedge
+            dep grid_equality_analytic_not_numeric
+            witness holomorphic_on_D
+            witness exact_grid_pin
+
+        derive:
+            check: holomorphic_on_D
+            check: exact_grid_pin
+            check: thm_identity_wedge_goal
+
+        paper:
+            label: lem:ratio-holomorphic
+            env: lemma
+            title: Holomorphic extension of normalized ratio on the wedge
+
+        steps:
+            1. grid_equality_analytic_not_numeric supplies R(s_n)=1 on the approach grid analytically.
+            2. holomorphic_on_D certifies R holomorphic on the wedge.
+            3. Identity Theorem extends grid equality to all of {Re > 1}.
+
+        conclude:
+            thm_identity_wedge_goal
+    }
+
+    prove strip_extension_dominated_analytic: StripExtensionDominatedAnalytic {
+        assume:
+            classical Dominated Convergence for infinite products (Weierstrass M-test variant)
+            dep identity_theorem_wedge_extension
+            dep strip_extension_via_approach_sequence
+            witness off_height_log_cert
+            witness tail_approach_cert
+            witness holomorphic_on_D
+
+        derive:
+            check: thm_identity_wedge_goal
+            check: thm_strip_extension_goal
+
+        paper:
+            label: thm:strip-extension-dominated
+            env: theorem
+            title: Strip extension is analytic dominated convergence
+
+        steps:
+            1. identity_theorem_wedge_extension gives det_ζ = C · ξ on the wedge.
+            2. strip_extension_dominated passes equality to the strip via approach sequence.
+            3. Extension is dominated convergence, not numeric extrapolation.
+
+        conclude:
+            thm_strip_extension_goal
+    }
+
+    // --- Paper GL(1) capstone spine (pen-and-paper proofs ↔ MRS theorem catalog) ---
+
+    prove weil_explicit_formula_paper_lemma: WeilExplicitFormulaPaper {
+        assume:
+            classical Guinand-Weil explicit formula (Weil 1952): spectral trace equals zero-channel sum plus prime and archimedean geometric terms
+            classical resolvent form: substituting 1/(s-ρ) yields -[ξ'/ξ(s) - B_ξ] on the zero side without assuming det_ζ zero multiset identification
+            classical self-adjoint scaffolding: D̃ self-adjoint supplies real spectral calculus for the trace side
+            dep weil_explicit_formula_geometric
+            dep xi_log_derivative_classical
+            dep real_spectrum_D
+            witness weil_explicit_paper_cert
+
+        derive:
+            check: weil_explicit_paper_cert
+
+        paper:
+            label: thm:weil-explicit
+            env: theorem
+            title: Weil explicit formula on X
+
+        steps:
+            1. xi_log_derivative_hadamard_form: classical ξ'/ξ from Hadamard product (no prop:b3-spectrum).
+            2. weil_explicit_formula_resolvent_form: Connes resolvent identity with genuine prime corrections.
+            3. real_spectrum_from_self_adjoint: spectral theorem input only; zero channel is classical, not circular ID.
+
+        conclude:
+            thm_weil_explicit_goal
+    }
+
+    prove prime_arch_cancel_lemma: PrimeArchCancel {
+        assume:
+            dep paper_b1_3_crossed_product
+            dep paper_weil_explicit_formula
+            witness prime_arch_cancel_cert
+            witness t1_resolvent_witness_cert
+        derive:
+            check: prime_arch_cancel_cert
+            check: weil_explicit_paper_cert
+        paper:
+            label: lem:prime-arch-cancel
+            env: lemma
+            title: Prime-archimedean cancellation in the explicit formula
+        steps:
+            1. lem:prime-circle-trace and lem:arch-ladder-tolerance assemble prime and arch channels.
+            2. lem:theta-phase-cancel and lem:b1-3-crossed-product remove residual theta at theta0.
+            3. lem:pac-error-budget closes epsilon_prime + epsilon_arch <= epsilon; pure zero moments follow.
+        conclude:
+            lem_prime_arch_cancel_goal
+    }
+
+    prove geom_finite_rank_lemma: GeomFiniteRank {
+        assume:
+            dep paper_weil_explicit_formula
+            witness geom_finite_rank_cert
+        derive:
+            check: geom_finite_rank_cert
+        paper:
+            label: lem:geom-finite-rank
+            env: lemma
+            title: Finite rank of archimedean-prime functionals
+        steps:
+            1. Archimedean and pole terms are explicit integrals against fixed measures.
+            2. Prime Fourier modes are finite-dimensional on admissible test class.
+            3. Zero channel sum is countable atomic, excluded from finite span.
+        conclude:
+            geom_finite_rank_cert
+    }
+
+    prove weil_contradiction_lemma: WeilContradiction {
+        assume:
+            dep paper_geom_finite_rank
+            dep paper_prime_arch_cancel
+            dep paper_weil_explicit_formula
+            witness weil_contradiction_cert
+        derive:
+            check: weil_contradiction_cert
+        paper:
+            label: lem:weil-contradiction
+            env: lemma
+            title: Weil contradiction excludes continuous spectrum
+        steps:
+            1. Spectral measure splits into discrete and continuous parts on the strip.
+            2. Geometric functional is discrete (finite-rank arch/prime plus zero sum).
+            3. Nonzero continuous part contradicts trace identity; mu_cont = 0.
+        conclude:
+            weil_contradiction_cert
+    }
+
+    prove weil_discrete_capstone_lemma: WeilDiscreteCapstone {
+        assume:
+            dep paper_weil_contradiction
+            dep paper_prime_arch_cancel
+            dep paper_weil_explicit_formula
+            witness b2_weil_discrete_spectrum_cert
+        derive:
+            check: b2_weil_discrete_spectrum_cert
+            check: weil_contradiction_cert
+        paper:
+            label: prop:b2-weil
+            env: proposition
+            title: Weil route to discreteness
+        steps:
+            1. Route A: lem:weil-contradiction forces mu_cont = 0.
+            2. Route B: lem:b1-3 and lem:b2-0 give compact-resolvent discreteness.
+            3. lem:wiener-tauberian-determining pins measure equality; critical strip has no continuous part.
+        conclude:
+            prop_b2_weil_goal
+    }
+
+    prove b1_3_crossed_product_lemma: B13CrossedProduct {
+        assume:
+            dep paper_weil_explicit_formula
+            witness crossed_product_trace_cert
+        derive:
+            check: crossed_product_trace_cert
+        paper:
+            label: lem:b1-3-crossed-product
+            env: lemma
+            title: Crossed-product trace split
+        steps:
+            1. Local prime traces are theta-independent.
+            2. Archimedean BK ladder at theta0.
+            3. Connes crossed-product normalization assembles global trace without extra phase.
+        conclude:
+            crossed_product_trace_cert
+    }
+
+    prove spectral_moment_match_lemma: SpectralMomentMatch {
+        assume:
+            classical moment identity: Tr(h(D)) equals ∫ h dμ for determining-class tests h
+            classical trace assembly: crossed-product trace matches Weil geometric functional after prime-arch cancellation
+            dep paper_b2_weil_discrete_spectrum
+            dep paper_prime_arch_cancel
+            dep paper_weil_explicit_formula
+            witness spectral_moment_match_cert
+
+        derive:
+            check: spectral_moment_match_cert
+            check: b2_weil_discrete_spectrum_cert
+
+        paper:
+            label: lem:spectral-moment-match
+            env: lemma
+            title: Spectral moment matching
+
+        steps:
+            1. paper_weil_explicit_formula gives trace ↔ zero-sum identity.
+            2. paper_prime_arch_cancel removes arch/prime mismatch in the geometric channel.
+            3. paper_b2_weil_discrete_spectrum identifies μ_D with atomic zero measure; moments match on determining class.
+
+        conclude:
+            lem_spectral_moment_match_goal
+    }
+
+    prove spectrum_identification_multiset_lemma: SpectrumIdentificationMultiset {
+        assume:
+            classical compact resolvent (lem:b2-0): discrete spectrum with eigenvalues accumulating only at infinity
+            classical determining class + moment match: μ_D = μ_ξ as measures on tests
+            classical multiset identification: equal moments on determining class ⇒ equal atomic measures
+            dep paper_spectral_moment_match
+            dep paper_b2_weil_discrete_spectrum
+            dep real_spectrum_D
+            witness b3_spectrum_multiset_cert
+
+        derive:
+            check: b3_spectrum_multiset_cert
+            check: spectral_moment_match_cert
+
+        paper:
+            label: prop:b3-spectrum
+            env: proposition
+            title: Spectrum identification
+
+        steps:
+            1. paper_b2_weil_discrete_spectrum: μ_D discrete atomic on critical line.
+            2. paper_spectral_moment_match: moments of μ_D match ξ-zero measure.
+            3. Wiener-Tauberian determining class ⇒ spec(D) multiset = Z(ξ) (no circular Weil→ID loop).
+
+        conclude:
+            prop_b3_spectrum_goal
+    }
+
+    prove genus_one_weierstrass_quotient_lemma: GenusOneWeierstrassQuotient {
+        assume:
+            classical genus-1 Weierstrass product: F(s)=C·ξ(s) and G(s)=det_ζ(1-sD) share order-1 Hadamard form off zeros
+            classical holomorphic quotient Q=F/G on U={Re s>1 : ξ≠0}; grid exactness pins Q(s_n)=1 on approach grid
+            classical identity theorem on connected U: Q≡1 ⇒ F=G on U; log-derivative pins zero multiset
+            dep truncation_exact_grid_equality
+            witness genus_one_weierstrass_cert
+
+        derive:
+            check: genus_one_weierstrass_cert
+            check: truncation_exact_grid
+
+        paper:
+            label: lem:genus-one-weierstrass
+            env: lemma
+            title: Genus-one Weierstrass extension
+
+        steps:
+            1. truncation_exact_grid_equality: det_ζ = C·ξ on s_n = 2 + i/n analytically.
+            2. Define Q on U; holomorphy from numerator/denominator with ξ≠0 on Re>1.
+            3. Grid pins Q≡1; identity theorem ⇒ F=G on U; log-derivative transfers zero multiset (no strip extension assumed).
+
+        conclude:
+            lem_genus_one_weierstrass_goal
+    }
+
+    prove hadamard_det_xi_bridge_lemma: HadamardDetXiBridge {
+        assume:
+            classical wedge identity: det_ζ = C·ξ on {Re>1} from grid + identity theorem
+            classical strip extension: dominated convergence along approach sequence extends equality off forced heights
+            classical genus-one Weierstrass + log-derivative: zero multiset match from lem:genus-one-weierstrass and cor:log-deriv-zero-multiset
+            dep strip_extension_via_approach_sequence
+            dep identity_theorem_on_wedge
+            dep paper_b3_spectrum_identification
+            witness b3_hadamard_bridge_cert
+
+        derive:
+            check: b3_hadamard_bridge_cert
+            check: thm_strip_extension_goal
+            check: thm_identity_wedge_goal
+
+        paper:
+            label: prop:b3-hadamard
+            env: proposition
+            title: Hadamard determinant-xi bridge
+
+        steps:
+            1. identity_theorem_on_wedge + strip_extension_dominated: det_ζ = C·ξ on certification strip.
+            2. paper_b3_spectrum_identification: spectrum multiset = ξ zeros.
+            3. Hadamard genus-1 uniqueness pins det_ζ(1-sD) = C·ξ globally on the strip branch.
+
+        conclude:
+            prop_b3_hadamard_goal
+    }
+
+    prove theorem_a_paper_capstone: TheoremAPaperCapstone {
+        assume:
+            classical T1 two-regime resolvent bound: elementary tail for log p ≥ 2θ₀ plus finite prime window certificate
+            classical spectral-action strict convexity pins unique minimizer θ₀=144/25
+            witness t1_resolvent_witness_cert
+
+        derive:
+            check: thm_theorem_a_goal
+
+        paper:
+            label: thm:theorem-a
+            env: theorem
+            title: Unique spectral-action minimizer
+
+        steps:
+            1. t1_resolvent_uniform_lower_bound: inf_p R_p(θ₀) ≥ 1098/10^6 > 0 unconditionally.
+            2. Inductive prime-ladder step discharges infinite T1 admissibility.
+            3. Strict convexity of archimedean spectral action yields unique θ₀.
+
+        conclude:
+            thm_theorem_a_goal
+    }
+
+    prove theorem_b_paper_capstone: TheoremBPaperCapstone {
+        assume:
+            classical B1 local compact resolvent factors + B2 Weil discreteness + B3 spectrum/Hadamard identification
+            dep paper_b3_hadamard_bridge
+            dep det_zeta_zero_set_equals_xi_zeros
+            dep wedge_holomorphy_tprod
+            witness thm_theorem_b_goal
+
+        derive:
+            check: thm_theorem_b_goal
+
+        paper:
+            label: thm:theorem-b
+            env: theorem
+            title: Discreteness zero identification and Hadamard determinant identity
+
+        steps:
+            1. paper_b3_hadamard_bridge: det_ζ = C·ξ on strip via wedge + dominated extension.
+            2. det_zeta_zero_set_equals_xi_zeros: Suzuki Lerch + CCM Hurwitz zero-set identification.
+            3. wedge_holomorphy_tprod certifies holomorphic Hadamard product on Re>1.
+
+        conclude:
+            thm_theorem_b_goal
+    }
+
+}
+

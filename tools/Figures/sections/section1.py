@@ -55,7 +55,7 @@ def render_S2_rooted_dag_convergence() -> FigureMeta:
 
 
 def render_S3_global_limit() -> FigureMeta:
-    data = load_cert("global_connes_limit.json")
+    data = try_cert("global_connes_limit.json") or load_cert("global_dirac_limit.json")
     pts = data.get("points", data.get("ladder", []))
     cap = [p.get("combined_cap", p.get("mesh", i)) for i, p in enumerate(pts)]
     rmse = [p["spectrum_rmse"] for p in pts]
@@ -70,34 +70,68 @@ def render_S3_global_limit() -> FigureMeta:
     add_tier_badge(ax, "NUMERIC")
     save_figure(fig, "fig_S3_global_limit")
     return FigureMeta("S3_global_limit", "Global operator limit convergence.", "NUMERIC",
-                      ["global_connes_limit.json"])
+                      ["global_connes_limit.json", "global_dirac_limit.json"])
 
 
 def render_S4_weil_convergence() -> FigureMeta:
-    files = ["weil_convergence_T8_kappa1.json", "weil_convergence_gamma1_kappa60.json"]
-    fig, ax = plt.subplots(figsize=figsize_single())
+    files = [
+        "weil_convergence_T8_kappa1.json",
+        "weil_convergence_T8_kappa1_500k.json",
+        "weil_convergence_gamma1_kappa60.json",
+    ]
+    fig, axes = plt.subplots(1, 2, figsize=figsize_double())
+    ax_ladder, ax_bar = axes
+    plotted = False
     for fname in files:
         d = try_cert(fname)
         if not d:
             continue
-        T = d.get("T_values", d.get("T_ladder", []))
-        bz = d.get("b_zeros", d.get("zero_exponent", []))
-        if not T and "points" in d:
-            T = [p["T"] for p in d["points"]]
-            bz = [p.get("b_zeros", 0) for p in d["points"]]
-        if T and bz:
-            ax.loglog(T, np.maximum(bz, 1e-16), "o-", label=fname.split("_")[2])
+        ladder = d.get("zero_ladder", [])
+        if ladder:
+            nz = [p["n_zeros"] for p in ladder]
+            res = [max(p.get("weil_residual", 0), 1e-16) for p in ladder]
+            label = fname.replace("weil_convergence_", "").replace(".json", "")
+            ax_ladder.loglog(nz, res, "o-", label=label, markersize=4)
+            plotted = True
+            fit_b = d.get("fit", {}).get("b_zeros", {}).get("b")
+            if fit_b is not None:
+                ax_ladder.text(
+                    0.03, 0.97 - 0.06 * len(ax_ladder.lines),
+                    rf"$b_{{\mathrm{{zeros}}}}={fit_b:.3f}$ ({label})",
+                    transform=ax_ladder.transAxes, fontsize=7, va="top",
+                )
     summ = try_cert("weil_convergence_summary.json")
-    if summ and not ax.lines:
-        ax.text(0.5, 0.5, str(summ)[:200], transform=ax.transAxes, fontsize=8)
-    ax.set_xlabel("T")
-    ax.set_ylabel(r"$b_{\mathrm{zeros}}$")
-    ax.set_title("Weil convergence exponents")
-    ax.legend(fontsize=7)
-    add_tier_badge(ax, "NUMERIC")
+    if summ and summ.get("scenarios"):
+        scenarios = summ["scenarios"]
+        names = [s.get("file", "?").split("_")[2] if "_" in s.get("file", "") else "?" for s in scenarios]
+        bz = [s.get("b_zeros", 0) for s in scenarios]
+        bp = [abs(s.get("b_primes", 0)) for s in scenarios]
+        x = np.arange(len(names))
+        w = 0.35
+        ax_bar.bar(x - w / 2, bz, w, label=r"$b_{\mathrm{zeros}}$", color="#0072B2", alpha=0.85)
+        ax_bar.bar(x + w / 2, bp, w, label=r"$|b_{\mathrm{primes}}|$", color="#E69F00", alpha=0.85)
+        ax_bar.set_xticks(x)
+        ax_bar.set_xticklabels(names, fontsize=8)
+        ax_bar.set_ylabel("fit exponent")
+        ax_bar.set_title(r"Scenario exponents ($\kappa$ labels)")
+        ax_bar.legend(fontsize=7)
+        plotted = True
+    if not plotted:
+        raise RuntimeError("S4: no Weil convergence data in certs")
+    ax_ladder.set_xlabel(r"$N_{\mathrm{zeros}}$")
+    ax_ladder.set_ylabel(r"Weil residual")
+    ax_ladder.set_title("Weil truncation ladders")
+    ax_ladder.legend(fontsize=6, loc="upper right")
+    fig.suptitle("Weil explicit formula convergence", fontsize=11)
+    add_tier_badge(ax_bar, "NUMERIC")
     save_figure(fig, "fig_S4_weil_convergence")
-    return FigureMeta("S4_weil_convergence", "Weil explicit formula convergence exponents.", "NUMERIC",
-                      files)
+    sources = [f for f in files if try_cert(f)] + (["weil_convergence_summary.json"] if summ else [])
+    return FigureMeta(
+        "S4_weil_convergence",
+        "Weil explicit formula: zero-ladder residuals and scenario exponents.",
+        "NUMERIC",
+        sources,
+    )
 
 
 RENDERERS = {

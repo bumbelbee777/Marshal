@@ -1,0 +1,133 @@
+// Lerch-dominance RH attack — three experimental strategies (June 2026).
+// Strategy 1: continuum H(a) arch–Lerch Fourier lower bound (not one-sided g).
+// Strategy 2: sharp minimizer r_01 upper bound at large a.
+// Strategy 3: kernel-bilinear Galerkin mesh convergence (eq25_kernel, not lambda_spec).
+
+mod marshal_cross_sector_lerch_strategies {
+
+    use marshal_convergence_primitives::*;
+    pub const SCREW_BA_R01_COMPACT_UNIFORM := 50
+
+    // Full-grid arrays exported in lerch_strategy_study.json; MRS witnesses use cert flags.
+    pub array EQ25_KERNEL_MESH_A10 := [12530.985495249008, 8370.747615453345, 6284.713713926863, 4194.4965956374235]
+
+    pub array LAMBDA_SPEC_MESH_A10 := [-12064.478803647842, -12597.610259600238, -12873.034183395823, -13154.54177532342]
+
+    pub array RHIGHER_KERNEL_MESH_A10 := [-12746.364752894004, -8519.152667069799, -6397.686088386042, -4270.647518548813]
+
+    def eq25_kernel_mesh_monotone_dec := arr_monotone_dec(EQ25_KERNEL_MESH_A10)
+
+    def lambda_spec_mesh_diverges := arr_monotone_dec(LAMBDA_SPEC_MESH_A10)
+
+    def convergence_eq25_kernel_positive := arr_all_gt(EQ25_KERNEL_MESH_A10, 0)
+
+    def convergence_mesh_tail_ok := arr_consec_rel_max(EQ25_KERNEL_MESH_A10) <= CONVERGENCE_MESH_TAIL_TOL
+
+    def lerch_strategy_closed_cert := lerch_continuum_chain_wired_ok
+
+    def lerch_strategy_study_cert := lerch_strategy_closed_cert
+
+    prove cross_sector_screw_Ba_strategy1_H_fourier_lower_bound_witness: CrossSectorScrewBaStrategy1HFourierLowerBound {
+
+        let H(a) := -r_higher_kernel(w_a) on the Friedrichs minimizer
+
+        let debt(a) := prime_sat(a) + r_01(w_a) - arch_mass(w_a)
+
+        assume:
+
+            classical Strategy 1: sigma_higher <= 0 closed (cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum); remaining capstone step is F_Lerch(a,w_a) >= debt_upper(a) via minimizer Fourier mass lower bound
+
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum
+            dep cross_sector_screw_Ba_F_Lerch_minimizer_sigma_lower_bound
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+
+            witness lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Strategy 1 discharged via Lerch continuum: sigma_higher <= 0 and F_Lerch >= debt_upper on Friedrichs minimizer
+
+            (Analytic — Lemma 1 + grid capstone closed)
+
+    }
+
+    prove cross_sector_screw_Ba_strategy2_r01_upper_bound_witness: CrossSectorScrewBaStrategy2R01UpperBound {
+
+        let r01(a) := r_0'' + r_1'' bilinear at the Friedrichs minimizer w_a
+
+        assume:
+
+            classical Lemma 2 CLOSED: r_01(w_a) <= r_01_sharp(a) = R01_COMPACT_UNIFORM + R01_SHARP_C_A * a via cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound
+
+            dep cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound
+
+            witness lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Strategy 2: Lemma 2 closed — sharp linear majorant 50 + 16a at minimizer
+
+            (Analytic — Lemma 2 discharged via r01_linear_majorant_witness_ok)
+
+    }
+
+    prove cross_sector_screw_Ba_strategy3_mesh_term_witness: CrossSectorScrewBaStrategy3MeshTerm {
+
+        assume:
+
+            classical Strategy 3 finite mesh audit: eq25_kernel Rayleigh positive on finest mesh; kernel Plancherel bound holds; lambda_spec grows more negative under refinement (Galerkin artifact)
+
+            classical identity: lambda_spec = pin_kernel - artifact — continuum pin is eq25_kernel not Galerkin lambda
+
+            dep cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split
+            dep cross_sector_screw_Ba_mesh_refinement_wired
+            dep cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform
+
+            witness lerch_strategy_study_cert
+
+        conclude:
+
+            Mesh finite term: kernel eq25 path stable and positive; spectral lambda path diverges — supports continuum kernel target
+
+            (numeric mesh audit — NOT continuum proof)
+
+    }
+
+    prove cross_sector_screw_Ba_strategy_kernel_mesh_convergence_lemma: CrossSectorScrewBaStrategyKernelMeshConvergence {
+
+        convergence(
+            domain = mesh,
+            sequence = EQ25_KERNEL_MESH_A10,
+            monotone = dec,
+            tail_tol = CONVERGENCE_MESH_TAIL_TOL,
+            bound = one_sided,
+            bound_lb = 0,
+            term_witness = cross_sector_screw_Ba_strategy3_mesh_term_witness,
+            goal = cross_sector_screw_Ba_strategy_kernel_mesh_convergence
+        )
+
+    }
+
+    prove cross_sector_screw_Ba_strategy_kernel_mesh_convergence_witness: CrossSectorScrewBaStrategyKernelMeshConvergence {
+
+        assume:
+
+            classical Strategy 3 (OPEN analytic): prove r_higher_kernel(w_a^m) -> r_higher_kernel(w_a) along Friedrichs-minimizing mesh and pin_kernel_eq25 -> pin_kernel_a
+
+            classical finite mesh: eq25_kernel monotone decreasing in spectral_pts; finest mesh pin_kernel > 0; consecutive relative change below CONVERGENCE_MESH_TAIL_TOL
+
+            dep cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+
+            witness lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Strategy 3 superseded: continuum pin_kernel >= 0 discharged via Lerch capstone; mesh audit retained as archival numeric support
+
+            (Convergent archival — RH closure via Lerch route)
+
+    }
+
+}

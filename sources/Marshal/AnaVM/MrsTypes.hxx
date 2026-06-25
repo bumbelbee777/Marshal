@@ -225,6 +225,40 @@ struct MrsBoundAudit {
 
     double goldbach_n0 = 4;
 
+    double goldbach_effective_n_max = 10000;
+
+    double goldbach_extension_ratio_lb = 10.0;
+
+    double bsd_extension_ratio_lb = 2.0;
+
+    double bsd_formula_rel_gap_ub = 0.05;
+
+    double bsd_millennium_extension_ratio_lb = 2.0;
+
+    double hodge_extension_ratio_lb = 1.0;
+
+    double hodge_millennium_extension_ratio_lb = 1.0;
+
+    double hodge_millennium_pp_target = 22;
+
+    double rooted_rmse_ub = 0.001;
+
+    double gauge_over_gravity_lb = 1.0;
+
+    double holy_anchor_t = 3.141592653589793;
+
+    double ym_mass_gap_lb = 2.0;
+
+    double ym_extension_ratio_lb = 1.0;
+
+    double ym_millennium_extension_ratio_lb = 1.0;
+
+    double holy_stationarity_residual_ub = 50.0;
+
+    double ym_lattice_beta = 5.7;
+
+    double ym_lattice_volume = 64;
+
 };
 
 /// Genus-1 log summability audit (ported from Mathlib `GenusOneLogBounds` to AnaVM/MRS).

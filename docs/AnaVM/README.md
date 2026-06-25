@@ -1,10 +1,10 @@
 # AnaVM — Marshal Research Script (.mrs) v1
 
-AnaVM compiles high-level `.mrs` operator scripts, **MRS v1 proof modules** (`mod`/`prove`/`infer`), checks Weil coupling via symbolic eigenvalue derivation (`MrsSym`), runs **built-in formal analytics**, and exports **formal calibration JSON** + Lean certs when obligations close.
+AnaVM compiles high-level `.mrs` operator scripts, **MRS v1 proof modules** (`mod`/`prove`/`infer`), checks Weil coupling via symbolic eigenvalue derivation (`MrsSym`), runs **built-in formal analytics**, and exports **formal calibration JSON** + MRS witness audits when obligations close.
 
 See [MrsLanguage.md](MrsLanguage.md) for systems-syntax theorem engine details.
 
-**v1 objective:** unconditional classical RH via `programs/lib/marshal_hadamard_proof.mrs` + `MarshalAnaVmAnalyticClosure.lean`. **v2 deferred:** rank-generic GL(n) MRS proofs.
+**v1 (developing):** full GL(n) ladder closure via MRS proof scripts — `MrsProofLogic` replays `assume:`/`conclude:` bodies, `MrsProveSpine` enforces compile-time discipline (E0902–E0920), combinators discharge induction/∀/convergence. Version stays **v1** until the theorem-engine surface stabilizes; rank-generic proofs are in scope now, not a future v2.
 
 ## Usage
 
@@ -73,9 +73,9 @@ python tools/Analysis/MarshalXiHadamardEngineCert.py --check
 
 **Architecture:** `grid_pointwise_tprod_eq_xi` is proved **directly** from partial-product convergence + tail bounds at `s_n = 2 + i/n`. Wedge `EqOn` follows via identity theorem (grid accumulates to 2) — **not** the other way around. Proof graph cycle detection raises `E0800` if dependencies loop.
 
-Exports: `anavm_xi_hadamard_proof.json`, `anavm_xi_hadamard_proof_graph.json`, `mrs_infer_audit.json`. Lean emission writes pinned numerics (`MarshalXiHadamardAnaVmCert.lean`), audit bridge (`MarshalHadamardCanonicalProduct.lean`), and **parameterless** RH capstone (`MarshalAnaVmRhClosure.lean` → `classical_rh_unconditional_mrs`).
+Exports: `anavm_xi_hadamard_proof.json`, `anavm_xi_hadamard_proof_graph.json`, `mrs_proof_audit.json`, `mrs_infer_audit.json`. Capstones close when `MrsProofGate` reports `proof_chain_closed` and every audit row is `ok`.
 
-**Publication:** Weierstrass identification closed in `Analysis/MarshalAnaVmAnalyticClosure.lean` (`marshal_anavm_weierstrass_identification_proved`); MRS spine in `programs/lib/`. See [MarshalXiHadamardPublication.md](../Analysis/MarshalXiHadamardPublication.md).
+**Publication:** RH spine in `programs/lib/marshal_hadamard_proof.mrs`; machine-checked via `verify-mrs-proof`. See [MarshalXiHadamardPublication.md](../Analysis/MarshalXiHadamardPublication.md) and [PUBLICATION_STATUS.md](../Analysis/PUBLICATION_STATUS.md).
 
 ## Formal bridge
 

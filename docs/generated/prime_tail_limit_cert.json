@@ -1,0 +1,11 @@
+{
+  "version": 3,
+  "source": "docs/generated/prime_tail_limit_study.json",
+  "prime_tail_limit_audit_ok": true,
+  "prime_block_monotone_sample_ok": true,
+  "pnt_increment_bound_covers_sample_ok": true,
+  "prime_tail_saturation_sample_ok": true,
+  "lambda_proxy_positive_yoshida_sample_ok": true,
+  "arithmetic_limit_still_open_ok": false,
+  "lerch_continuum_closed_ok": true
+}

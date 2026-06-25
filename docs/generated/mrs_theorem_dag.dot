@@ -1,0 +1,31 @@
+digraph MRS {
+  rankdir=TB;
+  "gl2_kernel_rank_match" -> "bsd_rank_proved";
+  "gl2_sha_resolvent_gap" -> "bsd_rank_proved";
+  "bsd_rank_proved" -> "classical_bsd_rank_general";
+  "bsd_spectral_witness_extension" -> "classical_bsd_rank_general";
+  "gl2_l_function_identification" -> "classical_bsd_rank_general";
+  "goldbach_proved" -> "classical_goldbach";
+  "goldbach_spectral_analytic_continuation" -> "classical_goldbach";
+  "goldbach_major_minor_dominance_analytic" -> "classical_goldbach";
+  "goldbach_effective_range" -> "classical_goldbach";
+  "hodge_conjecture_proved" -> "classical_hodge11_general";
+  "hodge_spectral_witness_extension" -> "classical_hodge11_general";
+  "hodge_lefschetz_bridge" -> "classical_hodge11_general";
+  "ym_mass_gap_proved" -> "classical_ym_mass_gap_general";
+  "ym_spectral_witness_extension" -> "classical_ym_mass_gap_general";
+  "ym_hamiltonian_mass_gap_global" -> "classical_ym_mass_gap_general";
+  "hodge_kernel_h11_match" -> "hodge_conjecture_proved";
+  "hodge_lefschetz_bridge" -> "hodge_conjecture_proved";
+  "paper_weil_contradiction" -> "paper_b2_weil_discrete_spectrum";
+  "paper_prime_arch_cancel" -> "paper_b2_weil_discrete_spectrum";
+  "paper_weil_explicit_formula" -> "paper_b2_weil_discrete_spectrum";
+  "paper_spectral_moment_match" -> "paper_b3_spectrum_identification";
+  "paper_b2_weil_discrete_spectrum" -> "paper_b3_spectrum_identification";
+  "real_spectrum_D" -> "paper_b3_spectrum_identification";
+  "paper_b1_3_crossed_product" -> "paper_prime_arch_cancel";
+  "paper_weil_explicit_formula" -> "paper_prime_arch_cancel";
+  "ym_os_axioms_witness" -> "ym_mass_gap_proved";
+  "ym_spectral_to_hamiltonian_gap" -> "ym_mass_gap_proved";
+  "ym_hamiltonian_mass_gap_global" -> "ym_mass_gap_proved";
+}

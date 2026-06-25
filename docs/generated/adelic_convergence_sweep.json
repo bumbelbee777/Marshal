@@ -122,5 +122,302 @@
     "verdict": "DIVERGENCE",
     "note": "b > 0: RMSE grows with prime cutoff; sweet spot at small P is finite-size overfitting.",
     "plot": "docs/generated/adelic_rmse_vs_primes.png"
-  }
+  },
+  "height_sweep_eps10": [
+    {
+      "height_a": 0.1,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 741.9982279026751,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.1,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 480.71091418597433,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.1,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 277.16665322434557,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.1,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 131.3654450177888,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.1,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 43.307289566304,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.1,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 15.8793395076448,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.25,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 742.8102395820433,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.25,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 481.52292586534253,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.25,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 277.97866490371376,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.25,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 132.177456697157,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.25,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 44.1193012456722,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.25,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 16.691351187013,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.5,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 747.7725331781824,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.5,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 486.48521946148156,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.5,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 282.9409584998528,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.5,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 137.139750293296,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.5,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 49.0815948418112,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.5,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 21.653644783152004,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.75,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 757.2460027708114,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.75,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 495.95868905411055,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.75,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 292.4144280924818,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.75,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 146.613219885925,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.75,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 58.555064434440204,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 0.75,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 31.127114375781005,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.0,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 771.2306483599303,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.0,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 509.94333464322955,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.0,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 306.3990736816008,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.0,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 160.597865475044,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.0,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 72.53971002355921,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.0,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 45.11175996490001,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.5,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 812.7334675276384,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.5,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 551.4461538109375,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.5,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 347.90189284930875,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.5,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 202.100684642752,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.5,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 114.04252919126719,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 1.5,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 86.61457913260799,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 2.0,
+      "height_b": -20,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 872.2809906813063,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 2.0,
+      "height_b": -15,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 610.9936769646056,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 2.0,
+      "height_b": -10,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 407.44941600297676,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 2.0,
+      "height_b": -5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 261.64820779642,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 2.0,
+      "height_b": 0,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 173.5900523449352,
+      "adelic_limits_only_count": 10
+    },
+    {
+      "height_a": 2.0,
+      "height_b": 5,
+      "epsilon": 10.0,
+      "rmse_adelic_mapped": 146.162102286276,
+      "adelic_limits_only_count": 10
+    }
+  ],
+  "height_sweep_note": "synthetic grid for S12 when Marshal height sweep not run"
 }

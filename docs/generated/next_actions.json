@@ -58,7 +58,7 @@
       "action": "run_analytic_lemma_demo",
       "lemma": "connes_analytic_lemma_demo",
       "status": "ANALYTIC_DEMONSTRATION_OPEN",
-      "suggested_approach": "Run RunAnalyticLemmaDemo.py; emit ConnesAnalyticLemmaCert; lake build",
+      "suggested_approach": "Run RunAnalyticLemmaDemo.py; emit ConnesAnalyticLemmaCert; cmake --build build --target verify-mrs-proof",
       "note": "Per-lemma gate map: weil PROVED, extension/discreteness/det=xi OPEN",
       "_ordinal": 6
     },
@@ -68,7 +68,7 @@
       "action": "run_formal_limit",
       "lemma": "global_connes_dirac_limit",
       "status": "FORMAL_LIMIT_OPEN",
-      "suggested_approach": "Run RunGlobalDiracLimit.py; emit GlobalConnesDiracLimitCert; lake build in docs/Formal",
+      "suggested_approach": "Run RunGlobalDiracLimit.py; emit GlobalConnesDiracLimitCert; verify-mrs-proof",
       "note": "Primary track — finite RMSE divergence documents DISCRETIZATION_IDENTIFICATION_FAILS",
       "_ordinal": 7
     },

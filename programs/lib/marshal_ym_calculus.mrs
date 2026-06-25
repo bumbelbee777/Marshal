@@ -1,0 +1,24 @@
+// GL(4) Yang--Mills formal goal defs for machine-checked theorem registry.
+
+
+
+mod marshal_ym_calculus {
+
+
+
+    use ladder_analytic_lemmas::*;
+
+
+
+    def thm_ym_os3_constructive_goal := os_reflection_ok and self_adjoint_ok
+
+    def thm_ym_os3_full_goal := os_reflection_ok and os_axioms_ok
+
+    def thm_ym_transfer_gap_goal := mass_gap_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb
+
+    def thm_ym_capstone_goal := os_axioms_ok and mass_gap_ok and lattice_gap_ok and su3_reduction_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb
+
+
+
+}
+

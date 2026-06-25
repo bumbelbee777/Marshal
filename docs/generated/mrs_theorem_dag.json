@@ -1,0 +1,122 @@
+{
+  "acyclic": true,
+  "capstone_nodes": [
+    "bsd_rank_proved",
+    "classical_bsd_rank_general",
+    "classical_goldbach",
+    "classical_hodge11_general",
+    "classical_ym_mass_gap_general",
+    "hodge_conjecture_proved",
+    "paper_b2_weil_discrete_spectrum",
+    "paper_b3_spectrum_identification",
+    "paper_prime_arch_cancel",
+    "ym_mass_gap_proved"
+  ],
+  "cycles": [],
+  "edges": {
+    "bsd_rank_proved": [
+      "gl2_kernel_rank_match",
+      "gl2_sha_resolvent_gap"
+    ],
+    "bsd_rh_prerequisite": [
+      "classical_riemann_hypothesis_marshal_proved"
+    ],
+    "bsd_spectral_witness_extension": [
+      "bsd_rank_proved",
+      "gl2_l_function_identification"
+    ],
+    "classical_bsd_rank_general": [
+      "bsd_rank_proved",
+      "bsd_spectral_witness_extension",
+      "gl2_l_function_identification"
+    ],
+    "classical_goldbach": [
+      "goldbach_proved",
+      "goldbach_spectral_analytic_continuation",
+      "goldbach_major_minor_dominance_analytic",
+      "goldbach_effective_range"
+    ],
+    "classical_hodge11_general": [
+      "hodge_conjecture_proved",
+      "hodge_spectral_witness_extension",
+      "hodge_lefschetz_bridge"
+    ],
+    "classical_ym_mass_gap_general": [
+      "ym_mass_gap_proved",
+      "ym_spectral_witness_extension",
+      "ym_hamiltonian_mass_gap_global"
+    ],
+    "goldbach_bsd_shared_gln2": [
+      "bsd_rank_proved"
+    ],
+    "goldbach_rh_prerequisite": [
+      "classical_riemann_hypothesis_marshal_proved"
+    ],
+    "hodge_conjecture_proved": [
+      "hodge_kernel_h11_match",
+      "hodge_lefschetz_bridge"
+    ],
+    "hodge_rh_prerequisite": [
+      "classical_riemann_hypothesis_marshal_proved"
+    ],
+    "hodge_spectral_witness_extension": [
+      "hodge_conjecture_proved",
+      "hodge_lefschetz_bridge"
+    ],
+    "paper_b2_weil_discrete_spectrum": [
+      "paper_weil_contradiction",
+      "paper_prime_arch_cancel",
+      "paper_weil_explicit_formula"
+    ],
+    "paper_b3_hadamard_bridge": [
+      "strip_extension_via_approach_sequence",
+      "identity_theorem_on_wedge",
+      "paper_b3_spectrum_identification"
+    ],
+    "paper_b3_spectrum_identification": [
+      "paper_spectral_moment_match",
+      "paper_b2_weil_discrete_spectrum",
+      "real_spectrum_D"
+    ],
+    "paper_prime_arch_cancel": [
+      "paper_b1_3_crossed_product",
+      "paper_weil_explicit_formula"
+    ],
+    "paper_spectral_moment_match": [
+      "paper_b2_weil_discrete_spectrum",
+      "paper_prime_arch_cancel",
+      "paper_weil_explicit_formula"
+    ],
+    "paper_weil_contradiction": [
+      "paper_geom_finite_rank",
+      "paper_prime_arch_cancel",
+      "paper_weil_explicit_formula"
+    ],
+    "ym_hodge_prerequisite": [
+      "hodge_conjecture_proved"
+    ],
+    "ym_mass_gap_proved": [
+      "ym_os_axioms_witness",
+      "ym_spectral_to_hamiltonian_gap",
+      "ym_hamiltonian_mass_gap_global"
+    ],
+    "ym_spectral_witness_extension": [
+      "ym_mass_gap_proved",
+      "ym_spectral_to_hamiltonian_gap"
+    ]
+  },
+  "labels": {
+    "bsd_rank_proved": "",
+    "classical_bsd_rank_general": "",
+    "classical_goldbach": "",
+    "classical_hodge11_general": "",
+    "classical_ym_mass_gap_general": "",
+    "hodge_conjecture_proved": "",
+    "paper_b2_weil_discrete_spectrum": "",
+    "paper_b3_spectrum_identification": "",
+    "paper_prime_arch_cancel": "",
+    "ym_mass_gap_proved": ""
+  },
+  "node_count": 252,
+  "ok": true
+}

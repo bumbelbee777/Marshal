@@ -17,7 +17,7 @@ SPINE_MODULES = [
     "Analysis/MarshalHadamardWeierstrassClosure.lean",
     "Analysis/ClassicalRiemannHypothesis.lean",
     "Analysis/MarshalCertLift.lean",
-    "Analysis/FortressClosure.lean",
+    "Analysis/TheoremsABClosure.lean",
     "Analysis/MarshalAnaVmAnalyticClosure.lean",
 ]
 

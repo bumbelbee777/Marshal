@@ -25,7 +25,8 @@ TraceResult EvaluateTrace(const TestFunction& tf, Real sigma,
                           const Heat::PrimeCatalog& cat, ZeroKernel zk, SimdLevel simd,
                           Real eps, bool include_trivial, bool precision_mode = false,
                           int arch_pts = 400000, bool quick_sinc2_arch = false,
-                          const Heat::ArchimedeanBoundarySpec* arch_spec = nullptr);
+                          const Heat::ArchimedeanBoundarySpec* arch_spec = nullptr,
+                          bool scale_mode = false);
 
 // Prefix evaluation: sum only the first n_zeros ordinates (no vector copy).
 TraceResult EvaluateTracePrefix(const TestFunction& tf, Real sigma, const double* gammas,
@@ -33,7 +34,8 @@ TraceResult EvaluateTracePrefix(const TestFunction& tf, Real sigma, const double
                                 const Heat::PrimeCatalog& cat, ZeroKernel zk, SimdLevel simd,
                                 Real eps, bool include_trivial, bool precision_mode = false,
                                 int arch_pts = 400000, bool quick_sinc2_arch = false,
-                                const Heat::ArchimedeanBoundarySpec* arch_spec = nullptr);
+                                const Heat::ArchimedeanBoundarySpec* arch_spec = nullptr,
+                                bool scale_mode = false);
 
 struct ArchSinc2AuditPoint {
     Real L = 0;

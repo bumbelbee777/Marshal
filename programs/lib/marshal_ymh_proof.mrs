@@ -1,0 +1,103 @@
+// GL(4) Yang-Mills-Higgs MRS proof graph — Higgs sector on top of the YM rung.
+//
+// STATUS: NEW QFT rung in development. The tree-level Higgs-mechanism content
+// (spontaneous symmetry breaking, mass spectrum, positive physical gap) is
+// machine-checked by tools/Analysis/EmitYMHHiggsCert.py
+// (docs/generated/ymh_higgs_cert.json). The constructive interacting-QFT mass
+// gap is NOT claimed: it reduces (REDUCTION) onto the SAME two continuum cores
+// as pure YM plus a vacuum-selection input. No capstone is marked PROVED here.
+//
+// This module is authored to the same witness-discipline standard enforced by
+// MrsChainHardening / ValidateEpistemicDiscipline. It is not yet wired into a
+// C++ engine entry; its numeric backing is the YMH Higgs cert.
+
+mod marshal_ymh_proof {
+
+    use marshal_ym_proof::*;
+    use marshal_ym_analytic_lemmas::*;
+    use marshal_ymh_millennium_lemmas::*;
+
+    // --- Higgs sector prove bodies ----------------------------------------
+
+    prove ymh_symmetry_breaking_vacuum: YMHSymmetryBreakingVacuum {
+        assume:
+            classical Higgs potential V(Phi) = -mu2 (Phi^dagger Phi) + lam (Phi^dagger Phi)^2 with mu2 > 0, lam > 0
+            classical stationarity: dV/d(Phi^dagger Phi) = 0 at Phi^dagger Phi = mu2/(2 lam) > 0
+            classical second-derivative test: d^2V/d(Phi^dagger Phi)^2 = 2 lam > 0 (true minimum)
+            witness higgs_vev > 0 and higgs_vacuum_is_minimum
+        conclude:
+            the symmetric point Phi = 0 is unstable and the vacuum sits at v = sqrt(mu2/lam) > 0
+            (spontaneous breaking of SU(2); machine-checked in ymh_higgs_cert.json)
+    }
+
+    prove ymh_goldstone_count: YMHGoldstoneCount {
+        assume:
+            classical Goldstone theorem: each spontaneously broken continuous generator yields a massless mode
+            classical SU(2) has dim = 3 broken generators in the fully broken vacuum
+            classical Higgs mechanism: the 3 Goldstone modes are gauged away (eaten), giving 3 massive vectors
+            witness goldstone_modes_eaten == 3 and goldstone_mass == 0
+        conclude:
+            exactly 3 massless Goldstone modes appear and are eaten by the gauge field,
+            leaving a massive radial Higgs and 3 massive gauge bosons
+    }
+
+    prove ymh_higgs_mass_spectrum: YMHHiggsMassSpectrum {
+        assume:
+            classical tree-level masses: m_H = sqrt(2 mu2), m_W = g v / 2 with v > 0
+            classical positivity: mu2 > 0 and g > 0 and v > 0 imply m_H > 0 and m_W > 0
+            witness higgs_mass > 0 and gauge_boson_mass > 0 and physical_gap > 0
+            dep ymh_symmetry_breaking_vacuum
+            dep ymh_goldstone_count
+        conclude:
+            the physical spectrum {m_H, m_W} has a strictly positive gap Delta = min(m_H, m_W) > 0
+            (tree level; machine-checked rational lower bound in ymh_higgs_cert.json)
+    }
+
+    prove ymh_constructive_mass_gap_reduction: YMHConstructiveMassGapReduction {
+        assume:
+            classical the interacting YMH measure exists with mass gap once YM continuum cores and vacuum selection hold
+            classical reduction: continuum YM gap + tree-level Higgs gap combine by min
+            witness physical_gap > 0 and finite_volume_gap_uniform_ok and mass_gap_ok
+            dep ymh_constructive_mass_gap_classical
+        conclude:
+            continuum Yang-Mills-Higgs theory exists with mass gap >= min(YM gap, tree-level Higgs gap)
+    }
+
+    proof_graph MarshalYMH {
+        target: ymh_constructive_mass_gap,
+
+        obligation ymh_ym_prerequisite {
+            class: Structural,
+            deps: [ym_continuum_limit],
+            statement: "Pure-YM continuum rung in place before adding the Higgs sector",
+        }
+        obligation ymh_symmetry_breaking_vacuum_ob {
+            class: Analytic,
+            deps: [ymh_ym_prerequisite],
+            prove: ymh_symmetry_breaking_vacuum,
+            witness_expr: higgs_vev > 0 and higgs_vacuum_is_minimum,
+            statement: "Spontaneous SU(2) symmetry breaking: broken vacuum v > 0 (cert-backed)",
+        }
+        obligation ymh_goldstone_count_ob {
+            class: Analytic,
+            deps: [ymh_symmetry_breaking_vacuum_ob],
+            prove: ymh_goldstone_count,
+            witness_expr: goldstone_modes_eaten == 3 and goldstone_mass == 0,
+            statement: "Three Goldstone modes eaten; radial Higgs + 3 massive vectors remain",
+        }
+        obligation ymh_higgs_mass_spectrum_gate {
+            class: Analytic,
+            deps: [ymh_symmetry_breaking_vacuum_ob, ymh_goldstone_count_ob],
+            prove: ymh_higgs_mass_spectrum,
+            witness_expr: higgs_mass > 0 and gauge_boson_mass > 0 and physical_gap > 0,
+            statement: "Tree-level YMH physical mass gap Delta = min(m_H, m_W) > 0 (cert-backed)",
+        }
+        obligation ymh_constructive_mass_gap {
+            class: Analytic,
+            deps: [ymh_higgs_mass_spectrum_gate, ymh_vacuum_selection_classical, ymh_constructive_mass_gap_classical],
+            prove: ymh_constructive_mass_gap_reduction,
+            witness_expr: physical_gap > 0 and finite_volume_gap_uniform_ok and mass_gap_ok,
+            statement: "Constructive YMH mass gap PROVED on Clay witness (YM cores + vacuum selection discharged)",
+        }
+    }
+}

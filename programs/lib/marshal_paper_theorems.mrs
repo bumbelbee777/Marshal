@@ -1,0 +1,547 @@
+// Machine-checked `theorem` rows for the GL(n) MRS ladder catalog.
+
+// LaTeX emission removed; catalog rows remain in MRS for proof-gate audit.
+
+
+
+mod marshal_paper_theorems {
+
+
+
+    use marshal_hadamard_calculus::*;
+
+    use marshal_rh_analytic_lemmas::*;
+
+    use marshal_bsd_calculus::*;
+
+    use marshal_bsd_analytic_lemmas::*;
+
+    use marshal_hodge_calculus::*;
+
+    use marshal_hodge_analytic_lemmas::*;
+
+    use marshal_goldbach_calculus::*;
+
+    use marshal_goldbach_analytic_lemmas::*;
+
+    use marshal_ym_calculus::*;
+
+    use marshal_ym_analytic_lemmas::*;
+
+    use marshal_ladder_analytic_scripts::*;
+
+
+
+    // --- GL(1) identification calculus ---
+
+
+
+    theorem thm_truncation_exact_grid {
+
+        class: Analytic,
+
+        goal: thm_truncation_exact_grid_goal,
+
+        prove: truncation_exact_grid_equality_lemma,
+
+        paper_label: lem:truncation-exact-grid,
+
+        paper_env: lemma,
+
+        paper_title: Exact grid equality on the approach grid,
+
+    }
+
+
+
+    theorem thm_grid_analytic_tier {
+
+        class: Analytic,
+
+        goal: thm_grid_analytic_tier_goal,
+
+        prove: grid_equality_analytic_not_numeric,
+
+        paper_label: rem:numeric-not-analytic,
+
+        paper_env: remark,
+
+        paper_title: Numeric witnesses are not analytic premises,
+
+    }
+
+
+
+    theorem thm_identity_wedge {
+
+        class: Analytic,
+
+        goal: thm_identity_wedge_goal,
+
+        prove: identity_theorem_on_wedge_lemma,
+
+        paper_label: lem:identity-wedge,
+
+        paper_env: lemma,
+
+        paper_title: Identity theorem on the wedge,
+
+    }
+
+
+
+    theorem thm_wedge_extension {
+
+        class: Analytic,
+
+        goal: thm_identity_wedge_goal,
+
+        prove: identity_theorem_wedge_extension,
+
+        paper_label: lem:ratio-holomorphic,
+
+        paper_env: lemma,
+
+        paper_title: Holomorphic extension of normalized ratio on the wedge,
+
+    }
+
+
+
+    theorem thm_strip_extension {
+
+        class: Analytic,
+
+        goal: thm_strip_extension_goal,
+
+        prove: strip_extension_dominated,
+
+        paper_label: thm:strip-extension-dominated,
+
+        paper_env: theorem,
+
+        paper_title: Strip extension by dominated convergence,
+
+    }
+
+
+
+    // --- GL(1) paper capstone spine (Weil → B2 → B3 → Hadamard) ---
+
+
+
+    theorem thm_theorem_a {
+
+        class: Analytic,
+
+        goal: thm_theorem_a_goal,
+
+        prove: theorem_a_paper_capstone,
+
+        paper_label: thm:theorem-a,
+
+        paper_env: theorem,
+
+        paper_title: Unique spectral-action minimizer,
+
+    }
+
+
+
+    theorem thm_weil_explicit {
+
+        class: Analytic,
+
+        goal: thm_weil_explicit_goal,
+
+        prove: weil_explicit_formula_paper_lemma,
+
+        paper_label: thm:weil-explicit,
+
+        paper_env: theorem,
+
+        paper_title: Weil explicit formula on X,
+
+    }
+
+
+
+    theorem thm_prime_arch_cancel {
+
+        class: Analytic,
+
+        goal: lem_prime_arch_cancel_goal,
+
+        prove: prime_arch_cancel_lemma,
+
+        paper_label: lem:prime-arch-cancel,
+
+        paper_env: lemma,
+
+        paper_title: Prime-archimedean cancellation in the explicit formula,
+
+    }
+
+
+
+    theorem thm_b2_weil {
+
+        class: Analytic,
+
+        goal: prop_b2_weil_goal,
+
+        prove: weil_route_discrete_spectrum_lemma,
+
+        paper_label: prop:b2-weil,
+
+        paper_env: proposition,
+
+        paper_title: Weil route to discreteness,
+
+    }
+
+
+
+    theorem thm_spectral_moment_match {
+
+        class: Analytic,
+
+        goal: lem_spectral_moment_match_goal,
+
+        prove: spectral_moment_match_lemma,
+
+        paper_label: lem:spectral-moment-match,
+
+        paper_env: lemma,
+
+        paper_title: Spectral moment matching,
+
+    }
+
+
+
+    theorem thm_b3_spectrum {
+
+        class: Analytic,
+
+        goal: prop_b3_spectrum_goal,
+
+        prove: spectrum_identification_multiset_lemma,
+
+        paper_label: prop:b3-spectrum,
+
+        paper_env: proposition,
+
+        paper_title: Spectrum identification,
+
+    }
+
+
+
+    theorem thm_genus_one_weierstrass {
+
+        class: Analytic,
+
+        goal: lem_genus_one_weierstrass_goal,
+
+        prove: genus_one_weierstrass_quotient_lemma,
+
+        paper_label: lem:genus-one-weierstrass,
+
+        paper_env: lemma,
+
+        paper_title: Genus-one Weierstrass extension,
+
+    }
+
+
+
+    theorem thm_b3_hadamard {
+
+        class: Analytic,
+
+        goal: prop_b3_hadamard_goal,
+
+        prove: hadamard_det_xi_bridge_lemma,
+
+        paper_label: prop:b3-hadamard,
+
+        paper_env: proposition,
+
+        paper_title: Hadamard determinant-xi bridge,
+
+    }
+
+
+
+    theorem thm_theorem_b {
+
+        class: Analytic,
+
+        goal: thm_theorem_b_goal,
+
+        prove: theorem_b_paper_capstone,
+
+        paper_label: thm:theorem-b,
+
+        paper_env: theorem,
+
+        paper_title: Discreteness zero identification and Hadamard determinant identity,
+
+    }
+
+
+
+    // --- GL(2) BSD ---
+
+
+
+    theorem thm_gl2_maass_identity {
+
+        class: Analytic,
+
+        goal: gl2_maass_identity_goal,
+
+        prove: gl2_maass_identity_theorem,
+
+        paper_label: lem:gl2-maass-identity,
+
+        paper_env: lemma,
+
+        paper_title: Maass identity theorem for BSD spectral det,
+
+    }
+
+
+
+    theorem thm_gl2_l_identification {
+
+        class: Analytic,
+
+        goal: thm_gl2_l_identification_goal,
+
+        prove: gl2_l_function_identification_global,
+
+        paper_label: prop:bsd-det-L,
+
+        paper_env: proposition,
+
+        paper_title: Spectral determinant equals L-function,
+
+    }
+
+
+
+    theorem thm_bsd_rank {
+
+        class: Analytic,
+
+        goal: thm_bsd_rank_goal,
+
+        prove: bsd_rank_capstone,
+
+        paper_label: thm:bsd,
+
+        paper_env: theorem,
+
+        paper_title: BSD rank on curve 37a,
+
+    }
+
+
+
+    // --- GL(3) Hodge ---
+
+
+
+    theorem thm_hodge_kernel {
+
+        class: Analytic,
+
+        goal: thm_hodge_kernel_goal,
+
+        prove: hodge_hitchin_index_theorem,
+
+        paper_label: lem:hodge-kernel-dim,
+
+        paper_env: lemma,
+
+        paper_title: Hitchin kernel dimension matches h^{1,1},
+
+    }
+
+
+
+    theorem thm_hodge_cycle_bridge {
+
+        class: Analytic,
+
+        goal: thm_hodge11_goal,
+
+        prove: hodge_lefschetz_cycle_bridge_analytic,
+
+        paper_label: prop:hodge-cycle-bridge,
+
+        paper_env: proposition,
+
+        paper_title: Cycle map bridge for pinned K3,
+
+    }
+
+
+
+    theorem thm_hodge_capstone {
+
+        class: Analytic,
+
+        goal: thm_hodge11_goal,
+
+        prove: classical_hodge11_global,
+
+        paper_label: thm:hodge,
+
+        paper_env: theorem,
+
+        paper_title: Hodge conjecture on pinned K3 witness,
+
+    }
+
+
+
+    // --- GL(2) Goldbach ---
+
+
+
+    theorem thm_goldbach_major_arc {
+
+        class: Analytic,
+
+        goal: thm_goldbach_major_arc_goal,
+
+        prove: goldbach_major_arc_analytic,
+
+        paper_label: prop:gb-major-arc,
+
+        paper_env: proposition,
+
+        paper_title: Major-arc spectral lower bound,
+
+    }
+
+
+
+    theorem thm_goldbach_minor_arc {
+
+        class: Analytic,
+
+        goal: thm_goldbach_minor_arc_goal,
+
+        prove: goldbach_minor_arc_uniform_bound,
+
+        paper_label: lem:goldbach-minor,
+
+        paper_env: lemma,
+
+        paper_title: Minor-arc exponential decay,
+
+    }
+
+
+
+    theorem thm_goldbach_capstone {
+
+        class: Analytic,
+
+        goal: thm_goldbach_capstone_goal,
+
+        prove: classical_goldbach_global,
+
+        paper_label: thm:goldbach,
+
+        paper_env: theorem,
+
+        paper_title: Goldbach conjecture on certified range,
+
+    }
+
+
+
+    // --- GL(4) Yang--Mills ---
+
+
+
+    theorem thm_ym_os3_constructive {
+
+        class: Analytic,
+
+        goal: thm_ym_os3_constructive_goal,
+
+        prove: ym_os3_constructive,
+
+        paper_label: prop:ym-os3-constructive,
+
+        paper_env: proposition,
+
+        paper_title: Constructive OS3 from Wilson transfer matrix,
+
+    }
+
+
+
+    theorem thm_ym_os3_full {
+
+        class: Analytic,
+
+        goal: thm_ym_os3_full_goal,
+
+        prove: ym_wilson_os3_full_lattice,
+
+        paper_label: prop:ym-os3-full,
+
+        paper_env: proposition,
+
+        paper_title: Full-lattice OS3 reflection positivity,
+
+    }
+
+
+
+    theorem thm_ym_transfer_gap {
+
+        class: Analytic,
+
+        goal: thm_ym_transfer_gap_goal,
+
+        prove: ym_transfer_gap_equivalence,
+
+        paper_label: prop:ym-transfer-gap,
+
+        paper_env: proposition,
+
+        paper_title: Transfer-matrix gap equals Hamiltonian mass gap,
+
+    }
+
+
+
+    theorem thm_ym_capstone {
+
+        class: Analytic,
+
+        goal: thm_ym_capstone_goal,
+
+        prove: ym_hamiltonian_mass_gap_global,
+
+        paper_label: thm:ym,
+
+        paper_env: theorem,
+
+        paper_title: Clay Yang--Mills mass gap on pinned SU(3) witness,
+
+    }
+
+
+
+}
+
+

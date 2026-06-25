@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "purpose": "eq45 large-a F_Lerch coercivity vs debt_sharp (pinned analytic)",
+  "SIGMA_HIGHER_ETA_PIN": 771.5,
+  "SIGMA_HIGHER_Z0": 8.0,
+  "sigma_higher_tail_ol2_constant_c": 191231.3896070835,
+  "sigma_higher_abs_max_pinned": 2984.7332360333658,
+  "M_PLANCHEREL_MIN_PIN": 13.0,
+  "K_SQRT_PIN": 564.357655806106,
+  "K_52_PIN": 2.071272166581645,
+  "K_TAIL_PIN": 2.071272166581645,
+  "A_LARGE_MIN": 10.0,
+  "f_lerch_large_a_coercivity_all_a_ok": true,
+  "f_lerch_large_a_coercivity_margin_min": 3698.288388734281,
+  "f_lerch_large_a_coercivity_lb_le_kernel_ok": true,
+  "f_lerch_large_a_coercivity_audit_ok": true,
+  "large_a_rows": [
+    {
+      "a": 15.0,
+      "H_lb": 3990.698388734281,
+      "debt_sharp": 292.40999999999997,
+      "margin": 3698.288388734281,
+      "ok": true
+    },
+    {
+      "a": 20.0,
+      "H_lb": 6229.088455513625,
+      "debt_sharp": 372.40999999999997,
+      "margin": 5856.6784555136255,
+      "ok": true
+    },
+    {
+      "a": 30.0,
+      "H_lb": 13301.456581181692,
+      "debt_sharp": 532.4100000000001,
+      "margin": 12769.046581181692,
+      "ok": true
+    },
+    {
+      "a": 64.0,
+      "H_lb": 72386.3076009962,
+      "debt_sharp": 1076.4099999999999,
+      "margin": 71309.89760099619,
+      "ok": true
+    },
+    {
+      "a": 100.0,
+      "H_lb": 212770.79321622555,
+      "debt_sharp": 1652.4099999999999,
+      "margin": 211118.38321622554,
+      "ok": true
+    },
+    {
+      "a": 500.0,
+      "H_lb": 11591382.831769614,
+      "debt_sharp": 8052.41,
+      "margin": 11583330.421769613,
+      "ok": true
+    },
+    {
+      "a": 1000.0,
+      "H_lb": 65517223.561169945,
+      "debt_sharp": 16052.41,
+      "margin": 65501171.15116995,
+      "ok": true
+    },
+    {
+      "a": 10000.0,
+      "H_lb": 20712778101.582027,
+      "debt_sharp": 160052.41,
+      "margin": 20712618049.172028,
+      "ok": true
+    }
+  ],
+  "cert_grid_crosscheck": [
+    {
+      "a": 10.0,
+      "H_kernel": 16943.190720346796,
+      "H_lb": 2439.649377351614,
+      "debt_sharp": 212.41,
+      "lb_le_kernel_ok": true
+    },
+    {
+      "a": 15.0,
+      "H_kernel": 25407.830089828734,
+      "H_lb": 3990.698388734281,
+      "debt_sharp": 292.40999999999997,
+      "lb_le_kernel_ok": true
+    }
+  ]
+}

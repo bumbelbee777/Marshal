@@ -1,0 +1,12 @@
+// MRS v1 built-in math primitives (evaluated by MrsMath witness_expr engine).
+mod marshal_math_primitives {
+    // Scalar: ratio, max, min, abs, floor, ceil, round, sign, clamp, mod, hypot
+    // Trig: sin, cos, tan, sinh, cosh, tanh, asinh, acosh, atanh
+    // Exp/log: exp, log, ln, log2, sqrt, pow
+    // Logic: and or not -> <-> ⟹ ⟺ implies iff equiv
+    // Sets: in_set(x, nats)  or  x ∈ ℤ  (domains: nats ints rationals reals complex)
+    // Quantifiers: forall_even_n, forall_n, exists_n
+    // FP: fn name(x, y) := expr  — parametric witness helpers (see marshal_fp_primitives.mrs)
+    // Operators: + - * / >= <= > < == !=
+    // Env: bound_audit pins + engine report fields (see MrsMath.cxx)
+}

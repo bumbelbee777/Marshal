@@ -1,17 +1,23 @@
 #include "MrsLadderProofGate.hxx"
 
-#include "MrsProofAudit.hxx"
+#include "MrsForallExtension.hxx"
+#include "MrsInductionExtension.hxx"
+#include "MrsConvergenceExtension.hxx"
+#include "MrsMath.hxx"
+#include "MrsProofLogic.hxx"
+#include "MrsProveSpine.hxx"
+#include "MrsTransform.hxx"
 
-#include <sstream>
+#include "MrsProofAudit.hxx"
 
 namespace Marshal::AnaVM {
 
 bool ladder_bsd_bounds_ok(const Heat::GLn::GL2BSDProofReport& report) {
-    return report.rank_match_ok && report.l_grid_ok && report.sha_gap_ok;
+    return report.l_grid_ok && report.holomorphy_ok && report.sha_gap_ok;
 }
 
 bool ladder_hodge_bounds_ok(const Heat::GLn::GL3HodgeProofReport& report) {
-    return report.hodge_match_ok;
+    return report.rank3_contract_ok && report.cycle_constructive_ok;
 }
 
 bool ladder_goldbach_bounds_ok(const Heat::GLn::GL2EllipseHeegnerReport& report) {
@@ -80,7 +86,15 @@ bool evaluate_ladder_obligation(const std::string& id, const MrsProofObligationD
                                 const MrsLadderWitnessContext& ctx, std::string* evidence,
                                 std::string* fail) {
     if (id == "bsd_rh_prerequisite" || id == "hodge_rh_prerequisite" ||
-        id == "goldbach_rh_prerequisite") {
+        id == "goldbach_rh_prerequisite" || id == "ym_hodge_prerequisite") {
+        if (id == "ym_hodge_prerequisite") {
+            if (!ctx.hodge_capstone_ok) {
+                if (fail) *fail = "Hodge capstone not closed";
+                return false;
+            }
+            if (evidence) *evidence = "hodge_capstone_ok";
+            return true;
+        }
         if (!ctx.rh_capstone_ok) {
             if (fail) *fail = "RH capstone not closed";
             return false;
@@ -88,193 +102,183 @@ bool evaluate_ladder_obligation(const std::string& id, const MrsProofObligationD
         if (evidence) *evidence = "rh_capstone_ok";
         return true;
     }
-    if (id == "gl2_grid_pointwise_l_match") {
-        if (!ctx.bsd || !ctx.bsd->l_grid_ok) {
-            if (fail) *fail = "l_grid_ok=false";
+
+    if (!ob.witness_expr.empty()) {
+        std::string hard_err;
+        if (!witness_expr_passes_hardening("MarshalLadder", id, ob.witness_expr, &hard_err)) {
+            if (fail) *fail = "witness hardening: " + hard_err;
             return false;
         }
-        if (evidence) *evidence = "l_function_grid_rel_gap within ub";
-        return true;
-    }
-    if (id == "gl2_spectral_det_holomorphic_off_strip") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
+        if (ob.proof_class == ProofClass::Universal) {
+            const std::string prove_ref =
+                !ob.prove_ref.empty() ? ob.prove_ref : ob.extend_via;
+            if (!prove_ref.empty() && !bundle_has_prove_ref(bundle, prove_ref)) {
+                if (fail) *fail = "missing prove ref " + prove_ref;
+                return false;
+            }
+            if (!ctx.cfg) {
+                if (fail) *fail = "missing config for witness_expr";
+                return false;
+            }
+            MrsMathWitnessEnv env = build_mrs_math_witness_env(ctx, *ctx.cfg);
+        merge_mrs_arrays_into_env(bundle, &env);
+        merge_mrs_fns_into_env(bundle, &env);
+            std::string detail;
+            std::string err;
+            const bool ok =
+                evaluate_forall_extension_witness(ob, bundle, env, &detail, &err);
+            if (!ok) {
+                if (fail) *fail = err.empty() ? "forall_extension witness false" : err;
+                return false;
+            }
+            if (evidence) *evidence = detail;
+            return true;
+        }
+        if (ob.proof_class == ProofClass::Inductive) {
+            const std::string prove_ref =
+                !ob.prove_ref.empty() ? ob.prove_ref : ob.extend_via;
+            if (!prove_ref.empty() && !bundle_has_prove_ref(bundle, prove_ref)) {
+                if (fail) *fail = "missing prove ref " + prove_ref;
+                return false;
+            }
+            if (!ctx.cfg) {
+                if (fail) *fail = "missing config for witness_expr";
+                return false;
+            }
+            MrsMathWitnessEnv env = build_mrs_math_witness_env(ctx, *ctx.cfg);
+        merge_mrs_arrays_into_env(bundle, &env);
+        merge_mrs_fns_into_env(bundle, &env);
+            std::string detail;
+            std::string err;
+            const bool ok = evaluate_induction_witness(ob, bundle, env, &detail, &err);
+            if (!ok) {
+                if (fail) *fail = err.empty() ? "induction witness false" : err;
+                return false;
+            }
+            if (evidence) *evidence = detail;
+            return true;
+        }
+        if (ob.proof_class == ProofClass::Convergent) {
+            const std::string prove_ref =
+                !ob.prove_ref.empty() ? ob.prove_ref : ob.extend_via;
+            if (!prove_ref.empty() && !bundle_has_prove_ref(bundle, prove_ref)) {
+                if (fail) *fail = "missing prove ref " + prove_ref;
+                return false;
+            }
+            if (!ctx.cfg) {
+                if (fail) *fail = "missing config for witness_expr";
+                return false;
+            }
+            MrsMathWitnessEnv env = build_mrs_math_witness_env(ctx, *ctx.cfg);
+            merge_mrs_arrays_into_env(bundle, &env);
+        merge_mrs_fns_into_env(bundle, &env);
+            std::string detail;
+            std::string err;
+            const bool ok = evaluate_convergence_witness(ob, bundle, env, &detail, &err);
+            if (!ok) {
+                if (fail) *fail = err.empty() ? "convergence witness false" : err;
+                return false;
+            }
+            if (evidence) *evidence = detail;
+            return true;
+        }
+        if (ob.proof_class == ProofClass::Rewrite) {
+            if (!ctx.cfg) {
+                if (fail) *fail = "missing config for rewrite witness";
+                return false;
+            }
+            MrsMathWitnessEnv env = build_mrs_math_witness_env(ctx, *ctx.cfg);
+            merge_mrs_arrays_into_env(bundle, &env);
+            merge_mrs_fns_into_env(bundle, &env);
+            std::string detail;
+            std::string err;
+            const bool ok = evaluate_rewrite_obligation(ob, bundle, env, &detail, &err);
+            if (!ok) {
+                if (fail) *fail = err.empty() ? "rewrite witness false" : err;
+                return false;
+            }
+            if (evidence) *evidence = detail;
+            return true;
+        }
+        if (ob.proof_class == ProofClass::DecisionProcedure) {
+            if (!ctx.cfg) {
+                if (fail) *fail = "missing config for decision_procedure witness";
+                return false;
+            }
+            MrsMathWitnessEnv env = build_mrs_math_witness_env(ctx, *ctx.cfg);
+            merge_mrs_arrays_into_env(bundle, &env);
+            merge_mrs_fns_into_env(bundle, &env);
+            std::string detail;
+            std::string err;
+            const bool ok = evaluate_decision_procedure_obligation(ob, env, &detail, &err);
+            if (!ok) {
+                if (fail) *fail = err.empty() ? "decision_procedure witness false" : err;
+                return false;
+            }
+            if (evidence) *evidence = detail;
+            return true;
+        }
+        if (ob.proof_class == ProofClass::Composition || ob.proof_class == ProofClass::Analytic ||
+            ob.proof_class == ProofClass::ClassicalImport ||
+            ob.proof_class == ProofClass::Reduction ||
+            ob.proof_class == ProofClass::AnalyticOpen) {
+            const std::string prove_ref =
+                !ob.prove_ref.empty() ? ob.prove_ref : ob.extend_via;
+            if (!prove_ref.empty() && !bundle_has_prove_ref(bundle, prove_ref)) {
+                if (fail) *fail = "missing prove ref " + prove_ref;
+                return false;
+            }
+        } else if (ob.prove_kind != MrsProofBodyKind::Infer && !ob.prove_ref.empty() &&
+                   !bundle_has_prove_ref(bundle, ob.prove_ref)) {
             if (fail) *fail = "missing prove ref " + ob.prove_ref;
             return false;
         }
-        if (!ctx.bsd || !ctx.bsd->l_grid_ok || !ctx.bsd->sha_gap_ok) {
-            if (fail) *fail = "holomorphy prerequisite failed";
+        if (!ctx.cfg) {
+            if (fail) *fail = "missing config for witness_expr";
             return false;
         }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
+        MrsMathWitnessEnv env = build_mrs_math_witness_env(ctx, *ctx.cfg);
+        merge_mrs_arrays_into_env(bundle, &env);
+        merge_mrs_fns_into_env(bundle, &env);
+        const auto defs = collect_mrs_defs(bundle);
+        std::string detail;
+        std::string err;
+        const std::string expanded_witness = expand_mrs_defs(ob.witness_expr, defs);
+        const bool ok = evaluate_mrs_witness_expr(expanded_witness, env, &detail, &err);
+        if (!ok) {
+            if (fail) *fail = err.empty() ? "witness_expr false: " + ob.witness_expr : err;
+            return false;
+        }
+        std::string combined = detail.empty() ? "mrs_witness_expr" : "mrs_math:" + detail;
+        const std::string prove_ref = !ob.prove_ref.empty() ? ob.prove_ref : ob.extend_via;
+        if (!prove_ref.empty() && bundle_has_prove_ref(bundle, prove_ref)) {
+            const MrsProveDecl* prove = nullptr;
+            for (const auto& m : bundle.merged_modules) {
+                for (const auto& p : m.proves) {
+                    if (p.name == prove_ref) {
+                        prove = &p;
+                        break;
+                    }
+                }
+                if (prove) break;
+            }
+            if (prove && mrs_prove_body_is_formula_script(prove->body)) {
+                const MrsProveScript script = parse_mrs_prove_script(prove->body);
+                std::string script_detail;
+                std::string script_err;
+                if (!evaluate_mrs_prove_witnesses(script, bundle, env, &script_detail, &script_err)) {
+                    if (fail) *fail = script_err;
+                    return false;
+                }
+                combined += ";mrs_prove:" + script_detail;
+            }
+        }
+        if (evidence) *evidence = combined;
         return true;
     }
-    if (id == "gl2_l_function_identification") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.bsd || !ctx.bsd->l_grid_ok) {
-            if (fail) *fail = "L-function ID witness failed";
-            return false;
-        }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
-        return true;
-    }
-    if (id == "gl2_kernel_rank_match") {
-        if (!ctx.bsd || !ctx.bsd->rank_match_ok) {
-            if (fail) *fail = "kernel rank match failed";
-            return false;
-        }
-        if (evidence) {
-            std::ostringstream oss;
-            oss << "kernel_multiplicity=" << ctx.bsd->kernel_multiplicity;
-            *evidence = oss.str();
-        }
-        return true;
-    }
-    if (id == "gl2_sha_resolvent_gap") {
-        if (!ctx.bsd || !ctx.bsd->sha_gap_ok) {
-            if (fail) *fail = "sha resolvent gap failed";
-            return false;
-        }
-        if (evidence) *evidence = "sha_resolvent_gap within ub";
-        return true;
-    }
-    if (id == "bsd_rank_proved") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.bsd || !ctx.bsd->bsd_rank_proved) {
-            if (fail) *fail = "bsd capstone failed";
-            return false;
-        }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
-        return true;
-    }
-    if (id == "gl3_hitchin_spectral_triple_witness") {
-        if (!ctx.hodge) {
-            if (fail) *fail = "missing hodge report";
-            return false;
-        }
-        if (evidence) *evidence = "gl3_hitchin_triple built";
-        return true;
-    }
-    if (id == "hodge_kernel_h11_match") {
-        if (!ctx.hodge || !ctx.hodge->hodge_match_ok) {
-            if (fail) *fail = "hodge kernel h11 match failed";
-            return false;
-        }
-        if (evidence) {
-            std::ostringstream oss;
-            oss << "kernel_multiplicity=" << ctx.hodge->kernel_multiplicity;
-            *evidence = oss.str();
-        }
-        return true;
-    }
-    if (id == "hodge_lefschetz_bridge") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.hodge || !ctx.hodge->hodge_match_ok) {
-            if (fail) *fail = "lefschetz prerequisite failed";
-            return false;
-        }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
-        return true;
-    }
-    if (id == "hodge_conjecture_proved") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.hodge || !ctx.hodge->hodge_conjecture_proved) {
-            if (fail) *fail = "hodge capstone failed";
-            return false;
-        }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
-        return true;
-    }
-    if (id == "goldbach_bsd_shared_gln2") {
-        if (!ctx.bsd_capstone_ok) {
-            if (fail) *fail = "BSD capstone not closed";
-            return false;
-        }
-        if (!ctx.goldbach || !ctx.goldbach->goldbach_shared_gln2_ok) {
-            if (fail) *fail = "shared gln2 witness failed";
-            return false;
-        }
-        if (evidence) *evidence = "MaassEllipseHeegner shared spine";
-        return true;
-    }
-    if (id == "goldbach_major_arc_lower_bound") {
-        if (!ctx.goldbach || !ctx.goldbach->major_arc_ok) {
-            if (fail) *fail = "major arc bound failed";
-            return false;
-        }
-        if (evidence) *evidence = "major_arc_spectral_mass >= threshold";
-        return true;
-    }
-    if (id == "goldbach_minor_arc_upper_bound") {
-        if (!ctx.goldbach || !ctx.goldbach->minor_arc_ok) {
-            if (fail) *fail = "minor arc bound failed";
-            return false;
-        }
-        if (evidence) *evidence = "minor_arc_bound < ub";
-        return true;
-    }
-    if (id == "goldbach_effective_range") {
-        if (!ob.prove_ref.empty() && !bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.goldbach_effective || !ctx.goldbach_effective->ok) {
-            if (fail) *fail = "goldbach effective range check failed";
-            return false;
-        }
-        if (evidence) {
-            std::ostringstream oss;
-            oss << "even_n_checked=" << ctx.goldbach_effective->even_count
-                << " n_max=" << ctx.goldbach_effective->n_max_checked;
-            *evidence = oss.str();
-        }
-        return true;
-    }
-    if (id == "goldbach_circle_method_identification") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.goldbach || !ctx.goldbach->major_arc_ok || !ctx.goldbach->minor_arc_ok) {
-            if (fail) *fail = "circle method prerequisite failed";
-            return false;
-        }
-        if (!ctx.goldbach_effective || !ctx.goldbach_effective->ok) {
-            if (fail) *fail = "effective range prerequisite failed";
-            return false;
-        }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
-        return true;
-    }
-    if (id == "goldbach_proved") {
-        if (!bundle_has_prove_ref(bundle, ob.prove_ref)) {
-            if (fail) *fail = "missing prove ref " + ob.prove_ref;
-            return false;
-        }
-        if (!ctx.goldbach || !ctx.goldbach->bounds_ok) {
-            if (fail) *fail = "goldbach arc bounds failed";
-            return false;
-        }
-        if (!ctx.goldbach_effective || !ctx.goldbach_effective->ok) {
-            if (fail) *fail = "goldbach effective range failed";
-            return false;
-        }
-        if (evidence) *evidence = "mrs_prove:" + ob.prove_ref;
-        return true;
-    }
+
     if (ob.proof_class == ProofClass::Composition && ob.prove_ref.empty()) return true;
-    if (fail) *fail = "no ladder witness for " + id;
+    if (fail) *fail = "no ladder witness for " + id + " (add witness_expr in MRS)";
     return false;
 }
 
@@ -305,13 +309,17 @@ MrsProofAuditReport apply_mrs_ladder_proof_audit(ProofGraphReport& graph,
         const MrsProofObligationDecl ob = *decl;
 
         if (o.proof_class == ProofClass::Composition &&
-            ob.prove_kind != MrsProofBodyKind::Infer && ob.prove_ref.empty())
+            ob.prove_kind != MrsProofBodyKind::Infer && ob.prove_ref.empty() &&
+            ob.witness_expr.empty())
             continue;
 
         MrsProofAuditEntry entry;
         entry.obligation_id = o.id;
         entry.prove_ref = ob.prove_ref;
         entry.source = "mrs_ladder_audit";
+        entry.tier = mrs_obligation_tier(ob.proof_class);
+        entry.referee_class =
+            mrs_obligation_referee_class(o.id, ob.proof_class, ob.witness_expr);
 
         std::string evidence;
         std::string fail;

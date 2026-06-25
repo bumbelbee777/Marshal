@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "purpose": "Lerch dominance three-strategy experiment (MRS Convergent + Python)",
+  "convergence_mesh_tail_tol": 0.34,
+  "convergence_tail_ratio": 0.6680588473640375,
+  "convergence_tail_rel_max": 0.33194115263596247,
+  "convergence_finite_ok": true,
+  "convergence_limit_ok": true,
+  "convergence_tail_rel_ok": true,
+  "lerch_strategy_study_audit_ok": true,
+  "strategy1_numeric_support_ok": true,
+  "strategy1_min_lerch_margin": 1958.1160919630527,
+  "strategy1_fourier_proxy_lb": 125.66370614359172,
+  "strategy1_H_at_a10": 8515.550625550652,
+  "strategy1_fourier_proxy_support_ok": true,
+  "strategy2_r01_gap_observed_ok": true,
+  "strategy2_r01_at_a10": 260.2376591378923,
+  "strategy2_r01_compact_gap": 210.2376591378923,
+  "strategy3_mesh_numeric_support_ok": true,
+  "strategy3_eq25_kernel_finest": 8377.874536529183,
+  "strategy3_lambda_spec_finest": -12850.29800200467,
+  "strategy3_pin_kernel_finest": 8377.874536529183,
+  "strategy3_spectral_artifact_gap": 21228.172538533854,
+  "arrays": {
+    "LERCH_H_MARGIN_GRID": [
+      1958.1160919630527,
+      3912.4472550764617,
+      5866.073682818131,
+      7818.8343453562065,
+      9771.872464964756,
+      11191.045804630832,
+      11306.27947418674,
+      11456.686188329471,
+      11519.972510257294,
+      11529.069025852017,
+      11825.408371872521,
+      16730.43030390964,
+      25114.706812470835,
+      33503.66461323058
+    ],
+    "R01_RAYLEIGH_GRID": [
+      -0.004205640697598234,
+      0.0012107472921613187,
+      0.025717573303038394,
+      0.08018371666812035,
+      0.17496617821936883,
+      -3.3407398982862615,
+      0.9092481813780635,
+      4.1968472731199595,
+      14.010303856588578,
+      40.00482023151049,
+      40.91618451512504,
+      260.2376591378923,
+      19840.015153102802,
+      1949307.1596087322
+    ],
+    "EQ25_KERNEL_MESH_A10": [
+      12540.623583664517,
+      8377.874536529183
+    ],
+    "LAMBDA_SPEC_MESH_A10": [
+      -12314.537740589976,
+      -12850.29800200467
+    ],
+    "RHIGHER_KERNEL_MESH_A10": [
+      -12740.165455203005,
+      -8515.550625550652
+    ]
+  },
+  "mesh_levels": 2,
+  "a_grid_points": 14
+}

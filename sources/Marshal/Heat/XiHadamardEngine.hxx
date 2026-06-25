@@ -65,6 +65,10 @@ struct XiHadamardReport {
     bool accumulation_grid_ok = false;
     bool functional_equation_probe_ok = false;
     bool xi_zero_normalization_ok = false;
+    bool genus_multiplier_unique_ok = false;
+    bool exact_grid_equality_ok = false;
+    double genus_multiplier_re = 0;
+    double genus_multiplier_im = 0;
     double det_at_zero_re = 0;
     double det_at_zero_im = 0;
     double xi_at_zero_re = 0;

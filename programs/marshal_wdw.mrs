@@ -1,0 +1,11 @@
+// Wheeler-DeWitt minisuperspace entry program (cert-backed sector + full-superspace open).
+use lib::marshal_wdw_proof;
+
+ansatz marshal_wdw {
+  meta { uses_gamma: false sym_tier: analytic kind: operator }
+  formal_target {
+    lemma wdw_spectral_gap_positive
+    lemma wdw_canonical_quantization_consistency
+    approach acyclic_marshal_wdw
+  }
+}

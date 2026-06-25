@@ -10,15 +10,29 @@ namespace Marshal::Kernel {
 static constexpr Real kPi = MARSHAL_LIT(3.141592653589793238462643383279502884);
 
 Real FusedHeatTracePoisson(Real t, Real inv_log_p, int nmax) {
+#if defined(MARSHAL_HAVE_AVX2)
+    if (nmax > 0) {
+        return static_cast<Real>(ExpPoissonModesSum(static_cast<double>(t),
+                                                   static_cast<double>(inv_log_p), nmax));
+    }
+    return 0;
+#else
     Real sum = 0;
     for (int n = 1; n <= nmax; ++n) {
         const Real lam = 2.0L * kPi * static_cast<Real>(n) * inv_log_p;
         sum += MarshalExp(-t * lam * lam);
     }
     return sum;
+#endif
 }
 
 Real FusedPrimeBlock(Real t, Real log_p, int k_cap) {
+#if defined(MARSHAL_HAVE_AVX2)
+    const double coeff = -static_cast<double>(t);
+    const double sum = PrimePowerExpSum(static_cast<double>(log_p), k_cap, coeff, 0.0,
+                                        static_cast<double>(2.0L * kPi), true);
+    return static_cast<Real>(sum);
+#else
     Real sum = 0;
     Real ppow = MarshalExp(log_p * 0.5L);
     for (int k = 1; k <= k_cap; ++k) {
@@ -27,6 +41,7 @@ Real FusedPrimeBlock(Real t, Real log_p, int k_cap) {
         ppow *= MarshalExp(log_p * 0.5L);
     }
     return sum / (2.0L * kPi);
+#endif
 }
 
 Real FusedZeroGaussianSum(const Real* gamma_ld, size_t off, size_t len, Real t) {
@@ -85,15 +100,15 @@ void FusedPrimeBlockSoA(Real t, const double* log_p, const int* k_cap,
 
 #if defined(MARSHAL_HAVE_AVX2)
 double FusedZeroGaussianSum4(const double* gamma, size_t n, double heat_t) {
-    double sum = 0;
+    __m256d acc = _mm256_setzero_pd();
     size_t i = 0;
-    for (; i + 4 <= n; i += 4) {
-        __m256d g = _mm256_loadu_pd(gamma + i);
-        __m256d e = ExpNegSq4(g, heat_t);
-        alignas(32) double lane[4];
-        _mm256_store_pd(lane, e);
-        sum += lane[0] + lane[1] + lane[2] + lane[3];
+    for (; i + 8 <= n; i += 8) {
+        acc = _mm256_add_pd(acc, ExpNegSq4(_mm256_loadu_pd(gamma + i), heat_t));
+        acc = _mm256_add_pd(acc, ExpNegSq4(_mm256_loadu_pd(gamma + i + 4), heat_t));
     }
+    double sum = HorizontalSum4(acc);
+    for (; i + 4 <= n; i += 4)
+        sum += HorizontalSum4(ExpNegSq4(_mm256_loadu_pd(gamma + i), heat_t));
     for (; i < n; ++i)
         sum += Exp1(-heat_t * gamma[i] * gamma[i]);
     return 2.0 * sum;

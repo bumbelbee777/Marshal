@@ -67,9 +67,19 @@ std::string strip_comment(const std::string& line) {
 
 ProofClass parse_proof_class(const std::string& v) {
     const auto s = trim(v);
+    if (s == "NumericInterval" || s == "numeric_interval") return ProofClass::NumericInterval;
     if (s == "Analytic" || s == "analytic") return ProofClass::Analytic;
+    if (s == "ClassicalImport" || s == "classical_import") return ProofClass::ClassicalImport;
+    if (s == "Reduction" || s == "reduction") return ProofClass::Reduction;
+    if (s == "AnalyticOpen" || s == "analytic_open") return ProofClass::AnalyticOpen;
     if (s == "Structural" || s == "structural") return ProofClass::Structural;
     if (s == "Composition" || s == "composition") return ProofClass::Composition;
+    if (s == "Universal" || s == "universal") return ProofClass::Universal;
+    if (s == "Inductive" || s == "inductive") return ProofClass::Inductive;
+    if (s == "Convergent" || s == "convergent") return ProofClass::Convergent;
+    if (s == "Rewrite" || s == "rewrite") return ProofClass::Rewrite;
+    if (s == "DecisionProcedure" || s == "decision_procedure" || s == "decision")
+        return ProofClass::DecisionProcedure;
     return ProofClass::Numeric;
 }
 
@@ -83,6 +93,7 @@ bool parse_use_line(const std::string& line, MrsUseDecl& out) {
         out.path.pop_back();
         if (!out.path.empty() && out.path.back() == ':') out.path.pop_back();
         if (!out.path.empty() && out.path.back() == ':') out.path.pop_back();
+        if (!out.path.empty() && out.path.back() == '.') out.path.pop_back();
     }
     return true;
 }
@@ -99,6 +110,36 @@ std::vector<std::string> parse_bracket_list(const std::string& s) {
         tok = trim(tok);
         if (!tok.empty()) out.push_back(tok);
     }
+    return out;
+}
+
+std::vector<double> parse_numeric_bracket_list(const std::string& s) {
+    std::vector<double> out;
+    for (const auto& tok : parse_bracket_list(s)) {
+        try {
+            out.push_back(std::stod(tok));
+        } catch (...) {
+            out.clear();
+            return out;
+        }
+    }
+    return out;
+}
+
+std::vector<std::string> parse_paren_id_list(const std::string& inside) {
+    std::vector<std::string> out;
+    std::string tok;
+    for (char c : inside) {
+        if (c == ',' || std::isspace(static_cast<unsigned char>(c))) {
+            const std::string t = trim(tok);
+            if (!t.empty()) out.push_back(t);
+            tok.clear();
+        } else {
+            tok += c;
+        }
+    }
+    const std::string t = trim(tok);
+    if (!t.empty()) out.push_back(t);
     return out;
 }
 
@@ -128,6 +169,7 @@ MrsCompilationUnit parse_mrs_unit(const std::string& path) {
     bool in_prove_body = false;
     MrsProveDecl* cur_prove = nullptr;
     std::string prove_body_accum;
+    MrsTheoremDecl* cur_theorem = nullptr;
 
     bool saw_ansatz = false;
 
@@ -156,6 +198,27 @@ MrsCompilationUnit parse_mrs_unit(const std::string& path) {
                 prove_body_accum += line;
                 absorb_prove_interior = true;
             }
+        } else if (cur_theorem && line == "}") {
+            cur_theorem = nullptr;
+            absorb_prove_interior = true;
+        } else if (cur_theorem) {
+            if (line.find("class:") != std::string::npos) {
+                cur_theorem->proof_class =
+                    parse_proof_class(strip_mrs_field_value(line.substr(line.find(':') + 1)));
+            } else if (line.find("goal:") != std::string::npos) {
+                cur_theorem->goal = strip_mrs_field_value(line.substr(line.find(':') + 1));
+            } else if (line.find("prove:") != std::string::npos) {
+                cur_theorem->prove_ref = strip_mrs_field_value(line.substr(line.find(':') + 1));
+            } else if (line.find("paper_label:") != std::string::npos) {
+                cur_theorem->paper_label =
+                    strip_mrs_field_value(line.substr(line.find(':') + 1));
+            } else if (line.find("paper_env:") != std::string::npos) {
+                cur_theorem->paper_env = strip_mrs_field_value(line.substr(line.find(':') + 1));
+            } else if (line.find("paper_title:") != std::string::npos) {
+                cur_theorem->paper_title =
+                    strip_mrs_field_value(line.substr(line.find(':') + 1));
+            }
+            absorb_prove_interior = true;
         }
 
         if (!absorb_prove_interior) {
@@ -194,13 +257,68 @@ MrsCompilationUnit parse_mrs_unit(const std::string& path) {
                             c.value_expr = trim(rest.substr(eq + 1));
                             if (!c.value_expr.empty() && c.value_expr.back() == ';')
                                 c.value_expr.pop_back();
-                            if (c.value_expr.rfind("infer!", 0) == 0) c.infer_value = true;
+                            if (c.value_expr.rfind("infer!", 0) == 0) {
+                                c.infer_value = true;
+                                if (c.value_expr.rfind("infer!rational_bound", 0) == 0)
+                                    c.infer_rational_bound = true;
+                            }
                         } else {
                             c.type_expr = trim(rest.substr(colon + 1));
                         }
                     }
                     c.visibility = pub ? MrsVisibility::Pub : MrsVisibility::Private;
                     cur_mod->consts.push_back(std::move(c));
+                }
+            } else if (line.rfind("pub array ", 0) == 0 || line.rfind("array ", 0) == 0) {
+                if (cur_mod) {
+                    MrsArrayDecl a;
+                    a.span.line = line_no;
+                    const bool pub = line.rfind("pub ", 0) == 0;
+                    auto rest = pub ? trim(line.substr(4)) : line;
+                    if (rest.rfind("array ", 0) == 0) rest = trim(rest.substr(6));
+                    const size_t eq = rest.find(":=");
+                    if (eq != std::string::npos) {
+                        a.name = trim(rest.substr(0, eq));
+                        const std::string vals = trim(rest.substr(eq + 2));
+                        a.elements = parse_numeric_bracket_list(vals);
+                    }
+                    a.visibility = pub ? MrsVisibility::Pub : MrsVisibility::Private;
+                    if (!a.name.empty() && !a.elements.empty()) cur_mod->arrays.push_back(std::move(a));
+                }
+            } else if (line.rfind("def ", 0) == 0) {
+                if (cur_mod) {
+                    MrsDefDecl d;
+                    d.span.line = line_no;
+                    auto rest = trim(line.substr(4));
+                    const size_t eq = rest.find(":=");
+                    if (eq != std::string::npos) {
+                        d.name = trim(rest.substr(0, eq));
+                        d.expr = trim(rest.substr(eq + 2));
+                        if (!d.expr.empty() && d.expr.back() == ';') d.expr.pop_back();
+                        d.expr = trim(d.expr);
+                        cur_mod->defs.push_back(std::move(d));
+                    }
+                }
+            } else if (line.rfind("pub fn ", 0) == 0 || line.rfind("fn ", 0) == 0) {
+                if (cur_mod) {
+                    MrsFnDecl f;
+                    f.span.line = line_no;
+                    const bool pub = line.rfind("pub ", 0) == 0;
+                    auto rest = pub ? trim(line.substr(4)) : line;
+                    if (rest.rfind("fn ", 0) == 0) rest = trim(rest.substr(3));
+                    const size_t lpar = rest.find('(');
+                    const size_t rpar = rest.find(')');
+                    const size_t eq = rest.find(":=");
+                    if (lpar != std::string::npos && rpar != std::string::npos && rpar > lpar &&
+                        eq != std::string::npos && eq > rpar) {
+                        f.name = trim(rest.substr(0, lpar));
+                        f.params = parse_paren_id_list(rest.substr(lpar + 1, rpar - lpar - 1));
+                        f.body = trim(rest.substr(eq + 2));
+                        if (!f.body.empty() && f.body.back() == ';') f.body.pop_back();
+                        f.body = trim(f.body);
+                        f.visibility = pub ? MrsVisibility::Pub : MrsVisibility::Private;
+                        if (!f.name.empty() && !f.body.empty()) cur_mod->fns.push_back(std::move(f));
+                    }
                 }
             } else if (line.rfind("prove ", 0) == 0) {
                 if (cur_mod) {
@@ -219,6 +337,16 @@ MrsCompilationUnit parse_mrs_unit(const std::string& path) {
                             prove_body_accum.clear();
                         }
                     }
+                }
+            } else if (line.rfind("theorem ", 0) == 0) {
+                if (cur_mod) {
+                    MrsTheoremDecl t;
+                    t.span.line = line_no;
+                    auto rest = trim(line.substr(8));
+                    const size_t brace = rest.find('{');
+                    t.name = brace == std::string::npos ? trim(rest) : trim(rest.substr(0, brace));
+                    cur_mod->theorems.push_back(std::move(t));
+                    cur_theorem = &cur_mod->theorems.back();
                 }
             } else if (line.rfind("proof_graph ", 0) == 0) {
                 if (cur_mod) {
@@ -246,9 +374,6 @@ MrsCompilationUnit parse_mrs_unit(const std::string& path) {
                     if (line.find("class:") != std::string::npos) {
                         ob.proof_class =
                             parse_proof_class(strip_mrs_field_value(line.substr(line.find(':') + 1)));
-                    } else if (line.find("lean_name:") != std::string::npos ||
-                               line.find("lean_theorem:") != std::string::npos) {
-                        ob.lean_theorem = strip_mrs_field_value(line.substr(line.find(':') + 1));
                     } else if (line.find("deps:") != std::string::npos) {
                         ob.dependencies = parse_bracket_list(line);
                     } else if (line.find("prove:") != std::string::npos) {
@@ -262,7 +387,52 @@ MrsCompilationUnit parse_mrs_unit(const std::string& path) {
                         }
                     } else if (line.find("statement:") != std::string::npos) {
                         ob.statement = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("domain:") != std::string::npos &&
+                               line.find("domain_lower:") == std::string::npos &&
+                               line.find("domain_upper:") == std::string::npos) {
+                        ob.domain_kind = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("domain_lower:") != std::string::npos) {
+                        ob.domain_lower = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("domain_upper:") != std::string::npos) {
+                        ob.domain_upper = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("predicate:") != std::string::npos) {
+                        ob.predicate = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("extend_via:") != std::string::npos) {
+                        ob.extend_via = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("witness_expr:") != std::string::npos) {
+                        ob.witness_expr = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                    } else if (line.find("rewrite_rules:") != std::string::npos) {
+                        ob.rewrite_rules = parse_bracket_list(line);
+                    } else if (line.find("transform_hints:") != std::string::npos) {
+                        ob.transform_hints = parse_bracket_list(line);
+                    } else if (line.find("decision_procedure:") != std::string::npos) {
+                        ob.decision_procedure =
+                            strip_mrs_field_value(line.substr(line.find(':') + 1));
                     }
+                }
+            } else if (cur_mod && line.rfind("transform rule ", 0) == 0) {
+                MrsTransformRule tr;
+                auto rest = trim(line.substr(15));
+                const size_t brace = rest.find('{');
+                tr.id = brace == std::string::npos ? trim(rest) : trim(rest.substr(0, brace));
+                if (line.find("from:") != std::string::npos) {
+                    tr.from_pattern = strip_mrs_field_value(line.substr(line.find("from:") + 5));
+                }
+                if (line.find("to:") != std::string::npos) {
+                    tr.to_pattern = strip_mrs_field_value(line.substr(line.find("to:") + 3));
+                }
+                if (line.find("hints:") != std::string::npos) {
+                    tr.hints = parse_bracket_list(line);
+                }
+                if (!tr.id.empty()) cur_mod->transforms.push_back(std::move(tr));
+            } else if (cur_mod && !cur_mod->transforms.empty() && !cur_graph) {
+                auto& tr = cur_mod->transforms.back();
+                if (line.find("hints:") != std::string::npos) {
+                    tr.hints = parse_bracket_list(line);
+                } else if (line.find("from:") != std::string::npos) {
+                    tr.from_pattern = strip_mrs_field_value(line.substr(line.find(':') + 1));
+                } else if (line.find("to:") != std::string::npos) {
+                    tr.to_pattern = strip_mrs_field_value(line.substr(line.find(':') + 1));
                 }
             }
         }

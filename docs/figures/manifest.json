@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-15T11:51:10.538831+00:00",
+  "generated_at": "2026-06-23T14:34:30.554318+00:00",
   "figures": [
     {
       "id": "S10_gap_semantics",
       "caption": "Falsification gap semantics.",
       "tier": "NUMERIC",
       "sources": [
-        "spectral_findings.md"
+        "duality_gold_standard.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S10_gap_semantics.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S10_gap_semantics.png"
@@ -16,6 +16,7 @@
       "caption": "Adelic mapped RMSE vs completion tolerance.",
       "tier": "NUMERIC",
       "sources": [
+        "adelic_convergence_sweep.json",
         "adelic_epsilon_sweep.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S11_adelic_epsilon.pdf",
@@ -43,10 +44,11 @@
     },
     {
       "id": "S14_xi_det_strip",
-      "caption": "XiDetGap along the critical strip.",
+      "caption": "XiDetGap along critical-line ordinates (cert: spectral_determinant.json).",
       "tier": "NUMERIC",
       "sources": [
-        "spectral_determinant.json"
+        "spectral_determinant.json",
+        "marshal_xi_spectral_determinant.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S14_xi_det_strip.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S14_xi_det_strip.png"
@@ -63,9 +65,11 @@
     },
     {
       "id": "S16_gln_ladder",
-      "caption": "Rank ladder: RH, BSD, Hodge, Yang\u2013Mills.",
+      "caption": "Rank ladder: RH, BSD, Goldbach, Hodge, Yang\u2013Mills.",
       "tier": "MIXED",
-      "sources": [],
+      "sources": [
+        "mrs_ladder_proof_audit.json"
+      ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S16_gln_ladder.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S16_gln_ladder.png"
     },
@@ -91,10 +95,11 @@
     },
     {
       "id": "S19_bsd_rank2",
-      "caption": "GL(2) BSD rank-2 kernel identification.",
+      "caption": "GL(2) BSD rank identification (curve 37a).",
       "tier": "EVIDENCE",
       "sources": [
-        "marshal_bsd_37a.json"
+        "marshal_bsd_37a.json",
+        "anavm_bsd_proof.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S19_bsd_rank2.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S19_bsd_rank2.png"
@@ -114,7 +119,8 @@
       "caption": "Rank-3 Hitchin/K3: Hodge classes as ker(D).",
       "tier": "EVIDENCE",
       "sources": [
-        "marshal_hodge_k3_demo.json"
+        "marshal_hodge_k3_demo.json",
+        "anavm_hodge_proof.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S20_hodge_k3_kernel.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S20_hodge_k3_kernel.png"
@@ -134,14 +140,15 @@
       "caption": "GL(4) block structure / YMH analogy.",
       "tier": "OUTLOOK",
       "sources": [
-        "gln4_physics_outlook.json"
+        "gln4_physics_outlook.json",
+        "anavm_ym_proof.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S22_gln4_block_decomposition.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S22_gln4_block_decomposition.png"
     },
     {
       "id": "S23_holy_function",
-      "caption": "Holy Function profile; anchor at t=\u03c0.",
+      "caption": "Holy Function at s=1/2+i pi; WDW outlook anchor.",
       "tier": "OUTLOOK",
       "sources": [
         "holy_function_demo.json"
@@ -151,11 +158,24 @@
     },
     {
       "id": "S24_unification_map",
-      "caption": "Summary: arithmetic/physics problems on the GL(n) ladder.",
+      "caption": "Summary: Millennium problems on the GL(n) ladder.",
       "tier": "OUTLOOK",
-      "sources": [],
+      "sources": [
+        "mrs_ladder_proof_audit.json",
+        "mrs_proof_audit.json"
+      ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S24_unification_map.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S24_unification_map.png"
+    },
+    {
+      "id": "S25_goldbach_arcs",
+      "caption": "Major/minor arc dominance and extension ratio for classical Goldbach.",
+      "tier": "PROVED",
+      "sources": [
+        "anavm_goldbach_proof.json"
+      ],
+      "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S25_goldbach_arcs.pdf",
+      "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S25_goldbach_arcs.png"
     },
     {
       "id": "S2_rooted_dag_convergence",
@@ -172,18 +192,21 @@
       "caption": "Global operator limit convergence.",
       "tier": "NUMERIC",
       "sources": [
-        "global_connes_limit.json"
+        "global_connes_limit.json",
+        "global_dirac_limit.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S3_global_limit.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S3_global_limit.png"
     },
     {
       "id": "S4_weil_convergence",
-      "caption": "Weil explicit formula convergence exponents.",
+      "caption": "Weil explicit formula: zero-ladder residuals and scenario exponents.",
       "tier": "NUMERIC",
       "sources": [
         "weil_convergence_T8_kappa1.json",
-        "weil_convergence_gamma1_kappa60.json"
+        "weil_convergence_T8_kappa1_500k.json",
+        "weil_convergence_gamma1_kappa60.json",
+        "weil_convergence_summary.json"
       ],
       "pdf": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\pdf\\fig_S4_weil_convergence.pdf",
       "png": "C:\\Users\\bumbe\\Downloads\\schizo riemann hypothesis stuff\\docs\\figures\\png\\fig_S4_weil_convergence.png"

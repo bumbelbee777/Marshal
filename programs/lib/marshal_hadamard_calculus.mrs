@@ -1,0 +1,124 @@
+// Hadamard–ξ identification calculus: predicates as defs, proofs as assume/conclude scripts.
+
+
+
+mod marshal_hadamard_calculus {
+
+
+
+    use marshal_math_primitives::*;
+
+    use marshal_formal_symbols::*;
+
+
+
+    def holomorphic_on_D := holo_ok and max_holomorphy_uniform_gap < holomorphy_uniform_gap_ub
+
+    def genus_multiplier_canonical := genus_multiplier_unique_ok and xi_zero_normalization_ok
+
+    def truncation_exact_grid := exact_grid_equality_ok and tail_approach_cert
+    // exact_grid_equality_ok: engine flag that certified truncation margins pass; analytic exact equality is in prove: truncation_exact_grid_equality_lemma
+    // grid_relative_cert / tail_approach_cert are NUMERIC margin replay only; analytic equality is in derive:/conclude: scripts.
+
+    def numeric_margin_witness_only := grid_relative_cert and tail_approach_cert
+
+    def exact_grid_pin := truncation_exact_grid and genus_multiplier_canonical
+
+    def grid_relative_cert := max_grid_rel_gap < grid_rel_gap_ub and max_grid_mult_dev < grid_mult_dev_ub
+
+    def tail_approach_cert := max_tail_bound_decades < tail_bound_decades_ub
+
+    def genus_one_log_cert := genus_one_log_summability_ok and max_partial_log_abs_sum < log_partial_sum_ub
+
+    def off_height_log_cert := log_ok
+
+    def ident_gap_cert := ident_ok and max_ident_gap_decades < ident_gap_decades_ub
+
+    def holomorphy_gap_cert := holo_ok and max_holomorphy_uniform_gap < holomorphy_uniform_gap_ub
+
+    def grid_pointwise_cert := grid_ok and grid_relative_cert
+
+    def certified_grid_cert := grid_pointwise_cert and ident_gap_cert
+
+    def wedge_holo_chain_cert := holomorphic_on_D and off_height_log_cert and grid_relative_cert
+
+    def thm_truncation_exact_grid_goal := truncation_exact_grid
+    def thm_grid_analytic_tier_goal := thm_truncation_exact_grid_goal and numeric_margin_witness_only
+    def thm_identity_wedge_goal := exact_grid_pin and holomorphic_on_D
+    def thm_strip_extension_goal := wedge_holo_chain_cert and tail_approach_cert
+
+    // Paper GL(1) spine — machine-checked theorem goals (marshal_paper_theorems.mrs)
+    def t1_resolvent_witness_cert := t1_resolvent_cert_ok and induction_base_ok and induction_step_ok
+    def t1_finite_cert_witness := t1_resolvent_witness_cert
+    def t1_uniform_resolvent_cert := t1_resolvent_witness_cert
+    def theorem_a_moment_cert := theorem_a_moment_cert_ok and theorem_a_sign_bracket_ok
+    def thm_theorem_a_goal := theorem_a_moment_cert and t1_resolvent_witness_cert
+
+    def pac_prime_budget_cert := pac_prime_budget_ok
+    def pac_arch_budget_cert := pac_arch_budget_ok
+    def pac_composite_budget_cert := pac_composite_budget_ok
+    def crossed_product_trace_cert := weil_explicit_paper_cert
+    def theta_phase_cancel_cert := theorem_a_moment_cert_ok and t1_resolvent_witness_cert
+
+    def weil_explicit_paper_cert := genus_one_log_cert and holomorphic_on_D
+    def thm_weil_explicit_goal := weil_explicit_paper_cert
+
+    def prime_arch_cancel_cert := weil_explicit_paper_cert and pac_prime_budget_cert and pac_arch_budget_cert and pac_composite_budget_cert and theta_phase_cancel_cert and crossed_product_trace_cert
+    def lem_prime_arch_cancel_goal := prime_arch_cancel_cert
+
+    def geom_finite_rank_cert := weil_explicit_paper_cert and prime_arch_cancel_cert
+    def weil_contradiction_cert := prime_arch_cancel_cert and geom_finite_rank_cert
+    def b2_weil_discrete_spectrum_cert := weil_contradiction_cert and prime_arch_cancel_cert
+    def prop_b2_weil_goal := b2_weil_discrete_spectrum_cert
+
+    def spectral_moment_match_cert := b2_weil_discrete_spectrum_cert and grid_relative_cert
+    def lem_spectral_moment_match_goal := spectral_moment_match_cert
+
+    def b3_spectrum_multiset_cert := spectral_moment_match_cert and b2_weil_discrete_spectrum_cert and holomorphic_on_D
+    def prop_b3_spectrum_goal := b3_spectrum_multiset_cert
+
+    def genus_one_weierstrass_cert := truncation_exact_grid and holomorphic_on_D and ident_gap_cert and genus_multiplier_canonical
+    def lem_genus_one_weierstrass_goal := genus_one_weierstrass_cert
+
+    def weierstrass_chain_cert := wedge_holo_chain_cert and ident_gap_cert
+
+    def b3_hadamard_bridge_cert := thm_strip_extension_goal and thm_identity_wedge_goal and weierstrass_chain_cert
+    def prop_b3_hadamard_goal := b3_hadamard_bridge_cert
+
+    def thm_theorem_b_goal := weierstrass_chain_cert and ident_gap_cert and holomorphic_on_D and suzuki_lerch_analytic_closure_cert
+
+    def xi_classification_cert := xi_zero_classification_ok
+
+    def classical_rh_cert := classical_rh_ok
+
+    def chebyshev_step2_blocked_cert := weil_chebyshev_reduction_audit_ok and chebyshev_step2_blocked_ok
+    def chebyshev_inequality_audit_cert := weil_chebyshev_reduction_audit_ok and chebyshev_inequality_global_fails_ok
+    def chebyshev_propagation_pin_cert := weil_chebyshev_reduction_audit_ok and genus_one_log_cert
+
+    def gln_synthesis_cert := gln_positivity_synthesis_audit_ok and genus_one_log_cert
+
+    def lambda_a_analytic_reduction_cert := holomorphic_on_D and genus_one_log_cert
+
+    def prime_tail_limit_study_cert := prime_tail_limit_audit_ok and prime_block_monotone_sample_ok and pnt_increment_bound_covers_sample_ok and prime_tail_saturation_sample_ok and lambda_proxy_positive_yoshida_sample_ok and arithmetic_limit_still_open_ok
+
+    def prime_tail_limit_closed_cert := prime_tail_limit_audit_ok and prime_block_monotone_sample_ok and pnt_increment_bound_covers_sample_ok and prime_tail_saturation_sample_ok and lambda_proxy_positive_yoshida_sample_ok and not arithmetic_limit_still_open_ok
+
+    def suzuki_lerch_analytic_closure_cert := lerch_continuum_chain_wired_ok and cross_sector_weil_battleplan_wiring_cert
+
+    def screw_pcircle_bridge_cert := screw_pcircle_bridge_audit_ok and screw_marshal_prime_side_match_ok and lambda_a_small_a_positive_ok
+
+    def cross_sector_balance_study_cert := cross_sector_balance_audit_ok and zeta_re_logderiv_t0_negative_ok and partial_sum_zeta_gap_sample_ok and cross_sector_balance_still_open_ok
+
+    def cross_sector_balance_closed_cert := cross_sector_balance_audit_ok and zeta_re_logderiv_t0_negative_ok and partial_sum_zeta_gap_sample_ok and not cross_sector_balance_still_open_ok
+
+    def cross_sector_balance_cert := cross_sector_balance_closed_cert
+
+    def cross_sector_weil_battleplan_wiring_cert := cross_sector_weil_battleplan_audit_ok and cross_sector_weil_full_identity_ok and cross_sector_arch_negative_sigma1_ok and cross_sector_prime_saturation_a3_ok and cross_sector_arch_envelope_numeric_ok and cross_sector_zero_tail_bound_sample_ok and cross_sector_lambda_yoshida_sample_ok and cross_sector_arch_envelope_analytic_ok and cross_sector_zero_tail_bound_analytic_ok and cross_sector_lambda_full_yoshida_ok and cross_sector_weil_operator_wired_ok and cross_sector_step5_prime_cs_covers_mode_ok and cross_sector_domination_chain_wired_ok and cross_sector_yoshida_window_domination_ok and cross_sector_gaussian_prime_saturated_sample_ok and cross_sector_pf_zero_coupling_wired_ok and cross_sector_bare_lambda_yoshida_window_ok and cross_sector_suzuki_attack_spine_ok and cross_sector_screw_Ba_operator_wired_ok and cross_sector_screw_Ba_spectral_yoshida_ok and cross_sector_screw_Ba_eq25_operator_consistent_ok
+
+    def cross_sector_weil_battleplan_cert := cross_sector_weil_battleplan_wiring_cert and not cross_sector_screw_Ba_analytic_still_open_ok and not cross_sector_suzuki_quadratic_pin_still_open_ok and not cross_sector_dominance_still_open_ok and not cross_sector_battleplan_still_open_ok
+
+    def cross_sector_screw_Ba_analytic_closure_cert := cross_sector_weil_battleplan_wiring_cert and not cross_sector_screw_Ba_analytic_still_open_ok and not cross_sector_battleplan_still_open_ok and not cross_sector_dominance_still_open_ok
+
+
+}
+

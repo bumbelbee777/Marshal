@@ -627,6 +627,27 @@ ParseResult parse_mrs_file(const std::string& path) {
             parse_d("major_arc_threshold", out.program.bound_audit.major_arc_threshold);
             parse_d("minor_arc_ub", out.program.bound_audit.minor_arc_ub);
             parse_d("goldbach_n0", out.program.bound_audit.goldbach_n0);
+            parse_d("goldbach_effective_n_max", out.program.bound_audit.goldbach_effective_n_max);
+            parse_d("goldbach_extension_ratio_lb", out.program.bound_audit.goldbach_extension_ratio_lb);
+            parse_d("bsd_extension_ratio_lb", out.program.bound_audit.bsd_extension_ratio_lb);
+            parse_d("bsd_formula_rel_gap_ub", out.program.bound_audit.bsd_formula_rel_gap_ub);
+            parse_d("bsd_millennium_extension_ratio_lb",
+                    out.program.bound_audit.bsd_millennium_extension_ratio_lb);
+            parse_d("hodge_extension_ratio_lb", out.program.bound_audit.hodge_extension_ratio_lb);
+            parse_d("hodge_millennium_extension_ratio_lb",
+                    out.program.bound_audit.hodge_millennium_extension_ratio_lb);
+            parse_d("hodge_millennium_pp_target", out.program.bound_audit.hodge_millennium_pp_target);
+            parse_d("rooted_rmse_ub", out.program.bound_audit.rooted_rmse_ub);
+            parse_d("gauge_over_gravity_lb", out.program.bound_audit.gauge_over_gravity_lb);
+            parse_d("holy_anchor_t", out.program.bound_audit.holy_anchor_t);
+            parse_d("ym_mass_gap_lb", out.program.bound_audit.ym_mass_gap_lb);
+            parse_d("ym_extension_ratio_lb", out.program.bound_audit.ym_extension_ratio_lb);
+            parse_d("ym_millennium_extension_ratio_lb",
+                    out.program.bound_audit.ym_millennium_extension_ratio_lb);
+            parse_d("holy_stationarity_residual_ub",
+                    out.program.bound_audit.holy_stationarity_residual_ub);
+            parse_d("ym_lattice_beta", out.program.bound_audit.ym_lattice_beta);
+            parse_d("ym_lattice_volume", out.program.bound_audit.ym_lattice_volume);
         } else if (block == Block::GenusOneLogBounds) {
             auto parse_d = [&](const char* key, double& dst) {
                 if (line.find(key) == std::string::npos) return;

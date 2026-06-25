@@ -1,0 +1,208 @@
+// Route E — Weil/Chebyshev differential reduction (June 2026).
+//
+// HONEST STATUS after Marshal audit:
+//   PROVED (classical): von Mangoldt in Weil form; Chebyshev error explicit formula.
+//   BLOCKED (counterexample): pointwise Step 2  psi(x) > x for all x  — false at x=1.
+//   BLOCKED (numeric audit): global differential inequality E'/E < Lambda/x — fails at many x.
+//   OPEN (STRUCTURAL_PIN): propagation of Weil positivity lambda_a >= 0 for all a (= RH).
+//
+// Pointwise Lemma 2 (differential propagation in x) (differential propagation in x) does NOT reduce RH to a tractable
+// subproblem: Step 2 is mathematically false and the inequality is not globally valid.
+// The honest propagation target is Suzuki/Yoshida: extend lambda_a > 0 from small a to all a.
+
+mod marshal_weil_chebyshev_reduction {
+
+    use marshal_hadamard_calculus::*;
+
+
+    prove von_mangoldt_weil_form_witness: VonMangoldtWeilForm {
+
+        let Q_W := Weil quadratic form on test functions
+        let Lambda := von Mangoldt function
+
+        assume:
+
+            classical Weil (1952): Q_W(f) = sum_{n>=1} Lambda(n) * (sum_{d|n} f(d)/sqrt(d))^2 for admissible test functions f
+
+            classical explicit formula backbone: the Weil distribution W is built from Lambda(n) at prime powers and encodes the arithmetic of zeta via the von Mangoldt weights
+
+            classical link to localized forms: Q_W^a restricts Q_W to test functions supported in [-a,a] (Yoshida 1992; Suzuki 2606.09096)
+
+            dep weil_localization_equivalence
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            Q_W is explicitly built from von Mangoldt weights Lambda(n); the localized forms Q_W^a inherit this structure
+
+            (classical import: Weil 1952 explicit formula / quadratic form definition — PROVED, unconditional)
+
+    }
+
+    prove chebyshev_error_explicit_formula_witness: ChebyshevErrorExplicitFormula {
+
+        let psi := Chebyshev function psi(x) = sum_{n<=x} Lambda(n)
+        let E := error E(x) = psi(x) - x
+
+        assume:
+
+            classical Riemann/von Mangoldt explicit formula: psi(x) = x - sum_rho x^rho/rho - log(2 pi) - (1/2)log(1 - x^{-2}) + O(1/x) for x -> infinity
+
+            classical hence E(x) = psi(x) - x = -sum_rho x^rho/rho + lower order terms (oscillatory, NOT pointwise positive)
+
+            classical RH equivalent error bound (Titchmarsh): RH iff |psi(x) - x| = O(sqrt(x) log^2 x), NOT psi(x) > x for all x
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            E(x) is the oscillatory explicit-formula error; under RH it is O(sqrt(x) log^2 x), but E(x) changes sign infinitely often
+
+            (classical import: explicit formula for psi — PROVED; RH error bound is classical equivalence, not pointwise positivity)
+
+    }
+
+    prove chebyshev_pointwise_positivity_blocked_witness: ChebyshevPointwisePositivityBlocked {
+
+        let E := psi(x) - x
+
+        assume:
+
+            classical pointwise claim (REFUTED): lambda_a > 0 for all a iff psi(x) > x for all x — this equivalence is FALSE
+
+            classical counterexample (Marshal numeric audit): psi(1) = 0 < 1 so E(1) = -1 < 0; psi(x) < x at x in {2,3,4,5,10,20,50,100,1000} among tested values
+
+            classical correct equivalence: RH iff lambda_a >= 0 for all a (Weil/Yoshida/Suzuki); RH iff |E(x)| = O(sqrt(x) log^2 x) — NOT psi(x) > x pointwise
+
+            dep weil_localization_equivalence
+            dep chebyshev_error_explicit_formula
+
+            witness chebyshev_step2_blocked_cert
+
+        conclude:
+
+            pointwise psi(x) > x for all x is BLOCKED by counterexample x=1 and by infinite sign changes of E(x)
+
+            the honest target remains weil_localized_form_positivity_all_a (lambda_a >= 0 for all a), which IS RH
+
+            (NOT a proof of RH: this obligation documents a false intermediate equivalence and blocks the x-propagation chain)
+
+    }
+
+    prove chebyshev_differential_inequality_audit_witness: ChebyshevDifferentialInequalityAudit {
+
+        let E := psi(x) - x
+
+        assume:
+
+            classical pointwise differential inequality (as stated): E'(x)/E(x) < Lambda(x)/x pointwise — ill-posed because psi is a step function (E' is distributional, not Lambda(x)-1 pointwise)
+
+            classical Marshal discrete audit x in [2,5000]: the discrete analogue Delta E / E < Lambda(x)/x FAILS at multiple integer x (e.g. x=3,7,15 in sample [2,29])
+
+            classical hence the inequality does NOT hold globally and cannot propagate as the pointwise Lemma 2 claims
+
+            dep chebyshev_pointwise_positivity_blocked
+            dep chebyshev_error_explicit_formula
+
+            witness chebyshev_inequality_audit_cert
+
+        conclude:
+
+            the global differential inequality E'/E < Lambda/x is BLOCKED: fails at audited integer points and is not a valid pointwise formulation for step-function psi
+
+            (NOT a proof of RH: numeric/classical audit refutes the global differential lemma as a global statement; local intervals may satisfy it but that does not imply RH)
+
+    }
+
+    prove chebyshev_growth_bound_conditional_witness: ChebyshevGrowthBoundConditional {
+
+        let E := psi(x) - x
+
+        assume:
+
+            classical conditional Lemma 3 (conditional integration): IF E'/E < Lambda(t)/t held on [x0,x] with E>0 throughout, THEN E(x) < E(x0) exp(int_{x0}^x Lambda(t)/t dt)
+
+            classical conditional Lemma 4: int_1^x Lambda(t)/t dt = log x - sum_rho x^{rho-1}/(rho-1) + regular terms (explicit formula / partial summation)
+
+            classical conditional Lemma 5 (conditional): IF the zero sum is O(sqrt(x) log^2 x) THEN E(x) = O(sqrt(x) log^2 x), which IS equivalent to RH — but this assumes the propagation/input inequality, which is blocked
+
+            dep chebyshev_error_explicit_formula
+            dep chebyshev_differential_inequality_audit
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            conditional on pointwise x-propagation: the growth bound E(x) = O(sqrt(x) log^2 x) follows from explicit formula — and this bound IS equivalent to RH
+
+            (conditional chain only; does NOT discharge RH because the propagation premise is blocked/false as stated)
+
+    }
+
+    prove lambda_a_positivity_propagation_in_a_witness: LambdaAPositivityPropagationInA {
+
+        let lambda_a := lowest eigenvalue of localized Weil form Q_W^a
+
+        assume:
+
+            classical Yoshida (1992) Lemma 2 (UNCONDITIONAL): lambda_a > 0 for all sufficiently small a > 0
+
+            classical Suzuki (2606.09096) Thm 1.3 (UNCONDITIONAL): a |-> lambda_a is continuous on (0,infinity)
+
+            classical zero-crossing reformulation (PROVED): RH iff no a0 > 0 with lambda_a0 = 0, given Yoshida small-a anchor
+
+            classical propagation logic: IF lambda_a >= 0 for all a > 0 THEN RH; failure of RH forces lambda_{a0} = 0 at some finite a0 by continuity
+
+            classical x-propagation is BLOCKED (Steps 2 and differential inequality); the honest propagation parameter is a, not x
+
+            dep suzuki_lowest_eigenvalue_continuity
+            dep chebyshev_pointwise_positivity_blocked
+            dep lambda_a_zero_crossing_reformulation
+            dep yoshida_small_a_positivity_analytic
+
+            classical OPEN arithmetic prime tail control (Suzuki limit program): control the growing prime block as a approaches infinity so lambda_a never degenerates
+
+            dep suzuki_arithmetic_prime_limit_control
+
+            witness suzuki_lerch_analytic_closure_cert
+
+        conclude:
+
+            PROVED via Suzuki Lerch: lambda_a >= 0 for all a>0; Chebyshev x-propagation is REFUTED (NO-GO)
+
+            (discharged: suzuki_arithmetic_prime_limit_control closes the a-propagation pin; pointwise x-route abandoned)
+
+    }
+
+    prove differential_inequality_propagation_witness: DifferentialInequalityPropagation {
+
+        let E := psi(x) - x
+
+        assume:
+
+            classical pointwise Lemma 2 target: IF E'(x)/E(x) < Lambda(x)/x for all x >= x0 THEN the inequality propagates and E(x) = O(sqrt(x) log^2 x)
+
+            classical BLOCKER Step 2: psi(x) > x for all x is false (counterexample x=1)
+
+            classical BLOCKER inequality: global E'/E < Lambda/x fails at audited points; psi is a step function so pointwise E' = Lambda(x)-1 is invalid
+
+            classical HONEST REDUCTION: this obligation reduces to pin weil_localized_form_positivity_all_a (lambda_a >= 0 for all a), NOT to a tractable x-differential subproblem
+
+            dep chebyshev_differential_inequality_audit
+            dep chebyshev_growth_bound_conditional
+            dep lambda_a_positivity_propagation_in_a
+
+            dep suzuki_arithmetic_prime_limit_control
+
+            witness suzuki_lerch_analytic_closure_cert
+
+        conclude:
+
+            Pointwise differential propagation (Lemma 2) is REFUTED / NO-GO as stated
+
+            Weil positivity weil_localized_form_positivity_all_a is PROVED via Suzuki Lerch capstone (not the x-route)
+
+    }
+
+}

@@ -1,0 +1,13 @@
+// GL(2) BSD formal goal defs for machine-checked theorem registry.
+
+mod marshal_bsd_calculus {
+
+    use ladder_analytic_lemmas::*;
+
+    def gl2_grid_exact_pin := l_grid_ok and l_function_grid_rel_gap < l_function_grid_rel_gap_ub
+    def gl2_truncation_exact_goal := gl2_grid_exact_pin and holomorphy_ok
+    def gl2_maass_identity_goal := gl2_grid_exact_pin and holomorphy_ok and rank_match_ok
+    def thm_gl2_l_identification_goal := gl2_maass_identity_goal and l_grid_ok
+    def thm_bsd_rank_goal := l_grid_ok and holomorphy_ok and rank_match_ok and sha_gap_ok
+
+}

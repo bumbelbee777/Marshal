@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "Kernel/FusedHotPaths.hxx"
 #include "Kernel/PairwiseSum.hxx"
+#include "Kernel/SimdMicrokernels.hxx"
 #include "Kernel/SoaLayouts.hxx"
 #include "Numerics/Real.hxx"
 #include <cmath>
@@ -20,6 +21,13 @@ static constexpr Real kSqrt2Pi = MARSHAL_LIT(2.506628274631000502415165145310982
 Real FusedGaussPrimeHatBlock(Real sigma, Real log_p, int k_cap, Real eps) {
     const Real hscale = sigma * kSqrt2Pi;
     const Real inv_2ss = 0.5L * sigma * sigma;
+#if defined(MARSHAL_HAVE_AVX2)
+    const double coeff = -static_cast<double>(inv_2ss);
+    const double scale = 2.0 * static_cast<double>(hscale);
+    const double raw =
+        PrimePowerExpSum(static_cast<double>(log_p), k_cap, coeff, static_cast<double>(eps));
+    return static_cast<Real>(raw * scale);
+#else
     Real sum = 0;
     Real ppow = MarshalExp(log_p * 0.5L);
     for (int k = 1; k <= k_cap; ++k) {
@@ -30,6 +38,27 @@ Real FusedGaussPrimeHatBlock(Real sigma, Real log_p, int k_cap, Real eps) {
         ppow *= MarshalExp(log_p * 0.5L);
     }
     return sum;
+#endif
+}
+
+Real FusedAbHeatBlock(Real tau, Real log_p, int k_cap, Real eps) {
+#if defined(MARSHAL_HAVE_AVX2)
+    const double coeff = -1.0 / (4.0 * static_cast<double>(tau));
+    return static_cast<Real>(PrimePowerExpSum(static_cast<double>(log_p), k_cap, coeff,
+                                            static_cast<double>(eps)));
+#else
+    const Real inv4t = 1.0L / (4.0L * tau);
+    Real sum = 0;
+    Real ppow = MarshalExp(log_p * 0.5L);
+    for (int k = 1; k <= k_cap; ++k) {
+        const Real u = static_cast<Real>(k) * log_p;
+        const Real term = (log_p / ppow) * MarshalExp(-u * u * inv4t);
+        sum += term;
+        if (term < eps) break;
+        ppow *= MarshalExp(log_p * 0.5L);
+    }
+    return sum;
+#endif
 }
 
 void FusedGaussPrimeHatBlockSoA(Real sigma, const Real* log_p, const int* k_cap,
@@ -43,20 +72,6 @@ void FusedGaussPrimeHatBlockSoA(Real sigma, const Real* log_p, const int* k_cap,
         out[i] = static_cast<double>(
             FusedGaussPrimeHatBlock(sigma, log_p[i], k_cap[i], eps));
     }
-}
-
-Real FusedAbHeatBlock(Real tau, Real log_p, int k_cap, Real eps) {
-    const Real inv4t = 1.0L / (4.0L * tau);
-    Real sum = 0;
-    Real ppow = MarshalExp(log_p * 0.5L);
-    for (int k = 1; k <= k_cap; ++k) {
-        const Real u = static_cast<Real>(k) * log_p;
-        const Real term = (log_p / ppow) * MarshalExp(-u * u * inv4t);
-        sum += term;
-        if (term < eps) break;
-        ppow *= MarshalExp(log_p * 0.5L);
-    }
-    return sum;
 }
 
 void FusedAbHeatBlockSoA(Real tau, const Real* log_p, const int* k_cap,

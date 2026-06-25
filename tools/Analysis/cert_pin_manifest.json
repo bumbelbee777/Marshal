@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "description": "Single source of truth for all rational bound pins used in MRS infer obligations and Python PINNED dicts. Each entry maps an obligation_id to its certified rational bound with provenance.",
+  "pins": {
+    "moment_tolerance_ok": {
+      "num": 704,
+      "den": 1000000,
+      "engine": "marshal_theorem_b_cert.json",
+      "field": "moment_l2_distance",
+      "constraint": "MOMENT_TOLERANCE < Rational(1, 100)",
+      "note": "Theorem B moment L2 distance; measured 0.000704"
+    },
+    "grid_rel_gap_bounded": {
+      "num": 258,
+      "den": 10000,
+      "engine": "anavm_xi_hadamard_proof.json",
+      "field": "max_grid_rel_gap",
+      "constraint": "GRID_REL_GAP_UB <= Rational(3, 100)",
+      "note": "Hadamard grid relative gap; measured ~0.0258; bound 0.03; NumericInterval only, NOT exact equality"
+    },
+    "t1_uniform_resolvent_lb": {
+      "num": 1098,
+      "den": 1000000,
+      "engine": "t1_uniform_resolvent_cert.json",
+      "field": "delta_uniform_rational_lb",
+      "constraint": "T1_UNIFORM_RESOLVENT_LB >= Rational(1098, 1000000)",
+      "note": "Uniform resolvent lower bound inf_p R_p(theta0) >= 1098/1000000 > 0; PROVED unconditionally via elementary tail bound (log p >= 2*theta0 => R_p >= theta0) + finite cert over the 9651 primes below e^{2*theta0}; minimizer p=317, j=1; no Baker effective constant. See tools/Analysis/EmitT1UniformResolventCert.py"
+    },
+    "ym_finite_volume_gap_uniform_lb": {
+      "num": 2079036,
+      "den": 1000000,
+      "engine": "ym_finite_volume_gap_cert.json",
+      "field": "uniform_floor_rational_lb",
+      "constraint": "YM_FINITE_VOLUME_GAP_LB >= Rational(2079036, 1000000)",
+      "note": "Volume-uniform finite-volume YM transfer-gap floor inf_V Delta(V) >= beta*g/pi^2 = 2.07904 > 0; the heat-kernel (spectral) channel beta*g/pi^2 is volume-independent and dominates the decaying plaquette channel beta/(2 L^2). Backs ym_finite_volume_gap_uniform ONLY; does NOT close os_continuum_tightness_hypothesis or gap_lower_semicontinuity_hypothesis (the two named open continuum cores). See tools/Analysis/EmitYMFiniteVolumeGapCert.py"
+    }
+  },
+  "semantic_note": "NumericInterval bounds like grid_rel_gap_bounded certify |det-C*xi| < tol on the approach grid. They are interval bounds, not exact transcendental equalities. Exact equality requires det_zeta_zero_set_equals_xi_zeros (STRUCTURAL_PIN)."
+}

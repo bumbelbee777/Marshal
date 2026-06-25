@@ -122,6 +122,6 @@ python tools/Analysis/RunInvestigation.py --suite theorem_ab --quick
 # Global Dirac limit (falsification of finite models)
 python tools/Analysis/RunGlobalDiracLimit.py
 
-# Lean
-cd docs/Formal && lake build HPAnalysis
+# MRS closure
+cmake --build build --target verify-mrs-proof
 ```

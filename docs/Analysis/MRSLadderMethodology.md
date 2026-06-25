@@ -1,8 +1,8 @@
-# MRS Ladder Methodology — BSD, Hodge, Goldbach (v1-extended)
+# MRS Ladder Methodology — BSD, Hodge, Goldbach, Yang–Mills (MRS v1)
 
 **Prerequisite:** Classical RH closed via `marshal_hadamard_proof.mrs` — see [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md).
 
-Cross-links: [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md), [GrandUnificationManifesto.md](GrandUnificationManifesto.md), [MrsLanguage.md](../AnaVM/MrsLanguage.md).
+Cross-links: [GLnMRSProofSpine.md](GLnMRSProofSpine.md), [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md), [GrandUnificationManifesto.md](GrandUnificationManifesto.md), [MrsLanguage.md](../AnaVM/MrsLanguage.md).
 
 ---
 
@@ -10,7 +10,7 @@ Cross-links: [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md), [Gr
 
 | Tier | Tag | Meaning | CI gate |
 |------|-----|---------|---------|
-| Full closure | `PROVED` | All MRS obligations `PROVED`; capstone theorem in Lean | `verify-*-proof` + `MrsLadderProofGate` |
+| Full closure | `PROVED` | All MRS obligations `PROVED`; `prove:` scripts replay + witnesses/conclude evaluate | `verify-*-proof` + `MrsLadderProofGate` |
 | Numeric witness | `NUMERIC_WITNESS` | Pinned bounds satisfied; analytic lemma pending | bounds check only |
 | Evidence | `EVIDENCE` | Kernel multiplicity / rank match demo | cert `--check` (legacy) |
 | Open | `ANALYTIC_OPEN` | Named obligation without witness | gate refuses |
@@ -36,7 +36,7 @@ flowchart LR
 2. **C++ engine** — measured `max_*` fields in proof JSON
 3. **`mrs_proof_audit.json`** — per-obligation witness rows
 4. **Python cert `--check`** — drift + capstone obligation presence
-5. **Lean** (optional) — exact rationals from cert JSON via `norm_num`
+5. **`MrsProveSpine` + `MrsProofLogic`** — compile-time and script-replay discipline on every `prove:` body
 
 ---
 
@@ -63,6 +63,9 @@ RH prerequisite: all ladder graphs declare `deps: [bsd_rh_prerequisite]` referen
 | `programs/lib/marshal_bsd_proof.mrs` | BSD proof graph |
 | `programs/lib/marshal_hodge_proof.mrs` | Hodge proof graph |
 | `programs/lib/marshal_goldbach_proof.mrs` | Goldbach proof graph |
+| `programs/lib/marshal_ym_proof.mrs` | GL(4) Clay YM proof graph |
+
+Full assembly: [GLnMRSProofSpine.md](GLnMRSProofSpine.md).
 
 ---
 
@@ -75,6 +78,9 @@ RH prerequisite: all ladder graphs declare `deps: [bsd_rh_prerequisite]` referen
 | Skipping RH gate | Ladder work without `bsd_rh_prerequisite` edge |
 | Drift without pin | Changing bounds without updating MRS + cert + C++ |
 | Capstone theater | `bsd_rank_proved: true` in JSON without audit row |
+| Trivial prove alias | Multiple analytic obligations share one bare `prove:` identifier (`MrsProveSpine`) |
+| Boolean extension bypass | `forall_extension` closed via flags without spectral ratio pin |
+| `prove: infer` on analytic | Analytic/Universal/Composition obligations must name explicit `prove:` bodies |
 
 See [Discipline.md](Discipline.md) for global forbidden patterns.
 

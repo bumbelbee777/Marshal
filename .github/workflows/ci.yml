@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CMAKE_BUILD_TYPE: Release
+  MARSHAL_HAVE_AVX2: ON
+  MARSHAL_WERROR: ON
+
+jobs:
+  fixtures:
+    name: CI fixtures
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate fixture manifest
+        run: python tools/CI/ValidateFixtures.py --check
+
+  linux:
+    name: Build + verify (Linux)
+    runs-on: ubuntu-24.04
+    needs: fixtures
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential g++ cmake ninja-build libomp-dev ccache
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install Python CI deps
+        run: pip install -r requirements-ci.txt
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DMARSHAL_HAVE_AVX2=${{ env.MARSHAL_HAVE_AVX2 }} \
+            -DMARSHAL_WERROR=${{ env.MARSHAL_WERROR }}
+
+      - name: Build Marshal + unit tests
+        run: |
+          cmake --build build --parallel $(nproc) --target \
+            Marshal marshal-zero-verify \
+            test-unit test-mrs-module test-mrs-kernel test-mrs-proof-audit \
+            test-anavm-proof-engine test-mrs-hadamard-proof-gate
+
+      - name: Run fast unit tests
+        run: ctest --test-dir build --output-on-failure -R '^(unit|mrs-module|mrs-kernel|mrs-proof-audit)$'
+
+      - name: Epistemic discipline gate
+        run: cmake --build build --target validate-epistemic-discipline
+
+      - name: Full program gate (verify-ci)
+        run: cmake --build build --target verify-ci
+
+      - name: Package witness bundle
+        run: python tools/CI/PackageWitnessBundle.py --out-dir build/ci-artifacts
+
+      - name: Package Linux binaries
+        run: |
+          mkdir -p build/ci-artifacts/bin
+          cp -v build/Marshal build/marshal-zero-verify build/ci-artifacts/bin/
+          (cd build/ci-artifacts/bin && sha256sum Marshal marshal-zero-verify > ../BINARY_SHA256SUMS.txt)
+
+      - name: Upload witness bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: marshal-witness-bundle-${{ github.sha }}
+          path: |
+            build/ci-artifacts/marshal-witness-bundle-*.zip
+            build/ci-artifacts/SHA256SUMS.txt
+            build/ci-artifacts/witness_bundle_meta.json
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload Linux binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: marshal-linux-binaries-${{ github.sha }}
+          path: |
+            build/ci-artifacts/bin/
+            build/ci-artifacts/BINARY_SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  windows:
+    name: Build smoke (Windows)
+    runs-on: windows-2022
+    needs: fixtures
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+
+      - name: Install Python CI deps
+        run: pip install -r requirements-ci.txt
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 `
+            -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} `
+            -DMARSHAL_HAVE_AVX2=${{ env.MARSHAL_HAVE_AVX2 }} `
+            -DMARSHAL_WERROR=OFF
+
+      - name: Build Marshal + smoke tests
+        run: |
+          cmake --build build --config Release --target Marshal test-unit test-mrs-module
+
+      - name: Run smoke tests
+        run: |
+          .\build\Release\test-unit.exe
+          .\build\Release\test-mrs-module.exe
+
+      - name: Upload Windows binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: marshal-windows-binaries-${{ github.sha }}
+          path: |
+            build/Release/Marshal.exe
+            build/Release/test-unit.exe
+            build/Release/test-mrs-module.exe
+          if-no-files-found: error
+          retention-days: 14

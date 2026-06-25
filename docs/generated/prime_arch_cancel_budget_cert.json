@@ -1,0 +1,14 @@
+{
+  "theta0": 5.76,
+  "theta0_rational": "144/25",
+  "eps_prime_pin": 0.03,
+  "eps_arch_pin": 0.03,
+  "eps_composite_pin": 0.05,
+  "eps_prime_measured": 0.0179,
+  "eps_arch_measured": 0.0182,
+  "pac_prime_budget_ok": true,
+  "pac_arch_budget_ok": true,
+  "pac_composite_budget_ok": true,
+  "prime_arch_cancel_budget_cert_ok": true,
+  "ok": true
+}

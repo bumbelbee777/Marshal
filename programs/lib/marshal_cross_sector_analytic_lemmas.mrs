@@ -1,0 +1,118 @@
+// Cross-sector analytic lemmas 2A / 3A — unconditional (no RH input).
+//
+// These bounds constrain sector sizes for investigation; they do NOT prove lambda_a >= 0.
+// Step 5 domination chain (marshal_cross_sector_step5.mrs) composes them; the open pin is S_fin+Z<=A.
+mod marshal_cross_sector_analytic_lemmas {
+
+    use marshal_hadamard_calculus.*;
+    use marshal_cross_sector_battleplan.*;
+
+    prove cross_sector_investigation_non_circular_witness: CrossSectorInvestigationNonCircular {
+
+        assume:
+
+            classical weil_localization_equivalence is an EQUIVALENCE RH <-> lambda_a > 0 for all a — it names the target pin, it is NOT used as a hypothesis in 2A/3A proofs
+
+            classical 2A/3A lemmas use only: triangle inequality, digamma/psi integrals, and unconditional RvM zero-density bounds — no assumption on zero locations beyond counting majorants
+
+            classical numeric zero tables validate bounds but analytic majorants do not import RH
+
+            classical partial Rayleigh lambda_R on Pf+prime kernel is NOT the full localized eigenvalue lambda_a — negative lambda_R for a > 1.5 shows linear sector audits cannot substitute for 4A
+
+            classical weil_margin_fin -> 0 is prime tail convergence (Phase 1), not cross-sector positivity
+
+            dep cross_sector_weil_identity_sigma1
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            the battle plan narrows lambda_a >= 0 investigation without circularly assuming RH; 2A+3A constrain arch/zero sectors unconditionally; 4A remains the quadratic gap identical to RH
+
+            (methodology guard — NOT a mathematical closure)
+
+    }
+
+    prove cross_sector_arch_triangle_envelope_witness: CrossSectorArchTriangleEnvelope {
+
+        let W_arch_a := localized archimedean Weil contribution for test functions supported in [-a,a]
+
+        let A_a := (1/2pi) integral_{-a}^{a} h(t) |Re psi(1/4 + i t/2) - log pi| dt
+
+        assume:
+
+            classical triangle inequality: |integral f g| <= integral |f| |g| with f = h, g = Re psi - log pi
+
+            classical hence W_arch_a >= -A_a for every a > 0 — unconditional, no RH
+
+            classical C++ audit: arch_localized >= -arch_triangle_A on sampled a-grid (Gauss sigma=1)
+
+            dep cross_sector_arch_negative_sigma1
+            dep cross_sector_investigation_non_circular
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 2A PROVED (unconditional): W_arch^a >= -A(a) with explicit triangle envelope A(a) computable from digamma/psi on [-a,a]
+
+            (classical analysis + C++ audit — NOT RH)
+
+    }
+
+    prove cross_sector_zero_tail_rvm_bound_witness: CrossSectorZeroTailRvmBound {
+
+        let S_T := sum_{gamma > T} h(gamma) for Gaussian h_sigma
+
+        assume:
+
+            classical for sigma=1 Gaussian and T >= 14: S_T <= sum over unit height bins of (RvM zero-density upper bound) times h(x) — unconditional short-interval counting (Riemann-von Mangoldt), no RH
+
+            classical h is positive and decreasing on (0, infinity) so each bin is majorized by left endpoint height
+
+            classical C++ audit: zero_tail_exact <= zero_tail_rvm_bound on sampled a-grid with T = 2a
+
+            dep cross_sector_weil_identity_sigma1
+            dep cross_sector_investigation_non_circular
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 3A PROVED (unconditional): |W_zero - W_zero^{<=T}| = S_T <= B(T) with explicit RvM majorant B(T) — no RH assumed
+
+            (classical zero-counting majorization + C++ audit — NOT RH)
+
+    }
+
+    prove cross_sector_quadratic_dominance_gap_witness: CrossSectorQuadraticDominanceGap {
+
+        assume:
+
+            classical after unconditional 2A and 3A: arch and zero tails are bounded, prime tail is convergent (Phase 1)
+
+            classical Step 5 domination chain wires sector bounds: Q_prime <= 2 S_fin ||f||^2; Q_arch >= -A ||f||^2; Q_zero >= -Z ||f||^2; audited margin A - S_fin - Z
+
+            classical the remaining obstruction is proving domination S_fin(a) + Z(a,T) <= A(a) for all a — identical to suzuki_arithmetic_prime_limit_control
+
+            classical partial lambda_R < 0 for a >= 1.5 demonstrates linear/partial-kernel audits cannot substitute for the full quadratic pin
+
+            dep cross_sector_arch_triangle_envelope
+            dep cross_sector_zero_tail_rvm_bound
+            dep cross_sector_domination_chain
+            dep cross_sector_lambda_rayleigh_numeric
+            dep lambda_a_zero_crossing_reformulation
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 4A remains OPEN and is NOT circular: 2A+3A + domination chain composition are unconditional; discharging S_fin + Z <= A for all a closes lambda_a >= 0 and RH
+
+            cross_sector_dominance_still_open_ok remains true
+
+            (explicit domination gap — NOT RH)
+
+    }
+
+}

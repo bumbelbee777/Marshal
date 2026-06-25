@@ -1,0 +1,29 @@
+// MRS v1 induction combinator — base + step witness closure (MrsInductionExtension).
+
+mod marshal_induction_primitives {
+
+    use marshal_math_primitives::*;
+
+    // Prime-ladder induction for genus-one log summability (RH spine).
+    prove genus_one_log_induction_lemma: GenusOneLogInduction {
+        induction(
+            domain = nat,
+            base = 0,
+            step = genus_one_log_step,
+            goal = genus_one_log_summability,
+            witness = genus_one_log_base_witness
+        )
+    }
+
+    // Spectral gap induction for ladder rank lift (GL(n) → GL(n+1)).
+    prove gln_rank_lift_induction_lemma: GLnRankLiftInduction {
+        induction(
+            domain = nat,
+            base = 1,
+            step = gln_spectral_rank_step,
+            goal = gln_rank_lift_ok,
+            witness = gln_rank_base_witness
+        )
+    }
+
+}

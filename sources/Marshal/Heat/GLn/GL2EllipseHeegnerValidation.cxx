@@ -65,7 +65,7 @@ GL2EllipseHeegnerReport run_gl2_ellipse_heegner_validation(const Config& cfg,
     rep.minor_arc_ok = rep.minor_arc_bound < rep.minor_arc_ub;
     rep.goldbach_shared_gln2_ok = rep.kernel_multiplicity >= 1;
     rep.bounds_ok = rep.major_arc_ok && rep.minor_arc_ok && rep.goldbach_shared_gln2_ok;
-    rep.proof_status = rep.bounds_ok ? "PROVED" : "PENDING";
+    rep.proof_status = "PENDING";
     (void)result;
     return rep;
 }

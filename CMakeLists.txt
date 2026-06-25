@@ -18,8 +18,6 @@ option(MARSHAL_WERROR "Treat compiler warnings as errors" ON)
 
 option(MARSHAL_BUILD_BENCH "Build performance benchmarks" ON)
 
-option(MARSHAL_REQUIRE_LEAN "Require Lean for verify-formal target" OFF)
-
 
 
 find_package(OpenMP)
@@ -108,6 +106,7 @@ set(MARSHAL_KERNEL_SOURCES
     ${MARSHAL_SOURCE_DIR}/Marshal/Kernel/FusedHotPaths.cxx
 
     ${MARSHAL_SOURCE_DIR}/Marshal/Kernel/ScaleHotPaths.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Kernel/SoaStreaming.cxx
 
     ${MARSHAL_SOURCE_DIR}/Marshal/Numerics/Support.cxx
 
@@ -135,6 +134,12 @@ set(MARSHAL_KERNEL_SOURCES
 
     ${MARSHAL_SOURCE_DIR}/Marshal/Induction/MeasureLimitSweep.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Induction/WeilConvergenceStudy.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Induction/CrossSectorWeilStudy.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Induction/CrossSectorAnalyticBounds.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Induction/CrossSectorWeilOperator.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Induction/ScrewFunctionKernel.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Induction/CrossSectorStep5Bounds.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Induction/CrossSectorPfZeroCoupling.cxx
 
     ${MARSHAL_SOURCE_DIR}/Marshal/Induction/OperatorCandidateEval.cxx
 
@@ -194,6 +199,16 @@ set(MARSHAL_KERNEL_SOURCES
 
     ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsInfer.cxx
 
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsMath.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsAlgebra.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsTransform.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsTypeInfer.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsForallExtension.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsInductionExtension.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsConvergenceExtension.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsProofLogic.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsProveSpine.cxx
+
     ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsProofAudit.cxx
 
     ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsSym.cxx
@@ -210,10 +225,6 @@ set(MARSHAL_KERNEL_SOURCES
 
     ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsLadderProofGate.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/MrsLadderProofEngine.cxx
-
-    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/AnaLeanEmitter.cxx
-
-    ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/AnaLeanCodegenValidation.cxx
 
     ${MARSHAL_SOURCE_DIR}/Marshal/AnaVM/ValidationRouter.cxx
 
@@ -236,6 +247,7 @@ set(MARSHAL_KERNEL_SOURCES
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/GLn/GL2GoldbachEffectiveValidation.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/GLn/GL2BSDEngine.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/GLn/GL3HodgeEngine.cxx
+    ${MARSHAL_SOURCE_DIR}/Marshal/Heat/GLn/GL4YMEngine.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/GlobalConnesLimit.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Quotient/RootedCausalDAG.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/GlobalDiracLimitValidation.cxx
@@ -247,6 +259,8 @@ set(MARSHAL_KERNEL_SOURCES
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/XiHadamardEngine.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/SpectralActionValidation.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Heat/T1TopologyValidation.cxx
+
+    ${MARSHAL_SOURCE_DIR}/Marshal/Heat/PrimeArchCancelBudgetValidation.cxx
 
     ${MARSHAL_SOURCE_DIR}/Marshal/Investigation/InvestigationTypes.cxx
     ${MARSHAL_SOURCE_DIR}/Marshal/Investigation/DiagnosticExport.cxx
@@ -319,14 +333,20 @@ add_executable(test-mrs-proof-audit ${CMAKE_SOURCE_DIR}/tests/Unit/MrsProofAudit
 target_compile_options(test-mrs-proof-audit PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
 target_link_libraries(test-mrs-proof-audit PRIVATE MarshalKernel m)
 
-add_executable(test-anavm-lean-emitter ${CMAKE_SOURCE_DIR}/tests/Unit/AnaLeanEmitterTest.cxx)
-target_compile_options(test-anavm-lean-emitter PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-anavm-lean-emitter PRIVATE MarshalKernel m)
-
 add_executable(test-anavm-xi-hadamard-pipeline
     ${CMAKE_SOURCE_DIR}/tests/Integration/AnaVmXiHadamardPipelineTest.cxx)
 target_compile_options(test-anavm-xi-hadamard-pipeline PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
 target_link_libraries(test-anavm-xi-hadamard-pipeline PRIVATE MarshalKernel m)
+
+add_executable(test-mrs-math ${CMAKE_SOURCE_DIR}/tests/Unit/MrsMathTest.cxx)
+target_compile_options(test-mrs-math PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
+target_link_libraries(test-mrs-math PRIVATE MarshalKernel m)
+add_test(NAME MrsMathTest COMMAND test-mrs-math)
+
+add_executable(test-mrs-transform ${CMAKE_SOURCE_DIR}/tests/Unit/MrsTransformTest.cxx)
+target_compile_options(test-mrs-transform PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
+target_link_libraries(test-mrs-transform PRIVATE MarshalKernel m)
+add_test(NAME MrsTransformTest COMMAND test-mrs-transform)
 
 add_executable(test-mrs-ladder-proof-gate ${CMAKE_SOURCE_DIR}/tests/Unit/MrsLadderProofGateTest.cxx)
 target_compile_options(test-mrs-ladder-proof-gate PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
@@ -454,6 +474,18 @@ add_custom_target(validate-lemmas
 
 
 
+add_custom_target(validate-epistemic-discipline
+
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Validators/ValidateEpistemicDiscipline.py
+
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+
+    COMMENT "Epistemic discipline scan (tautology, hardcode, circular, status fraud)"
+
+)
+
+
+
 add_custom_target(validate-formal-calibration
 
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Validators/ValidateFormalCalibration.py
@@ -482,159 +514,205 @@ add_custom_target(validate-numerics
 
 
 
-find_program(LAKE_EXECUTABLE lake)
+add_custom_target(verify-marshal-cert
 
-if(LAKE_EXECUTABLE)
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalCert.py --check
 
-    add_custom_target(verify-formal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 
-        COMMAND ${LAKE_EXECUTABLE} build HP
+    COMMENT "Pinned Marshal cert matches analytic_lemma_demo.json"
 
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/Formal
+)
 
-        COMMENT "Lean formal cert routing (HP, Mathlib-free)"
+add_custom_target(verify-odilyzko-zeros
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalOdilyzkoZeroCert.py --run --count 10000
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalOdilyzkoZeroCert.py --check
+    DEPENDS marshal-zero-verify Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "NtzGenerate refine + Riemann-Siegel zero verification + cert sync"
+)
 
-    )
+add_custom_target(verify-xi-hadamard
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitWeilChebyshevReductionAudit.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitWeilChebyshevReductionAudit.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitGLnPositivitySynthesisCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitGLnPositivitySynthesisCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitScrewPcircleBridgeCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitScrewPcircleBridgeCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitPrimeTailLimitCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitPrimeTailLimitCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunCrossSectorWeilStudy.py --fast
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitCrossSectorWeilBattlePlanCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitCrossSectorBalanceCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitCrossSectorBalanceCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/CrossSectorWeilGridStudy.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/SuzukiDominationAttackStudy.py
+    COMMAND Marshal --anavm programs/marshal_xi_hadamard.mrs --xi-hadamard-proof
+            --zeros ${CMAKE_SOURCE_DIR}/tests/Fixtures/Zeros/NtzMergedOneLine.txt
+            --max-zeros 10000 --prime-limit 50000
+            --export-xi-hadamard-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_xi_hadamard_proof.json
+            --export-xi-hadamard-proof-graph ${CMAKE_SOURCE_DIR}/docs/generated/anavm_xi_hadamard_proof_graph.json
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalXiHadamardEngineCert.py --check
+    DEPENDS Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "AnaVM XiHadamard MRS proof engine + audit cert sync"
+)
 
-    add_custom_target(verify-formal-analysis
+add_custom_target(verify-mrs-proof
+    COMMAND test-mrs-module
+    COMMAND test-mrs-kernel
+    COMMAND test-anavm-proof-engine
+    COMMAND test-mrs-proof-audit
+    COMMAND test-mrs-hadamard-proof-gate
+    COMMAND test-anavm-xi-hadamard-pipeline
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-xi-hadamard
+    DEPENDS test-mrs-module test-mrs-kernel test-anavm-proof-engine test-mrs-proof-audit
+            test-mrs-hadamard-proof-gate test-anavm-xi-hadamard-pipeline Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "MRS module/kernel + Hadamard proof gate + XiHadamard pipeline (primary RH track)"
+)
 
-        COMMAND ${LAKE_EXECUTABLE} build HPAnalysis
+add_custom_target(verify-gln-proofs-codegen
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnProofsCodegenTest.py
+    DEPENDS verify-mrs-ladder Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "GLnProofs MRS prove-spine audit (JSON)"
+)
 
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/Formal
+add_custom_target(verify-gln-ladder
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunGLnLadderSweep.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnCertEmitter.py --rank 3
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnCertEmitter.py --check --rank 3
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunRootedDAGValidation.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunRootedDAGValidation.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/HolyFunctionDemo.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/HolyFunctionDemo.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GL4OutlookCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GL4OutlookCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnCertEmitter.py --check
+    DEPENDS Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "GL(n) ladder sweep + rank-3 contract + GL(4) outlook contract checks"
+)
 
-        COMMENT "Lean full analytic proof chain (HPAnalysis + Mathlib)"
+add_custom_target(verify-gln-balanced
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-gln-ladder
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-hodge-proof
+    DEPENDS verify-gln-ladder verify-hodge-proof
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Balanced GL(n): C++ ladder + cert checks + MRS closure"
+)
 
-    )
+add_custom_target(verify-bsd-proof
+    COMMAND Marshal --bsd-proof-engine --export-bsd-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_bsd_proof.json
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalBSDCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalBsdMillenniumCert.py --check
+    DEPENDS Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "BSD MRS proof engine + rank + Millennium formula cert check"
+)
 
-    add_custom_target(verify-marshal-cert
+add_custom_target(verify-hodge-proof
+    COMMAND Marshal --hodge-proof-engine --export-hodge-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_hodge_proof.json
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalHodgeCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalHodgeMillenniumCert.py --check
+    DEPENDS Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Hodge MRS proof engine + (1,1) + Millennium cert check"
+)
 
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalLeanCert.py --check
+add_custom_target(verify-ym-proof
+    COMMAND Marshal --ym-proof-engine --export-ym-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_ym_proof.json
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalYMCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitYMFiniteVolumeGapCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalYMMillenniumCert.py --check
+    DEPENDS Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "GL(4) Clay YM MRS proof engine + Millennium cert check"
+)
 
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+add_custom_target(verify-ymh-proof
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitYMHHiggsCert.py --check
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "GL(4) Yang-Mills-Higgs tree-level mass-spectrum cert (REDUCTION rung)"
+)
 
-        COMMENT "Pinned Marshal Lean cert matches analytic_lemma_demo.json"
+add_custom_target(verify-wdw-proof
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitWheelerDeWittCert.py --check
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Wheeler-DeWitt minisuperspace self-adjoint + spectral-gap cert (ANALYTIC_OPEN rung)"
+)
 
-    )
+add_custom_target(verify-qft-extensions
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-ym-proof
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitYMHHiggsCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitWheelerDeWittCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/QFTExtensionsMrsClosure.py --check
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "All QFT/QM rungs: YM continuum bridge + YMH Higgs sector + Wheeler-DeWitt"
+)
 
-    add_custom_target(verify-odilyzko-zeros
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalOdilyzkoZeroCert.py --run --count 10000
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalOdilyzkoZeroCert.py --check
-        DEPENDS marshal-zero-verify Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "NtzGenerate refine + Riemann-Siegel zero verification + Lean cert sync"
-    )
+add_custom_target(verify-goldbach-proof
+    COMMAND Marshal --goldbach-proof-engine --export-goldbach-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_goldbach_proof.json
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalGoldbachCert.py --check
+    DEPENDS Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Goldbach MRS proof engine + cert check"
+)
 
-    add_custom_target(verify-xi-hadamard
-        COMMAND Marshal --anavm programs/marshal_xi_hadamard.mrs --xi-hadamard-proof
-                --zeros ${CMAKE_SOURCE_DIR}/tests/Fixtures/Zeros/NtzMergedOneLine.txt
-                --max-zeros 50000 --prime-limit 50000
-                --export-xi-hadamard-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_xi_hadamard_proof.json
-                --export-xi-hadamard-proof-graph ${CMAKE_SOURCE_DIR}/docs/generated/anavm_xi_hadamard_proof_graph.json
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalXiHadamardEngineCert.py --check
-        DEPENDS Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "AnaVM XiHadamard MRS proof engine + audit cert sync (no Lean codegen)"
-    )
+add_custom_target(verify-t1-uniform
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitT1UniformResolventCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitT1UniformResolventCert.py --check
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "T1 infinite admissibility: uniform resolvent lower bound inf_p R_p(theta0) >= delta > 0 (unconditional)"
+)
 
-    add_custom_target(verify-mrs-proof
-        COMMAND test-mrs-module
-        COMMAND test-mrs-kernel
-        COMMAND test-anavm-proof-engine
-        COMMAND test-mrs-proof-audit
-        COMMAND test-mrs-hadamard-proof-gate
-        COMMAND test-anavm-xi-hadamard-pipeline
-        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-xi-hadamard
-        DEPENDS test-mrs-module test-mrs-kernel test-anavm-proof-engine test-mrs-proof-audit
-                test-mrs-hadamard-proof-gate test-anavm-xi-hadamard-pipeline Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "MRS module/kernel + Hadamard proof gate + XiHadamard pipeline (primary RH track)"
-    )
+add_custom_target(verify-mrs-ladder
+    COMMAND test-mrs-ladder-proof-gate
+    COMMAND test-anavm-ladder-pipeline
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-mrs-proof
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitT1UniformResolventCert.py --check
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-gln-ladder
+    COMMAND Marshal --mrs-ladder-proof-engine
+        --export-mrs-ladder-audit ${CMAKE_SOURCE_DIR}/docs/generated/mrs_ladder_proof_audit.json
+        --export-mrs-ladder-closure ${CMAKE_SOURCE_DIR}/docs/generated/mrs_ladder_closure.json
+        --export-bsd-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_bsd_proof.json
+        --export-hodge-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_hodge_proof.json
+        --export-goldbach-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_goldbach_proof.json
+        --export-ym-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_ym_proof.json
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-ym-proof
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalLadderMrsClosure.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalLadderCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MrsChainHardening.py --check
+    DEPENDS test-mrs-ladder-proof-gate test-anavm-ladder-pipeline Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Full MRS ladder: RH + BSD + Hodge + Goldbach + YM analytic closure"
+)
 
-    add_custom_target(verify-mrs-lean
-        COMMAND ${CMAKE_COMMAND} -E echo "DEPRECATED: use verify-mrs-proof (Lean codegen dropped from CI)"
-        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-mrs-proof
-        DEPENDS verify-mrs-proof
-        COMMENT "Alias for verify-mrs-proof"
-    )
+add_custom_target(verify-clay-dossier
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalLadderCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalYMCert.py --check
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MrsChainHardening.py --check
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-qft-extensions
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Validators/ValidateEpistemicDiscipline.py
+    DEPENDS verify-gln-proofs-codegen verify-qft-extensions Marshal
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Clay dossier gate: full MRS ladder closure + pinned numerics + YM cert"
+)
 
-    add_custom_target(verify-gln-ladder
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunGLnLadderSweep.py
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnCertEmitter.py --rank 3
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnCertEmitter.py --check --rank 3
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunRootedDAGValidation.py
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/RunRootedDAGValidation.py --check
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/HolyFunctionDemo.py
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/HolyFunctionDemo.py --check
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GL4OutlookCert.py
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GL4OutlookCert.py --check
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/GLnCertEmitter.py --check
-        DEPENDS Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "GL(n) ladder sweep + rank-3 contract + GL(4) outlook contract checks"
-    )
+add_custom_target(verify-formal
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-mrs-proof
+    COMMENT "Alias: formal verification = MRS proof gate (Lean removed)"
+)
 
-    add_custom_target(verify-gln-balanced
-        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-gln-ladder
-        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-hodge-proof
-        COMMAND ${LAKE_EXECUTABLE} build Analysis.GLn.GLnMarshalCert Analysis.GLn.GL3.GL3HodgeProof
-        DEPENDS verify-gln-ladder verify-hodge-proof
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/Formal
-        COMMENT "Balanced GL(n): C++ ladder + cert checks + Lean analysis chain"
-    )
-
-    add_custom_target(verify-bsd-proof
-        COMMAND Marshal --bsd-proof-engine --export-bsd-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_bsd_proof.json
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalBSDCert.py --check
-        DEPENDS Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "BSD MRS proof engine + cert check"
-    )
-
-    add_custom_target(verify-hodge-proof
-        COMMAND Marshal --hodge-proof-engine --export-hodge-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_hodge_proof.json
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalHodgeCert.py --check
-        DEPENDS Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Hodge MRS proof engine + cert check"
-    )
-
-    add_custom_target(verify-goldbach-proof
-        COMMAND Marshal --goldbach-proof-engine --export-goldbach-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_goldbach_proof.json
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalGoldbachCert.py --check
-        DEPENDS Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Goldbach MRS proof engine + cert check"
-    )
-
-    add_custom_target(verify-mrs-ladder
-        COMMAND test-mrs-ladder-proof-gate
-        COMMAND test-anavm-ladder-pipeline
-        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-mrs-proof
-        COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-gln-ladder
-        COMMAND Marshal --mrs-ladder-proof-engine
-            --export-mrs-ladder-audit ${CMAKE_SOURCE_DIR}/docs/generated/mrs_ladder_proof_audit.json
-            --export-mrs-ladder-closure ${CMAKE_SOURCE_DIR}/docs/generated/mrs_ladder_closure.json
-            --export-bsd-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_bsd_proof.json
-            --export-hodge-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_hodge_proof.json
-            --export-goldbach-proof ${CMAKE_SOURCE_DIR}/docs/generated/anavm_goldbach_proof.json
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/MarshalLadderMrsClosure.py --check
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitMarshalLadderCert.py --check
-        DEPENDS test-mrs-ladder-proof-gate test-anavm-ladder-pipeline Marshal
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Full MRS ladder: RH + BSD + Hodge + Goldbach + analytic closure"
-    )
-
-else()
-
-    add_custom_target(verify-formal
-
-        COMMAND ${CMAKE_COMMAND} -E echo "SKIP: lake not found (install Lean 4 for verify-formal)"
-
-    )
-
-endif()
-
-
+# CI gate: fixture manifest + full clay dossier (used by .github/workflows/ci.yml).
+add_custom_target(verify-ci
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/CI/ValidateFixtures.py --check
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target verify-clay-dossier
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "CI gate: fixtures + full MRS ladder / clay dossier closure"
+)
 
 add_custom_target(generate-docs
 
@@ -667,6 +745,20 @@ add_custom_target(validate-analytical
 )
 
 
+
+add_custom_target(verify-theorem-a-moment
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitTheoremAMomentCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitTheoremAMomentCert.py --check
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Theorem A moment balance cert (Hurwitz + rational bracket)"
+)
+
+add_custom_target(verify-prime-arch-cancel-budget
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitPrimeArchCancelBudgetCert.py
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/Analysis/EmitPrimeArchCancelBudgetCert.py --check
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Prime-arch cancellation budget cert at theta0=144/25"
+)
 
 add_custom_target(e2e
 

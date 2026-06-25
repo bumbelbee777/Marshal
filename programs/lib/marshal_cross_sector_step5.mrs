@@ -1,0 +1,239 @@
+// Cross-sector Phase 4A Step 5 — global Rayleigh lower bound (June 2026).
+//
+// Target: lambda_a >= 0 for all a > 0 on full Q_W^a.
+// Unconditional: sector bounds + domination chain composition + conditional implication.
+// OPEN pin: suzuki_arithmetic_prime_limit_control = S_fin(a) + Z(a,T) <= A(a) for all a.
+mod marshal_cross_sector_step5 {
+
+    use marshal_hadamard_calculus.*;
+    use marshal_lambda_a_analytic_reduction.*;
+    use marshal_cross_sector_phase4a.*;
+    use marshal_cross_sector_analytic_lemmas.*;
+
+    prove cross_sector_quadratic_arch_lower_bound_witness: CrossSectorQuadraticArchLowerBound {
+
+        let A_a := (1/2pi) integral_{-a}^{a} h(t) |Re psi(1/4 + i t/2) - log pi| dt
+
+        assume:
+
+            classical Phase 2A triangle envelope: the localized archimedean Weil linear functional W_arch^a >= -A(a)
+
+            classical bilinear lift: for the arch Pf+digamma screw kernel on [-a,a], the quadratic form Q_arch^a satisfies Q_arch^a(f) >= -A(a) ||f||_2^2 for all f in L2(-a,a) — same psi-L1 majorant as 2A applied to |f(x)f(y)| via |K_arch(x,y)| <= triangle integrand
+
+            dep cross_sector_arch_triangle_envelope
+            dep cross_sector_weil_operator_Ta
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Quadratic arch sector lower bound PROVED (unconditional): Q_arch^a(f) >= -A(a) ||f||^2 with explicit A(a) from 2A
+
+            (classical analysis — NOT RH)
+
+    }
+
+    prove cross_sector_quadratic_zero_lower_bound_witness: CrossSectorQuadraticZeroLowerBound {
+
+        let Z_a_T := RvM majorant B(T) on zero tail with T = 2a
+
+        assume:
+
+            classical Phase 3A: zero tail S_T = sum_{gamma > T} h(gamma) <= B(T) unconditional RvM bound
+
+            classical quadratic lift: the localized zero cos kernel contribution Q_zero^a(f) >= -Z(a,T) ||f||_2^2 with Z(a,T) := B(T) — conservative majorization of off-diagonal zero cos mass by the linear tail bound (audit pin)
+
+            dep cross_sector_zero_tail_rvm_bound
+            dep cross_sector_weil_operator_Ta
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Quadratic zero sector lower bound PROVED (unconditional majorization): Q_zero^a(f) >= -Z(a,T) ||f||^2 with Z from 3A RvM staircase
+
+            (classical zero-counting + conservative quadratic lift — NOT RH)
+
+    }
+
+    prove cross_sector_domination_chain_witness: CrossSectorDominationChain {
+
+        let S_fin(a) := sum_{n <= exp(2a)} Lambda(n)/sqrt(n)
+
+        let domination_margin(a) := A(a) - S_fin(a) - Z(a,T)
+
+        assume:
+
+            classical sector bounds (all unconditional): Q_prime^a(f) <= 2 S_fin(a) ||f||^2; Q_arch^a(f) >= -A(a) ||f||^2; Q_zero^a(f) >= -Z(a,T) ||f||^2
+
+            classical screw-kernel Weil sign on finite-a decomposition: Q_W^a(f) = Q_arch^a(f) + Q_zero^a(f) + Q_prime^a(f) with prime block entering through positive von Mangoldt kernel weights; cross-balance q_pf + q_zero - q_prime tracks Pf+zero vs prime at Rayleigh-min mode
+
+            classical domination margin A(a) - S_fin(a) - Z(a,T) computed on C++ a-grid; domination_inequality_ok when margin >= 0
+
+            dep cross_sector_quadratic_prime_cs_bound
+            dep cross_sector_quadratic_arch_lower_bound
+            dep cross_sector_quadratic_zero_lower_bound
+            dep cross_sector_step5_sector_decomposition
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Domination chain wired: prime (CS), arch (-A), zero (-Z) sector bounds compose; margin A - S_fin - Z auditable per a; this is exactly the arithmetic limit control inequality template
+
+            (chain composition — discharge requires margin >= 0 for all a)
+
+    }
+
+    prove cross_sector_domination_implies_lambda_nonneg_witness: CrossSectorDominationImpliesLambdaNonneg {
+
+        assume:
+
+            classical combining sector bounds: for every f with ||f|| = 1, Q_W^a(f) >= -A(a) - Z(a,T) + Q_prime contribution bounded by CS
+
+            classical domination hypothesis: S_fin(a) + Z(a,T) <= A(a) for fixed a — equivalently domination_margin(a) >= 0
+
+            classical under domination at a: the sector lower bound closes to Q_W^a(f) >= (A(a) - S_fin(a) - Z(a,T)) ||f||^2 >= 0 for all unit f, hence lambda_a >= 0
+
+            classical Yoshida small-a anchor + Suzuki continuity: if domination holds for ALL a > 0, then lambda_a >= 0 for all a, hence RH by zero-crossing reformulation
+
+            dep cross_sector_domination_chain
+            dep cross_sector_rayleigh_characterization
+            dep lambda_a_zero_crossing_reformulation
+            dep yoshida_small_a_positivity_analytic
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            CONDITIONAL THEOREM (PROVED implication): (forall a: S_fin(a) + Z(a,T) <= A(a)) => (forall a: lambda_a >= 0) => RH
+
+            (logical chain — NOT unconditional RH)
+
+    }
+
+    prove cross_sector_step5_prime_cs_covers_mode_witness: CrossSectorStep5PrimeCsCoversMode {
+
+        assume:
+
+            classical Step 5 CS bound: at the Rayleigh-min sin mode, q_prime_mode <= prime_cs_bound = 2 S_fin(a) from cross_sector_quadratic_prime_cs_bound
+
+            classical C++ audit step5_prime_cs_covers_mode_ok when q_prime_mode <= 1.001 * prime_cs_bound on the sampled a-grid
+
+            dep cross_sector_quadratic_prime_cs_bound
+            dep cross_sector_step5_sector_decomposition
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Prime Cauchy–Schwarz template covers the observed Rayleigh-min mode prime sector on grid — bridges Step 5 CS to eq. (2.5) prime bilinear upper bound
+
+            (numeric validation — NOT RH)
+
+    }
+
+    prove cross_sector_quadratic_prime_cs_bound_witness: CrossSectorQuadraticPrimeCsBound {
+
+        let S_fin(a) := sum_{n <= exp(2a)} Lambda(n)/sqrt(n)
+
+        assume:
+
+            classical for f on [-a,a]: Q_prime^a(f) = sum_{n <= exp(2a)} (Lambda(n)/sqrt(n)) times shift pairings integral f(x)f(x ± log n) dx
+
+            classical Cauchy-Schwarz: |integral f(x)f(x-u) dx| <= ||f||_2^2 for each shift u in the support
+
+            classical hence Q_prime^a(f) <= 2 S_fin(a) ||f||_2^2 — unconditional, no RH
+
+            classical C++ audit: q_prime_mode <= prime_cs_bound on sampled a-grid (CrossSectorStep5Bounds)
+
+            dep cross_sector_rayleigh_characterization
+            dep weil_form_finite_a_decomposition
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Step 5 unconditional prime upper bound: Rayleigh prime sector at unit norm is bounded by 2 S_fin(a); S_fin saturates by a approximately three (prime tail study)
+
+            (classical CS + C++ audit — NOT RH)
+
+    }
+
+    prove cross_sector_step5_sector_decomposition_witness: CrossSectorStep5SectorDecomposition {
+
+        assume:
+
+            classical full kernel Q_W^a(f) = Q_pf^a(f) + Q_prime^a(f) + Q_zero^a(f) at screw-kernel level
+
+            classical C++ weil_rayleigh_sector_breakdown reports q_pf_mode, q_prime_mode, q_zero_mode at Rayleigh-min sin mode with q_total = lambda_full proxy
+
+            classical cross_balance_mode := q_pf + q_zero - q_prime tracks Pf+zero vs prime at the minimizing mode (audit only)
+
+            dep cross_sector_quadratic_prime_cs_bound
+            dep cross_sector_lambda_full_kernel_numeric
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Step 5 sector decomposition wired: quadratic contributions auditable separately at the Rayleigh-min mode; numeric crossing proxy flagged when lambda_full < 0 on grid
+
+            (decomposition audit — NOT global lower bound)
+
+    }
+
+    prove cross_sector_step5_zero_crossing_propagation_witness: CrossSectorStep5ZeroCrossingPropagation {
+
+        assume:
+
+            classical Yoshida (1992): lambda_a > 0 for all sufficiently small a > 0 — unconditional analytic anchor
+
+            classical Suzuki (2606.09096) Thm 1.3: a |-> lambda_a continuous on (0,infinity)
+
+            classical hence Step 5 reduces to ruling out a finite degeneration a0 with lambda_a0 = 0; equivalently keeping lambda_a >= 0 on all a > 0
+
+            classical this is exactly lambda_a_zero_crossing_reformulation and suzuki_arithmetic_prime_limit_control (prime block growth vs arch+zero in Q_W^a)
+
+            dep cross_sector_step5_sector_decomposition
+            dep lambda_a_zero_crossing_reformulation
+            dep yoshida_small_a_positivity_analytic
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Step 5 propagation chain PROVED (reduction only): global Rayleigh positivity = no zero crossing = arithmetic prime tail control in localization limit = RH
+
+            (reduction — NOT discharge)
+
+    }
+
+    prove cross_sector_step5_global_rayleigh_lower_bound_witness: CrossSectorStep5GlobalRayleighLowerBound {
+
+        assume:
+
+            classical Step 5 / Phase 5.6 target: lambda_a >= 0 for all a > 0
+
+            classical attack spine PROVED: Pf sin-mode positivity, Pf+zero coupling identity, sector bounds, Yoshida anchor — scaffolding closed
+
+            classical OPEN discharge: cross_sector_pf_zero_arch_coupling_lower_bound = suzuki_arithmetic_prime_limit_control = lambda_a >= 0 for all a
+
+            dep cross_sector_step5_suzuki_attack_spine
+            dep cross_sector_pf_zero_arch_coupling_lower_bound
+            dep cross_sector_domination_implies_lambda_nonneg
+            dep cross_sector_step5_zero_crossing_propagation
+            dep cross_sector_suzuki_quadratic_rayleigh_pin
+            dep suzuki_arithmetic_prime_limit_control
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 5.6 OPEN ≡ RH: discharge Pf+zero+arch coupling lower bound at Rayleigh-min mode; cross_sector_suzuki_coupling_still_open_ok remains true until analytic closure
+
+            (explicit Step 5.6 pin — NOT discharged)
+
+    }
+
+}

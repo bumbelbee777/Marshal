@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "obligation_ids": [
+    "wdw_constraint_self_adjoint",
+    "wdw_spectral_gap_positive"
+  ],
+  "title": "Wheeler-DeWitt harmonic minisuperspace: self-adjoint constraint + spectral gap",
+  "model": "H = -d^2/dx^2 + (1/4) omega^2 x^2 (deparametrized minisuperspace)",
+  "parameters": {
+    "omega": 2.0,
+    "x_max": 8.0,
+    "n_points": 1200,
+    "step": 0.013322231473771857
+  },
+  "self_adjoint": {
+    "discretization": "second-order finite differences, Dirichlet BC",
+    "matrix_asymmetry_inf_norm": 0.0,
+    "symmetric": true,
+    "deficiency_indices": [
+      0,
+      0
+    ],
+    "essentially_self_adjoint": true
+  },
+  "spectrum": {
+    "E0": 0.999988907264608,
+    "E1": 2.999944535815195,
+    "E2": 4.999855791689383,
+    "all_eigenvalues_real_nonneg": true,
+    "expected_omega_half_integer": [
+      1.0,
+      3.0,
+      5.0
+    ],
+    "max_level_error": 0.00014420831061734418
+  },
+  "spectral_gap": 1.999955628550587,
+  "spectral_gap_rational_lb": {
+    "num": 19999,
+    "den": 10000,
+    "value": 1.9999
+  },
+  "gap_positive": true,
+  "uniform_claim": "minisuperspace constraint operator is symmetric (self-adjoint) with E1 - E0 > 0",
+  "closes_full_superspace": false,
+  "open_named_cores": [
+    "wdw_superspace_wellposedness_hypothesis",
+    "wdw_problem_of_time_hypothesis"
+  ]
+}

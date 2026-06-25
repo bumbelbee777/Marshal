@@ -2,17 +2,16 @@
 
 Canonical resolution of ambiguities and open lemmas for the **analytic global Connes Dirac** program.
 
-**Publication source of truth:** [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md)
+**Publication source of truth:** [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md)
 
 Machine-readable: `docs/Analysis/ProofObligationRegistry.json`  
 Emitted cert: `docs/generated/proof_obligations.json`  
-Lean: `docs/Formal/GlobalOperatorProof.lean`
+MRS routing: `programs/marshal_ladder.mrs` (RH capstone prerequisite)
 
 ```bash
 python tools/Analysis/EmitProofObligations.py
-python tools/Analysis/EmitMarshalLeanCert.py --check
-cd docs/Formal && lake build HP
-cd docs/Formal && lake build HPAnalysis
+python tools/Analysis/EmitMarshalCert.py --check
+cmake --build build --target verify-mrs-proof verify-mrs-ladder
 ```
 
 ---
@@ -89,5 +88,6 @@ Hunt **closed** = C_fin excluded, trait profile locked. RH **open** = global `sp
 python tools/Analysis/RunAnalyticLemmaDemo.py
 python tools/Analysis/RunGlobalDiracLimit.py
 python tools/Analysis/EmitProofObligations.py
-python tools/Analysis/EmitMarshalLeanCert.py --check
+python tools/Analysis/EmitMarshalCert.py --check
+cmake --build build --target verify-mrs-proof
 ```

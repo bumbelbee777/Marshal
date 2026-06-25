@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "sigma0": 100.0,
+  "lambda0": 100.0,
+  "log_ratio": 6.0,
+  "theta0_rational": "144/25",
+  "hurwitz_strict_convexity_ok": true,
+  "hurwitz_d2_min": 1.2227620690341565,
+  "dL_at_72_25": -3.865964400747322e-06,
+  "dL_at_144_25": -7.731928775404947e-06,
+  "dL_at_216_25": -1.159789309785417e-05,
+  "sign_72_25": -1,
+  "sign_216_25": 1,
+  "sign_bracket_product": -1,
+  "sign_bracket_ok": true,
+  "dL_at_144_25_zero_ok": true,
+  "theorem_a_moment_cert_ok": true,
+  "numeric_corroboration_note": "dL_at_* fields are numeric ladder-sum corroboration; analytic gates use Hurwitz convexity + rational \u03b8\u2080=144/25 sign bracket."
+}

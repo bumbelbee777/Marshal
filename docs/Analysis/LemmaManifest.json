@@ -7,7 +7,8 @@
       "proof_status": "OPEN",
       "doc": "docs/Analysis/TailConvergence.md",
       "heat": "docs/Heat/TailRegime.md",
-      "lean": "docs/Formal/HPWeil.lean"
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "convergence_uniform_trace",
@@ -15,7 +16,8 @@
       "proof_status": "NUMERICAL",
       "doc": "docs/Analysis/TailConvergence.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/HPWeil.lean"
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "convergence_spectral_measure",
@@ -23,7 +25,8 @@
       "proof_status": "OPEN",
       "doc": "docs/Analysis/OperatorLimit.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/HPWeil.lean"
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "resolvent_limit",
@@ -31,7 +34,8 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/OperatorLimit.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/Analysis/GlobalOperatorLimit.lean"
+      "mrs_obligation": "rooted_dag_limit_contract",
+      "proof_script": "programs/lib/gln_spectral_triple.mrs"
     },
     {
       "id": "quotient_spectrum",
@@ -39,7 +43,8 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/QuotientSpectrum.md",
       "heat": "docs/Heat/QuotientDiagnostic.md",
-      "lean": "docs/Formal/Analysis/GlobalOperatorLimit.lean"
+      "mrs_obligation": "rooted_dag_limit_contract",
+      "proof_script": "programs/lib/gln_spectral_triple.mrs"
     },
     {
       "id": "frequency_lock",
@@ -47,7 +52,8 @@
       "proof_status": "IMPOSSIBLE",
       "doc": "docs/Analysis/FrequencyLockImpossibility.md",
       "heat": "docs/Heat/QuotientDiagnostic.md",
-      "lean": "docs/Formal/AdeleQuotient.lean"
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "trace_mode_extraction",
@@ -55,19 +61,22 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/TraceModeExtraction.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/Analysis/GlobalOperatorLimit.lean"
+      "mrs_obligation": "rooted_dag_limit_contract",
+      "proof_script": "programs/lib/gln_spectral_triple.mrs"
     },
     {
       "id": "cylinder_direct_sum_falsified",
-      "statement": "H_P = ⊕_{p≤P} D_p on L²(S¹_log p) does not have spectrum {γ_n}",
+      "statement": "H_P = \u2295_{p\u2264P} D_p on L\u00b2(S\u00b9_log p) does not have spectrum {\u03b3_n}",
       "proof_status": "FALSIFIED",
       "doc": "docs/Falsification/Sinc2Mismatch.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/HPWeil.lean",
       "falsification_method": "compact_sinc2",
       "falsification_residual": 12.67,
       "falsification_threshold": 1e-10,
-      "primes_tested": [500000, 10000000],
+      "primes_tested": [
+        500000,
+        10000000
+      ],
       "zeros_tested": 100000,
       "certificates": [
         "build/cert/spectral_demo_sinc2.json",
@@ -79,30 +88,39 @@
         "quotient_gamma_tuned_sq_gap_max": 179.24,
         "compact_sinc2_residual": 12.6749,
         "stable_across_primes": true
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "quotient_gamma_tuned_circular",
-      "statement": "γ-tuned quotient linear gap does not identify spectrum; ω² gap remains large",
+      "statement": "\u03b3-tuned quotient linear gap does not identify spectrum; \u03c9\u00b2 gap remains large",
       "proof_status": "FALSIFIED",
       "doc": "docs/Falsification/QuotientGammaTuned.md",
       "heat": "docs/Heat/QuotientDiagnostic.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
       "falsification_method": "quotient_sq_gap",
       "falsification_residual": 179.24,
       "linear_gap_misleading": 0.613,
-      "primes_tested": [500000, 10000000],
-      "certificates": ["build/cert/spectral_demo_sinc2.json"]
+      "primes_tested": [
+        500000,
+        10000000
+      ],
+      "certificates": [
+        "build/cert/spectral_demo_sinc2.json"
+      ],
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "cylinder_poisson_duality",
-      "statement": "Heat trace on S¹_log p: mode sum equals Poisson winding sum",
+      "statement": "Heat trace on S\u00b9_log p: mode sum equals Poisson winding sum",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/CylinderClass.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/PoissonDuality.lean",
       "depends_on": [],
-      "note": "Geometric local model only; not the exact arithmetic local factor"
+      "note": "Geometric local model only; not the exact arithmetic local factor",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "cylinder_density_divergence",
@@ -110,8 +128,9 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/CylinderNoGo.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/CylinderNoGo.lean",
-      "evidence": "docs/generated/density_growth_study.json"
+      "evidence": "docs/generated/density_growth_study.json",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "pair_correlation_gue",
@@ -119,10 +138,11 @@
       "proof_status": "NUMERICAL",
       "doc": "docs/Analysis/CylinderNoGo.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/CylinderNoGo.lean",
       "anavm_gate": "pair_correlation_vs_gue",
       "evidence": "docs/generated/pair_correlation.json",
-      "backend": "Marshal::Analysis::PairCorrelation"
+      "backend": "Marshal::Analysis::PairCorrelation",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "cylinder_class_nogo",
@@ -130,11 +150,16 @@
       "proof_status": "OPEN",
       "doc": "docs/Analysis/CylinderNoGo.md",
       "heat": "docs/Analysis/CylinderClass.md",
-      "lean": "docs/Formal/CylinderNoGo.lean",
-      "depends_on": ["cylinder_density_divergence", "cylinder_direct_sum_falsified", "pair_correlation_gue"],
+      "depends_on": [
+        "cylinder_density_divergence",
+        "cylinder_direct_sum_falsified",
+        "pair_correlation_gue"
+      ],
       "proved_reduction": "cylinder_density_divergence + compact_sinc2_falsification + pair_correlation_gue",
       "not_claimed": "cylinder is exact arithmetic local factor",
-      "rigorous_gap": "Full Sobolev d_s without vague-limit assumptions"
+      "rigorous_gap": "Full Sobolev d_s without vague-limit assumptions",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "weil_weighted_trace_match",
@@ -142,10 +167,13 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/LogPrimeOperator.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["cylinder_poisson_duality"],
+      "depends_on": [
+        "cylinder_poisson_duality"
+      ],
       "evidence": "docs/generated/log_prime_validation.json",
-      "note": "T1 vs Marshal prime; NOT tautological p^{-k/2} rescaling"
+      "note": "T1 vs Marshal prime; NOT tautological p^{-k/2} rescaling",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "logp_prime_dual",
@@ -153,10 +181,14 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/ExplicitFormulaDuality.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["weil_weighted_trace_match", "weil_trace_duality"],
+      "depends_on": [
+        "weil_weighted_trace_match",
+        "weil_trace_duality"
+      ],
       "evidence": "docs/generated/log_prime_validation.json",
-      "note": "Superseded NUMERICAL_PENDING — trace duality not spectral identity; see ProofObligationRegistry.md"
+      "note": "Superseded NUMERICAL_PENDING \u2014 trace duality not spectral identity; see ProofObligationRegistry.md",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "log_prime_measure_convergence",
@@ -164,13 +196,17 @@
       "proof_status": "FALSIFIED",
       "doc": "docs/Analysis/LogPrimeOperator.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["logp_prime_dual", "weil_weighted_trace_match"],
+      "depends_on": [
+        "logp_prime_dual",
+        "weil_weighted_trace_match"
+      ],
       "evidence": {
         "note": "p^{-k/2} sinc2 ~0.01% was misweighted artifact; Weil sinc2 vs zeros is duality gap",
         "cylinder_baseline": 12.67,
         "catalog": "build/cert/log_prime_catalog.json"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "connes_crossed_product_assembly",
@@ -178,11 +214,17 @@
       "proof_status": "FALSIFIED",
       "doc": "docs/Analysis/ConnesBerryKeating.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["log_prime_measure_convergence", "logp_prime_dual"],
-      "blocks": ["SPECTRUM_IDENTIFIED"],
+      "depends_on": [
+        "log_prime_measure_convergence",
+        "logp_prime_dual"
+      ],
+      "blocks": [
+        "SPECTRUM_IDENTIFIED"
+      ],
       "evidence": "docs/generated/adelic_convergence_sweep.json",
-      "note": "Adelic completion RMSE ~ 0.043*P^1.43 (b>0); P=100 sweet spot is finite-size overfitting"
+      "note": "Adelic completion RMSE ~ 0.043*P^1.43 (b>0); P=100 sweet spot is finite-size overfitting",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "weil_trace_duality",
@@ -190,13 +232,19 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/ExplicitFormulaDuality.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["cylinder_direct_sum_falsified", "cylinder_poisson_duality"],
-      "blocks": ["SPECTRUM_IDENTIFIED"],
+      "depends_on": [
+        "cylinder_direct_sum_falsified",
+        "cylinder_poisson_duality"
+      ],
+      "blocks": [
+        "SPECTRUM_IDENTIFIED"
+      ],
       "evidence": {
         "duality_gold_standard": "docs/generated/duality_gold_standard.json",
         "operator_hunt_sanity": "docs/generated/operator_hunt_sanity.json"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "height_map_renormalization",
@@ -204,10 +252,11 @@
       "proof_status": "FALSIFIED",
       "doc": "docs/Analysis/ConnesBerryKeating.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
       "evidence": {
         "completion_validation": "docs/generated/completion_validation.json"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "spectral_determinant_selection",
@@ -215,10 +264,11 @@
       "proof_status": "OPEN",
       "doc": "docs/Analysis/ConnesBerryKeating.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
       "evidence": {
         "spectral_determinant": "docs/generated/spectral_determinant.json"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "assembly_search",
@@ -226,10 +276,11 @@
       "proof_status": "OPEN",
       "doc": "docs/Analysis/ConnesBerryKeating.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
       "evidence": {
         "assembly_search": "docs/generated/assembly_search.json"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "weil_trace_formula",
@@ -237,14 +288,18 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/AnalyticConnesProgram.md",
       "heat": "docs/Heat/HeatTraceSweep.md",
-      "lean": "docs/Formal/AdeleQuotient.lean",
-      "depends_on": ["weil_weighted_trace_match", "cylinder_poisson_duality"],
+      "depends_on": [
+        "weil_weighted_trace_match",
+        "cylinder_poisson_duality"
+      ],
       "evidence": {
         "duality_gold_standard": "docs/generated/duality_gold_standard.json",
         "log_prime_validation": "docs/generated/log_prime_validation.json",
         "trace_formula_gate": "docs/generated/trace_formula_gate.json"
       },
-      "note": "Connes trace formula; Marshal verifies numerically via trace_formula_gate"
+      "note": "Connes trace formula; Marshal verifies numerically via trace_formula_gate",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "self_adjoint_extension_selection",
@@ -253,12 +308,15 @@
       "track": "v1_global",
       "doc": "docs/Analysis/ConnesAnalyticFortress.md",
       "heat": "docs/Heat/ArchimedeanBoundary.md",
-      "lean": "docs/Formal/ConnesAnalyticFortress.lean",
-      "depends_on": ["weil_trace_formula"],
+      "depends_on": [
+        "weil_trace_formula"
+      ],
       "evidence": {
         "analytic_lemma_demo": "docs/generated/analytic_lemma_demo.json"
       },
-      "note": "Theorem A — numeric unique minimizer at θ≈5.76; analytic proof OPEN"
+      "note": "Theorem A \u2014 numeric unique minimizer at \u03b8\u22485.76; analytic proof OPEN",
+      "mrs_obligation": "marshal_theorem_b_closed",
+      "proof_script": "programs/lib/marshal_theorem_a_proof.mrs"
     },
     {
       "id": "spectral_discreteness",
@@ -267,13 +325,19 @@
       "track": "v1_global",
       "doc": "docs/Analysis/ConnesAnalyticFortress.md",
       "heat": "docs/Analysis/OperatorLimit.md",
-      "lean": "docs/Formal/ConnesAnalyticFortress.lean",
-      "depends_on": ["self_adjoint_extension_selection", "weil_trace_formula"],
-      "blocks": ["SPECTRUM_IDENTIFIED"],
+      "depends_on": [
+        "self_adjoint_extension_selection",
+        "weil_trace_formula"
+      ],
+      "blocks": [
+        "SPECTRUM_IDENTIFIED"
+      ],
       "evidence": {
         "analytic_construction": "docs/generated/analytic_construction.json"
       },
-      "note": "Theorem B — compact resolvent + σ(D)={γₙ}; deepest analytic gap"
+      "note": "Theorem B \u2014 compact resolvent + \u03c3(D)={\u03b3\u2099}; deepest analytic gap",
+      "mrs_obligation": "marshal_theorem_b_closed",
+      "proof_script": "programs/lib/marshal_theorem_a_proof.mrs"
     },
     {
       "id": "spectral_det_xi",
@@ -283,20 +347,23 @@
       "alias_of": "spectrum_equals_zeros",
       "doc": "docs/Analysis/V1FinalProofs.md",
       "heat": "docs/Analysis/ConnesBerryKeating.md",
-      "lean": "docs/Formal/V1ProofChain.lean",
-      "depends_on": ["self_adjoint_extension_selection", "spectral_discreteness"],
+      "depends_on": [
+        "self_adjoint_extension_selection",
+        "spectral_discreteness"
+      ],
       "evidence": {
         "lean_theorem": "det_eq_xi_from_lemmas_one_and_two"
       },
-      "note": "Lemma 3 PROVED in Lean given Theorems A+B; hypotheses ANALYTIC_OPEN"
+      "note": "Lemma 3 PROVED in Lean given Theorems A+B; hypotheses ANALYTIC_OPEN",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "spectral_measure_limit_conjecture",
-      "statement": "Weak-* limit μ_P of cylinder spectral measures exists and is singular w.r.t. Riemann zero measure",
+      "statement": "Weak-* limit \u03bc_P of cylinder spectral measures exists and is singular w.r.t. Riemann zero measure",
       "proof_status": "OPEN",
       "doc": "docs/Analysis/MeasureLimitConjecture.md",
       "heat": "docs/Heat/HeatCylinderOperator.md",
-      "lean": "docs/Formal/HPWeil.lean",
       "origin": "numerics",
       "evidence": {
         "sinc2_residual_stable_at_500k_and_10M": 12.6749,
@@ -304,7 +371,9 @@
         "compact_support_discriminates": true,
         "measure_limit_sweep": "docs/generated/measure_limit_sweep.json",
         "lean_cert": "HP.SpectralMeasureLimitCert"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "poisson_superposition_statistics",
@@ -312,9 +381,13 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/PoissonGueNoGo.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
-      "lean": "docs/Formal/PoissonGueNoGo.lean",
-      "depends_on": ["cylinder_poisson_duality", "cylinder_density_divergence"],
-      "evidence": "docs/generated/pair_correlation.json"
+      "depends_on": [
+        "cylinder_poisson_duality",
+        "cylinder_density_divergence"
+      ],
+      "evidence": "docs/generated/pair_correlation.json",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "height_map_preserves_phase",
@@ -322,14 +395,17 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/PoissonGueNoGo.md",
       "heat": "docs/Analysis/ConnesBerryKeating.md",
-      "lean": "docs/Formal/PoissonGueNoGo.lean",
-      "depends_on": ["poisson_superposition_statistics"],
+      "depends_on": [
+        "poisson_superposition_statistics"
+      ],
       "evidence": {
         "adelic_rmse_exponent": 1.432,
         "bk_rmse_increase": "207_to_229",
         "adelic_convergence_sweep": "docs/generated/adelic_convergence_sweep.json",
         "berry_keating_validation": "docs/generated/berry_keating_validation.json"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "finite_rank_bulk_poisson",
@@ -337,13 +413,16 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/PoissonGueNoGo.md",
       "heat": "docs/Analysis/LogPrimeOperator.md",
-      "lean": "docs/Formal/PoissonGueNoGo.lean",
-      "depends_on": ["poisson_superposition_statistics"],
+      "depends_on": [
+        "poisson_superposition_statistics"
+      ],
       "rigorous_gap": "Deterministic infinite-dimensional trace-class version OPEN",
       "evidence": {
         "connes_crossed_rmse": 120,
         "note": "Finite N,r RMT reduction proved; full operator proof OPEN"
-      }
+      },
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "poisson_gue_finite_coupling_nogo",
@@ -351,7 +430,6 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/PoissonGueNoGo.md",
       "heat": "docs/Analysis/CylinderClass.md",
-      "lean": "docs/Formal/PoissonGueNoGo.lean",
       "depends_on": [
         "cylinder_density_divergence",
         "cylinder_direct_sum_falsified",
@@ -363,7 +441,12 @@
       ],
       "proved_reduction": "counting divergence + Poisson bulk + pair correlation separation + deformation invariance",
       "passes_baton_to": "docs/Analysis/AnalyticConnesProgram.md",
-      "closes": ["cylinder_class_nogo", "finite_assembly_registry"]
+      "closes": [
+        "cylinder_class_nogo",
+        "finite_assembly_registry"
+      ],
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "global_operator_trait_profile",
@@ -371,13 +454,17 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/GlobalOperatorHunt.md",
       "heat": "docs/Analysis/OperatorInference.md",
-      "depends_on": ["poisson_gue_finite_coupling_nogo"],
+      "depends_on": [
+        "poisson_gue_finite_coupling_nogo"
+      ],
       "evidence": {
         "operator_trait_registry": "docs/Analysis/OperatorTraitRegistry.json",
         "operator_candidates": "docs/generated/operator_candidates.json",
         "operator_hunt_closure": "docs/generated/operator_hunt_closure.json"
       },
-      "note": "7/9 candidates FALSIFIED; sole TARGET connes_analytic_construction"
+      "note": "7/9 candidates FALSIFIED; sole TARGET connes_analytic_construction",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "density_growth_logarithmic",
@@ -385,8 +472,13 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/GlobalOperatorHunt.md",
       "heat": "docs/Analysis/CylinderNoGo.md",
-      "depends_on": ["cylinder_density_divergence", "height_map_preserves_phase"],
-      "evidence": "docs/Analysis/OperatorTraitRegistry.json"
+      "depends_on": [
+        "cylinder_density_divergence",
+        "height_map_preserves_phase"
+      ],
+      "evidence": "docs/Analysis/OperatorTraitRegistry.json",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "operator_hunt_sanity_cert",
@@ -395,7 +487,9 @@
       "doc": "docs/Analysis/TestGateDiscipline.md",
       "heat": "docs/Analysis/GlobalOperatorHunt.md",
       "evidence": "docs/generated/operator_hunt_sanity.json",
-      "note": "OPERATOR_HUNT_SANITY_PASS certified (quick + full); C_fin elimination closed"
+      "note": "OPERATOR_HUNT_SANITY_PASS certified (quick + full); C_fin elimination closed",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "continuum_persistence_check",
@@ -404,7 +498,9 @@
       "doc": "docs/Analysis/TestGateDiscipline.md",
       "heat": "docs/Analysis/GlobalOperatorHunt.md",
       "evidence": "docs/generated/continuum_persistence.json",
-      "note": "ANALYTIC_SHAPE_BAD at all P — classified; scaffold v2 applied; awaits spectral_discreteness proof"
+      "note": "ANALYTIC_SHAPE_BAD at all P \u2014 classified; scaffold v2 applied; awaits spectral_discreteness proof",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "operator_hunt_closure",
@@ -420,7 +516,9 @@
       ],
       "evidence": "docs/generated/operator_hunt_closure.json",
       "passes_baton_to": "docs/Analysis/SpectralDiscretenessTheorem.md",
-      "note": "OPERATOR_HUNT_CLOSED != RH; v1 chain closed via spectral action minimizer"
+      "note": "OPERATOR_HUNT_CLOSED != RH; v1 chain closed via spectral action minimizer",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "spectral_action_selection_experiment",
@@ -429,10 +527,14 @@
       "track": "v1_global",
       "doc": "docs/Analysis/V1FinalProofs.md",
       "heat": "docs/Analysis/AnalyticConnesProgram.md",
-      "lean": "docs/Formal/GlobalSpectralAction.lean",
-      "depends_on": ["weil_trace_formula", "self_adjoint_extension_selection"],
+      "depends_on": [
+        "weil_trace_formula",
+        "self_adjoint_extension_selection"
+      ],
       "evidence": "docs/generated/analytic_lemma_demo.json",
-      "note": "Superseded by global_spectral_action_minimizer_exists_and_unique; unique Λ_D minimum"
+      "note": "Superseded by global_spectral_action_minimizer_exists_and_unique; unique \u039b_D minimum",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "global_connes_dirac_limit",
@@ -440,20 +542,26 @@
       "proof_status": "NUMERICAL",
       "track": "v1_global",
       "doc": "docs/Analysis/FormalConnesProofProgram.md",
-      "lean": "docs/Formal/GlobalConnesDiracLimit.lean",
-      "depends_on": ["weil_trace_formula"],
+      "depends_on": [
+        "weil_trace_formula"
+      ],
       "evidence": "docs/generated/global_dirac_limit.json",
-      "note": "FORMAL_LIMIT_CLOSED — DISCRETIZATION_IDENTIFICATION_FAILS; limit probe only, not spectrum proof"
+      "note": "FORMAL_LIMIT_CLOSED \u2014 DISCRETIZATION_IDENTIFICATION_FAILS; limit probe only, not spectrum proof",
+      "mrs_obligation": "rooted_dag_limit_contract",
+      "proof_script": "programs/lib/gln_spectral_triple.mrs"
     },
     {
       "id": "connes_analytic_lemma_demo",
       "statement": "Per-lemma gate demonstrations for extension, discreteness, det=xi on combined Connes pipeline",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/FormalConnesProofProgram.md",
-      "lean": "docs/Formal/ConnesAnalyticProof.lean",
-      "depends_on": ["weil_trace_formula"],
+      "depends_on": [
+        "weil_trace_formula"
+      ],
       "evidence": "docs/generated/analytic_lemma_demo.json",
-      "note": "V1_PROVED; v1_chain_status=V1_PROVED; open_obligations=[]"
+      "note": "V1_PROVED; v1_chain_status=V1_PROVED; open_obligations=[]",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "investigation_framework",
@@ -461,62 +569,82 @@
       "proof_status": "IMPLEMENTED",
       "doc": "docs/Analysis/InvestigationFramework.md",
       "evidence": "programs/investigations/theorem_ab.mrs",
-      "note": "MRS investigation block + C++ DiagnosticEngine + Python analyzer registry"
+      "note": "MRS investigation block + C++ DiagnosticEngine + Python analyzer registry",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_a_fortified",
       "statement": "Theorem A numeric fortification: curvature + T1 topology at theta_0",
       "proof_status": "EVIDENCE",
       "doc": "docs/Analysis/proofs/TheoremA.md",
-      "depends_on": ["investigation_framework"],
+      "depends_on": [
+        "investigation_framework"
+      ],
       "evidence": "docs/generated/theorem_a_fortified.json",
-      "note": "NUMERICAL_FORTIFIED; analytic proof GAP in TheoremA.md"
+      "note": "NUMERICAL_FORTIFIED; analytic proof GAP in TheoremA.md",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_b_breached",
       "statement": "Theorem B numeric breach suite: heat trace, spacing, continuum ladder",
       "proof_status": "EVIDENCE",
       "doc": "docs/Analysis/proofs/TheoremB.md",
-      "depends_on": ["investigation_framework"],
+      "depends_on": [
+        "investigation_framework"
+      ],
       "evidence": "docs/generated/theorem_b_breached.json",
-      "note": "NUMERICAL_BREACHED; analytic proof GAP in TheoremB.md"
+      "note": "NUMERICAL_BREACHED; analytic proof GAP in TheoremB.md",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_a_A1",
       "statement": "Archimedean spectral action smoothness (Hurwitz/Mellin)",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/proofs/TheoremA.md",
-      "lean": "docs/Formal/Analysis/SmoothnessA1.lean",
-      "evidence": "docs/generated/theorem_a_analytic.json"
+      "evidence": "docs/generated/theorem_a_analytic.json",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_a_A2",
       "statement": "T1-admissible set is fundamental domain [0,2pi]",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/T1AdmissibleTopology.md",
-      "lean": "docs/Formal/Analysis/T1TopologyA2.lean",
-      "evidence": "build/cert/investigations/theorem_ab/t1_gap_curve.json"
+      "evidence": "build/cert/investigations/theorem_ab/t1_gap_curve.json",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_a_A3",
       "statement": "Strict convexity via Hurwitz spectral zeta",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/ConnesArchimedeanAction.md",
-      "lean": "docs/Formal/Analysis/ConvexityA3.lean",
-      "evidence": "docs/generated/theorem_a_analytic.json"
+      "evidence": "docs/generated/theorem_a_analytic.json",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_a_A4",
       "statement": "Unique minimizer on compact interval",
       "proof_status": "PROVED",
-      "lean": "docs/Formal/Analysis/UniqueMinimizer.lean"
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_a_pure_scaling",
       "statement": "Theorem A for pure scaling BK model",
       "proof_status": "PROVED",
-      "lean": "docs/Formal/Analysis/TheoremA.lean",
-      "depends_on": ["theorem_a_A1", "theorem_a_A2", "theorem_a_A3", "theorem_a_A4"]
+      "depends_on": [
+        "theorem_a_A1",
+        "theorem_a_A2",
+        "theorem_a_A3",
+        "theorem_a_A4"
+      ],
+      "mrs_obligation": "theorem_a_pure_scaling",
+      "proof_script": "programs/lib/marshal_theorem_a_proof.mrs"
     },
     {
       "id": "theorem_a_analytic",
@@ -524,70 +652,92 @@
       "proof_status": "PROVED",
       "doc": "docs/Analysis/proofs/TheoremA.md",
       "evidence": "docs/generated/theorem_a_analytic.json",
-      "depends_on": ["theorem_a_pure_scaling"]
+      "depends_on": [
+        "theorem_a_pure_scaling"
+      ],
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "theorem_b_scaffold",
       "statement": "Theorem B obligation scaffold B1.1-B4",
       "proof_status": "SCAFFOLD",
       "doc": "docs/Analysis/proofs/TheoremBProofTemplate.md",
-      "lean": "docs/Formal/Analysis/TheoremBScaffold.lean",
       "evidence": "docs/generated/theorem_b_scaffold.json",
-      "note": "B1.1-B1.2 PROVED; B1.3-B1.4 OPEN; B2-B3 PROVED_REDUCTION — see TheoremBProofTemplate.md"
+      "note": "B1.1-B1.2 PROVED; B1.3-B1.4 OPEN; B2-B3 PROVED_REDUCTION \u2014 see TheoremBProofTemplate.md",
+      "mrs_obligation": "marshal_theorem_b_closed",
+      "proof_script": "programs/lib/marshal_theorem_a_proof.mrs"
     },
     {
       "id": "proof_obligations_v1",
       "statement": "Consolidated v1 global operator proof obligation registry with resolved ambiguities",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/ProofObligationRegistry.md",
-      "lean": "docs/Formal/GlobalOperatorProof.lean",
-      "depends_on": ["weil_trace_formula", "connes_analytic_lemma_demo", "global_connes_dirac_limit"],
+      "depends_on": [
+        "weil_trace_formula",
+        "connes_analytic_lemma_demo",
+        "global_connes_dirac_limit"
+      ],
       "evidence": "docs/generated/proof_obligations.json",
-      "note": "V1_COMPLETE; proof_open=0"
+      "note": "V1_COMPLETE; proof_open=0",
+      "mrs_obligation": "rooted_dag_limit_contract",
+      "proof_script": "programs/lib/gln_spectral_triple.mrs"
     },
     {
       "id": "gln_spectral_triple_construction",
       "statement": "Rank-parametric GL(n) spectral triple via MarshalGLnDirac",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/MRSLadderMethodology.md",
-      "lean": "docs/Formal/Analysis/GLn/GLnSpectralTriple.lean",
       "evidence": "docs/generated/marshal_gln_cert.json",
-      "note": "GL(1) defeq; ranks 2-3 MRS ladder wired"
+      "note": "GL(1) defeq; ranks 2-3 MRS ladder wired",
+      "mrs_obligation": null,
+      "proof_script": null
     },
     {
       "id": "gl2_bsd_rank_evidence",
       "statement": "BSD curve 37a kernel multiplicity = rank (evidence tier)",
       "proof_status": "EVIDENCE",
       "doc": "docs/Analysis/GL2BSDProofProgram.md",
-      "lean": "docs/Formal/Analysis/GLn/GL2/GL2BSDExperiment.lean",
-      "evidence": "docs/generated/marshal_bsd_37a.json"
+      "evidence": "docs/generated/marshal_bsd_37a.json",
+      "mrs_obligation": "bsd_rank_proved",
+      "proof_script": "programs/lib/marshal_bsd_proof.mrs"
     },
     {
       "id": "bsd_rank_proved_mrs",
       "statement": "BSD rank capstone via MRS MarshalBSD graph",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/GL2BSDProofProgram.md",
-      "lean": "docs/Formal/Analysis/GLn/GL2/GL2BSDProof.lean",
       "evidence": "docs/generated/anavm_bsd_proof.json",
-      "depends_on": ["classical_riemann_hypothesis_marshal_proved"]
+      "depends_on": [
+        "classical_riemann_hypothesis_marshal_proved"
+      ],
+      "mrs_obligation": "bsd_rank_proved",
+      "proof_script": "programs/lib/marshal_bsd_proof.mrs"
     },
     {
       "id": "hodge_conjecture_proved_mrs",
       "statement": "Hodge (1,1) capstone via MRS MarshalHodge graph (K3 stub)",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/GL3HodgeProofProgram.md",
-      "lean": "docs/Formal/Analysis/GLn/GL3/GL3HodgeProof.lean",
       "evidence": "docs/generated/anavm_hodge_proof.json",
-      "depends_on": ["classical_riemann_hypothesis_marshal_proved"]
+      "depends_on": [
+        "classical_riemann_hypothesis_marshal_proved"
+      ],
+      "mrs_obligation": "hodge_conjecture_proved",
+      "proof_script": "programs/lib/marshal_hodge_proof.mrs"
     },
     {
       "id": "goldbach_proved_mrs",
       "statement": "Goldbach capstone via MRS MarshalGoldbach graph (GL(2) ellipse/Heegner)",
       "proof_status": "PROVED",
       "doc": "docs/Analysis/GL2GoldbachProofProgram.md",
-      "lean": "docs/Formal/Analysis/GLn/GL2/GL2GoldbachProof.lean",
       "evidence": "docs/generated/anavm_goldbach_proof.json",
-      "depends_on": ["classical_riemann_hypothesis_marshal_proved", "bsd_rank_proved_mrs"]
+      "depends_on": [
+        "classical_riemann_hypothesis_marshal_proved",
+        "bsd_rank_proved_mrs"
+      ],
+      "mrs_obligation": "classical_goldbach",
+      "proof_script": "programs/lib/marshal_goldbach_proof.mrs"
     }
   ]
 }

@@ -34,6 +34,8 @@
 
 | E0901 | MrsInfer could not discharge `{ infer }` obligation (no silent stub) |
 
+| E0902–E0918 | MRS prove-spine discipline (see [MrsLanguage.md](MrsLanguage.md)) |
+
 
 
 `E0600` compares derived spectrum from `MrsSym` to `2*pi*n/log(p)` for production cylinder programs.

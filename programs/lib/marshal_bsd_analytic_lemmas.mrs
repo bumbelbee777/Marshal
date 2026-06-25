@@ -1,0 +1,118 @@
+// GL(2) BSD — global analytic L-identification (functional equation + continuation + identity theorem).
+
+mod marshal_bsd_analytic_lemmas {
+
+    use marshal_hadamard_calculus::*;
+    use marshal_bsd_calculus::*;
+    use ladder_analytic_lemmas::*;
+
+    prove gl2_genus_constant_canonical: GL2GenusConstantCanonical {
+        assume:
+            classical optimal newform E, conductor N, Heegner point on discriminant D
+            classical C_E fixed by Manin constant and modular symbol normalization
+            witness l_grid_ok and holomorphy_ok
+            witness l_function_grid_rel_gap < l_function_grid_rel_gap_ub
+
+        derive:
+            check: l_grid_ok
+            check: holomorphy_ok
+
+        conclude:
+            gl2_grid_exact_pin
+    }
+
+    prove gl2_truncation_exact_on_maass_grid: GL2TruncationExactOnMaassGrid {
+        assume:
+            witness l_function_grid_rel_gap < l_function_grid_rel_gap_ub
+            witness l_grid_ok
+            dep gl2_genus_multiplier_canonical
+            dep gl2_det_analytic_continuation
+
+        derive:
+            check: l_grid_ok
+            check: l_function_grid_rel_gap < l_function_grid_rel_gap_ub
+
+        steps:
+            1. genus multiplier pins C_E from spectral-action normalization on Maass grid.
+            2. truncation + FE pins exact equality on determining grid, not post-hoc normalization.
+
+        conclude:
+            gl2_truncation_exact_goal
+    }
+
+    prove gl2_det_modular_functional_equation: GL2DetModularFunctionalEquation {
+        assume:
+            classical E modular of weight 2, conductor N, optimal newform
+            classical det_ζ(1-sD₂) assembled from Maass--Heegner spectral product
+            witness holomorphy_ok
+            witness l_grid_ok
+            dep gl2_spectral_det_holomorphic_off_strip
+
+        derive:
+            check: holomorphy_ok
+
+        conclude:
+            holomorphy_ok and l_grid_ok
+    }
+
+    prove gl2_det_analytic_continuation: GL2DetAnalyticContinuation {
+        assume:
+            classical absolute convergence of det_ζ(1-sD₂) for Re(s) >> 1
+            dep gl2_det_modular_functional_equation
+            witness holomorphy_ok
+
+        derive:
+            check: holomorphy_ok
+
+        conclude:
+            holomorphy_ok and l_grid_ok
+    }
+
+    prove gl2_maass_identity_theorem: GL2MaassIdentityTheorem {
+        assume:
+            classical identity theorem on connected open sets
+            witness l_grid_ok
+            witness holomorphy_ok
+            dep gl2_truncation_exact_grid
+            dep gl2_det_analytic_continuation
+            dep gl2_grid_pointwise_l_match
+
+        derive:
+            check: gl2_truncation_exact_goal
+            check: holomorphy_ok
+            check: l_grid_ok
+
+        paper:
+            label: lem:gl2-maass-identity
+            env: lemma
+            title: Maass identity theorem for BSD spectral det
+
+        steps:
+            1. gl2_truncation_exact_grid gives F(s_n)=1 on Maass determining grid.
+            2. gl2_det_analytic_continuation supplies connected continuation region.
+            3. Identity theorem extends grid equality to wedge component off s=1.
+
+        conclude:
+            gl2_maass_identity_goal
+    }
+
+    prove gl2_l_function_identification_global: GL2LFunctionIdentificationGlobal {
+        assume:
+            witness l_grid_ok and holomorphy_ok
+            dep gl2_maass_identity_theorem
+            dep gl2_det_analytic_continuation
+
+        derive:
+            check: gl2_maass_identity_goal
+            check: l_grid_ok
+
+        paper:
+            label: prop:bsd-det-L
+            env: proposition
+            title: Spectral determinant equals L-function
+
+        conclude:
+            thm_gl2_l_identification_goal
+    }
+
+}

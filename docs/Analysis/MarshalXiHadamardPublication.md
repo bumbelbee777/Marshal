@@ -2,8 +2,8 @@
 
 Machine-checked reduction of **unconditional classical RH** to a **single analytic lemma** on the Marshal wedge route, plus pinned numeric audit from AnaVM.
 
-**Lean entry point:** `Analysis/MarshalXiHadamardPublication.lean`  
-**Build:** `lake build Analysis.MarshalXiHadamardPublication`  
+**MRS entry:** `programs/marshal_xi_hadamard.mrs` → graph `MarshalHadamard`  
+**Build:** `cmake --build build --target verify-mrs-proof verify-xi-hadamard`  
 **AnaVM program:** `programs/marshal_xi_hadamard.mrs`  
 **Audit sync:** `python tools/Analysis/MarshalXiHadamardEngineCert.py --check`
 

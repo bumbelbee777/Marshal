@@ -1,0 +1,11 @@
+// GL(3) Hodge formal goal defs for machine-checked theorem registry.
+
+mod marshal_hodge_calculus {
+
+    use ladder_analytic_lemmas::*;
+
+    def thm_hodge_kernel_goal := rank3_contract_ok and hodge_match_ok and hodge_kernel_multiplicity >= hodge_h11_target
+    def thm_hodge_cycle_bridge_goal := rank3_contract_ok and cycle_constructive_ok and cycle_map_ok
+    def thm_hodge11_goal := rank3_contract_ok and hodge_pp_ok and cycle_map_ok
+
+}

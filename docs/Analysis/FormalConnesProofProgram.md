@@ -1,12 +1,26 @@
-# Formal Connes proof program (v1)
+# Formal Marshal proof program (GL(n), MRS-first)
 
-**Primary track:** analytic proof via Lean + AnaVM — **not** finite numerical identification.
+**Primary track:** Marshal/AnaVM **MRS** spine over the GL(n) program.
+`n=1` closes the RH chain; `n=2` and `n=3` carry BSD/Hodge capstones; `n=4` tracks Yang-Mills coupling findings as a certified outlook track.
 
-Cross-links: [SpectralDiscretenessTheorem.md](SpectralDiscretenessTheorem.md), [ProofObligationRegistry.md](ProofObligationRegistry.md), [SpectralActionResearchProgram.md](SpectralActionResearchProgram.md), [AnalyticConnesProgram.md](AnalyticConnesProgram.md), [FormalBridge.md](../AnaVM/FormalBridge.md).
+Cross-links: [GLnMRSProofSpine.md](GLnMRSProofSpine.md), [MRSLadderMethodology.md](MRSLadderMethodology.md), [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md), [SpectralDiscretenessTheorem.md](SpectralDiscretenessTheorem.md), [ProofObligationRegistry.md](ProofObligationRegistry.md), [SpectralActionResearchProgram.md](SpectralActionResearchProgram.md), [AnalyticConnesProgram.md](AnalyticConnesProgram.md), [FormalBridge.md](../AnaVM/FormalBridge.md).
 
 ---
 
-## v1 formal routing — **CLOSED** (not analytic fortress)
+## Program center: GL(n) + MRS ladder
+
+| Track | Rank | Scope | Gate |
+|-------|------|-------|------|
+| RH spine | `n=1` | Xi-Hadamard / v1 determinant chain | `verify-mrs-proof`, `verify-xi-hadamard` |
+| BSD spine | `n=2` | rank-certified BSD capstone flow | `verify-bsd-proof`, `verify-mrs-ladder` |
+| Hodge spine | `n=3` | rank-certified Hodge capstone flow | `verify-hodge-proof`, `verify-mrs-ladder` |
+| YM outlook | `n=4` | rooted-DAG + coupling-ratio findings | `verify-gln-balanced` |
+
+The canonical execution order is **MRS v1 proof scripts first**: `prove:` bodies, witness evaluation, and cert checks run in Marshal/AnaVM; capstones close via `MrsProofGate` / `MrsLadderProofGate` audit JSON. Lean has been removed (2026-06).
+
+---
+
+## v1 RH routing — **CLOSED** (not the only program)
 
 **Formal routing** (conditional Lean chain + Marshal cert wiring) is complete. The **Connes analytic fortress** on the true global operator remains **OPEN**. See [PUBLICATION_STATUS.md](../Formal/PUBLICATION_STATUS.md).
 
@@ -33,7 +47,7 @@ Numerics remain **limit probes** only — exported with `FORMAL_LIMIT_OPEN`.
 
 ---
 
-## AnaVM extensions (v1)
+## AnaVM / MRS execution spine
 
 ### `discretization_limit` block
 
@@ -57,7 +71,7 @@ formal_target {
 }
 ```
 
-Program: `programs/connes_global_dirac_limit.mrs`  
+Program: `programs/connes_global_dirac_limit.mrs`
 Rule: `connes_global_dirac_limit`
 
 ### `analytic_lemma_demo` diagnostic
@@ -69,9 +83,21 @@ diagnostics {
 }
 ```
 
-Program: `programs/connes_analytic_lemmas.mrs`  
-Rule: `connes_analytic_lemmas`  
+Program: `programs/connes_analytic_lemmas.mrs`
+Rule: `connes_analytic_lemmas`
 Export: `docs/generated/analytic_lemma_demo.json`
+
+### MRS ladder entry points (GL(n))
+
+| Program | Rank focus | Capstones |
+|---------|------------|-----------|
+| `programs/lib/marshal_hadamard_proof.mrs` | `n=1` | RH / Xi-Hadamard Weierstrass closure |
+| `programs/lib/marshal_bsd_proof.mrs` | `n=2` | BSD rank + L-function ID obligations |
+| `programs/lib/marshal_hodge_proof.mrs` | `n=3` | Hodge rank bridge obligations |
+| `programs/lib/marshal_ym_proof.mrs` | `n=4` | YM outlook / coupling contract obligations |
+| `programs/marshal_ladder.mrs` | mixed `n=1..4` | Integrated ladder gate |
+
+GL(4) YM outlook closes via `MarshalYM` proof graph + `gln4_physics_outlook.json` (`verify-gln-ladder`). Full assembly map: [GLnMRSProofSpine.md](GLnMRSProofSpine.md).
 
 ---
 
@@ -91,14 +117,25 @@ Export: `docs/generated/analytic_lemma_demo.json`
 | `Analysis/MarshalCertLift.lean` | HP + HPAnalysis bridge (`marshal_hp_and_analysis_preconditions`) |
 | `Analysis/ProofChain.lean` | Master chain + `proof_chain_marshal_bridge` |
 | `Analysis/ProofStatus.lean` | Live Mathlib lemma table |
-| `Formal/PUBLICATION_STATUS.md` | **Publication source of truth** |
+| `Formal/PUBLICATION_STATUS.md` | **Archived** — see `docs/Analysis/PUBLICATION_STATUS.md` (MRS) |
 
 ```bash
-cd docs/Formal && lake build HP              # CI default
-cd docs/Formal && lake build HPAnalysis      # full Mathlib chain
+cmake --build build --target verify-mrs-proof verify-clay-dossier
+python tools/Analysis/EmitMarshalCert.py --check
 ```
 
+*Lean modules listed above are historical routing artifacts; active CI uses MRS gates only.*
+
 ---
+
+## Running the GL(n) program
+
+```bash
+cmake --build build --target verify-mrs-proof
+cmake --build build --target verify-xi-hadamard
+cmake --build build --target verify-mrs-ladder
+cmake --build build --target verify-gln-balanced
+```
 
 ## Running the formal limit ladder
 

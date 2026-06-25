@@ -202,14 +202,6 @@ def main() -> None:
             (out_dir / "convergence_study.md").write_text(tpl_conv.render(**ctx), encoding="utf-8")
             print(f"Wrote {out_dir / 'convergence_study.md'}")
 
-    if "lean" in args.format and (FORMAL / "HPWeil.lean").exists():
-        shutil.copy2(FORMAL / "HPWeil.lean", out_dir / "HPWeil.lean")
-        lean_tpl = TEMPLATES / "LeanSkeleton.lean.j2"
-        if lean_tpl.exists():
-            tpl = env.get_template("LeanSkeleton.lean.j2")
-            (out_dir / "hp_lean_skeleton.lean").write_text(tpl.render(**ctx), encoding="utf-8")
-            print(f"Wrote {out_dir / 'hp_lean_skeleton.lean'}")
-
 
 if __name__ == "__main__":
     main()

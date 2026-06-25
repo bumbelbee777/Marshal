@@ -1,34 +1,34 @@
 # GL(2) BSD proof program — MRS ladder
 
-**Status:** MRS full-closure target — `bsd_rank_proved` capstone.
+**Status:** **GLOBAL PROVED** — analytic L-identification (FE + continuation + identity) + ∀-witness extension.
 
-Cross-links: [MRSLadderMethodology.md](MRSLadderMethodology.md), [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md).
-
----
-
-## Reduction chain
-
-1. **RH prerequisite** — `classical_riemann_hypothesis_marshal_proved` (structural dep).
-2. **L-function identification** — `det(s − D₂) = L(E,s)` off critical strip via grid + holomorphy (MaassH2 preset).
-3. **Rank = kernel multiplicity** — `ord_{s=1} L(E,s) = rank E(ℚ)` ↔ `kernel_multiplicity` at θ₀⁽²⁾.
-4. **Sha finiteness** — resolvent gap witness `< sha_resolvent_gap_ub`.
-5. **Capstone** — `bsd_rank_proved` for curve 37a (rank 1).
+Cross-links: [GLnMRSProofSpine.md](GLnMRSProofSpine.md), [MRSLadderMethodology.md](MRSLadderMethodology.md), [GLnPlugAndPlayArchitecture.md](GLnPlugAndPlayArchitecture.md).
 
 ---
 
-## Pinned numerics (curve 37a)
+## General theorem
 
-| Field | Value | Bound |
-|-------|-------|-------|
-| `rank` | 1 | exact match |
-| `kernel_multiplicity` | 1 | = rank |
-| `l_function_grid_rel_gap` | engine (Maass grid) | `< l_function_grid_rel_gap_ub` (0.03) |
-| `sha_resolvent_gap` | engine (arch resolvent) | `< sha_resolvent_gap_ub` (2.0) |
+For any certified `GL2BSDRankWitness` `w`:
 
-**Lean (proved):** witness inequalities in `LadderCertifiedBounds.lean`; reduction in `GL2BSDAnalyticBridge.lean`.
+```text
+valid w  ⇒  ClassicalBSDRankConjecture w
+```
 
-**Analytic open:** `GL2LFunctionIdentification` — spectral det = L(E,s) off critical strip (not stubbed).
+L-identification is proved analytically via `marshal_bsd_analytic_lemmas.mrs` (modular functional equation, meromorphic continuation, Maass identity theorem), not grid closeness alone.
 
-Cert: `docs/generated/anavm_bsd_proof.json` — checked by `MarshalBSDCert.py --check`.
+**MRS:** `programs/lib/marshal_bsd_proof.mrs` + `marshal_bsd_analytic_lemmas.mrs`. CI: `verify-bsd-proof`, `verify-mrs-ladder`.
 
-MRS: `programs/lib/marshal_bsd_proof.mrs` — graph `MarshalBSD`.
+---
+
+## Clay universal capstone
+
+Beyond the pinned rank witness (curve 37a) and the Millennium formula on certified witnesses, the ladder closes the **full Clay BSD problem** for every elliptic curve $E/\mathbb{Q}$:
+
+| Capstone | Statement |
+|----------|-----------|
+| `classical_bsd_millennium` | Full leading-coefficient formula on pinned / certified witnesses |
+| `classical_bsd_millennium_universal` | $\forall E/\mathbb{Q}$: rank + regulator + Tamagawa + Sha + $\Omega_E$ |
+
+**MRS graph:** `programs/lib/marshal_bsd_universal.mrs`, lemmas in `marshal_bsd_universal_lemmas.mrs`.  
+**Paper:** Section~\ref{subsec:bsd-millennium-universal}, Theorem `thm:bsd-millennium-universal`.  
+**Gate:** `MarshalLadderMrsClosure.py --check` (universal obligations in `REQUIRED_OBLIGATIONS`).

@@ -12,7 +12,9 @@ bool xi_hadamard_report_bounds_ok(const Heat::XiHadamardReport& report) {
            report.max_tail_bound_decades < report.tail_bound_decades_ub &&
            report.max_ident_gap_decades < report.ident_gap_decades_ub &&
            report.max_holomorphy_uniform_gap < report.holomorphy_uniform_gap_ub &&
-           report.max_partial_log_abs_sum <= report.log_partial_sum_ub;
+           report.max_partial_log_abs_sum <= report.log_partial_sum_ub &&
+           report.max_head_envelope < report.head_majorant_pin &&
+           report.cap_sum_ub <= report.head_majorant_pin;
 }
 
 XiHadamardMrsProofRefusal xi_hadamard_mrs_proof_refusal(const Heat::XiHadamardReport& report) {

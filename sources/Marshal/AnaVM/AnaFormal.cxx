@@ -76,11 +76,11 @@ FormalAnalyticsResult run_formal_analytics(const MrsProgram& prog, const Operato
         std::find(r.proved_gates.begin(), r.proved_gates.end(), "cylinder_density_divergence") !=
         r.proved_gates.end();
     if (traits.scaffold || traits.placeholder)
-        r.lean_emit_ready = r.failed_gates.empty();
+        r.mrs_emit_ready = r.failed_gates.empty();
     else if (r.cylinder_class_excluded)
-        r.lean_emit_ready = counting_ok && r.failed_gates.empty();
+        r.mrs_emit_ready = counting_ok && r.failed_gates.empty();
     else
-        r.lean_emit_ready = false;
+        r.mrs_emit_ready = false;
     return r;
 }
 
@@ -90,8 +90,8 @@ void export_formal_analytics_json(const std::string& path, const FormalAnalytics
     out << std::setprecision(17);
     out << "{\n  \"version\": 1,\n  \"engine\": \"AnaVM_FormalAnalytics\",\n";
     out << "  \"ansatz_id\": \"" << r.ansatz_id << "\",\n";
-    out << "  \"lean_emit_ready\": " << (r.lean_emit_ready ? "true" : "false") << ",\n";
-    out << "  \"lean_module\": \"" << cal.lean_module << "\",\n";
+    out << "  \"mrs_emit_ready\": " << (r.mrs_emit_ready ? "true" : "false") << ",\n";
+    out << "  \"mrs_module\": \"" << cal.mrs_module << "\",\n";
     out << "  \"cylinder_class_excluded\": " << (r.cylinder_class_excluded ? "true" : "false")
         << ",\n";
     out << "  \"counting\": {\n";

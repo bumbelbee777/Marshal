@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "description": "Pinned inputs required by GitHub CI and verify-ci. Paths are repo-relative.",
+  "zeros": {
+    "primary": "tests/Fixtures/Zeros/NtzMergedOneLine.txt",
+    "min_lines": 10000,
+    "sha256": null
+  },
+  "thresholds": "tests/Fixtures/Thresholds.json",
+  "induction_certs": [
+    "tests/Fixtures/Certs/mini_induction.json",
+    "tests/Fixtures/Certs/medium_induction.json"
+  ],
+  "programs": [
+    "programs/marshal_xi_hadamard.mrs",
+    "programs/marshal_ladder.mrs"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "purpose": "Uniform minimizer Fourier mass lb for Lerch continuum capstone",
+  "SIGMA_HIGHER_ETA_PIN": 771.5,
+  "SIGMA_HIGHER_Z0": 8.0,
+  "sigma_higher_abs_max_pinned": 2984.7332360333658,
+  "M_PLANCHEREL_MIN_PIN": 13.0,
+  "ARCH_MASS_MIN_PIN": -1.34,
+  "H_CONT_UNIFORM_MIN_PIN": 1596.2445017401644,
+  "A_CERT_MAX": 15.0,
+  "debt_sharp_crossover_a_uniform_lb": 96.48965635876027,
+  "H_minus_debt_sharp_margin_min_on_cert_grid": 1904.1118863223553,
+  "minimizer_plancherel_mass_audit_ok": true,
+  "minimizer_plancherel_mass_witness_ok": true,
+  "cert_grid_rows": [
+    {
+      "a": 0.25,
+      "H": 1956.1866312497493,
+      "debt_sharp": 52.074744927394114,
+      "margin_H_minus_debt_sharp": 1904.1118863223553,
+      "implied_mass_lb": 4.117983795397437,
+      "ok": true
+    },
+    {
+      "a": 0.5,
+      "H": 3912.2052977759467,
+      "debt_sharp": 57.756831952192435,
+      "margin_H_minus_debt_sharp": 3854.4484658237543,
+      "implied_mass_lb": 8.235614006940075,
+      "ok": true
+    },
+    {
+      "a": 0.75,
+      "H": 5868.227640514495,
+      "debt_sharp": 64.12824012306122,
+      "margin_H_minus_debt_sharp": 5804.099400391434,
+      "implied_mass_lb": 12.353251957306119,
+      "ok": true
+    },
+    {
+      "a": 1.0,
+      "H": 7824.247638625336,
+      "debt_sharp": 71.33310955246083,
+      "margin_H_minus_debt_sharp": 7752.914529072875,
+      "implied_mass_lb": 16.470884971978016,
+      "ok": true
+    },
+    {
+      "a": 1.25,
+      "H": 9780.272999107643,
+      "debt_sharp": 78.22556796466806,
+      "margin_H_minus_debt_sharp": 9702.047431142975,
+      "implied_mass_lb": 20.58852927502008,
+      "ok": true
+    },
+    {
+      "a": 1.5,
+      "H": 11201.683842570274,
+      "debt_sharp": 87.97877783772755,
+      "margin_H_minus_debt_sharp": 11113.705064732547,
+      "implied_mass_lb": 23.580752371975706,
+      "ok": true
+    },
+    {
+      "a": 2.0,
+      "H": 11331.500339809363,
+      "debt_sharp": 106.31161744124555,
+      "margin_H_minus_debt_sharp": 11225.188722368117,
+      "implied_mass_lb": 23.854030096844063,
+      "ok": true
+    },
+    {
+      "a": 3.0,
+      "H": 11463.099758148806,
+      "debt_sharp": 100.21672254621559,
+      "margin_H_minus_debt_sharp": 11362.88303560259,
+      "implied_mass_lb": 24.131061062881965,
+      "ok": true
+    },
+    {
+      "a": 4.0,
+      "H": 11536.296656758357,
+      "debt_sharp": 116.31384264447554,
+      "margin_H_minus_debt_sharp": 11419.982814113882,
+      "implied_mass_lb": 24.285148427314525,
+      "ok": true
+    },
+    {
+      "a": 5.0,
+      "H": 11571.43321139153,
+      "debt_sharp": 132.3593653080017,
+      "margin_H_minus_debt_sharp": 11439.073846083527,
+      "implied_mass_lb": 24.359114663610224,
+      "ok": true
+    },
+    {
+      "a": 7.0,
+      "H": 11868.74776311974,
+      "debt_sharp": 164.42320673209394,
+      "margin_H_minus_debt_sharp": 11704.324556387646,
+      "implied_mass_lb": 24.98499385458007,
+      "ok": true
+    },
+    {
+      "a": 10.0,
+      "H": 16943.190720346796,
+      "debt_sharp": 212.7604164371565,
+      "margin_H_minus_debt_sharp": 16730.43030390964,
+      "implied_mass_lb": 35.667243459352974,
+      "ok": true
+    },
+    {
+      "a": 15.0,
+      "H": 25407.830089828734,
+      "debt_sharp": 293.1232773578993,
+      "margin_H_minus_debt_sharp": 25114.706812470835,
+      "implied_mass_lb": 53.48622207855586,
+      "ok": true
+    }
+  ]
+}

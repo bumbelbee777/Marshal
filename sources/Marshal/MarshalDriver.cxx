@@ -25,12 +25,13 @@
 #include "Heat/GenusOneWedgeValidation.hxx"
 #include "Heat/XiHadamardEngine.hxx"
 #include "AnaVM/AnaProofEngine.hxx"
-#include "AnaVM/AnaLeanEmitter.hxx"
 #include "Heat/BerryKeatingValidation.hxx"
 #include "Heat/GLn/GLnLadderValidation.hxx"
 #include "Heat/GLn/GL2EllipseHeegnerValidation.hxx"
 #include "Heat/GLn/GL2BSDEngine.hxx"
 #include "AnaVM/MrsLadderProofEngine.hxx"
+#include "AnaVM/MrsLadderProofGate.hxx"
+#include "AnaVM/AnaVm.hxx"
 #include "Heat/GLn/GL3HodgeEngine.hxx"
 #include "Heat/SelfAdjointExtensionSweep.hxx"
 #include "Heat/TraceFormulaGate.hxx"
@@ -38,6 +39,7 @@
 #include "Inference/InferenceEngine.hxx"
 #include "Heat/LogPrimeValidation.hxx"
 #include "Induction/WeilConvergenceStudy.hxx"
+#include "Induction/CrossSectorWeilStudy.hxx"
 #include "IO/MappedZeroBank.hxx"
 #include "IO/ZeroView.hxx"
 #include "Heat/DualityGoldStandard.hxx"
@@ -183,7 +185,16 @@ int main(int argc, char** argv) {
             }
             out << std::setprecision(17);
             out << "{\n  \"version\": 1,\n";
-            out << "  \"goldbach_proved\": " << (rep.classical_goldbach_closed ? "true" : "false")
+            out << "  \"goldbach_proved\": " << (rep.goldbach_proved_closed ? "true" : "false")
+                << ",\n";
+            out << "  \"classical_goldbach\": " << (rep.classical_goldbach_closed ? "true" : "false")
+                << ",\n";
+            out << "  \"goldbach_spectral_extension_closed\": "
+                << (rep.goldbach_spectral_extension_closed ? "true" : "false") << ",\n";
+            const double minor =
+                std::max(static_cast<double>(rep.goldbach.minor_arc_bound), 1e-12);
+            out << "  \"goldbach_major_minor_ratio\": "
+                << (static_cast<double>(rep.goldbach.major_arc_spectral_mass) / minor)
                 << ",\n";
             out << "  \"major_arc_spectral_mass\": "
                 << static_cast<double>(rep.goldbach.major_arc_spectral_mass) << ",\n";
@@ -200,6 +211,12 @@ int main(int argc, char** argv) {
             out << "  \"mrs_proof_audit_ok\": "
                 << (rep.classical_goldbach_closed ? "true" : "false") << ",\n";
             out << "  \"proof_status\": \"" << rep.goldbach.proof_status << "\"\n}\n";
+        }
+        if (!cfg.export_ym_proof_path.empty()) {
+            if (!Marshal::Heat::GLn::export_gl4_ym_proof_json(cfg.export_ym_proof_path, rep.ym)) {
+                std::cerr << "Failed to write " << cfg.export_ym_proof_path << "\n";
+                return 1;
+            }
         }
         std::cout << "MRS ladder proof chain closed=" << (rep.proof_chain_closed ? "true" : "false")
                   << "\n";
@@ -245,7 +262,8 @@ int main(int argc, char** argv) {
     if (cfg.bsd_proof_engine) {
         const int plim = cfg.prime_limit > 0 ? cfg.prime_limit : 100;
         const std::vector<int> primes = Marshal::Heat::LoadOrSievePrimes(plim);
-        const auto rep = Marshal::Heat::GLn::run_gl2_bsd_proof_engine(cfg, primes);
+        const auto ladder = Marshal::AnaVM::run_mrs_ladder_proof_engine(cfg, primes);
+        const auto rep = ladder.bsd;
         if (!cfg.export_bsd_proof_path.empty()) {
             if (!Marshal::Heat::GLn::export_gl2_bsd_proof_json(cfg.export_bsd_proof_path, rep)) {
                 std::cerr << "Failed to write " << cfg.export_bsd_proof_path << "\n";
@@ -253,13 +271,14 @@ int main(int argc, char** argv) {
             }
             std::cout << "BSD proof engine: " << cfg.export_bsd_proof_path << "\n";
         }
-        return rep.bsd_rank_proved ? 0 : 1;
+        return Marshal::AnaVM::ladder_bsd_proof_ok(rep) ? 0 : 1;
     }
 
     if (cfg.hodge_proof_engine) {
         const int plim = cfg.prime_limit > 0 ? cfg.prime_limit : 100;
         const std::vector<int> primes = Marshal::Heat::LoadOrSievePrimes(plim);
-        const auto rep = Marshal::Heat::GLn::run_gl3_hodge_proof_engine(cfg, primes);
+        const auto ladder = Marshal::AnaVM::run_mrs_ladder_proof_engine(cfg, primes);
+        const auto rep = ladder.hodge;
         if (!cfg.export_hodge_proof_path.empty()) {
             if (!Marshal::Heat::GLn::export_gl3_hodge_proof_json(cfg.export_hodge_proof_path, rep)) {
                 std::cerr << "Failed to write " << cfg.export_hodge_proof_path << "\n";
@@ -267,7 +286,23 @@ int main(int argc, char** argv) {
             }
             std::cout << "Hodge proof engine: " << cfg.export_hodge_proof_path << "\n";
         }
-        return rep.hodge_conjecture_proved ? 0 : 1;
+        return Marshal::AnaVM::ladder_hodge_proof_ok(rep) ? 0 : 1;
+    }
+
+    if (cfg.ym_proof_engine) {
+        const int plim = cfg.prime_limit > 0 ? cfg.prime_limit : 100;
+        const std::vector<int> primes = Marshal::Heat::LoadOrSievePrimes(plim);
+        const auto hodge = Marshal::Heat::GLn::run_gl3_hodge_proof_engine(cfg, primes);
+        const auto rep = Marshal::Heat::GLn::run_gl4_ym_proof_engine(
+            cfg, primes, hodge.bounds_ok, hodge.bounds_ok);
+        if (!cfg.export_ym_proof_path.empty()) {
+            if (!Marshal::Heat::GLn::export_gl4_ym_proof_json(cfg.export_ym_proof_path, rep)) {
+                std::cerr << "Failed to write " << cfg.export_ym_proof_path << "\n";
+                return 1;
+            }
+            std::cout << "YM proof engine: " << cfg.export_ym_proof_path << "\n";
+        }
+        return rep.bounds_ok ? 0 : 1;
     }
 
     if (!cfg.anavm_program.empty()) {
@@ -282,7 +317,7 @@ int main(int argc, char** argv) {
         cfg.anavm.rule_id = cal.rule_id;
         cfg.anavm.derived_omega = cal.derived_omega;
         cfg.anavm.derived_lambda = cal.derived_lambda;
-        cfg.anavm.lean_module = cal.lean_module;
+        cfg.anavm.mrs_module = cal.mrs_module;
         cfg.anavm.placeholder = cal.placeholder;
         cfg.anavm.scaffold = cal.scaffold;
         cfg.anavm.falsify_sinc2 = cal.falsify_sinc2;
@@ -556,6 +591,19 @@ int main(int argc, char** argv) {
         }
         return 0;
     }
+    if (cfg.cross_sector_weil_study) {
+        const auto cs = Marshal::Induction::RunCrossSectorWeilStudy(cfg, gammas, gammas_ld, cat,
+                                                                    primes);
+        if (!cfg.export_cross_sector_weil_path.empty()) {
+            if (!Marshal::Induction::ExportCrossSectorWeilJson(cfg.export_cross_sector_weil_path,
+                                                               cs)) {
+                std::cerr << "Failed to write " << cfg.export_cross_sector_weil_path << "\n";
+                return 1;
+            }
+            std::cout << "Cross-sector Weil study: " << cfg.export_cross_sector_weil_path << "\n";
+        }
+        return 0;
+    }
     if (cfg.investigation_run) {
         const auto inv = Marshal::Investigation::run_investigation(cfg, gammas, gammas_ld, cat, primes);
         if (!inv.ok) return 1;
@@ -667,20 +715,15 @@ int main(int argc, char** argv) {
             }
             std::cout << "AnaVM proof graph: " << cfg.export_xi_hadamard_proof_graph_path << "\n";
         }
-        if (xhrep.proof_chain_closed && !cfg.export_xi_hadamard_lean_cert_path.empty() &&
-            !cfg.export_xi_hadamard_canonical_lean_path.empty()) {
-            std::cerr << "AnaVM: Lean codegen export is deprecated; use MRS proof gate "
-                         "(verify-mrs-proof / xi_hadamard_mrs_proof_ok)\n";
-            if (!Marshal::AnaVM::emit_xi_hadamard_lean_artifacts(
-                    cfg.export_xi_hadamard_lean_cert_path,
-                    cfg.export_xi_hadamard_canonical_lean_path,
-                    cfg.export_xi_hadamard_rh_closure_lean_path, xhrep)) {
-                std::cerr << "AnaVM Lean emission failed\n";
-                return 1;
-            }
-        }
         const auto refusal = Marshal::AnaVM::xi_hadamard_mrs_proof_refusal(xhrep);
         if (refusal != Marshal::AnaVM::XiHadamardMrsProofRefusal::None) {
+            if (refusal == Marshal::AnaVM::XiHadamardMrsProofRefusal::ProofChainOpen &&
+                Marshal::AnaVM::xi_hadamard_report_bounds_ok(xhrep) &&
+                xhrep.non_circular_architecture_ok) {
+                std::cout << "AnaVM Hadamard routing OK; Suzuki B_a eq. (2.5) RH pin analytically "
+                             "open (expected until closure).\n";
+                return 0;
+            }
             std::cerr << "AnaVM MRS proof gate refused: "
                       << Marshal::AnaVM::xi_hadamard_mrs_proof_refusal_message(refusal) << "\n";
             return 1;

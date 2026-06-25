@@ -53,8 +53,9 @@ def main() -> int:
         fa = json.loads(FORMAL.read_text(encoding="utf-8"))
         if fa.get("engine") != "AnaVM_FormalAnalytics":
             errors.append("formal_analytics.json engine mismatch")
-        if "lean_emit_ready" not in fa:
-            errors.append("formal_analytics.json missing lean_emit_ready")
+        emit_key = "mrs_emit_ready" if "mrs_emit_ready" in fa else "lean_emit_ready"
+        if emit_key not in fa:
+            errors.append("formal_analytics.json missing mrs_emit_ready")
     else:
         print(f"SKIP: {FORMAL} not found (run RunPairCorrelation.py)")
 

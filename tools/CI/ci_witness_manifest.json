@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "description": "Canonical witness/cert JSON included in CI witness bundles (SHA256SUMS + zip).",
+  "bundle_members": [
+    "tools/Analysis/cert_pin_manifest.json",
+    "docs/generated/mrs_proof_audit.json",
+    "docs/generated/mrs_ladder_proof_audit.json",
+    "docs/generated/mrs_ladder_closure.json",
+    "docs/generated/anavm_xi_hadamard_proof.json",
+    "docs/generated/anavm_xi_hadamard_proof_graph.json",
+    "docs/generated/anavm_bsd_proof.json",
+    "docs/generated/anavm_hodge_proof.json",
+    "docs/generated/anavm_goldbach_proof.json",
+    "docs/generated/anavm_ym_proof.json",
+    "docs/generated/ladder_certified_bounds.json",
+    "docs/generated/qft_extensions_closure.json",
+    "docs/generated/weil_chebyshev_reduction_audit.json",
+    "docs/generated/cross_sector_weil_battleplan_cert.json",
+    "docs/generated/cross_sector_balance_cert.json",
+    "docs/generated/t1_uniform_resolvent_cert.json",
+    "docs/generated/gln_positivity_synthesis_audit.json",
+    "docs/generated/mrs_infer_audit.json"
+  ]
+}

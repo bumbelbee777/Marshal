@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Config.hxx"
 #include "AnaProofEngine.hxx"
 #include "MrsProofAudit.hxx"
 #include "Heat/GLn/GL2BSDEngine.hxx"
 #include "Heat/GLn/GL2EllipseHeegnerValidation.hxx"
 #include "Heat/GLn/GL2GoldbachEffectiveValidation.hxx"
 #include "Heat/GLn/GL3HodgeEngine.hxx"
+#include "Heat/GLn/GL4YMEngine.hxx"
 
 #include <string>
 
@@ -14,10 +16,13 @@ namespace Marshal::AnaVM {
 struct MrsLadderWitnessContext {
     bool rh_capstone_ok = false;
     bool bsd_capstone_ok = false;
+    bool hodge_capstone_ok = false;
+    const Config* cfg = nullptr;
     const Heat::GLn::GL2BSDProofReport* bsd = nullptr;
     const Heat::GLn::GL3HodgeProofReport* hodge = nullptr;
     const Heat::GLn::GL2EllipseHeegnerReport* goldbach = nullptr;
     const Heat::GLn::GoldbachEffectiveReport* goldbach_effective = nullptr;
+    const Heat::GLn::GL4YMProofReport* ym = nullptr;
 };
 
 enum class MrsLadderProofRefusal {

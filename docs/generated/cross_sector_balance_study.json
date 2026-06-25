@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "purpose": "Cross-sector balance \u2014 audit scalar cosine route vs full Weil form",
+  "nmax": 200000,
+  "n_terms": 18120,
+  "t0_partial_sum": 11.628990212566446,
+  "t0_re_minus_zeta_log_deriv": -2.6860917096128327,
+  "max_abs_gap_on_sample": 14.315081922179278,
+  "sample_rows": [
+    {
+      "t": 0.0,
+      "partial_sum": 11.628990212566446,
+      "re_minus_zeta_log_deriv": -2.6860917096128327,
+      "abs_gap": 14.315081922179278
+    },
+    {
+      "t": 0.3,
+      "partial_sum": -2.22964393127507,
+      "re_minus_zeta_log_deriv": -2.1492985432862164,
+      "abs_gap": 0.08034538798885382
+    },
+    {
+      "t": 1.0,
+      "partial_sum": -0.8820509815954455,
+      "re_minus_zeta_log_deriv": -1.0125730965517337,
+      "abs_gap": 0.13052211495628818
+    },
+    {
+      "t": 2.0,
+      "partial_sum": -0.7515999854033235,
+      "re_minus_zeta_log_deriv": -0.5807785454837899,
+      "abs_gap": 0.17082143991953358
+    },
+    {
+      "t": 5.0,
+      "partial_sum": -0.30026692961741647,
+      "re_minus_zeta_log_deriv": -0.11505910912279887,
+      "abs_gap": 0.1852078204946176
+    },
+    {
+      "t": 10.0,
+      "partial_sum": 0.23307310910882065,
+      "re_minus_zeta_log_deriv": 0.23214531343246514,
+      "abs_gap": 0.0009277956763555084
+    },
+    {
+      "t": 15.0,
+      "partial_sum": -0.04668215191183472,
+      "re_minus_zeta_log_deriv": 0.43499390256781956,
+      "abs_gap": 0.4816760544796543
+    },
+    {
+      "t": 20.0,
+      "partial_sum": 0.09648497850138404,
+      "re_minus_zeta_log_deriv": 0.5788754974224168,
+      "abs_gap": 0.4823905189210328
+    }
+  ],
+  "lerch_continuum_closed_ok": true,
+  "zeta_re_logderiv_t0_negative_ok": true,
+  "partial_sum_zeta_gap_sample_ok": true,
+  "cross_sector_balance_still_open_ok": false,
+  "verdict": "Prime-only partial sums do not match Re(-zeta'/zeta(1/2+it)) on the critical line; Re is negative at t=0. The scalar cos inequality is NOT Weil positivity. Global cross-sector Weil positivity for all a is CLOSED via Suzuki B_a Lerch route (cross_sector_balance_still_open_ok=false)."
+}

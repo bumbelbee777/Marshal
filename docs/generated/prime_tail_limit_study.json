@@ -1,0 +1,181 @@
+{
+  "version": 2,
+  "purpose": "Prime tail limit study for suzuki_arithmetic_prime_limit_control",
+  "sigma_gauss": 1.0,
+  "prime_limit_gauss_sigma1": 1.0699501880555897,
+  "arch_poles_sigma1": 2.0380119426893604,
+  "prime_block_monotone_sample_ok": true,
+  "pnt_increment_bound_covers_sample_ok": true,
+  "prime_tail_saturation_sample_ok": true,
+  "lambda_proxy_positive_yoshida_sample_ok": true,
+  "by_a": [
+    {
+      "a": 0.5,
+      "nmax": 2,
+      "prime": 0.3075540697937262,
+      "rel_to_limit": 0.7125529083249742,
+      "lambda_proxy": 1.579594482343267
+    },
+    {
+      "a": 1.0,
+      "nmax": 7,
+      "prime": 0.9357566194462802,
+      "rel_to_limit": 0.1254203888249959,
+      "lambda_proxy": 0.6889792734953863
+    },
+    {
+      "a": 1.5,
+      "nmax": 20,
+      "prime": 1.0580343596955686,
+      "rel_to_limit": 0.011136806641135007,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 2.0,
+      "nmax": 54,
+      "prime": 1.0694610205660038,
+      "rel_to_limit": 0.00045718716165179553,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 3.0,
+      "nmax": 403,
+      "prime": 1.0699501463058176,
+      "rel_to_limit": 3.902029510346049e-08,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 4.0,
+      "nmax": 2980,
+      "prime": 1.0699501880555249,
+      "rel_to_limit": 6.059817116901194e-14,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 5.0,
+      "nmax": 22026,
+      "prime": 1.0699501880555897,
+      "rel_to_limit": 0.0,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 6.0,
+      "nmax": 162754,
+      "prime": 1.0699501880555897,
+      "rel_to_limit": 0.0,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 8.0,
+      "nmax": 200000,
+      "prime": 1.0699501880555897,
+      "rel_to_limit": 0.0,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 10.0,
+      "nmax": 200000,
+      "prime": 1.0699501880555897,
+      "rel_to_limit": 0.0,
+      "lambda_proxy": NaN
+    },
+    {
+      "a": 12.0,
+      "nmax": 200000,
+      "prime": 1.0699501880555897,
+      "rel_to_limit": 0.0,
+      "lambda_proxy": NaN
+    }
+  ],
+  "increments": [
+    {
+      "a_lo": 0.5,
+      "a_hi": 1.0,
+      "n_old": 2,
+      "n_new": 7,
+      "delta_prime": 0.6282025496525541,
+      "relative_increment": 0.6713311309775007,
+      "pnt_bound": 3.0217707246193757,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 1.0,
+      "a_hi": 1.5,
+      "n_old": 7,
+      "n_new": 20,
+      "delta_prime": 0.12227774024928839,
+      "relative_increment": 0.11557067039341873,
+      "pnt_bound": 8.202999362285944,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 1.5,
+      "a_hi": 2.0,
+      "n_old": 20,
+      "n_new": 54,
+      "delta_prime": 0.011426660870435201,
+      "relative_increment": 0.010684504297676723,
+      "pnt_bound": 21.11793135362986,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 2.0,
+      "a_hi": 3.0,
+      "n_old": 54,
+      "n_new": 403,
+      "delta_prime": 0.000489125739813856,
+      "relative_increment": 0.00045714815919474814,
+      "pnt_bound": 212.03409371575725,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 3.0,
+      "a_hi": 4.0,
+      "n_old": 403,
+      "n_new": 2980,
+      "delta_prime": 4.174970724690752e-08,
+      "relative_increment": 3.9020234505291684e-08,
+      "pnt_bound": 1540.0503631107485,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 4.0,
+      "a_hi": 5.0,
+      "n_old": 2980,
+      "n_new": 22026,
+      "delta_prime": 6.483702463810914e-14,
+      "relative_increment": 6.059817116901194e-14,
+      "pnt_bound": 11261.813578607356,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 5.0,
+      "a_hi": 6.0,
+      "n_old": 22026,
+      "n_new": 162754,
+      "delta_prime": 0.0,
+      "relative_increment": 0.0,
+      "pnt_bound": 82601.93460658626,
+      "pnt_covers": true,
+      "tail_small": true
+    },
+    {
+      "a_lo": 6.0,
+      "a_hi": 8.0,
+      "n_old": 162754,
+      "n_new": 200000,
+      "delta_prime": 0.0,
+      "relative_increment": 0.0,
+      "pnt_bound": 21810.00307833075,
+      "pnt_covers": true,
+      "tail_small": true
+    }
+  ],
+  "verdict": "Gaussian prime block is monotone, PNT-bounded, and saturates by a~3. Limit W_prime(infty) < arch+poles at sigma=1; full Weil balance uses arch/zero sector. Does NOT discharge arithmetic prime limit control (RH)."
+}

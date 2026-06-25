@@ -1,5 +1,7 @@
 // MRS proof witness audit — table-driven obligation closure (no raw C++ apply block).
 
+#include "Inference/JsonMinimal.hxx"
+
 #include "AnaVM/AnaProofEngine.hxx"
 #include "AnaVM/AnaVm.hxx"
 #include "AnaVM/MrsProofAudit.hxx"
@@ -39,10 +41,15 @@ Marshal::Heat::XiHadamardReport closed_fixture_report() {
     r.genus_one_log_summability_ok = true;
     r.grid_pointwise_identification_ok = true;
     r.holomorphy_uniform_cauchy_ok = true;
+    r.accumulation_grid_ok = true;
+    r.xi_zero_normalization_ok = true;
+    r.functional_equation_probe_ok = true;
+    r.genus_multiplier_unique_ok = true;
+    r.exact_grid_equality_ok = true;
     return r;
 }
 
-void test_mrs_audit_passes_on_closed_fixture() {
+void test_mrs_audit_honest_while_suzuki_open() {
     using namespace Marshal::AnaVM;
     using namespace Marshal::Heat;
 
@@ -66,14 +73,42 @@ void test_mrs_audit_passes_on_closed_fixture() {
     ctx.ident_ok = true;
 
     const auto audit = apply_mrs_hadamard_proof_audit(graph, bundle, ctx);
-    require(audit.ok, "MrsProofAudit ok on closed fixture");
+    const bool lerch_closed =
+        Marshal::Inference::json_get_bool(
+            Marshal::Inference::read_text_file("docs/generated/cross_sector_weil_battleplan_cert.json"),
+            "lerch_continuum_closed_ok");
+    if (lerch_closed) {
+        if (!audit.ok) {
+            int n = 0;
+            for (const auto& e : audit.entries) {
+                if (!e.ok && n++ < 8)
+                    std::cerr << "audit fail: " << e.obligation_id << " — " << e.failure_reason
+                              << "\n";
+            }
+        }
+        require(audit.ok, "MrsProofAudit must pass after Lerch continuum closure");
+        bool suzuki_pin_ok = false;
+        for (const auto& e : audit.entries) {
+            if (e.obligation_id == "suzuki_arithmetic_prime_limit_control" && e.ok)
+                suzuki_pin_ok = true;
+        }
+        require(suzuki_pin_ok, "suzuki_arithmetic_prime_limit_control must pass after Lerch closure");
+        graph = finalize_proof_graph(graph);
+        require(graph.all_proved, "graph must claim all_proved after Lerch closure");
+        return;
+    }
+    require(!audit.ok, "MrsProofAudit must fail while Suzuki RH analytic pin open");
+    bool suzuki_pin_failed = false;
+    for (const auto& e : audit.entries) {
+        if (e.obligation_id == "suzuki_arithmetic_prime_limit_control" && !e.ok)
+            suzuki_pin_failed = true;
+    }
+    require(suzuki_pin_failed, "suzuki_arithmetic_prime_limit_control blocked while analytic open");
     require(bundle_has_prove_ref(bundle, "marshal_xi_zero_classification_of_wedge"),
             "MRS prove marshal_xi_zero_classification_of_wedge");
-    require(bundle_has_prove_ref(bundle, "classical_riemann_hypothesis_from_classification"),
-            "MRS prove classical_riemann_hypothesis_from_classification");
 
     graph = finalize_proof_graph(graph);
-    require(graph.all_proved, "graph all_proved after audit + finalize");
+    require(!graph.all_proved, "graph must not claim all_proved while Suzuki RH open");
 }
 
 void test_mrs_audit_fails_bad_bounds() {
@@ -118,7 +153,7 @@ void test_export_mrs_audit_json() {
 }  // namespace
 
 int main() {
-    test_mrs_audit_passes_on_closed_fixture();
+    test_mrs_audit_honest_while_suzuki_open();
     test_mrs_audit_fails_bad_bounds();
     test_export_mrs_audit_json();
     if (g_fails) {

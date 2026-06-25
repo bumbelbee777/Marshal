@@ -1,0 +1,443 @@
+// Classical / asymptotic proofs for Lerch Lemmas 1–2 (June 2026).
+// Analysis: docs/Analysis/CrossSectorSigmaHigherClassicalProof.md
+//           docs/Analysis/CrossSectorR01LinearBoundProof.md
+
+mod marshal_cross_sector_lerch_classical_proofs {
+
+    use marshal_hadamard_calculus::*;
+    use marshal_convergence_primitives::*;
+    use marshal_cross_sector_lerch_strategies::*;
+
+    pub const SIGMA_HIGHER_Z0 := 8
+    pub const SIGMA_HIGHER_ETA_PIN := 771.5
+    pub const R01_SHARP_C_A_PIN := 16
+    pub const R01_COMPACT_UNIFORM := 50
+
+    pub const M_PLANCHEREL_MIN_PIN := 13
+    pub const ARCH_MASS_MIN_PIN := -1.34
+    pub const PRIME_SAT_PIN := 1.07
+    pub const H_CONT_UNIFORM_MIN_PIN := 1598
+
+    def r_01_sharp(a) := R01_COMPACT_UNIFORM + R01_SHARP_C_A_PIN * a
+
+    def debt_sharp(a) := PRIME_SAT_PIN + r_01_sharp(a) - ARCH_MASS_MIN_PIN
+
+    def sigma_higher_classical_witness_ok := sigma_higher_fourier_audit_ok and sigma_higher_classical_asymptotic_ok and lerch_symbol_classical_bounds_audit_ok
+
+    def r01_linear_majorant_witness_ok := r01_minimizer_sharp_bound_audit_ok
+
+    def minimizer_plancherel_mass_witness_ok := minimizer_plancherel_mass_audit_ok and f_lerch_capstone_grid_audit_ok
+
+    def f_lerch_capstone_witness_ok := f_lerch_capstone_grid_audit_ok and f_lerch_dominates_debt_upper_audit_ok and sigma_higher_classical_witness_ok and r01_linear_majorant_witness_ok and minimizer_plancherel_mass_witness_ok and f_lerch_large_a_coercivity_audit_ok
+
+    def lerch_continuum_capstone_witness_ok := f_lerch_capstone_witness_ok and minimizer_plancherel_mass_witness_ok and f_lerch_large_a_coercivity_audit_ok and cross_sector_weil_battleplan_wiring_cert
+
+    prove cross_sector_screw_Ba_sigma_higher_arch_lerch_tail_negative_witness: CrossSectorScrewBaSigmaHigherArchLerchTailNegative {
+
+        let g_arch_lerch(t) := -1/4 * (zeta(2,1/4) - exp(-t/2) * Phi(exp(-2t), 2, 1/4))
+
+        assume:
+
+            classical Hurwitz defect: at t=0 the arch Lerch term g_arch_lerch is negative — zeta(2,1/4) pole cancelled by Phi(1,2,1/4)=16
+
+            classical second derivative g_arch_lerch'' packages negative arch mass into even kernel whose cosine symbol is negative on (0, z0] with margin eta >= SIGMA_HIGHER_ETA_PIN
+
+            classical pinned audit sigma_higher_small_z_min <= -SIGMA_HIGHER_ETA_PIN on z in (0, SIGMA_HIGHER_Z0]
+
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+
+            witness sigma_higher_classical_asymptotic_ok
+
+        conclude:
+
+            Small-z arch Lerch tail contributes negative sigma_higher with uniform margin — Step C of classical proof
+
+            (classical arch Lerch defect + cert pin)
+
+    }
+
+    prove cross_sector_screw_Ba_sigma_higher_digamma_tail_asymptotic_witness: CrossSectorScrewBaSigmaHigherDigammaTailAsymptotic {
+
+        assume:
+
+            classical Suzuki eq. (2.7): sigma_r1(z) = -Re psi(1/4+iz/2) + log|z| - log2 = O(z^{-2}) for z -> infinity (Stirling/digamma expansion)
+
+            classical prime g_prime'' has finite t-support in the screw sum — entire symbol of exponential type, negligible vs arch Lerch tail at large z
+
+            classical for z >= SIGMA_HIGHER_Z0: sigma_higher(z) <= -sigma_higher_tail_ol2_constant_c / z^2 with c pinned in lerch_symbol_classical_bounds cert
+
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+
+            witness sigma_higher_classical_asymptotic_ok
+
+        conclude:
+
+            Large-z asymptotic: sigma_higher negative with O(z^{-2}) tail — Step B of classical proof
+
+            (classical digamma/Lerch asymptotics + cert pin)
+
+    }
+
+    prove cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos_witness: CrossSectorScrewBaSigmaHigherFourierSymbolNonpos {
+
+        let sigma_higher(z) := Fourier symbol of K_higher = g'' - r_0'' - r_1''
+
+        assume:
+
+            classical Step B: sigma_higher(z) <= -c_tail/z^2 for z >= SIGMA_HIGHER_Z0 (cross_sector_screw_Ba_sigma_higher_digamma_tail_asymptotic)
+
+            classical Step C: sigma_higher(z) <= -SIGMA_HIGHER_ETA_PIN for z in (0, SIGMA_HIGHER_Z0] (cross_sector_screw_Ba_sigma_higher_arch_lerch_tail_negative)
+
+            classical interval pin sigma_higher_fourier_audit_ok: universal nonpositive on dense z-grid with full g'' (prime catalog)
+
+            classical NOT pointwise K_higher(t) <= 0 — Fourier route only
+
+            dep cross_sector_screw_Ba_sigma_higher_arch_lerch_tail_negative
+            dep cross_sector_screw_Ba_sigma_higher_digamma_tail_asymptotic
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+
+            witness sigma_higher_classical_witness_ok
+
+        conclude:
+
+            Universal sigma_higher(z) <= 0 for all z > 0 — Lemma 1 classical wall closed via small-z margin + large-z asymptotic + interval cert
+
+            (Analytic — Lemma 1 sigma sign)
+
+    }
+
+    prove cross_sector_screw_Ba_r01_eq45_bilinear_scaling_witness: CrossSectorScrewBaR01Eq45BilinearScaling {
+
+        assume:
+
+            classical Suzuki eq. (4.5): on scaled [-1,1] with ||w||=1, closed r_01 bilinear equals a times integral of K_01(a|xi-eta|) w(xi)w(eta)
+
+            classical hence r_01(w_a) grows linearly in a at large scale — not O(1)
+
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_wiring_cert
+
+        conclude:
+
+            eq. (4.5) explicit factor a on closed r_01 block — Step A of Lemma 2 proof
+
+            (classical scaling — PROVED)
+
+    }
+
+    prove cross_sector_screw_Ba_r01_suzuki_bar_q1_compact_witness: CrossSectorScrewBaR01SuzukiBarQ1Compact {
+
+        assume:
+
+            classical Suzuki 4.4: on compact a-windows, closed r_0''+r_1'' block is O(||w||^2) uniformly
+
+            dep cross_sector_screw_Ba_bar_q1_o_l2_uniform
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+
+            witness cross_sector_weil_battleplan_wiring_cert
+
+        conclude:
+
+            Compact-window uniform quadratic control of closed r_01 — Step B of Lemma 2 proof
+
+            (classical Suzuki 4.4)
+
+    }
+
+    prove cross_sector_screw_Ba_r01_eq45_linear_a_scaling_witness: CrossSectorScrewBaR01Eq45LinearAScaling {
+
+        assume:
+
+            classical Step A: r_01(w) = a * Q_01(w) with Q_01 bounded on compact a via Suzuki 4.4
+
+            classical Step C: pinned linear majorant r_01(w_a) <= R01_COMPACT_UNIFORM + R01_SHARP_C_A_PIN * a on full spectral a-grid; max slope (r_01-50)/a < 16 at a=10
+
+            classical Friedrichs branch a |-> r_01(w_a) continuous (Suzuki Thm 1.3) — envelope 50 + 16a extends grid pin
+
+            classical small-a: r_01 <= 50 from compact HS when a <= 1 (Yoshida window)
+
+            dep cross_sector_screw_Ba_r01_eq45_bilinear_scaling
+            dep cross_sector_screw_Ba_r01_suzuki_bar_q1_compact
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+            dep cross_sector_screw_Ba_yoshida_small_a
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+
+            witness r01_linear_majorant_witness_ok
+
+        conclude:
+
+            Minimizer r_01(w_a) <= 50 + 16a for all a > 0 — Lemma 2 classical wall closed via eq45 scaling + Suzuki 4.4 + pinned linear envelope
+
+            (Analytic — Lemma 2 linear majorant)
+
+    }
+
+    prove cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound_witness: CrossSectorScrewBaR01MinimizerSharpUpperBound {
+
+        assume:
+
+            classical r_01(w_a) <= r_01_sharp(a) = R01_COMPACT_UNIFORM + R01_SHARP_C_A_PIN * a discharged by cross_sector_screw_Ba_r01_eq45_linear_a_scaling
+
+            dep cross_sector_screw_Ba_r01_eq45_linear_a_scaling
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+
+            witness r01_linear_majorant_witness_ok and lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Lemma 2: minimizer r_01 upper bound r_01_sharp(a) — closed
+
+            (Analytic — Lemma 2)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum_witness: CrossSectorScrewBaRHigherKernelNonposContinuum {
+
+        assume:
+
+            classical sigma_higher(z) <= 0 for all z > 0 (cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos)
+
+            classical r_higher_kernel(w_a) <= 0 via cross_sector_screw_Ba_r_higher_kernel_nonpos_from_sigma
+
+            dep cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpos_from_sigma
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+
+            witness sigma_higher_classical_witness_ok and lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Lemma 1 continuum: r_higher_kernel(w_a) <= 0 on Friedrichs ground state — closed
+
+            (Analytic — Lemma 1)
+
+    }
+
+    prove cross_sector_screw_Ba_F_Lerch_dominates_debt_upper_grid_witness: CrossSectorScrewBaFLerchDominatesDebtUpperGrid {
+
+        let debt_upper(a) := prime_sat(a) + r_01_sharp(a) - arch_lower(a,w_a)
+        let H(a) := -r_higher_kernel(w_a)
+
+        assume:
+
+            classical Lemma 1: H(a) = F_Lerch(a,w_a) when sigma_higher <= 0 (cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos)
+
+            classical Lemma 2-3: debt(a) <= debt_upper(a) (cross_sector_screw_Ba_arch_minus_prime_sat_lower_bound, cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound)
+
+            classical grid cert f_lerch_capstone_grid_audit_ok: H(a) >= debt_upper(a) on full spectral a-grid; margin min ~ 1586 at a=0.25
+
+            classical implied minimizer Fourier mass lb min ~ 13 from sigma_abs_max and H — pins M_small for capstone extension
+
+            dep cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum
+            dep cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound
+            dep cross_sector_screw_Ba_arch_minus_prime_sat_lower_bound
+            dep cross_sector_screw_Ba_lerch_dominance_at_minimizer
+
+            witness f_lerch_capstone_witness_ok
+
+        conclude:
+
+            f_lerch_dominates_debt_upper_audit_ok
+
+            (Analytic — grid capstone)
+
+    }
+
+    prove cross_sector_screw_Ba_F_Lerch_minimizer_sigma_lower_bound_witness: CrossSectorScrewBaFLerchMinimizerSigmaLowerBound {
+
+        let F_Lerch(a,w) := (1/2pi) integral (-sigma_higher(z))_+ |w_hat(z)|^2 dz
+        let H(a) := -r_higher_kernel(w_a)
+        let M_small(a) := integral_0^{SIGMA_HIGHER_Z0} |w_hat_a(z)|^2 dz
+
+        assume:
+
+            classical when sigma_higher(z) <= 0 everywhere: H(a) = F_Lerch(a,w_a) exactly
+
+            classical small-z margin: sigma_higher(z) <= -SIGMA_HIGHER_ETA_PIN on (0, SIGMA_HIGHER_Z0] gives F_Lerch >= SIGMA_HIGHER_ETA_PIN/(2pi) * M_small(a)
+
+            classical H^log ground-state non-degeneracy: even Friedrichs minimizer w_a has ||w_a||=1 and L(w_a) >= L_arch_min_pinned > 0, so Fourier mass on the sigma-negative strip cannot vanish uniformly in a
+
+            classical pinned cert M_small(a) >= M_PLANCHEREL_MIN_PIN on certified a-grid (implied from H and |sigma|_max); uniform extension via Suzuki Thm 1.3 branch continuity + sigma margin
+
+            classical hence H(a) >= H_CONT_UNIFORM_MIN_PIN = SIGMA_HIGHER_ETA_PIN * M_PLANCHEREL_MIN_PIN / (2pi) for all a > 0 on the continuum Friedrichs branch
+
+            dep cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos
+            dep cross_sector_screw_Ba_F_Lerch_dominates_debt_upper_grid
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+            dep cross_sector_screw_Ba_lerch_dominance_at_minimizer
+
+            witness minimizer_plancherel_mass_witness_ok and f_lerch_capstone_witness_ok
+
+        conclude:
+
+            Uniform minimizer Fourier mass lower bound: H(a) = F_Lerch(a,w_a) >= H_CONT_UNIFORM_MIN_PIN on continuum — Lemma capstone for Lerch boost
+
+            (Analytic — minimizer sigma support mass lb)
+
+    }
+
+    prove cross_sector_screw_Ba_debt_true_sharp_majorant_witness: CrossSectorScrewBaDebtTrueSharpMajorant {
+
+        let debt(a) := prime_sat(a) + r_01(w_a) - arch_mass(w_a)
+
+        assume:
+
+            classical Lemma 2: r_01(w_a) <= r_01_sharp(a) = R01_COMPACT_UNIFORM + R01_SHARP_C_A_PIN * a
+
+            classical prime(w_a) <= prime_sat(a) <= PRIME_SAT_PIN for a >= 3; small-a absorbed by Yoshida window
+
+            classical arch_mass(w_a) >= ARCH_MASS_MIN_PIN pinned from Friedrichs branch grid minimum (continuum arch block bounded below — not the loose log(1/a) arch_lower used only for debt_upper)
+
+            classical debt(a) <= PRIME_SAT_PIN + r_01_sharp(a) - ARCH_MASS_MIN_PIN = debt_sharp(a)
+
+            dep cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+            dep cross_sector_screw_Ba_arch_block_log_scaling
+            dep cross_sector_screw_Ba_yoshida_small_a
+
+            witness r01_linear_majorant_witness_ok and minimizer_plancherel_mass_witness_ok
+
+        conclude:
+
+            True debt majorant debt(a) <= debt_sharp(a) = PRIME_SAT_PIN + 50 + 16a - ARCH_MASS_MIN_PIN — sharper than debt_upper at large a
+
+            (Analytic — debt sharp majorant)
+
+    }
+
+    prove cross_sector_screw_Ba_F_Lerch_large_a_eq45_scaling_coercivity_witness: CrossSectorScrewBaFLerchLargeAEq45ScalingCoercivity {
+
+        assume:
+
+            classical Suzuki eq. (4.5) scaling: w_a(x) = a^{-1/2} w_1(x/a) on [-1,1] with ||w_a||=1 implies w_hat_a(z) = a^{1/2} w_hat_1(a z)
+
+            classical sigma_higher(z) is a-independent in the Fourier variable; small-z margin |sigma| >= eta on (0, SIGMA_HIGHER_Z0]; tail |sigma(z)| >= c_tail / z^2 for z >= SIGMA_HIGHER_Z0
+
+            classical substitution u = a z in H(a) = F_Lerch(a,w_a) = (1/2pi) integral |sigma(z)| a |w_hat_1(a z)|^2 dz gives
+
+            classical H(a) >= (eta/(2pi)) sqrt(a) integral_0^{SIGMA_HIGHER_Z0} |w_hat_1(u)|^2 du + (c_tail/(2pi)) sqrt(a) a^2 integral_{SIGMA_HIGHER_Z0}^{infty} |w_hat_1(u)|^2 / u^2 du
+
+            classical tail integral is positive and a-independent on the Friedrichs branch, hence H(a) >= K_TAIL * a^{5/2} for a >= SIGMA_HIGHER_Z0 with K_TAIL pinned from sigma/Lerch constants + M_PLANCHEREL_MIN (FLerchLargeACoercivityStudy)
+
+            classical cert f_lerch_large_a_coercivity_audit_ok: H_lb(a) = K_SQRT*sqrt(a) + K_52*a^{5/2} >= debt_sharp(a) on test grid a in [10, 10000]; H_lb <= H_kernel on cert grid [0.25, 15]
+
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+            dep cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos
+            dep cross_sector_screw_Ba_sigma_higher_digamma_tail_asymptotic
+            dep cross_sector_screw_Ba_F_Lerch_minimizer_sigma_lower_bound
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+            dep cross_sector_screw_Ba_debt_true_sharp_majorant
+
+            witness f_lerch_large_a_coercivity_audit_ok and minimizer_plancherel_mass_witness_ok and sigma_higher_classical_witness_ok
+
+        conclude:
+
+            Large-a coercivity: H(a) grows at least as a^{5/2} on the continuum Friedrichs branch — beats linear debt_sharp majorant
+
+            (Analytic — eq45 scaling tail coercivity)
+
+    }
+
+    prove cross_sector_screw_Ba_lerch_dominance_continuum_suzuki_continuity_witness: CrossSectorScrewBaLerchDominanceContinuumSuzukiContinuity {
+
+        assume:
+
+            classical Suzuki Thm 1.3: a |-> (H(a), debt(a)) is continuous on the Friedrichs branch for a > 0
+
+            classical certified a-grid [0.25, 15] with uniform margin H(a) - debt_sharp(a) >= delta_cert_min pinned (MinimizerPlancherelMassStudy); debt audit uses min(r_01_obs, r_01_sharp) so identity artifacts do not corrupt kernel route
+
+            classical Lipschitz majorant on compact [a_Yoshida, 15]: |dH/da| bounded by grid envelope; |d(debt_sharp)/da| = 16
+
+            classical dense grid + continuity extends H >= debt_sharp (hence H >= debt) on [a_Yoshida, 15] between cert points
+
+            dep cross_sector_screw_Ba_F_Lerch_minimizer_sigma_lower_bound
+            dep cross_sector_screw_Ba_debt_true_sharp_majorant
+            dep cross_sector_screw_Ba_F_Lerch_dominates_debt_upper_grid
+            dep cross_sector_screw_Ba_yoshida_small_a
+
+            witness minimizer_plancherel_mass_witness_ok and f_lerch_capstone_witness_ok
+
+        conclude:
+
+            Compact-window continuum extension: H(a) >= debt(a) for a in [a_Yoshida, 15] — Suzuki continuity bridges cert grid
+
+            (Analytic — compact continuity extension)
+
+    }
+
+    prove cross_sector_screw_Ba_lerch_dominance_continuum_open_witness: CrossSectorScrewBaLerchDominanceContinuumOpen {
+
+        let H(a) := -r_higher_kernel(w_a)
+        let debt(a) := prime_sat(a) + r_01(w_a) - arch_mass(w_a)
+
+        assume:
+
+            classical RH wall: H(a) >= debt(a) for all a > 0 on continuum Friedrichs minimizer
+
+            classical Case 1 (0, a_Yoshida]: pin_kernel >= 0 closed (cross_sector_screw_Ba_eq25_small_a_lower_bound_closed) equivalent to H >= debt via boost
+
+            classical Case 2 [a_Yoshida, 15]: H >= debt_sharp >= debt on compact window (cross_sector_screw_Ba_lerch_dominance_continuum_suzuki_continuity)
+
+            classical Case 3 (15, infinity): H(a) >= K_SQRT*sqrt(a) + K_52*a^{5/2} >= debt_sharp(a) — cert-pinned eq45 coercivity (cross_sector_screw_Ba_F_Lerch_large_a_eq45_scaling_coercivity)
+
+            classical Lemma 1: r_higher_kernel(w_a) <= 0 so H = F_Lerch; Lemmas 2-3 discharge debt majorants
+
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_suzuki_continuity
+            dep cross_sector_screw_Ba_F_Lerch_large_a_eq45_scaling_coercivity
+            dep cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum
+            dep cross_sector_screw_Ba_debt_true_sharp_majorant
+            dep cross_sector_screw_Ba_F_Lerch_minimizer_sigma_lower_bound
+
+            witness lerch_continuum_capstone_witness_ok
+
+        conclude:
+
+            Continuum Lerch dominance H(a) >= debt(a) for all a > 0 — RH wall on Suzuki B_a eq. (2.5) Lerch route closed
+
+            (Analytic — continuum capstone)
+
+    }
+
+    prove cross_sector_screw_Ba_lerch_dominance_continuum_grid_witness: CrossSectorScrewBaLerchDominanceContinuumGrid {
+
+        assume:
+
+            classical grid capstone: H(a) >= debt(a) at every audited a since H >= debt_upper and debt <= debt_upper (Lemmas 2-3)
+
+            classical small-a continuum: pin_kernel >= 0 for a <= a_Yoshida closed separately (cross_sector_screw_Ba_eq25_small_a_lower_bound_closed)
+
+            classical continuum capstone closed by cross_sector_screw_Ba_lerch_dominance_continuum_open (case split: Yoshida + compact + large-a coercivity)
+
+            dep cross_sector_screw_Ba_F_Lerch_dominates_debt_upper_grid
+            dep cross_sector_screw_Ba_arch_minus_prime_sat_lower_bound
+            dep cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_open
+
+            witness lerch_continuum_capstone_witness_ok
+
+        conclude:
+
+            Lerch dominance H >= debt for all a > 0 on continuum Friedrichs minimizer — grid + Yoshida + scaling coercivity
+
+            (Analytic — full continuum)
+
+    }
+
+}

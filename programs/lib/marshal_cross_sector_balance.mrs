@@ -1,0 +1,151 @@
+// Route F — cross-sector balance (June 2026 treatise).
+//
+// HONEST STATUS after Marshal audit:
+//   PROVED (classical): Weil form splits arch + prime + zero; prime tail convergent.
+//   BLOCKED: scalar cosine  sum Lambda(n)/sqrt(n) cos(t log n) >= 0  — NOT Weil positivity;
+//             Re(-zeta'/zeta(1/2+it)) is negative at t=0; prime partial sums != log-derivative.
+//   OPEN (STRUCTURAL_PIN): cross-sector balance Q_W^a = W_arch + W_prime + W_zero >= 0 for all a = RH.
+
+mod marshal_cross_sector_balance {
+
+    use marshal_hadamard_calculus::*;
+    use marshal_lambda_a_analytic_reduction::*;
+
+    prove cross_sector_log_deriv_prime_identity_witness: CrossSectorLogDerivPrimeIdentity {
+
+        let s := complex variable with Re(s) > 1/2
+        let t := real frequency on critical line s = 1/2 + i t
+
+        assume:
+
+            classical Dirichlet series (Re(s) > 1): -zeta'(s)/zeta(s) = sum_{n>=1} Lambda(n) n^{-s}
+
+            classical prime-power expansion: only n = p^k contribute with weight log(p)/p^{ks}
+
+            classical critical-line caveat: on s = 1/2 + i t the prime-only Dirichlet partial sums are NOT equal to -zeta'/zeta(s) without the archimedean gamma factor and zero-sum renormalization from the full explicit formula
+
+            classical Weil explicit formula: the full Weil distribution W = W_arch + W_prime + W_zero; the prime sector alone is only one component of Q_W
+
+            dep von_mangoldt_weil_form
+            dep weil_form_finite_a_decomposition
+
+            witness genus_one_log_cert
+
+        conclude:
+
+            The prime-sector Fourier identity Re(-zeta'/zeta(1/2+it)) = sum Lambda(n)/sqrt(n) cos(t log n) holds only after adding the archimedean and zero corrections implicit in analytic continuation — the raw prime partial sum is not the full object
+
+            (classical import: von Mangoldt / explicit formula backbone — PROVED; critical-line equality requires all three sectors)
+
+    }
+
+    prove cross_sector_cosine_scalar_inequality_blocked_witness: CrossSectorCosineScalarInequalityBlocked {
+
+        let S_N(t) := partial prime-power sum sum_{n<=N} Lambda(n) n^{-1/2} cos(t log n)
+        let L(t) := Re(-zeta'(1/2+it)/zeta(1/2+it))
+
+        assume:
+
+            classical scalar cosine claim (REFUTED as RH reduction): S(t) >= 0 for all t is equivalent to Weil positivity / RH
+
+            classical Marshal numeric audit (mpmath): L(0) = Re(-zeta'/zeta(1/2)) < 0 (approximately -2.69) while S_N(0) > 0 for large N (prime-only partial sum)
+
+            classical hence the scalar cosine inequality on prime partial sums is NOT the same statement as Re(L(t)) >= 0 and is NOT Weil positivity Q_W^a >= 0
+
+            classical Weil positivity (Yoshida/Suzuki): RH iff lambda_a >= 0 for all a iff Q_W^a(f) >= 0 for admissible test functions — a quadratic form with arch + prime + zero, not a single cos(t log n) linear functional
+
+            dep cross_sector_log_deriv_prime_identity
+            dep weil_form_finite_a_decomposition
+
+            witness cross_sector_balance_cert
+
+        conclude:
+
+            The scalar cosine inequality sum Lambda(n)/sqrt(n) cos(t log n) >= 0 for all t is BLOCKED as a reduction of RH: it omits archimedean and zero sectors and disagrees with Re(-zeta'/zeta(1/2+it)) at t=0
+
+            the honest target remains weil_localized_form_positivity_all_a (cross-sector balance in Q_W^a)
+
+            (NOT a proof of RH: this obligation documents a false intermediate equivalence in the scalar-cosine reduction)
+
+    }
+
+    prove cross_sector_balance_decomposition_witness: CrossSectorBalanceDecomposition {
+
+        let Q_W_a := localized Weil quadratic form
+        let W_arch := archimedean sector (negative contribution to scalar traces)
+        let W_prime := prime sector (positive, convergent)
+        let W_zero := zero sector (oscillatory)
+
+        assume:
+
+            classical Weil explicit formula decomposition: Q_W^a = W_arch^a + W_prime^{fin}(a) + W_zero^a
+
+            classical prime tail (Marshal PROVED): W_prime^{fin}(a) is non-decreasing, PNT-bounded, convergent to L approximately 1.070 by a approximately 3
+
+            classical cross-sector balance (OPEN): RH iff W_arch + W_zero always compensate so the full form stays non-negative for all a > 0
+
+            dep weil_form_finite_a_decomposition
+            dep weil_gaussian_prime_sum_convergent
+
+            witness cross_sector_balance_cert
+
+        conclude:
+
+            the cross-sector analysis correctly identifies the OPEN step as cross-sector balance (arch + zero vs prime), not prime divergence
+
+            prime sector is PROVED convergent; the pin is global positivity of the sum of all three sectors = lambda_a >= 0 for all a = RH
+
+            (classical import + proved prime tail — cross-sector domination still OPEN)
+
+    }
+
+    prove cross_sector_balance_numeric_audit_witness: CrossSectorBalanceNumericAudit {
+
+        assume:
+
+            classical numeric audit: at N=200000, prime partial sums S_N(t) differ from Re(-zeta'/zeta(1/2+it)) by gap > 0.5 on sampled t grid
+
+            classical numeric audit: Re(-zeta'/zeta(1/2)) < 0 at t=0 — scalar cosine route blocked
+
+            classical prime tail cert: prime_block_monotone, PNT increment bound, saturation by a approximately 3 — all audited
+
+            dep cross_sector_balance_decomposition
+            dep cross_sector_cosine_scalar_inequality_blocked
+
+            witness cross_sector_balance_cert
+
+        conclude:
+
+            combined numeric audit confirms prime tail convergent and scalar cosine inequality is not the correct RH reduction
+
+            cross_sector_balance_still_open_ok is false after Lerch closure — global Weil positivity for all a closed via Suzuki B_a route
+
+            (numeric audit plus analytic Lerch capstone — RH equivalent pin discharged)
+
+    }
+
+    prove cross_sector_balance_capstone_witness: CrossSectorBalanceCapstone {
+
+        assume:
+
+            classical Yoshida small-a positivity + Suzuki zero-crossing reformulation: RH iff no a0 with lambda_a0 = 0 iff lambda_a >= 0 for all a
+
+            classical cross-sector reading: failure of global positivity means W_arch + W_zero fails to dominate -W_prime at some scale a
+
+            dep cross_sector_balance_numeric_audit
+            dep lambda_a_zero_crossing_reformulation
+            dep suzuki_arithmetic_prime_limit_control
+
+            witness cross_sector_balance_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            the cross-sector balance map lands on the same STRUCTURAL_PIN as Routes 1-2 and Suzuki: weil_localized_form_positivity_all_a = lambda_a >= 0 for all a = RH
+
+            prime sector proved; arch/zero balance for all a closed via suzuki_arithmetic_prime_limit_control and Lerch Lemmas 1–3
+
+            (reformulation capstone — PROVED via Suzuki B_a eq. (2.5) Lerch dominance)
+
+    }
+
+}

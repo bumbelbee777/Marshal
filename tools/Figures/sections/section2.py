@@ -67,7 +67,7 @@ def render_S7_pinned_constants() -> FigureMeta:
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_yscale("symlog", linthresh=1e-6)
-    ax.set_title("Pinned Marshal fortress constants")
+    ax.set_title("Pinned Marshal constants")
     add_tier_badge(ax, "PROVED")
     save_figure(fig, "fig_S7_pinned_constants")
     return FigureMeta("S7_pinned_constants", "Pinned θ₀, T1 gap, moment L², variational gap.", "PROVED",

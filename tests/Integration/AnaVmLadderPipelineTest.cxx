@@ -6,6 +6,7 @@
 #include "Config.hxx"
 #include "Heat/PrimeCache.hxx"
 
+#include <filesystem>
 #include <iostream>
 
 int main() {
@@ -42,6 +43,18 @@ int main() {
     }
     if (!rep.merged_audit.ok) {
         std::cerr << "FAIL: merged MRS ladder audit\n";
+        for (const auto& e : rep.merged_audit.entries) {
+            if (!e.ok)
+                std::cerr << "  obligation " << e.obligation_id << ": " << e.failure_reason << "\n";
+        }
+        return 1;
+    }
+    if (!rep.prove_spine.ok) {
+        std::cerr << "FAIL: ladder prove spine\n";
+        for (const auto& a : rep.prove_spine.trivial_aliases)
+            std::cerr << "  trivial alias: " << a << "\n";
+        for (const auto& a : rep.prove_spine.infer_on_analytic)
+            std::cerr << "  infer on analytic: " << a << "\n";
         return 1;
     }
     if (!rep.gl2_l_function_identification_closed) {

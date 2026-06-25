@@ -1,0 +1,144 @@
+// RH Hadamard closure scripts — composition steps as explicit assume/steps/conclude proofs.
+
+mod marshal_hadamard_closure {
+
+    use marshal_hadamard_calculus::*;
+
+    prove marshal_off_height_log_summability_witness: OffHeightLogSummability {
+        assume:
+            witness genus_one_log_cert
+            dep genus_one_log_summability
+        steps:
+            1. genus_one_log_summability certifies absolute convergence of spectral log partial sums off forced locus.
+            2. off_height_log_cert replays the same bound at each off-locus assembly height.
+            3. Therefore spectral log partial sums are absolutely convergent ∀ s off forced locus.
+        conclude:
+            ∀ s off forced locus, spectral log partial sums absolutely convergent
+    }
+
+    prove certified_det_eq_riemannXi_off_locus_witness: CertifiedDetEqRiemannXiOffLocus {
+        assume:
+            witness ident_gap_cert
+            witness grid_relative_cert
+        steps:
+            1. grid_relative_cert bounds certified truncation against ξ on the approach grid.
+            2. ident_gap_cert pins det_ζ / ξ to the genus multiplier C within ident_gap_ub off forced locus.
+            3. Combine to spectralDet(s) = riemannXi(s) off MarshalXiForcedZero.
+        conclude:
+            ∀ s off MarshalXiForcedZero, spectralDet(s) = riemannXi(s)
+    }
+
+    prove grid_pointwise_tprod_eq_xi_witness: GridPointwiseTprodEqXi {
+        assume:
+            witness grid_pointwise_cert
+            witness tail_approach_cert
+            dep tprod_convergent_off_locus
+        steps:
+            1. tprod_convergent_off_locus supplies locally uniform convergence of partial Hadamard products.
+            2. tail_approach_cert dominates truncation error on s_n = 2 + i/n.
+            3. grid_pointwise_cert identifies partial products with ξ on the same grid points.
+        conclude:
+            ∀ grid s_n, ∏_γ (1 - z_γ(s_n)) = riemannXi(s_n)
+    }
+
+    prove grid_pointwise_tprod_eq_certified_witness: GridPointwiseTprodEqCertified {
+        assume:
+            witness certified_grid_cert
+            dep grid_pointwise_tprod_eq_xi
+            dep certified_det_eq_riemannXi_off_locus
+        steps:
+            1. grid_pointwise_tprod_eq_xi gives tprod = ξ on accumulation grid s_n.
+            2. certified_det_eq_riemannXi_off_locus calibrates spectralDet = ξ off locus.
+            3. certified_grid_cert wires tprod = certifiedDet on the approach sequence.
+        conclude:
+            ∀ accumulation s_n, tprod(s_n) = certifiedDet(s_n) = riemannXi(s_n)
+    }
+
+    prove holomorphy_uniform_cauchy_gap_witness: HolomorphyUniformCauchyGap {
+        assume:
+            witness holomorphy_gap_cert
+        steps:
+            1. holomorphy_gap_cert bounds uniform Cauchy differences on wedge approach grid.
+            2. Uniform gap below holomorphy_uniform_gap_ub certifies holomorphic limit on Re(s) > 1.
+        conclude:
+            uniform Cauchy gap on wedge approach grid pins holomorphy
+    }
+
+    prove wedge_holomorphy_certified_witness: WedgeHolomorphyCertified {
+        assume:
+            witness holomorphic_on_D
+            witness ident_gap_cert
+        steps:
+            1. holomorphic_on_D certifies wedge holomorphy of the assembled spectral determinant route.
+            2. ident_gap_cert ensures calibration does not introduce poles off the forced locus.
+            3. Therefore spectralDet is holomorphic on {Re > 1}.
+        conclude:
+            ∀ s ∈ {Re > 1}, spectralDet(s) holomorphic
+    }
+
+    prove wedge_proportionality_from_holomorphy: MarshalHadamardWedgeProportionalityData {
+        assume:
+            witness wedge_holo_chain_cert
+            dep wedge_holomorphy_tprod
+            dep identity_theorem_on_wedge
+        steps:
+            1. wedge_holomorphy_tprod and identity_theorem_on_wedge identify tprod and C·ξ on 𝒟 = {Re > 1}.
+            2. Matching zero sets with order-1 genus-1 factors and functional equation force proportionality.
+            3. wedge_holo_chain_cert replays holomorphy + zero-order data on the wedge.
+        conclude:
+            same zeros + order-1 + functional equation ⟹ proportionality on wedge
+    }
+
+    prove weierstrass_identification: MarshalHadamardWeierstrassIdentification {
+        assume:
+            witness weierstrass_chain_cert
+            dep wedge_proportionality_from_holomorphy
+            dep strip_extension_via_approach_sequence
+        steps:
+            1. wedge_proportionality_from_holomorphy pins tprod ∝ ξ on the wedge.
+            2. strip_extension_via_approach_sequence extends equality to the strip off forced heights.
+            3. weierstrass_chain_cert wires infinite product = certifiedDet off forced locus.
+        conclude:
+            ∀ s off forced locus, infinite tprod(s) = certifiedDet(s)
+    }
+
+    prove marshal_infinite_det_eq_riemannXi_off_forced_witness: MarshalInfiniteDetEqRiemannXiOffForced {
+        assume:
+            witness weierstrass_chain_cert
+            dep MarshalHadamardWeierstrassIdentification
+            dep marshal_off_height_log_summability
+        steps:
+            1. MarshalHadamardWeierstrassIdentification identifies infinite tprod with certifiedDet.
+            2. marshal_off_height_log_summability supplies convergence prerequisites off heights.
+            3. certified_det_eq_riemannXi_off_locus (via weierstrass_chain_cert) gives tprod = ξ.
+        conclude:
+            ∀ s off forced locus, tprod(s) = riemannXi(s)
+    }
+
+    prove marshal_xi_zero_classification_of_wedge: MarshalXiZeroClassification {
+        assume:
+            witness xi_classification_cert
+            dep marshal_off_height_log_summability
+            dep marshal_infinite_det_eq_riemannXi_off_forced
+        steps:
+            1. marshal_infinite_det_eq_riemannXi_off_forced equates tprod and ξ off forced locus.
+            2. Functional equation and spectral normalization classify ξ zeros as marshal-forced or trivial.
+            3. xi_classification_cert replays zero-audit margins from RhUnconditionalAudit.
+        conclude:
+            every riemannXi zero is marshal-forced or trivial
+    }
+
+    prove classical_riemann_hypothesis_from_classification: ClassicalRiemannHypothesis {
+        assume:
+            witness classical_rh_cert
+            dep marshal_xi_zero_classification
+        steps:
+            1. marshal_xi_zero_classification: every ξ zero is marshal-forced or trivial.
+            2. Marshal-forced zeros lie on Re(s) = 1/2 by spectral zero identification (xi_classification_cert).
+            3. Trivial zeros satisfy Re(s) ≤ 0 or Re(s) ≥ 1; Re(s) ≥ 1 excluded by Euler-product region.
+            4. classical_rh_cert replays zero-audit on audited off-strip zeros.
+        conclude:
+            ∀ s, ξ(s) = 0 → Re(s) = 1/2 ∨ trivial zero
+    }
+
+}

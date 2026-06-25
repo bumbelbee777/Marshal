@@ -12,6 +12,22 @@ int ladder_count_kernel(const std::vector<Real>& eig, Real tol);
 /// Maass H² grid relative gap: compare excited arch ladder modes to λ_j = sqrt(1/4 + (jπ/θ)²).
 Real ladder_maass_grid_rel_gap(const std::vector<Real>& arch_ladder, Real theta, Real tol);
 
+/// Grid pointwise det vs L relative gap at `s = s_re + i/n` (genus-1 partial products).
+Real ladder_maass_grid_det_l_rel_gap(const std::vector<Real>& arch_ladder, Real theta, Real tol,
+                                     Real s_re, int grid_count = 8);
+
+/// Uniform Cauchy holomorphy gap: |gap_decades(det) - gap_decades(L)| on Maass grid.
+Real ladder_maass_holomorphy_uniform_gap(const std::vector<Real>& arch_ladder, Real theta,
+                                         Real tol, Real s_re, int stride = 2);
+
+std::vector<Real> ladder_excited_arch_gammas(const std::vector<Real>& arch_ladder, Real tol,
+                                            int max_levels);
+
+std::vector<Real> ladder_maass_predicted_gammas(Real theta, int max_levels);
+
+void ladder_partial_genus_one_det(Real s_re, Real s_im, const std::vector<Real>& gammas,
+                                  Real* out_re, Real* out_im);
+
 /// Smallest |λ| among non-kernel archimedean modes (Sha/resolvent gap witness).
 Real ladder_min_positive_arch(const std::vector<Real>& arch_ladder, Real tol);
 

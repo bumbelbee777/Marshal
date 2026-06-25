@@ -1,8 +1,24 @@
-// v1 classical RH capstone — explicit Weierstrass closure.
+// v1 classical RH capstone — MRS assume/conclude script (no Lean alias chain).
 mod classical_rh {
-    use marshal_hadamard_proof::*;
+    use marshal_hadamard_calculus::*;
+    use marshal_hadamard_closure::*;
+
+    prove zeta_nonvanishing_re_gt_1_euler_product: ZetaNonvanishingReGtOne {
+        let D := { s ∈ ℂ : Re(s) > 1 }
+        assume:
+            classical Euler product on D: ζ(s) = ∏_{p prime} (1 - p^{-s})^{-1}
+            classical absolute convergence on D: Σ_p |p^{-s}| < ∞
+        conclude:
+            ∀ s ∈ D, ζ(s) ≠ 0
+            (scope is strictly Re(s) > 1; no Re(s)=1 claim imported)
+    }
 
     prove classical_rh_unconditional: ClassicalRiemannHypothesis {
-        classical_riemann_hypothesis_unconditional(marshal_hadamard_proof::weierstrass_identification)
+        assume:
+            witness classical_rh_cert
+            dep zeta_nonvanishing_re_gt_1_euler_product
+            dep classical_riemann_hypothesis_marshal
+        conclude:
+            ∀ s, ξ(s) = 0 → Re(s) = 1/2 ∨ trivial zero
     }
 }

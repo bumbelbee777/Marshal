@@ -137,9 +137,7 @@ double FusedSpectralActionHeat(const double* evals, int n, double scale_base, in
             __m256d e = ExpNegSq4(g, inv_2ss);
             acc = _mm256_add_pd(acc, e);
         }
-        alignas(32) double lane[4];
-        _mm256_store_pd(lane, acc);
-        part += lane[0] + lane[1] + lane[2] + lane[3];
+        part += HorizontalSum4(acc);
 #endif
         for (; i < n; ++i) {
             const double lam = evals[i];

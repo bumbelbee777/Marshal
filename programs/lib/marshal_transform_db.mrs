@@ -1,0 +1,10 @@
+// Marshal transform DB — explicit rewrite rules (hint-tagged, auditable).
+// Built-in rules also live in MrsTransform::marshal_transform_db().
+
+mod MarshalTransformDb {
+    use lib/marshal_math_primitives.mrs
+
+    transform rule user_ratio_div hints: [ratio, grid] from: ratio({0},{1}) to: (({0})/({1}))
+    transform rule user_mul_one hints: [arith, normalize] from: 1 * {0} to: {0}
+    transform rule user_add_zero hints: [arith, normalize] from: 0 + {0} to: {0}
+}

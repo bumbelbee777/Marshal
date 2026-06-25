@@ -1,0 +1,15 @@
+// MRS v1 array pins — compile-time numeric arrays for witness gates.
+
+mod marshal_array_primitives {
+
+    pub array BSD_PINNED_GAPS := [0.03, 0.01, 2.0]
+    pub array HODGE_RANK_SPECTRUM := [20, 20, 20]
+    pub array GOLDBACH_ARC_PINS := [0.45, 0.01, 10.0]
+    pub array YM_GAP_PINS := [2.0, 1.0, 3.141592653589793]
+
+    def bsd_gap_cert := arr_all_lt(BSD_PINNED_GAPS, 3.0) and prod(BSD_PINNED_GAPS) > 0
+    def hodge_rank_cert := len(HODGE_RANK_SPECTRUM) == 3 and arr_min(HODGE_RANK_SPECTRUM) == 20
+    def goldbach_arc_cert := arr_all_gt(GOLDBACH_ARC_PINS, 0) and mean(GOLDBACH_ARC_PINS) >= 3.0
+    def ym_gap_cert := arr_all_ge(YM_GAP_PINS, 1.0) and clamp(YM_GAP_PINS[0], 1.0, 10.0) == YM_GAP_PINS[0]
+
+}

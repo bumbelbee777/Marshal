@@ -1,0 +1,11 @@
+// GL(4) Yang-Mills-Higgs entry program (tree-level cert + constructive REDUCTION).
+use lib::marshal_ymh_proof;
+
+ansatz marshal_ymh {
+  meta { uses_gamma: false sym_tier: analytic kind: operator }
+  formal_target {
+    lemma ymh_higgs_mass_spectrum_gate
+    lemma ymh_constructive_mass_gap
+    approach acyclic_marshal_ymh
+  }
+}

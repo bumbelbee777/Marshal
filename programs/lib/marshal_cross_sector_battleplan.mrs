@@ -1,0 +1,232 @@
+// Cross-sector Weil positivity battle plan — phased obligations (June 2026).
+//
+// Phase 1: C++ sector ledger + cert (DONE).
+// Phase 2-3: numeric baseline certs (DONE); analytic uniform bounds OPEN.
+// Phase 4: lambda Rayleigh sample + dominance pin OPEN (= RH).
+
+mod marshal_cross_sector_battleplan {
+
+    use marshal_hadamard_calculus.*;
+    use marshal_cross_sector_balance.*;
+    use marshal_lambda_a_analytic_reduction.*;
+
+    prove cross_sector_weil_identity_sigma1_witness: CrossSectorWeilIdentitySigma1 {
+
+        assume:
+
+            classical Marshal Weil trace identity at Gauss sigma=1: zero = poles + arch - prime (full truncation)
+
+            classical C++ CrossSectorWeilStudy with --precision: |weil_residual_full| below cert tolerance on 50k zeros / 200k primes
+
+            dep cross_sector_balance_decomposition
+            dep weil_gaussian_prime_sum_convergent
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 1.1: full Weil identity closes at sigma=1 — sector ledger baseline is internally consistent
+
+            (numeric cert — NOT RH)
+
+    }
+
+    prove cross_sector_arch_negative_sigma1_witness: CrossSectorArchNegativeSigma1 {
+
+        assume:
+
+            classical archimedean Weil term at sigma=1 is negative in Marshal convention (gamma/psi integral)
+
+            classical C++ audit: arch < 0 at full_scale in cross_sector_weil_study.json
+
+            dep cross_sector_weil_identity_sigma1
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 1.2: archimedean sector is negative — cross-sector balance requires zero + poles to compensate prime
+
+            (numeric sign audit — NOT RH)
+
+    }
+
+    prove cross_sector_prime_saturation_a3_witness: CrossSectorPrimeSaturationA3 {
+
+        assume:
+
+            classical prime tail convergent by a approximately 3 (Marshal prime_tail_limit_study)
+
+            classical C++ audit: prime_fin at a=3 within 2% of prime_full at sigma=1
+
+            dep cross_sector_weil_identity_sigma1
+            dep weil_gaussian_prime_sum_convergent
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 1.3: prime sector saturates early — the open problem is NOT prime divergence
+
+            (numeric saturation — NOT RH)
+
+    }
+
+    prove cross_sector_arch_envelope_numeric_witness: CrossSectorArchEnvelopeNumeric {
+
+        assume:
+
+            classical pinned envelope A = |W_arch| at sigma=1 from C++ ArchimedeanBaseline Richardson audit
+
+            classical C++ cert: |arch| <= A and arch Richardson drift below tolerance (quadrature stable)
+
+            classical hence W_arch >= -A numerically at sigma=1 (constant in full Gauss normalization)
+
+            dep cross_sector_arch_negative_sigma1
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 2 numeric baseline: archimedean envelope A pinned by C++ long-double audit — NOT yet a uniform analytic W_arch^a >= -A(a) for localized forms
+
+            (numeric envelope cert — analytic Phase 2 still OPEN)
+
+    }
+
+    prove cross_sector_arch_envelope_analytic_witness: CrossSectorArchEnvelopeAnalytic {
+
+        assume:
+
+            classical PROVED Phase 2A: triangle envelope W_arch^a >= -A(a) with A(a) = (1/2pi) integral_{-a}^{a} h|Re psi - log pi|
+
+            dep cross_sector_arch_triangle_envelope
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 2A discharged unconditionally via cross_sector_arch_triangle_envelope — localized arch is lower-bounded by explicit A(a)
+
+            (re-exports proved 2A — NOT RH)
+
+    }
+
+    prove cross_sector_zero_tail_numeric_witness: CrossSectorZeroTailNumeric {
+
+        assume:
+
+            classical zero tail at T(a)=2a measured by C++ prefix evaluation on zero table (validation only)
+
+            classical analytic majorization uses RvM bound independently of zero table — see cross_sector_zero_tail_rvm_bound
+
+            dep cross_sector_weil_identity_sigma1
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 3 numeric baseline on sampled grid — supplementary to unconditional 3A
+
+            (numeric tail audit — NOT RH)
+
+    }
+
+    prove cross_sector_zero_tail_bound_witness: CrossSectorZeroTailBound {
+
+        assume:
+
+            classical PROVED Phase 3A: zero tail S_T <= RvM majorant B(T) for T = 2a, unconditional zero-density bound
+
+            dep cross_sector_zero_tail_rvm_bound
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 3A discharged unconditionally via cross_sector_zero_tail_rvm_bound
+
+            (re-exports proved 3A — NOT RH)
+
+    }
+
+    prove cross_sector_lambda_rayleigh_numeric_witness: CrossSectorLambdaRayleighNumeric {
+
+        assume:
+
+            classical C++ screw Rayleigh quotient lambda_R(a) on Pf + prime-delta kernel (partial — no arch/zero in kernel)
+
+            classical cert: lambda_R > 0 on Yoshida sample a <= 1 (matches Python screw_pcircle_bridge small-a audit)
+
+            classical partial kernel positivity on sample does NOT imply lambda_a >= 0 for all a (full Q_W^a)
+
+            dep cross_sector_zero_tail_numeric
+            dep yoshida_small_a_positivity_analytic
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Phase 4 numeric baseline: C++ Rayleigh proxy positive on Yoshida region — global dominance still OPEN
+
+            (numeric Rayleigh audit — NOT RH)
+
+    }
+
+    prove cross_sector_dominance_all_a_witness: CrossSectorDominanceAllA {
+
+        assume:
+
+            classical TARGET (OPEN Phase 4 = RH): lambda_a >= 0 for all a > 0 in full localized Weil form Q_W^a
+
+            classical domination chain (PROVED composition): sector bounds + margin A - S_fin - Z; conditional closure via cross_sector_domination_implies_lambda_nonneg
+
+            classical OPEN discharge: suzuki_arithmetic_prime_limit_control = prove S_fin(a) + Z(a,T) <= A(a) for all a > 0
+
+            dep cross_sector_step5_global_rayleigh_lower_bound
+            dep cross_sector_phase4a_positivity_pin
+            dep cross_sector_domination_chain
+            dep cross_sector_arch_envelope_analytic
+            dep cross_sector_zero_tail_bound
+            dep cross_sector_lambda_rayleigh_numeric
+            dep lambda_a_zero_crossing_reformulation
+            dep suzuki_arithmetic_prime_limit_control
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Phase 4 is the STRUCTURAL PIN — identical to weil_localized_form_positivity_all_a
+
+            cross_sector_dominance_still_open_ok remains true
+
+            (battle plan map — NOT a proof of RH)
+
+    }
+
+    prove cross_sector_battleplan_capstone_witness: CrossSectorBattleplanCapstone {
+
+        assume:
+
+            classical Phases 1-3 numeric baselines certified; Phase 4 dominance OPEN
+
+            dep cross_sector_prime_saturation_a3
+            dep cross_sector_arch_envelope_numeric
+            dep cross_sector_zero_tail_numeric
+            dep cross_sector_lambda_rayleigh_numeric
+            dep cross_sector_dominance_all_a
+            dep cross_sector_balance_capstone
+
+            witness cross_sector_weil_battleplan_cert and cross_sector_balance_cert
+
+        conclude:
+
+            verified battle plan executed: sector ledger + arch envelope + zero tail + Rayleigh baselines wired; RH pin unchanged
+
+            cross_sector_battleplan_still_open_ok remains true until Phase 4 analytic closure
+
+            (capstone map — NOT RH)
+
+    }
+
+}

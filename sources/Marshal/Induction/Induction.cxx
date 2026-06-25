@@ -61,7 +61,8 @@ TraceResult RunEvaluate(const Config& cfg, const TestFunction& tf,
                                const Heat::PrimeCatalog& cat) {
     const Real sigma = TraceSigma(cfg, tf);
     return EvaluateTrace(tf, sigma, gammas, gammas_ld, cat, cfg.zero_kernel, cfg.simd, cfg.eps,
-                         cfg.trivial_zeros, cfg.precision_mode, cfg.arch_pts);
+                         cfg.trivial_zeros, cfg.precision_mode, cfg.arch_pts, false, nullptr,
+                         cfg.scale_mode);
 }
 
 TraceResult RunEvaluateView(const Config& cfg, const TestFunction& tf,
@@ -69,7 +70,8 @@ TraceResult RunEvaluateView(const Config& cfg, const TestFunction& tf,
     const Real sigma = TraceSigma(cfg, tf);
     return EvaluateTracePrefix(tf, sigma, zeros.ptr(), zeros.size(), zeros.ld_ptr(),
                                zeros.ld_count(), cat, cfg.zero_kernel, cfg.simd, cfg.eps,
-                               cfg.trivial_zeros, cfg.precision_mode, cfg.arch_pts);
+                               cfg.trivial_zeros, cfg.precision_mode, cfg.arch_pts, false, nullptr,
+                               cfg.scale_mode);
 }
 
 Real GammaSupportRadius(Real sigma, Real thresh = 1e-16L) {

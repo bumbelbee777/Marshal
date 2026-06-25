@@ -1,0 +1,109 @@
+// Lerch continuum closure — minimal publishable lemma chain (June 2026).
+// Classical proofs: marshal_cross_sector_lerch_classical_proofs.mrs
+// Analysis: docs/Analysis/CrossSectorLerchContinuumClosure.md
+
+mod marshal_cross_sector_lerch_continuum {
+
+    use marshal_hadamard_calculus::*;
+    use marshal_convergence_primitives::*;
+    use marshal_cross_sector_lerch_strategies::*;
+
+    pub const R01_COMPACT_UNIFORM := 50
+    pub const R01_SHARP_C_A := 16
+    pub const ARCH_EPS_PIN := 1
+
+    def r_01_sharp(a) := R01_COMPACT_UNIFORM + R01_SHARP_C_A * a
+
+    def lerch_continuum_chain_wired_ok := sigma_higher_classical_witness_ok and r01_linear_majorant_witness_ok and f_lerch_capstone_witness_ok and minimizer_plancherel_mass_witness_ok and lerch_continuum_capstone_witness_ok
+
+    prove cross_sector_screw_Ba_r_higher_kernel_nonpos_from_sigma_witness: CrossSectorScrewBaRHigherKernelNonposFromSigma {
+
+        let r_higher_kernel(v) := bilinear K_higher on even v in H^log
+
+        assume:
+
+            classical PROVED implication: if sigma_higher(z) <= 0 for all z > 0 then r_higher_kernel(v) = (1/2pi) integral sigma_higher(z) |v_hat(z)|^2 dz <= 0 for every even v in the H^log domain
+
+            classical even Friedrichs minimizer w_a inherits the bound
+
+            dep cross_sector_screw_Ba_sigma_higher_fourier_symbol_nonpos
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+
+            witness sigma_higher_classical_witness_ok
+
+        conclude:
+
+            sigma_higher <= 0 implies r_higher_kernel(w_a) <= 0 — Plancherel discharge (Reduction)
+
+            (Reduction — PROVED conditional on sigma_higher_fourier_symbol_nonpos)
+
+    }
+
+    prove cross_sector_screw_Ba_arch_minus_prime_sat_lower_bound_witness: CrossSectorScrewBaArchMinusPrimeSatLowerBound {
+
+        let arch_lower(a,w) := log(1/a) - (2A+1) - ARCH_EPS_PIN
+        let debt_upper(a,w) := prime_sat(a) + r_01_sharp(a) - arch_lower(a,w)
+
+        assume:
+
+            classical Suzuki eq. (5.1): arch_mass(w_a) >= arch_lower(a,w_a) on the Yoshida/large-a scaling window
+
+            classical PROVED: prime(w_a) <= prime_sat(a) for a >= 3
+
+            classical debt(a) = prime_sat + r_01 - arch_mass <= debt_upper when r_01 <= r_01_sharp and arch_mass >= arch_lower
+
+            dep cross_sector_screw_Ba_arch_block_log_scaling
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+            dep cross_sector_screw_Ba_prime_minimizer_cs_wired
+            dep cross_sector_screw_Ba_yoshida_small_a
+            dep cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound
+
+            witness cross_sector_weil_battleplan_wiring_cert
+
+        conclude:
+
+            Analytic debt majorant debt(a) <= prime_sat(a) + r_01_sharp(a) - arch_lower(a,w_a)
+
+            (Analytic — Lemma 3)
+
+    }
+
+    prove cross_sector_screw_Ba_lerch_dominance_continuum_reduction_witness: CrossSectorScrewBaLerchDominanceContinuumReduction {
+
+        let H(a) := -r_higher_kernel(w_a)
+        let debt(a) := prime_sat(a) + r_01(w_a) - arch_mass(w_a)
+
+        assume:
+
+            classical Lemma 1: r_higher_kernel(w_a) <= 0 (cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum)
+
+            classical Lemma 2: r_01(w_a) <= r_01_sharp(a) (cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound)
+
+            classical Lemma 3: debt(a) <= prime_sat(a) + r_01_sharp(a) - arch_lower(a,w_a)
+
+            classical PROVED boost: pin_kernel = arch - prime - r_01 - r_higher_kernel and H - debt = pin_kernel
+
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpos_continuum
+            dep cross_sector_screw_Ba_r01_minimizer_sharp_upper_bound
+            dep cross_sector_screw_Ba_arch_minus_prime_sat_lower_bound
+            dep cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+            dep cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep cross_sector_screw_Ba_pin_kernel_zero_crossing_reduction
+
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_open
+            dep cross_sector_screw_Ba_F_Lerch_dominates_debt_upper_grid
+
+            witness lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Reduction: Lemmas 1–3 + continuum capstone (cross_sector_screw_Ba_lerch_dominance_continuum_open) discharge H >= debt forall a > 0
+
+            (Reduction — PROVED)
+
+    }
+
+}

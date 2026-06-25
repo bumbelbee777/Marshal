@@ -30,7 +30,7 @@ struct FormalAnalyticsResult {
     Real gue_spacing_l2_zero = 0;
     Real montgomery_r2_l2 = 0;
     bool cylinder_class_excluded = false;
-    bool lean_emit_ready = false;
+    bool mrs_emit_ready = false;
     std::vector<std::string> proved_gates;
     std::vector<std::string> diagnostic_gates;
     std::vector<std::string> failed_gates;

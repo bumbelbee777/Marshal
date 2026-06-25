@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "obligation_id": "ymh_higgs_mass_spectrum_gate",
+  "title": "Tree-level Yang-Mills-Higgs spontaneous symmetry breaking + mass gap",
+  "gauge_group": "SU(2)",
+  "inputs": {
+    "mu2": 2.0,
+    "lambda": 0.5,
+    "g_gauge": 1.0,
+    "n_broken": 3
+  },
+  "vacuum": {
+    "phi2_star": 2.0,
+    "v": 2.0,
+    "v_squared": 4.0,
+    "broken_phase": true,
+    "second_derivative_positive": true,
+    "vacuum_energy": -2.0,
+    "breaks_symmetry": true
+  },
+  "spectrum": {
+    "higgs_mass": 2.0,
+    "gauge_boson_mass": 1.0,
+    "goldstone_mass": 0.0,
+    "n_goldstone_eaten": 3,
+    "physical_masses": [
+      2.0,
+      1.0
+    ]
+  },
+  "physical_gap": 1.0,
+  "physical_gap_rational_lb": {
+    "num": 1000000,
+    "den": 1000000,
+    "value": 1.0
+  },
+  "gap_positive": true,
+  "uniform_claim": "tree-level physical spectrum gap Delta = min(m_H, m_W) > 0 in broken vacuum",
+  "closes_constructive_mass_gap": false,
+  "open_named_cores": [
+    "os_continuum_tightness_hypothesis",
+    "gap_lower_semicontinuity_hypothesis",
+    "ymh_vacuum_selection_hypothesis"
+  ]
+}

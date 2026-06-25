@@ -1,0 +1,24 @@
+// GL(2) Goldbach formal goal defs for machine-checked theorem registry.
+
+
+
+mod marshal_goldbach_calculus {
+
+
+
+    use ladder_analytic_lemmas::*;
+
+
+
+    def thm_goldbach_major_arc_goal := major_arc_ok and major_arc_spectral_mass >= major_arc_threshold and goldbach_shared_gln2_ok
+
+    def thm_goldbach_minor_arc_goal := minor_arc_ok and minor_arc_bound < minor_arc_ub
+
+    def thm_goldbach_dominance_goal := major_minor_ratio >= goldbach_extension_ratio_lb and major_arc_ok and minor_arc_ok
+
+    def thm_goldbach_capstone_goal := effective_ok and major_arc_ok and minor_arc_ok and goldbach_shared_gln2_ok
+
+
+
+}
+

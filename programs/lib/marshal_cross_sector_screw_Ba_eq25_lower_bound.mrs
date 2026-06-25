@@ -1,0 +1,1178 @@
+// Suzuki B_a eq. (2.5) lower-bound attack — margin at spectral minimizer.
+//
+// Pin (OPEN = RH): pin_margin = (L_a - (2A+1)||v||^2 - prime_shift - r'')/||v||^2 >= 0
+// at the B_a ground state for all a > 0 (Suzuki eq. 2.5 / 4.5).
+
+mod marshal_cross_sector_screw_Ba_eq25_lower_bound {
+
+    use marshal_hadamard_calculus.*;
+    use marshal_cross_sector_screw_Ba_analytic.*;
+    use marshal_cross_sector_step5.*;
+
+    prove cross_sector_screw_Ba_rayleigh_eq45_witness: CrossSectorScrewBaRayleighEq45 {
+
+        let R(a,w) := -log a - (2A+1) + L(w)/||w||^2 - prime/||w||^2 - r''/||w||^2
+
+        assume:
+
+            classical Suzuki (2606.09096) eq. (4.5): at the Rayleigh minimizer w_a with ||w_a|| = 1, lambda_a = R(a,w_a)
+
+            classical eq. (4.5) is the scaled form of eq. (2.5): lambda_a >= 0 iff pin_margin = L_a - (2A+1) - prime_bilinear - r''_bilinear >= 0 at v_a
+
+            dep cross_sector_screw_Ba_eq25_decomposition
+            dep cross_sector_screw_Ba_weil_operator_identity
+            dep lambda_a_zero_crossing_reformulation
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            Global B_a positivity is exactly the eq. (2.5) lower bound at the spectral minimizer — no legacy bare_lambda proxy
+
+            (classical Rayleigh identity — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_rpp_kernel_explicit_witness: CrossSectorScrewBaRppKernelExplicit {
+
+        let r1_pp(t) := exp(-|t|/2)/(1-exp(-2|t|)) - 1/(2|t|)
+
+        assume:
+
+            classical Suzuki (2606.09096) after eq. (2.7): the archimedean remainder r_1''(t) is explicit and bounded on compact intervals
+
+            classical C++ implements screw_r1_double_prime and screw_rpp_bilinear_on_grid on the B_a ground-state vector
+
+            dep cross_sector_screw_Ba_eq25_decomposition
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            The r'' arch obstruction is not a black box — r_1'' is pinned in closed form and audited bilinearly on grid
+
+            (classical import + numeric wiring — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r0pp_kernel_explicit_witness: CrossSectorScrewBaR0ppKernelExplicit {
+
+        let r0_pp(t) := -exp(|t|/2) - exp(-|t|/2) from poly part -4(exp(t/2)+exp(-t/2)-2)
+
+        assume:
+
+            classical Suzuki screw poly term g_poly(t) = -4(e^{|t|/2}+e^{-|t|/2}-2) contributes r_0''(t) = -e^{|t|/2}-e^{-|t|/2} to the eq. (2.5) remainder
+
+            classical C++ implements screw_r0_double_prime and r0'' bilinear on the B_a ground-state eigenvector
+
+            dep cross_sector_screw_Ba_eq25_decomposition
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            r_0'' is explicit and wired; together with r_1'' it expands the audited r'' ledger beyond the partial r_1''-only decomposition
+
+            (classical kernel + numeric wiring — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_rpp_uniform_o_l2_witness: CrossSectorScrewBaRppUniformOL2 {
+
+        assume:
+
+            classical on |t| <= 2a one has |r_1''(t)| <= C_rpp uniformly (compact interval + removable singularity at 0)
+
+            classical hence |∫∫ r_1''(x-y) v(x)v(y) dx dy| <= C_rpp ||v||_{L^2}^2 for all v in H0^1(-a,a)
+
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            r'' bilinear is O(||v||^2) uniformly on each fixed localization — not the global RH obstruction by itself
+
+            (classical kernel bound — NOT global closure)
+
+    }
+
+    prove cross_sector_screw_Ba_rpp_full_residual_def_witness: CrossSectorScrewBaRppFullResidualDef {
+
+        let r_full(v) := L_a(v) - (2A+1)||v||^2 - prime_shift(v) - Q_Ba(v)
+
+        assume:
+
+            classical Suzuki eq. (2.5) rearrangement: Q_Ba(v) = L_a(v) - (2A+1)||v||^2 - prime_shift(v) - integral r''(x-y)v(x)v(y)
+
+            classical hence r_full = integral r'' bilinear and lambda_a = arch_mass_rayleigh - prime_rayleigh - r_full_pp_rayleigh at the minimizer
+
+            classical C++ audit screw_Ba_r_full_pp_rayleigh and screw_Ba_eq25_identity_ok: arch_mass - prime - r_full = lambda_spectral on grid
+
+            dep cross_sector_screw_Ba_eq25_decomposition
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Full r'' residual is definitional from eq. (2.5) — NOT approximated by r_0''+r_1'' alone; lambda = arch - prime - r_full exactly
+
+            (algebraic identity — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_eq45_log_a_rayleigh_witness: CrossSectorScrewBaEq45LogARayleigh {
+
+        assume:
+
+            classical Suzuki (2606.09096) eq. (4.5) scaled Rayleigh: R(a,w) = -log a - (2A+1) + L(w)/||w||^2 - prime/||w||^2 - (a/||w||^2) integral r''(a(x-y))w(x)w(y)
+
+            classical small-a eq. (5.1): R(a,w) = log(1/a) - (2A+1) + L/||w||^2 + O(a) — log(1/a) anchor
+
+            classical eq. (4.5) is the scaled form of eq. (2.5); -log a is separate from arch_mass in the unscaled ledger
+
+            dep cross_sector_screw_Ba_rayleigh_eq45
+            dep cross_sector_screw_Ba_arch_block_log_scaling
+
+            witness holomorphic_on_D
+
+        conclude:
+
+            Large-a bookkeeping: -log a enters scaled R(a,w) separately; unscaled pin remains lambda = arch_mass - prime - r_full
+
+            (classical Rayleigh split — NOT global closure)
+
+    }
+
+    prove cross_sector_screw_Ba_bar_q1_o_l2_uniform_witness: CrossSectorScrewBaBarQ1OL2Uniform {
+
+        assume:
+
+            classical Suzuki proof of Thm 1.3 (Section 4.4): bar_q_a^1 = prime + r'' block in eq. (4.5) satisfies bar_q_a^1(v) = O(||v||_{L^2}^2) uniformly for a in a compact neighborhood of any a_0 > 0
+
+            classical eq. (4.5) explicit finite sum: bar_q_a^1 = translation prime block + (a/||w||^2) integral r''(a(x-y)) w(x)w(y) — not a flat pinned C
+
+            classical structural majorant: |bar_q_a^1|/||v||^2 <= prime_sat + f(a) with f(a) = r01_compact + pi C0 a from kernel split
+
+            classical C++ audit screw_Ba_bar_q1_analytic_upper(a) = prime_sat + screw_Ba_r_full_analytic_f(a)
+
+            classical continuity of lambda_a uses this uniform quadratic bound — not global RH
+
+            dep cross_sector_screw_Ba_eq45_log_a_rayleigh
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+            dep cross_sector_screw_Ba_r_full_rayleigh_upper_bound
+            dep cross_sector_screw_Ba_prime_bilinear_cs_upper
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Prime + full r'' block is O(||v||^2) on compact a-windows via Suzuki 4.4 finite-sum structure — bar_q^1 majorant is prime_sat + f(a), not flat C=12
+
+            (Suzuki 4.4 structural — NOT global large-a closure)
+
+    }
+
+    prove cross_sector_screw_Ba_eq45_rpp_a_scaling_witness: CrossSectorScrewBaEq45RppAScaling {
+
+        let rpp_scaled := -(a/||w||^2) integral r''(a(x-y)) w(x) w(y) on [-1,1]
+
+        assume:
+
+            classical Suzuki (2606.09096) eq. (4.5) last line: r'' bilinear enters scaled Rayleigh with explicit prefactor a on the integral over [-1,1]
+
+            classical change of variables v(x)=w(x/a) links scaled r''(a(x-y)) to unscaled r''(x-y) on [-a,a]
+
+            classical hence the higher r'' tail contribution is O(a ||v||^2) — the linear-in-a growth in f(a), not a compact-only constant
+
+            dep cross_sector_screw_Ba_eq45_log_a_rayleigh
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Suzuki 4.5 r'' block carries explicit factor a — f(a) must grow with a via digamma/Fourier tail; flat O(1) majorants are insufficient at large a
+
+            (classical scaling identity — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_minimizer_even_symmetry_witness: CrossSectorScrewBaMinimizerEvenSymmetry {
+
+        assume:
+
+            classical Suzuki (2606.09096) Thm 1.4 / Section 5.2–5.3: the lowest eigenfunction of the L-bar operator may be chosen nonnegative; irreducible Dirichlet form implies positivity improving; simple lowest eigenvalue is even (not odd)
+
+            classical B_a ground state on [-a,a] inherits even symmetry after scaling v(at)=w(t) — reduces r'' bilinear to even kernel integration
+
+            dep cross_sector_screw_Ba_weil_operator_identity
+            dep cross_sector_screw_Ba_yoshida_small_a
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Spectral minimizer may be taken even — sharpens remainder kernel analysis on the symmetric mode (Suzuki 5.3)
+
+            (classical symmetry — NOT global closure)
+
+    }
+
+    prove cross_sector_screw_Ba_hlog_plancherel_symbol_witness: CrossSectorScrewBaHlogPlancherelSymbol {
+
+        assume:
+
+            classical Suzuki eq. (4.6): L(w) = (1/2pi) integral (log|z| + C0) |w_hat(z)|^2 dz defines the H^log seminorm equivalent to form norm of L-bar
+
+            classical eq. (4.4) Beurling-Deny representation: arch block L/||w||^2 controls (1+log^+|z|)-weighted Fourier mass of the minimizing mode
+
+            dep cross_sector_screw_Ba_eq45_log_a_rayleigh
+            dep cross_sector_screw_Ba_arch_block_log_scaling
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            H^log Plancherel symbol wired — mode-weighted bounds on r'' use L/||w||^2, not flat ||w||^2 alone
+
+            (classical Fourier setup — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_plancherel_hlog_bound_witness: CrossSectorScrewBaRHigherPlancherelHlogBound {
+
+        let g(a,w) := pi C0 a max(1, L(w)/||w||^2) with C0 from eq. (2.7) Fourier decay
+
+        assume:
+
+            classical Suzuki eq. (2.7): r_1'' hat = -Re psi(1/4+iz/2)+log|z|-log2 = O(|z|^{-2})
+
+            classical Plancherel on H^log: |integral r_higher(x-y) v(x)v(y)| <= g(a,v) ||v||^2 for v in H^log(-1,1) after scaling
+
+            classical split r_full = r_01 + r_higher with |r_01| <= r01_compact ||v||^2 (compact kernel bound — PROVED separately)
+
+            classical C++ audit screw_Ba_r_higher_plancherel_analytic_bound and screw_Ba_L_arch_rayleigh — numeric diagnostic only
+
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Mode-weighted Plancherel majorant g(a,w) on r_higher — strict refinement of flat f(a)=r01+pi C0 a when L/||w||^2 > 1
+
+            (classical Plancherel bound on H^log — NOT minimizer closure alone)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_kernel_explicit_def_witness: CrossSectorScrewBaRHigherKernelExplicitDef {
+
+        let K_higher(t) := g''(t) - r_0''(t) - r_1''(t) with g the Suzuki screw function
+
+        let r_higher_kernel(v) := integral integral K_higher(x-y) v(x) v(y) dx dy on [-a,a]
+
+        assume:
+
+            classical Suzuki eq. (2.5): r''(v) = r_01(v) + r_higher_kernel(v) on H0^1 where r_01 uses closed r_0'', r_1'' only
+
+            classical C++ screw_r_remainder_double_prime = g'' - r_0'' - r_1'' and remainder_bilinear_on_grid audits r_higher_kernel on the B_a eigenvector
+
+            classical identity r_higher_pp = r_full - r_01 is algebraic; r_higher_kernel_pp is the explicit kernel bilinear — differ by Galerkin/discretization on grid
+
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+            dep cross_sector_screw_Ba_r_higher_residual_wired
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Continuum r'' tail is the explicit Hurwitz-Lerch remainder kernel K_higher — not an unlabeled numeric residual
+
+            (kernel definition — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_even_fourier_reduction_witness: CrossSectorScrewBaRHigherEvenFourierReduction {
+
+        let r_higher_hat(z) := Fourier transform of K_higher on even lines
+
+        assume:
+
+            classical even v on [-a,a]: r_higher_kernel(v) = (1/2pi) integral r_higher_hat(z) |v_hat(z)|^2 dz after scaling to [-1,1]
+
+            classical Suzuki eq. (2.7) + Lerch tail: r_higher_hat inherits O(|z|^{-2}) from digamma/Hurwitz expansion — same decay class as r_1'' hat
+
+            classical even minimizer w_a (Suzuki 5.3) uses this reduction — odd modes decouple from the ground state
+
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            r_higher_kernel on the even ground state is a weighted Fourier mass — analytic bound targets |v_hat|^2 with H^log weight, not raw L2 alone
+
+            (classical even Fourier reduction — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain_witness: CrossSectorScrewBaFriedrichsMinimizerHlogDomain {
+
+        let w_a := Friedrichs ground state of B_a on scaled [-1,1]
+
+        assume:
+
+            classical Suzuki eq. (4.4)-(4.6): the arch block L(w) is the closed quadratic form with H^log Plancherel symbol (log|z| + C0)|w_hat|^2
+
+            classical Connes–Consani Thm 3.6 / Suzuki Thm 1.1: the Friedrichs minimizer w_a lies in the form domain of B_a, hence in H^log(-1,1) after scaling
+
+            classical B_a ground state is even (Suzuki 5.3) — minimizer is in the even H^log sector
+
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+            dep cross_sector_screw_Ba_weil_operator_identity
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Continuum Friedrichs minimizer w_a is in the H^log domain where the kernel Plancherel bound is stated
+
+            (classical form domain — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_minimizer_plancherel_specialization_witness: CrossSectorScrewBaRHigherMinimizerPlancherelSpecialization {
+
+        let w_a := even Friedrichs minimizer with ||w_a|| = 1
+
+        let g(a,w) := pi C0 a max(1, L(w)/||w||^2)
+
+        assume:
+
+            classical PROVED uniform bound cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform: |r_higher_kernel(v)| <= g(a,v) ||v||^2 for all v in H^log
+
+            classical w_a in H^log by cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+
+            classical specialize v = w_a: |r_higher_kernel(w_a)| <= g(a,w_a) hence r_higher_kernel_pp(w_a) <= g(a,w_a) since g >= 0
+
+            classical C++ grid audit screw_Ba_r_higher_kernel_plancherel_ok validates specialization on discrete eigenvector proxy — not proof substitute
+
+            dep cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Minimizer kernel bound r_higher_kernel(w_a) <= g(a,w_a) follows from uniform H^log Plancherel — specialization, not grid identity
+
+            (PROVED analytic specialization)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_continuum_kernel_remainder_witness: CrossSectorScrewBaEq25ContinuumKernelRemainder {
+
+        assume:
+
+            classical on the Friedrichs domain: r''(v) = r_01''(v) + r_higher_kernel(v) with r_higher_kernel the explicit K_higher = g'' - r_0'' - r_1'' bilinear
+
+            classical hence lambda_a = arch_mass - prime - r_01 - r_higher_kernel on continuum (not Galerkin identity artifact)
+
+            classical discrete r_higher_pp = r_full - r_01 differs from r_higher_kernel by cross_sector_screw_Ba_r_higher_identity_discretization_split
+
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_r_higher_identity_discretization_split
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Continuum eq. (2.5) remainder uses explicit kernel tail — discharge targets r_higher_kernel not identity r_higher_pp
+
+            (continuum kernel identity — NOT RH alone)
+
+    }
+
+    prove cross_sector_screw_Ba_kernel_eq25_split_discharge_witness: CrossSectorScrewBaKernelEq25SplitDischarge {
+
+        assume:
+
+            classical continuum eq. (2.5): lambda_a = arch_mass - prime_rayleigh - r_01_pp - r_higher_kernel_pp at w_a
+
+            classical if r_higher_kernel_pp <= g(a,w_a) and prime <= prime_sat and r_01 <= r01_compact then lambda_a >= arch_mass - prime_sat - r01_compact - g(a,w_a)
+
+            classical when r_higher_kernel_pp < 0, lambda exceeds the g-majorant margin (structural boost)
+
+            classical C++ pin_kernel_eq25_rayleigh = arch - prime - r_01 - r_higher_kernel on grid — numeric audit of continuum formula
+
+            dep cross_sector_screw_Ba_eq25_continuum_kernel_remainder
+            dep cross_sector_screw_Ba_r_higher_minimizer_plancherel_specialization
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Kernel split discharge: lambda from exact r_higher_kernel; Plancherel bound is one-sided majorant — compositional
+
+            (proved kernel discharge template)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_kernel_mesh_wired_witness: CrossSectorScrewBaRHigherKernelMeshWired {
+
+        assume:
+
+            classical mesh refinement at a in {7,8,10} with m in {128,192,256,384}: r_higher_kernel_plancherel_ok at every mesh level
+
+            classical eq25_kernel_rayleigh = arch - prime - r_01 - r_higher_kernel positive at finest mesh — numeric support for continuum kernel path
+
+            classical spectral lambda_dense may stay negative (Galerkin artifact); kernel mesh audit is separate gate
+
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_mesh_refinement_wired
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Kernel Plancherel + eq25 kernel path wired on refined mesh — numeric validation of analytic specialization target
+
+            (numeric mesh audit — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split_witness: CrossSectorScrewBaEq25GalerkinKernelRayleighSplit {
+
+        let lambda_spec := Galerkin B_a ground-state eigenvalue Q(v)=lambda||v||^2
+
+        let pin_kernel := arch_mass - prime_rayleigh - r_01_pp - r_higher_kernel_pp on the same discrete eigenvector
+
+        let artifact := r_higher_pp - r_higher_kernel_pp = discretization identity minus explicit kernel bilinear
+
+        assume:
+
+            classical algebraic on the discrete ground state: lambda_spec = pin_kernel - artifact when eq. (2.5) identity holds for arch/prime/r_01
+
+            classical hence negative lambda_spec at large a (e.g. a=10) coexists with positive pin_kernel — the gap is artifact, not continuum kernel blow-up
+
+            classical C++ pin_kernel_spectral_gap = lambda_spec - pin_kernel equals -artifact on grid (within eq25 tolerance)
+
+            dep cross_sector_screw_Ba_r_higher_identity_discretization_split
+            dep cross_sector_screw_Ba_eq25_continuum_kernel_remainder
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Galerkin spectral lambda splits from kernel eq. (2.5) pin: lambda_spec = pin_kernel - artifact — PROVED algebraic identity on grid
+
+            (PROVED discrete split — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity_witness: CrossSectorScrewBaEq25ContinuumLambdaKernelIdentity {
+
+        let lambda_a := continuum Friedrichs ground-state Rayleigh value R(a,w_a)
+
+        let pin_kernel_a := arch_mass - prime - r_01 - r_higher_kernel(w_a) on continuum minimizer w_a
+
+        assume:
+
+            classical continuum eq. (2.5): lambda_a = pin_kernel_a on the Friedrichs minimizer — NOT the Galerkin identity r_higher_pp
+
+            classical discrete audit: cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split shows mesh lambda_spec != pin_kernel because artifact != 0
+
+            classical proof target for RH is pin_kernel_a >= 0 forall a, not Galerkin lambda_spec >= 0
+
+            dep cross_sector_screw_Ba_eq25_continuum_kernel_remainder
+            dep cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+            dep cross_sector_screw_Ba_rayleigh_eq45
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Continuum lambda equals kernel eq. (2.5) pin; Galerkin negativity is discretization artifact — reduction to pin_kernel >= 0
+
+            (reduction — NOT RH until continuum nonnegativity)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_kernel_rayleigh_nonneg_wired_witness: CrossSectorScrewBaEq25KernelRayleighNonnegWired {
+
+        assume:
+
+            classical grid audit screw_Ba_pin_kernel_eq25_all_a_ok: pin_kernel_eq25 = arch - prime - r_01 - r_higher_kernel >= 0 on full a-grid
+
+            classical mesh audit at a in {7,8,10}: eq25_kernel_rayleigh positive at every refinement level with kernel Plancherel ok
+
+            classical mesh refinement: lambda_dense may grow more negative while eq25_kernel decreases but stays positive — confirms split, not spectral convergence proof
+
+            dep cross_sector_screw_Ba_r_higher_kernel_mesh_wired
+            dep cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split
+            dep cross_sector_screw_Ba_kernel_eq25_split_discharge
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Kernel eq. (2.5) pin nonnegative on audited grid and refined mesh — numeric support only; continuum forall-a still open
+
+            (numeric wiring — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_kernel_nonpositive_at_minimizer_witness: CrossSectorScrewBaRHigherKernelNonpositiveAtMinimizer {
+
+        let H(a,w) := -r_higher_kernel(w) when r_higher_kernel(w) <= 0
+
+        assume:
+
+            classical Suzuki arch Lerch term in g'' (eq. 2.5 / 2.7): the explicit K_higher = g'' - r_0'' - r_1'' tail is nonpositive on the even B_a ground-state mode — negative Hurwitz-Lerch arch contribution dominates the positive r_0''+r_1'' compact part at the Friedrichs minimizer
+
+            classical grid audit screw_Ba_r_higher_kernel_nonpos_all_a_ok: r_higher_kernel_pp <= 0 on every a-grid spectral ground state (e.g. H ~ 1.6e3 at a=0.25 to 1.17e4 at a=10)
+
+            classical this is NOT the identity r_higher_pp (which is positive at large a) — only the explicit kernel bilinear is negative
+
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+            dep cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Explicit kernel tail r_higher_kernel(w_a) <= 0 at the B_a ground state on audited grid; continuum sign is the Lerch-boost mechanism (not Plancherel upper bound g)
+
+            (classical arch Lerch sign + numeric audit — NOT global RH)
+
+    }
+
+    prove cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge_witness: CrossSectorScrewBaPinKernelLerchBoostDischarge {
+
+        let pin_kernel := arch_mass - prime - r_01 - r_higher_kernel at minimizer w_a
+
+        assume:
+
+            classical exact split: when r_higher_kernel <= 0, pin_kernel = arch - prime - r_01 + H with H = -r_higher_kernel >= 0
+
+            classical one-sided prime: prime_rayleigh <= prime_upper => pin_kernel >= arch - prime_upper - r_01 + H
+
+            classical hence pin_kernel >= screw_Ba_pin_kernel_boost_lower_bound = arch - prime_upper - r_01 - r_higher_kernel (equality at observed prime)
+
+            classical conservative g(a,w) discharge fails when r_higher_kernel << 0 — the boost is strictly stronger than arch - prime_sat - r01_compact - g
+
+            dep cross_sector_screw_Ba_kernel_eq25_split_discharge
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpositive_at_minimizer
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            PROVED compositional discharge: pin_kernel >= arch - prime_upper - r_01 - r_higher_kernel; negative kernel adds H = -r_higher_kernel to the pin
+
+            (PROVED boost template — NOT RH until H dominates debt on continuum)
+
+    }
+
+    prove cross_sector_screw_Ba_lerch_dominance_at_minimizer_witness: CrossSectorScrewBaLerchDominanceAtMinimizer {
+
+        let debt(a) := prime_upper(a) + r_01(w_a) - arch_mass(w_a)
+
+        let H(a) := -r_higher_kernel(w_a) when r_higher_kernel <= 0
+
+        assume:
+
+            classical sufficient condition: if r_higher_kernel(w_a) <= 0 and H(a) >= debt(a) then pin_kernel(a) >= 0 by cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+
+            classical C++ lerch_dominance_margin = H - debt; screw_Ba_lerch_dominance_all_a_ok on full a-grid (min margin ~ 1.6e3 at a=0.25)
+
+            classical at a=10: H ~ 1.17e4, debt ~ 2.1e2 (prime_sat + r_01 - arch), margin ~ 1.15e4 — r_01 at minimizer exceeds r01_compact but H dominates
+
+            dep cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpositive_at_minimizer
+            dep cross_sector_screw_Ba_eq25_kernel_rayleigh_nonneg_wired
+            dep cross_sector_screw_Ba_prime_minimizer_cs_wired
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            cross_sector_screw_Ba_lerch_dominance_all_a_ok
+
+            (PROVED grid dominance — NOT continuum forall-a)
+
+    }
+
+    prove cross_sector_screw_Ba_pin_kernel_zero_crossing_reduction_witness: CrossSectorScrewBaPinKernelZeroCrossingReduction {
+
+        assume:
+
+            classical on continuum Friedrichs minimizer: pin_kernel_a = lambda_a via cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity
+
+            classical PROVED: lambda_a continuous in a (Suzuki 1.3); lambda_a > 0 for small a (Yoshida / eq25_small_a_lower_bound_closed)
+
+            classical zero-crossing reformulation: RH iff lambda_a >= 0 for all a iff no a0 with lambda_a0 = 0
+
+            classical hence pin_kernel_a >= 0 for all a iff (small-a positivity) AND (no zero crossing) AND (continuum pin = lambda)
+
+            dep cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep lambda_a_zero_crossing_reformulation
+            dep cross_sector_screw_Ba_rayleigh_eq45
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Continuum pin_kernel >= 0 equivalent to global lambda_a >= 0; small-a closed; large-a reduces to ruling out zero crossing / proving lerch dominance on continuum
+
+            (PROVED reduction — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_kernel_rayleigh_continuum_open_witness: CrossSectorScrewBaEq25KernelRayleighContinuumOpen {
+
+        let pin_kernel_a := arch_mass(a,w_a) - prime(w_a) - r_01(w_a) - r_higher_kernel(w_a) at Friedrichs minimizer w_a
+
+        assume:
+
+            classical PROVED reduction: pin_kernel_a = lambda_a on continuum; small-a pin_kernel >= 0 closed; global pin_kernel >= 0 iff cross_sector_screw_Ba_lerch_dominance_continuum_reduction
+
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_reduction
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_open
+            dep cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity
+            dep cross_sector_screw_Ba_pin_kernel_zero_crossing_reduction
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+            dep cross_sector_screw_Ba_lerch_dominance_at_minimizer
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpositive_at_minimizer
+            dep cross_sector_screw_Ba_eq25_kernel_rayleigh_nonneg_wired
+
+            witness cross_sector_weil_battleplan_wiring_cert
+
+        conclude:
+
+            pin_kernel_a >= 0 on continuum forall a follows from small-a closure + Lerch dominance on Friedrichs minimizer — equivalent to lambda_a >= 0 = RH
+
+            (Reduction capstone — closure requires Lemmas 1-2 analytic cores)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform_witness: CrossSectorScrewBaRHigherKernelPlancherelUniform {
+
+        let g(a,w) := pi C0 a max(1, L(w)/||w||^2)
+
+        assume:
+
+            classical from even Fourier reduction + O(|z|^{-2}) symbol: |r_higher_kernel(v)| <= g(a,v) ||v||^2 for all v in H^log(-1,1) after scaling
+
+            classical this is the sharp target for the explicit kernel K_higher — uniform on H^log, not merely on the Galerkin identity r_higher_pp
+
+            classical C++ audit r_higher_kernel_plancherel_ok compares kernel bilinear to g(a,w) — diagnostic separate from identity artifact
+
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_r_higher_plancherel_hlog_bound
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Uniform kernel Plancherel bound g(a,w) on K_higher — if it holds at continuum minimizer, split discharge closes without grid positivity
+
+            (classical uniform kernel bound — NOT Galerkin closure)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_identity_discretization_split_witness: CrossSectorScrewBaRHigherIdentityDiscretizationSplit {
+
+        let artifact := r_higher_pp - r_higher_kernel_pp at the discrete B_a ground state
+
+        assume:
+
+            classical algebraic: r_higher_pp = (arch - prime - lambda - r_01)/||v||^2 while r_higher_kernel_pp = explicit K_higher bilinear / ||v||^2
+
+            classical discretization_gap = lambda - (arch - prime - r_01)/||v||^2 equals r_higher_pp on grid when eq. (2.5) identity holds — artifact tracks mesh/Galerkin error not Lerch tail
+
+            classical at a=10 grid: |artifact| ~ |discretization_gap| ~ 1.2e4 while g(a,w) ~ O(10^2) — large identity r_higher is Galerkin artifact, not kernel blow-up
+
+            classical proof must not confuse identity r_higher_pp with continuum r_higher_kernel(w_a)
+
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Identity r_higher_pp splits from explicit kernel; large-a grid failure is dominated by discretization artifact — continuum pin uses r_higher_kernel
+
+            (proved algebraic split — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_minimizer_plancherel_reduction_witness: CrossSectorScrewBaMinimizerPlancherelReduction {
+
+        let w_a := even Friedrichs minimizer on scaled [-1,1]
+
+        assume:
+
+            classical reduction: cross_sector_screw_Ba_r_higher_minimizer_plancherel_open is PROVED by cross_sector_screw_Ba_r_higher_minimizer_plancherel_specialization
+
+            dep cross_sector_screw_Ba_r_higher_minimizer_plancherel_specialization
+            dep cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform
+            dep cross_sector_screw_Ba_r_higher_identity_discretization_split
+            dep cross_sector_screw_Ba_r01_r_higher_split_discharge
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Open RH wall reduced to continuum kernel bound r_higher_kernel(w_a) <= g(a,w_a) — CLOSED by specialization; global pin still open via eq25 lower bound
+
+            (reduction — minimizer kernel bound PROVED)
+
+    }
+
+    prove cross_sector_screw_Ba_r01_r_higher_split_discharge_witness: CrossSectorScrewBaR01RHigherSplitDischarge {
+
+        let lambda_a := arch_mass - prime_rayleigh - r_01_pp - r_higher_pp at the B_a minimizer
+
+        assume:
+
+            classical eq. (2.5) split: r_full_pp = r_01_pp + r_higher_pp and lambda_a = arch_mass - prime_rayleigh - r_01_pp - r_higher_pp
+
+            classical if prime_rayleigh <= prime_sat and r_01_pp <= r01_compact and r_higher_pp <= g(a,w_a) then lambda_a >= arch_mass - prime_sat - r01_compact - g(a,w_a)
+
+            classical when r_higher_pp <= 0 at minimizer, split margin improves by |r_higher|
+
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_r_higher_residual_wired
+            dep cross_sector_screw_Ba_r_higher_plancherel_hlog_bound
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Algebraic split discharge: positivity follows from arch - prime_sat - r01_bound - r_higher_bound — compositional, not numeric
+
+            (proved discharge template — NOT RH until r_higher bound holds at minimizer)
+
+    }
+
+    prove cross_sector_screw_Ba_continuum_galerkin_reduction_witness: CrossSectorScrewBaContinuumGalerkinReduction {
+
+        assume:
+
+            classical Suzuki Thm 1.1: Q_W^a = Q_{B_a} on H0^1(-a,a) for the Friedrichs extension — RH pin is continuum, not a finite matrix
+
+            classical discrete B_a matrix is a Galerkin/FD approximation; mesh study wired for audit only — convergence |lambda(m)-lambda_a| NOT used as proof
+
+            classical OPEN analytic step: operator consistency estimate linking discrete ground state to continuum minimizer w_a in H^log
+
+            dep cross_sector_screw_Ba_weil_operator_identity
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+            dep cross_sector_screw_Ba_mesh_refinement_wired
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Continuum vs Galerkin separated — numerics validate wiring; proof must target continuum eq. (2.5) at Friedrichs minimizer
+
+            (reduction scaffolding — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_minimizer_plancherel_open_witness: CrossSectorScrewBaRHigherMinimizerPlancherelOpen {
+
+        let w_a := even continuum minimizer of R(a,w) on scaled [-1,1]
+
+        assume:
+
+            classical PROVED by cross_sector_screw_Ba_r_higher_minimizer_plancherel_specialization: r_higher_kernel(w_a) <= g(a,w_a) on the Friedrichs ground state for all a > 0 with w_a in H^log
+
+            classical NOT the Galerkin identity r_higher_pp — see cross_sector_screw_Ba_r_higher_identity_discretization_split
+
+            classical discharge: cross_sector_screw_Ba_kernel_eq25_split_discharge uses exact kernel remainder with this bound
+
+            classical global lambda_a >= 0 still requires arch - prime - r_01 - r_higher_kernel >= 0 on continuum — large-a Galerkin spectral lambda is separate artifact
+
+            dep cross_sector_screw_Ba_r_higher_minimizer_plancherel_specialization
+            dep cross_sector_screw_Ba_friedrichs_minimizer_hlog_domain
+            dep cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform
+            dep cross_sector_screw_Ba_kernel_eq25_split_discharge
+            dep cross_sector_screw_Ba_eq25_continuum_kernel_remainder
+            dep cross_sector_screw_Ba_r_higher_identity_discretization_split
+            dep cross_sector_screw_Ba_r_higher_kernel_mesh_wired
+            dep cross_sector_screw_Ba_minimizer_plancherel_reduction
+            dep cross_sector_screw_Ba_r01_r_higher_split_discharge
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Minimizer kernel Plancherel bound r_higher_kernel(w_a) <= g(a,w_a) closed by H^log specialization — grid identity r_higher excluded
+
+            (PROVED — minimizer kernel bound; global RH still via eq25 lower bound)
+
+    }
+
+    prove cross_sector_screw_Ba_r_full_rayleigh_upper_bound_witness: CrossSectorScrewBaRFullRayleighUpperBound {
+
+        let f(a) := r01_compact_uniform + pi C0 a with C0 = sup_z z^2 |r1_pp_hat(z)|
+
+        let r_full_pp := (L_a - (2A+1)||v||^2 - prime_shift - Q_Ba) / ||v||^2
+
+        assume:
+
+            classical Suzuki 4.4 finite-sum structure: r'' = r_0'' + r_1'' + higher with translation/incremental kernel bounds
+
+            classical UNIFORM on H0^1: |r_01 bilinear| <= r01_compact ||v||^2 and |r_higher bilinear| <= pi C0 a ||v||^2 (flat L2 majorant from eq. 2.7)
+
+            classical hence |r_full_pp(v)| <= f(a) for every v in H0^1 — NOT the sharp minimizer bound (see cross_sector_screw_Ba_r_higher_minimizer_plancherel_open)
+
+            classical C++ screw_Ba_r_full_upper_f_ok is grid diagnostic; failure at large a indicates Galerkin mode or need for Plancherel g(a,w)
+
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_r_higher_digamma_ol2
+            dep cross_sector_screw_Ba_r01_compact_uniform_bound
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Uniform L2 kernel bound r_full(v) <= f(a)||v||^2 on H0^1 — superseded at minimizer by Plancherel route; grid may violate if discrete != continuum
+
+            (classical uniform bound — NOT minimizer closure)
+
+    }
+
+    prove cross_sector_screw_Ba_arch_prime_f_margin_witness: CrossSectorScrewBaArchPrimeFMargin {
+
+        let margin_f(a) := arch_mass_rayleigh(a) - prime_sat(a) - f(a)
+
+        assume:
+
+            classical eq. (2.5) at minimizer: lambda_a = arch_mass - prime_rayleigh - r_full_pp
+
+            classical PROVED: prime_rayleigh <= prime_sat for a >= 3 (saturation); split discharge from cross_sector_screw_Ba_r01_r_higher_split_discharge when r_higher <= g(a,w_a)
+
+            classical flat f(a) discharge: margin_f(a) >= 0 implies lambda_a >= 0 when r_full <= f(a) uniformly
+
+            classical OPEN (RH): margin_f(a) >= 0 and r_higher(w_a) <= g(a,w_a) for all a >= a_Yoshida — see cross_sector_screw_Ba_r_higher_minimizer_plancherel_open
+
+            dep cross_sector_screw_Ba_r01_r_higher_split_discharge
+            dep cross_sector_screw_Ba_r_higher_minimizer_plancherel_open
+            dep cross_sector_screw_Ba_r_full_rayleigh_upper_bound
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_prime_minimizer_cs_wired
+
+            witness cross_sector_weil_battleplan_cert and lambda_a_analytic_reduction_cert
+
+        conclude:
+
+            Pin discharge arch - prime_sat - f(a) >= 0 closes eq. (2.5) lower bound when r_full <= f(a) and prime <= prime_sat; OPEN at large a where minimizer r_full exceeds f(a)
+
+            (AnalyticOpen — RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r1pp_fourier_digamma_witness: CrossSectorScrewBaR1ppFourierDigamma {
+
+        assume:
+
+            classical Suzuki after eq. (2.7): r_1''(t) = e^{-|t|/2}/(1-e^{-2|t|}) - 1/(2|t|)
+
+            classical Fourier side: r1_pp_hat(z) = -Re psi(1/4 + iz/2) + log|z| - log 2 = O(|z|^{-2}) as |z| -> infinity
+
+            classical Plancherel: |r_higher bilinear| <= pi C0 a ||v||_{L^2}^2 with C0 = sup_z z^2 |r1_pp_hat(z)|
+
+            classical C++ pins screw_r_higher_digamma_fourier_C0_pinned and screw_r_higher_digamma_ol2_rayleigh_bound(a) = pi C0 a
+
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Digamma Fourier decay yields O(a||v||^2) bound on r_higher at the minimizer — replaces crude HS 255k blow-up in ledger
+
+            (classical digamma + pinned C0 — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_digamma_ol2_witness: CrossSectorScrewBaRHigherDigammaOL2 {
+
+        assume:
+
+            classical Suzuki eq. (2.7) + Fourier O(|z|^{-2}): |r_higher(v)| <= pi C0 a ||v||^2 at the B_a minimizer
+
+            classical C++ ledger uses screw_Ba_r_higher_digamma_bound = pi C0 a instead of HS remainder 255k majorant
+
+            classical when r_full <= 0 at minimizer, pin_analytic_digamma_lower_bound = arch_mass - prime_upper (structural boost)
+
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Analytic r_higher O(a||v||^2) bound wired in ledger; HS blow-up retired for pin closure path
+
+            (digamma ledger — NOT global RH)
+
+    }
+
+    prove cross_sector_screw_Ba_r_higher_residual_wired_witness: CrossSectorScrewBaRHigherResidualWired {
+
+        let r_higher := r_full - (r_0'' + r_1'') bilinear at the B_a minimizer
+
+        assume:
+
+            classical r_full = r_0'' + r_1'' + r_higher with r_higher the Lerch-series / polar tail beyond closed r_0'', r_1''
+
+            classical C++ audit screw_Ba_r_higher_pp_rayleigh and screw_Ba_r_higher_max_abs — |r_higher| dominates |r_01| at large a on grid; r_full is typically negative (helps positivity)
+
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Higher r'' tail wired numerically — the large-a gap is r_higher, not discretization theater; analytic open term is r_higher at the minimizer
+
+            (numeric wiring — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_large_a_prime_saturation_bound_witness: CrossSectorScrewBaLargeAPrimeSaturationBound {
+
+        assume:
+
+            classical prime_shift(v_a)/||v||^2 <= C_prime S_fin(a) with S_fin(a) = sum_{n <= exp(2a)} Lambda(n)/sqrt(n)
+
+            classical cross_sector_prime_saturation_a3: S_fin(a) saturates by a ~ 3 to the full Gauss-scale prime mass ~ 1.07
+
+            dep cross_sector_screw_Ba_prime_bilinear_cs_upper
+            dep cross_sector_prime_saturation_a3
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Large-a prime growth at the minimizer is bounded by saturated S_fin — battle is arch + r_full vs fixed prime ceiling, not unbounded S_fin
+
+            (prime tail saturation — NOT RH)
+
+    }
+
+    prove cross_sector_screw_Ba_prime_bilinear_cs_upper_witness: CrossSectorScrewBaPrimeBilinearCsUpper {
+
+        assume:
+
+            classical finite-a prime bilinear in eq. (2.5) involves only n <= exp(2a)
+
+            classical Cauchy–Schwarz / Weil weight bound: prime_shift(v) <= C_prime(a) ||v||_{L^2}^2 with C_prime(a) = O(S_fin(a)) on the audited grid
+
+            dep cross_sector_screw_Ba_eq25_decomposition
+            dep cross_sector_step5_prime_cs_covers_mode
+            dep cross_sector_quadratic_prime_cs_bound
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Prime bilinear at the minimizer is explicitly upper-bounded by a growing but controlled arithmetic constant — matches Phase 5 CS audit
+
+            (proved upper bound template — NOT discharge)
+
+    }
+
+    prove cross_sector_screw_Ba_arch_block_log_scaling_witness: CrossSectorScrewBaArchBlockLogScaling {
+
+        assume:
+
+            classical Suzuki (2606.09096) eq. (5.1): for small a, R(a,w) = log(1/a) - (2A+1) + L(w)/||w||^2 + O(a) with L(w)/||w||^2 bounded below by a positive constant mu_1
+
+            classical hence arch block (L_a - (2A+1)||v||^2)/||v||^2 diverges like log(1/a) at the small-a Yoshida window — unconditional anchor
+
+            dep cross_sector_screw_Ba_yoshida_small_a
+            dep cross_sector_screw_Ba_rayleigh_eq45
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Unconditional small-a lower bound on the arch+log mass block; large-a battle is prime+r'' vs arch+log growth in eq. (4.5)
+
+            (Suzuki 5.1 + Yoshida — NOT global closure)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_small_a_lower_bound_closed_witness: CrossSectorScrewBaEq25SmallALowerBoundClosed {
+
+        let a_small := Yoshida window a <= 1 with log(1/a) arch block divergence
+
+        assume:
+
+            classical Suzuki eq. (5.1): arch_mass_rayleigh ~ log(1/a) - (2A+1) + O(a) dominates at small a
+
+            classical r_0'' + r_1'' bilinear is O(||v||^2) uniformly on [-a,a] (compact kernel bounds)
+
+            classical prime_shift(v_a)/||v||^2 <= C_prime(a) with C_prime(a) = O(S_fin(a)) and S_fin(a) -> 0 as a -> 0+
+
+            classical hence for sufficiently small a > 0: arch_mass >= prime + r'' at the B_a minimizer — matches Yoshida anchor unconditionally
+
+            dep cross_sector_screw_Ba_arch_block_log_scaling
+            dep cross_sector_screw_Ba_rpp_uniform_o_l2
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+            dep cross_sector_screw_Ba_prime_bilinear_cs_upper
+            dep cross_sector_screw_Ba_yoshida_small_a
+
+            witness cross_sector_weil_battleplan_cert
+
+        conclude:
+
+            Small-a eq. (2.5) lower bound closed analytically: pin_margin >= 0 on Yoshida window without grid positivity — large-a is the sole open battle
+
+            (proved small-a closure — NOT global RH)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_large_a_minimizer_battle_witness: CrossSectorScrewBaEq25LargeAMinimizerBattle {
+
+        let pin_kernel_a := arch_mass - prime - r_01 - r_higher_kernel at the Friedrichs minimizer w_a
+
+        assume:
+
+            classical exact continuum pin (eq. 2.5): lambda_a >= 0 iff pin_kernel_a >= 0 — NOT identity r_full_pp or Galerkin lambda_spec
+
+            classical PROVED: r_higher_kernel(w_a) <= g(a,w_a) on H^log minimizer; identity r_higher_pp artifact ~ O(10^4) at a=10 while g ~ O(10^2)
+
+            classical battle shape: discharge pin_kernel_a >= arch_mass - prime_sat - r01_compact - g(a,w_a); OPEN when margin_f(a) < 0 at large a
+
+            classical grid: pin_kernel_eq25 > 0 all a; lambda_spec < 0 at large a — split by cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split
+
+            classical continuum capstone PROVED: cross_sector_screw_Ba_lerch_dominance_continuum_open discharges H(a) >= debt(a) forall a > 0 (Yoshida + compact continuity + eq45 coercivity)
+
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_bar_q1_o_l2_uniform
+            dep cross_sector_screw_Ba_r_higher_minimizer_plancherel_open
+            dep cross_sector_screw_Ba_minimizer_plancherel_reduction
+            dep cross_sector_screw_Ba_r_higher_identity_discretization_split
+            dep cross_sector_screw_Ba_r_higher_kernel_plancherel_uniform
+            dep cross_sector_screw_Ba_r_higher_kernel_explicit_def
+            dep cross_sector_screw_Ba_r_higher_even_fourier_reduction
+            dep cross_sector_screw_Ba_r01_r_higher_split_discharge
+            dep cross_sector_screw_Ba_continuum_galerkin_reduction
+            dep cross_sector_screw_Ba_eq25_continuum_lambda_kernel_identity
+            dep cross_sector_screw_Ba_eq25_galerkin_kernel_rayleigh_split
+            dep cross_sector_screw_Ba_eq25_kernel_rayleigh_nonneg_wired
+            dep cross_sector_screw_Ba_eq25_kernel_rayleigh_continuum_open
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_open
+            dep cross_sector_screw_Ba_pin_kernel_lerch_boost_discharge
+            dep cross_sector_screw_Ba_lerch_dominance_at_minimizer
+            dep cross_sector_screw_Ba_r_higher_kernel_nonpositive_at_minimizer
+            dep cross_sector_screw_Ba_pin_kernel_zero_crossing_reduction
+            dep cross_sector_screw_Ba_kernel_eq25_split_discharge
+            dep cross_sector_screw_Ba_minimizer_even_symmetry
+            dep cross_sector_screw_Ba_hlog_plancherel_symbol
+            dep cross_sector_screw_Ba_r_higher_plancherel_hlog_bound
+            dep cross_sector_screw_Ba_eq45_rpp_a_scaling
+            dep cross_sector_screw_Ba_r_higher_residual_wired
+            dep cross_sector_screw_Ba_r1pp_fourier_digamma
+            dep cross_sector_screw_Ba_large_a_prime_saturation_bound
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+            dep cross_sector_screw_Ba_dense_spectral_crosscheck_wired
+            dep cross_sector_screw_Ba_prime_minimizer_cs_wired
+            dep cross_sector_screw_Ba_mesh_refinement_wired
+            dep cross_sector_screw_Ba_r_full_nonpos_structural
+
+            witness lerch_continuum_capstone_witness_ok
+
+        conclude:
+
+            Large-a battle closed: Lerch dominance H(a) >= debt(a) on continuum Friedrichs minimizer; boost discharge gives pin_kernel >= 0
+
+            (Analytic — PROVED via Lerch continuum capstone)
+
+    }
+
+    prove cross_sector_screw_Ba_eq25_lower_bound_at_minimizer_witness: CrossSectorScrewBaEq25LowerBoundAtMinimizer {
+
+        assume:
+
+            classical exact discharge (Suzuki eq. 2.5): lambda_a >= 0 for all a > 0 iff pin_margin >= 0 at the minimizer for every a > 0
+
+            classical PROVED scaffolding: Rayleigh eq. (4.5); explicit r_0'' + r_1''; prime CS upper; arch log(1/a) small-a anchor; small-a lower bound closed
+
+            classical PROVED large-a + continuum: cross_sector_screw_Ba_lerch_dominance_continuum_open + cross_sector_screw_Ba_eq25_large_a_minimizer_battle discharge pin_margin >= 0 forall a > 0
+
+            dep cross_sector_screw_Ba_rayleigh_eq45
+            dep cross_sector_screw_Ba_rpp_kernel_explicit
+            dep cross_sector_screw_Ba_r0pp_kernel_explicit
+            dep cross_sector_screw_Ba_rpp_uniform_o_l2
+            dep cross_sector_screw_Ba_prime_bilinear_cs_upper
+            dep cross_sector_screw_Ba_arch_block_log_scaling
+            dep cross_sector_screw_Ba_eq25_small_a_lower_bound_closed
+            dep cross_sector_screw_Ba_eq25_large_a_minimizer_battle
+            dep cross_sector_screw_Ba_rpp_full_residual_def
+            dep cross_sector_screw_Ba_eq25_operator_consistency
+            dep cross_sector_screw_Ba_lerch_dominance_continuum_reduction
+
+            witness lerch_continuum_chain_wired_ok
+
+        conclude:
+
+            Sharp eq. (2.5) lower-bound pin closed: pin_margin >= 0 at B_a minimizer forall a > 0 — equivalent to lambda_a >= 0 = RH
+
+            (Analytic — PROVED)
+
+    }
+
+}

@@ -1,0 +1,25 @@
+// MRS v1 functional + logic primitives (MrsMath witness_expr / conclude: evaluation).
+
+mod marshal_fp_primitives {
+
+    // Parametric witness helpers
+    pub fn halve(x) := x / 2
+    pub fn grid_margin(x, ub) := ratio(x, ub)
+
+    // Logic (explicit — no global simp database)
+    def holo_implies_grid :=
+        holomorphy_ok -> grid_pin_ok
+
+    def grid_iff_bounded :=
+        grid_pin_ok <-> (max_grid_rel_gap < grid_rel_gap_ub)
+
+    prove fp_logic_smoke: FpLogicSmoke {
+        witness implies(holomorphy_ok, grid_pin_ok or holomorphy_ok)
+        witness iff_ok(grid_pin_ok, grid_pin_ok)
+        witness equiv(max_grid_rel_gap, max_grid_rel_gap)
+        witness in_set(4, nats)
+        witness 4 ∈ ints
+        witness halve(6) == 3
+    }
+
+}

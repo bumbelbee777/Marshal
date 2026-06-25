@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "source": "docs/generated/screw_pcircle_bridge_study.json",
+  "screw_pcircle_bridge_audit_ok": true,
+  "screw_marshal_prime_side_match_ok": true,
+  "lambda_a_small_a_positive_ok": true,
+  "prime_match_tol": 1e-06
+}

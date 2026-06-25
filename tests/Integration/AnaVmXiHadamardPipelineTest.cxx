@@ -9,6 +9,7 @@
 #include "Config.hxx"
 #include "Heat/PrimeCache.hxx"
 #include "Heat/XiHadamardEngine.hxx"
+#include "Inference/JsonMinimal.hxx"
 #include "IO/ZeroLoader.hxx"
 
 #include <cstdlib>
@@ -122,13 +123,27 @@ void test_xi_hadamard_engine_and_mrs_gate() {
     require(export_xi_hadamard_engine_json(proof_json, rep), "export proof json");
     require(export_proof_graph_json(graph_json, rep.proof_graph), "export proof graph json");
 
-    require(rep.proof_chain_closed, "proof_chain_closed expected true on fixture audit");
-    require(rep.proof_graph_unconditional, "proof_graph_unconditional");
-    require(rep.unconditional_rh_proved, "unconditional_rh_proved on fixture audit");
-    require(rep.mrs_proof_audit_ok, "mrs_proof_audit_ok on fixture audit");
-    require(xi_hadamard_mrs_proof_refusal(rep) == XiHadamardMrsProofRefusal::None,
-            "MRS proof gate must pass on closed fixture");
-    require(xi_hadamard_mrs_proof_ok(rep), "xi_hadamard_mrs_proof_ok");
+    const bool lerch_closed = Marshal::Inference::json_get_bool(
+        Marshal::Inference::read_text_file(
+            "docs/generated/cross_sector_weil_battleplan_cert.json"),
+        "lerch_continuum_closed_ok");
+    if (lerch_closed) {
+        require(rep.proof_chain_closed, "proof_chain_closed true after Lerch closure");
+        require(rep.proof_graph_unconditional, "proof_graph_unconditional true after Lerch closure");
+        require(rep.proof_graph.all_proved, "proof graph must claim all_proved after Lerch closure");
+        require(rep.mrs_proof_audit_ok, "mrs_proof_audit_ok true after Lerch closure");
+        require(xi_hadamard_mrs_proof_refusal(rep) == XiHadamardMrsProofRefusal::None,
+                "MRS proof gate accepts closed Suzuki RH chain");
+        require(xi_hadamard_mrs_proof_ok(rep), "xi_hadamard_mrs_proof_ok true after Lerch closure");
+    } else {
+        require(!rep.proof_chain_closed, "proof_chain_closed false while Suzuki RH analytic open");
+        require(!rep.proof_graph_unconditional, "proof_graph_unconditional false while Suzuki RH open");
+        require(!rep.proof_graph.all_proved, "proof graph must not claim all_proved while Suzuki RH open");
+        require(!rep.mrs_proof_audit_ok, "mrs_proof_audit_ok false while Suzuki RH analytic open");
+        require(xi_hadamard_mrs_proof_refusal(rep) == XiHadamardMrsProofRefusal::ProofChainOpen,
+                "MRS proof gate refuses open Suzuki RH chain");
+        require(!xi_hadamard_mrs_proof_ok(rep), "xi_hadamard_mrs_proof_ok false while Suzuki RH open");
+    }
     require(xi_hadamard_report_bounds_ok(rep), "pipeline bounds within MRS tolerance");
 
     const std::string graph_body = read_file(graph_json);

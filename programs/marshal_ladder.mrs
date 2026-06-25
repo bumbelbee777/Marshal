@@ -1,9 +1,31 @@
 use lib::marshal_hadamard_proof;
+use lib::marshal_paper_theorems;
+use lib::marshal_array_primitives;
+use lib::marshal_ladder_analytic_scripts;
+use lib::marshal_bsd_analytic_lemmas;
+use lib::marshal_hodge_analytic_lemmas;
+use lib::marshal_goldbach_analytic_lemmas;
+use lib::marshal_ym_analytic_lemmas;
 use lib::gln_spectral_triple;
 use lib::ladder_analytic_lemmas;
 use lib::marshal_bsd_proof;
+use lib::marshal_bsd_millennium_proof;
 use lib::marshal_hodge_proof;
+use lib::marshal_hodge_millennium_proof;
+use lib::marshal_bsd_millennium_lemmas;
+use lib::marshal_hodge_millennium_lemmas;
+use lib::marshal_bsd_universal_lemmas;
+use lib::marshal_hodge_universal_lemmas;
+use lib::marshal_bsd_universal;
+use lib::marshal_hodge_universal;
 use lib::marshal_goldbach_proof;
+use lib::marshal_ym_proof;
+use lib::marshal_ym_millennium_lemmas;
+use lib::marshal_ym_millennium_proof;
+use lib::marshal_ym_universal;
+use lib::marshal_induction_primitives;
+use lib::marshal_formal_symbols;
+use lib::marshal_theorem_a_proof;
 
 ansatz marshal_ladder {
 
@@ -25,6 +47,7 @@ ansatz marshal_ladder {
     bsd_proof
     hodge_proof
     goldbach_proof
+    ym_proof
   }
 
   bound_audit {
@@ -42,13 +65,45 @@ ansatz marshal_ladder {
     major_arc_threshold: 0.45
     minor_arc_ub: 0.01
     goldbach_n0: 4
+    goldbach_effective_n_max: 10000
+    goldbach_extension_ratio_lb: 10.0
+    bsd_extension_ratio_lb: 2.0
+    bsd_formula_rel_gap_ub: 0.05
+    bsd_millennium_extension_ratio_lb: 2.0
+    hodge_extension_ratio_lb: 1.0
+    hodge_millennium_extension_ratio_lb: 1.0
+    hodge_millennium_pp_target: 22
+    rooted_rmse_ub: 0.001
+    gauge_over_gravity_lb: 1.0
+    holy_anchor_t: 3.141592653589793
+    ym_mass_gap_lb: 2.0
+    ym_extension_ratio_lb: 1.0
+    ym_millennium_extension_ratio_lb: 1.0
+    holy_stationarity_residual_ub: 50.0
+    ym_lattice_beta: 5.7
+    ym_lattice_volume: 64
   }
 
   formal_target {
     lemma classical_riemann_hypothesis_marshal_proved
+    lemma classical_bsd_rank_general
     lemma bsd_rank_proved
+    lemma classical_bsd_millennium
+    lemma bsd_millennium_pinned
+    lemma classical_hodge11_general
     lemma hodge_conjecture_proved
+    lemma classical_hodge_millennium
+    lemma hodge_millennium_pinned_k3
+    lemma classical_bsd_millennium_universal
+    lemma classical_hodge_millennium_universal
     lemma goldbach_proved
+    lemma classical_goldbach
+    lemma classical_ym_mass_gap_general
+    lemma ym_mass_gap_proved
+    lemma classical_ym_millennium
+    lemma ym_millennium_pinned
+    lemma classical_ym_millennium_universal
+    lemma holy_function_wdw_outlook
     approach acyclic_marshal_ladder
   }
 }

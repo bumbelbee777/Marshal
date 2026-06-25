@@ -1,0 +1,149 @@
+{
+  "schema_version": 2,
+  "source": "EmitMarshalLadderCert.py",
+  "provenance_policy": "All numeric fields carry source_engine, source_field, and cert_interval. No silent .get(default) fallbacks for required bound fields. Missing fields raise ProvenanceError.",
+  "bsd": {
+    "algebraic_rank": 1,
+    "kernel_multiplicity": 1,
+    "rank_equality": {
+      "source_engine": "anavm_bsd_proof.json",
+      "field_a": "kernel_multiplicity",
+      "field_b": "algebraic_rank",
+      "value": 1,
+      "constraint": "kernel_multiplicity == algebraic_rank",
+      "ok": true
+    },
+    "l_function_grid_gap": {
+      "source_engine": "anavm_bsd_proof.json",
+      "source_field": "l_function_grid_rel_gap",
+      "measured": 0,
+      "upper_bound": 0.03,
+      "cert_interval": [
+        0,
+        0.03
+      ],
+      "constraint": "l_function_grid_rel_gap < l_function_grid_rel_gap_ub",
+      "ok": true
+    },
+    "sha_resolvent_gap": {
+      "source_engine": "anavm_bsd_proof.json",
+      "source_field": "sha_resolvent_gap",
+      "measured": 0.7399463907318049,
+      "upper_bound": 2,
+      "cert_interval": [
+        0.7399463907318049,
+        2
+      ],
+      "constraint": "sha_resolvent_gap < sha_resolvent_gap_ub",
+      "ok": true
+    },
+    "holomorphy_gap": {
+      "source_engine": "anavm_bsd_proof.json",
+      "source_field": "holomorphy_uniform_gap",
+      "measured": 0,
+      "upper_bound": 0.01,
+      "cert_interval": [
+        0,
+        0.01
+      ],
+      "constraint": "holomorphy_uniform_gap < holomorphy_uniform_gap_ub",
+      "ok": true
+    },
+    "theta": {
+      "source_engine": "anavm_bsd_proof.json",
+      "source_field": "theta",
+      "value": 5.759586531581287
+    }
+  },
+  "hodge": {
+    "hodge_multiplicity_match": {
+      "source_engine": "anavm_hodge_proof.json",
+      "field_a": "kernel_multiplicity",
+      "field_b": "predicted_hodge_multiplicity",
+      "value": 20,
+      "constraint": "kernel_multiplicity == predicted_hodge_multiplicity",
+      "ok": true
+    },
+    "cycle_map_cokernel_dim": {
+      "source_engine": "anavm_hodge_proof.json",
+      "source_field": "cycle_map_cokernel_dim",
+      "value": 0,
+      "ok": true,
+      "constraint": "cycle_map_cokernel_dim == 0"
+    }
+  },
+  "goldbach": {
+    "major_arc_dominance": {
+      "source_engine": "anavm_goldbach_proof.json",
+      "source_field": "major_arc_spectral_mass",
+      "measured": 0.4923184908772058,
+      "lower_bound": 0.45,
+      "cert_interval": [
+        0.45,
+        0.4923184908772058
+      ],
+      "constraint": "major_arc_spectral_mass >= major_arc_threshold",
+      "ok": true
+    },
+    "minor_arc_control": {
+      "source_engine": "anavm_goldbach_proof.json",
+      "source_field": "minor_arc_bound",
+      "measured": 0.001436630920086387,
+      "upper_bound": 0.01,
+      "cert_interval": [
+        0.001436630920086387,
+        0.01
+      ],
+      "constraint": "minor_arc_bound < minor_arc_ub",
+      "ok": true
+    },
+    "goldbach_n0": {
+      "source_engine": "anavm_goldbach_proof.json",
+      "source_field": "goldbach_n0",
+      "value": 4
+    },
+    "goldbach_effective_n_max": {
+      "source_engine": "anavm_goldbach_proof.json",
+      "source_field": "goldbach_effective_n_max",
+      "value": 10000
+    }
+  },
+  "ym": {
+    "mass_gap_lb": 2,
+    "eigenvalue_gate": {
+      "source_engine": "anavm_ym_proof.json",
+      "source_field": "gauge_smallest_positive_eigenvalue",
+      "measured": 3.599870788800328,
+      "lower_bound": 2.0,
+      "cert_interval": [
+        2.0,
+        3.599870788800328
+      ],
+      "constraint": "gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb",
+      "ok": true
+    },
+    "lattice_gap_estimate": {
+      "source_engine": "anavm_ym_proof.json",
+      "source_field": "lattice_gap_estimate",
+      "value": 2.0790360649001345,
+      "note": "finite-volume lattice crosscheck; not a continuum proof"
+    },
+    "continuum_caveat": "YM continuum limit is REDUCTION \u2014 conditional on two named external cores: os_continuum_tightness_hypothesis and gap_lower_semicontinuity_hypothesis (decomposed from the former continuum_limit_gap_persistence_hypothesis; finite-volume uniform gap is cert-backed via ym_finite_volume_gap_cert.json)"
+  },
+  "rh": {
+    "grid_rel_gap": {
+      "source_engine": "anavm_xi_hadamard_proof.json",
+      "source_field": "max_grid_rel_gap",
+      "measured": 0.01790986800166357,
+      "upper_bound": 0.03,
+      "upper_bound_source": "cert_pin_manifest.json (grid_rel_gap_bounded)",
+      "cert_interval": [
+        0.01790986800166357,
+        0.03
+      ],
+      "constraint": "max_grid_rel_gap < 0.03 (pinned from certified_bounds.mrs)",
+      "ok": true
+    },
+    "rh_caveat": "RH capstone is ROUTED/STRUCTURAL_PIN \u2014 exact equality conditional on det_zeta_zero_set_equals_xi_zeros (operator-level spectral identification, not proved from numerics); numeric cert is interval bound only"
+  }
+}

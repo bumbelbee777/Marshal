@@ -46,9 +46,8 @@ Cert: `docs/generated/analytic_lemma_demo.json` — `global_minimizer_verified`,
 
 ```bash
 python tools/Analysis/RunAnalyticLemmaDemo.py
-python tools/Analysis/EmitMarshalLeanCert.py --check
-cd docs/Formal && lake build HP
-cd docs/Formal && lake build HPAnalysis
+python tools/Analysis/EmitMarshalCert.py --check
+cmake --build build --target verify-mrs-proof
 ```
 
 ---

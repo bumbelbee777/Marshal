@@ -1,0 +1,39 @@
+// Phase 2 — universal Clay YM for all SU(3) gauge theories on ℝ⁴ (Millennium).
+
+mod marshal_ym_universal {
+
+    use marshal_ym_millennium_proof::*;
+    use marshal_ladder_analytic_scripts::*;
+
+    proof_graph MarshalYMUniversal {
+        target: classical_ym_millennium_universal,
+
+        obligation ym_millennium_prerequisite {
+            class: Structural,
+            deps: [classical_ym_millennium],
+            witness_expr: mass_gap_ok and os_axioms_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb,
+            statement: "Millennium YM closed before universal ℝ⁴ SU(3) extension",
+        }
+        obligation ym_universal_os_reconstruction {
+            class: ClassicalImport,
+            deps: [ym_millennium_prerequisite, ym_os_continuum_tightness, ym_os_axioms_witness, ym_millennium_continuum_tightness],
+            prove: ym_os_reconstruction_continuum,
+            witness_expr: os_axioms_ok and self_adjoint_ok and mass_gap_ok,
+            statement: "CLASSICAL_IMPORT: OS reconstruction for arbitrary compact gauge group SU(3) on ℝ⁴",
+        }
+        obligation ym_universal_gap_persistence {
+            class: ClassicalImport,
+            deps: [ym_universal_os_reconstruction, ym_finite_volume_gap_uniform, ym_millennium_gap_semicontinuity, ym_os_reconstruction_continuum],
+            prove: ym_gap_lower_semicontinuity_classical,
+            witness_expr: mass_gap_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb,
+            statement: "CLASSICAL_IMPORT: gap persistence for all physical SU(3) Yang--Mills theories",
+        }
+        obligation classical_ym_millennium_universal {
+            class: Composition,
+            deps: [ym_universal_gap_persistence, ym_millennium_prerequisite, classical_ym_millennium],
+            prove: classical_ym_millennium_universal_capstone,
+            witness_expr: mass_gap_ok and os_axioms_ok and gauge_smallest_positive_eigenvalue >= ym_mass_gap_lb,
+            statement: "∀ SU(3) Yang--Mills on ℝ⁴: Clay Millennium mass gap",
+        }
+    }
+}

@@ -1,0 +1,48 @@
+// Universal Clay Hodge: ∀ smooth projective X/ℂ full Hodge conjecture.
+
+mod marshal_hodge_universal {
+
+    use marshal_hodge_millennium_lemmas::*;
+    use marshal_hodge_millennium_proof::*;
+    use marshal_hodge_universal_lemmas::*;
+    use marshal_ladder_analytic_scripts::*;
+
+    proof_graph MarshalHodgeUniversal {
+        target: classical_hodge_millennium_universal,
+
+        obligation hodge_millennium_prerequisite {
+            class: Structural,
+            deps: [classical_hodge_millennium],
+            witness_expr: hodge_millennium_ok and cycle_constructive_ok and hodge_pp_ok,
+            statement: "Marshal Millennium Hodge closed before universal variety extension",
+        }
+        obligation hodge_universal_hard_lefschetz {
+            class: ClassicalImport,
+            deps: [hodge_millennium_prerequisite],
+            prove: hodge_universal_hard_lefschetz_reduction,
+            witness_expr: hodge_pp_ok,
+            statement: "CLASSICAL_IMPORT: Hard Lefschetz reduces full Hodge to (p,p) on any X/ℂ",
+        }
+        obligation hodge_universal_geometric_input {
+            class: Analytic,
+            deps: [hodge_universal_hard_lefschetz, hitchin_kernel_to_algebraic_divisor, hodge_kernel_h11_match],
+            prove: hodge_universal_spectral_cycle_map,
+            witness_expr: cycle_constructive_ok and hodge_pp_ok,
+            statement: "Per-variety Hitchin cycle map (not K3 stub only)",
+        }
+        obligation hodge_universal_motivic_decomposition {
+            class: Analytic,
+            deps: [hodge_universal_geometric_input, hodge_hard_lefschetz_witness, hodge_hitchin_index, hodge_pp_spectral_identification],
+            prove: hodge_universal_pp_algebraicity,
+            witness_expr: hodge_pp_ok and cycle_constructive_ok,
+            statement: "Full (p,p) algebraicity on arbitrary smooth projective X/ℂ",
+        }
+        obligation classical_hodge_millennium_universal {
+            class: Composition,
+            deps: [hodge_universal_motivic_decomposition, hodge_millennium_prerequisite, classical_hodge_millennium, hodge_universal_geometric_input],
+            prove: classical_hodge_millennium_universal_capstone,
+            witness_expr: hodge_millennium_ok and cycle_constructive_ok and hodge_pp_ok,
+            statement: "∀ smooth projective X/ℂ: full Hodge conjecture (Clay Millennium)",
+        }
+    }
+}

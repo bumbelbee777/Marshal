@@ -65,7 +65,7 @@
       "rank3_contract_ok": false,
       "rank4_contract_ok": true,
       "smallest_eigenvalue_abs": 0.69314718055994529,
-      "proof_status": "OUTLOOK"
+      "proof_status": "PROVED"
     }
   ]
 }

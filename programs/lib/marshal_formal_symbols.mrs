@@ -1,0 +1,100 @@
+// MRS formal symbol registry — Lean-like glyphs as MrsMath aliases.
+
+// Unicode identifiers in witness_expr resolve via MrsFormalSym (C++).
+
+
+
+mod marshal_formal_symbols {
+
+
+
+    // ξ(s) — Riemann xi
+
+    pub const XI: Symbol = "ξ";
+
+
+
+    // ∏ — infinite product
+
+    pub const TPROD: Symbol = "∏";
+
+
+
+    // ∀ ∃ — quantifiers (witness_expr aliases for forall_n / exists_n)
+
+    pub const FORALL: Symbol = "∀";
+
+    pub const EXISTS: Symbol = "∃";
+
+
+
+    // Standard number-system / set glyphs
+
+    pub const REALS: Symbol = "ℝ";
+
+    pub const NATS: Symbol = "ℕ";
+
+    pub const INTS: Symbol = "ℤ";
+
+    pub const RATIONALS: Symbol = "ℚ";
+
+    pub const COMPLEX: Symbol = "ℂ";
+
+    pub const EMPTY_SET: Symbol = "∅";
+
+    pub const INFTY: Symbol = "∞";
+
+
+
+    // Set / relation operators
+
+    pub const IN: Symbol = "∈";
+
+    pub const SUBSET: Symbol = "⊆";
+
+    pub const UNION: Symbol = "∪";
+
+    pub const INTERSECT: Symbol = "∩";
+
+
+
+    // Logic connectives (also: -> <-> ⟹ ⟺ implies iff equiv builtins)
+
+    pub const IMPLIES: Symbol = "⟹";
+
+    pub const IFF: Symbol = "⟺";
+
+
+
+    // Analysis glyphs
+
+    pub const PARTIAL: Symbol = "∂";
+
+    pub const INTEGRAL: Symbol = "∫";
+
+    pub const SUM: Symbol = "∑";
+
+
+
+    // Operator / spectral notation
+
+    pub const DELTA: Symbol = "Δ";
+
+    pub const SPECTRAL_DET: Symbol = "det_ζ";
+
+    pub const GAMMA_FN: Symbol = "Γ";
+
+
+
+    // Example witness using formal symbols (ξ grid gap pin)
+
+    prove xi_grid_gap_witness: XiGridGapWitness {
+
+        ratio(ξ_grid_rel_gap, ξ_grid_rel_gap_ub) <= 1
+
+    }
+
+
+
+}
+

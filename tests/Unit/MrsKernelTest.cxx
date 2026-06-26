@@ -3,6 +3,7 @@
 #include "AnaVM/AnaVm.hxx"
 #include "AnaVM/MrsInfer.hxx"
 
+#include <filesystem>
 #include <iostream>
 
 namespace {
@@ -41,6 +42,7 @@ void test_infer_audit_export() {
     e.rational_den = "1000";
     e.ok = true;
     rep.audit.push_back(e);
+    std::filesystem::create_directories("build/test_out");
     require(export_infer_audit_json("build/test_out/mrs_infer_audit.json", rep),
             "export infer audit json");
 }

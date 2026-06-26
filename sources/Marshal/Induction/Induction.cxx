@@ -119,7 +119,7 @@ Analysis::ResidualBudget ComputeResidualBudget(const TestFunction& tf, Real sigm
     b.arch_abs_floor = precision_mode ? (sigma >= 4.0L ? 1e-7L : 1e-9L) : 1e-6L;
 
     if (!gammas.empty()) {
-        const size_t n = std::min({gammas.size(), gammas_ld.size(), size_t{20000}});
+        const size_t n = std::min(gammas.size(), std::min(gammas_ld.size(), size_t{20000}));
         if (n > 0) {
             const Real fsum = zero_sum_h_batched(tf, sigma, gammas.data(), n, SimdLevel::AVX2);
             const Real lsum = gammas_ld.size() >= n

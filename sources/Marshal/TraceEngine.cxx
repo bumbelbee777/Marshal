@@ -177,7 +177,7 @@ Real arch_gauss_richardson_1024(Real sigma, Real& drift_out, bool precise_psi = 
     const Real e256_128 = a256 - a128;
     const Real e128_64 = a128 - a64;
     const Real e1024_512 = a1024 - a512;
-    drift_out = std::max({fabsl(e1024_512), fabsl(e512_256), fabsl(e256_128)});
+    drift_out = std::max(MarshalFabs(e1024_512), std::max(MarshalFabs(e512_256), MarshalFabs(e256_128)));
     return a1024 + e1024_512 / 3.0L + (e1024_512 - e512_256) / 15.0L +
            (e1024_512 - 2.0L * e512_256 + e256_128) / 105.0L +
            (e1024_512 - 3.0L * e512_256 + 3.0L * e256_128 - e128_64) / 945.0L;

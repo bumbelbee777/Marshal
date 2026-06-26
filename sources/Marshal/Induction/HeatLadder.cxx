@@ -154,8 +154,8 @@ void ExportInductionJson(const std::string& path, const Config& cfg,
         cum += pk.prime_norm;
         const Real cum_rhs = global.poles + global.arch - cum;
         const Real ladder_res = global.lhs - cum_rhs;
-        const Real tier1_err = std::max({pk.poisson_err,
-                                         fabsl(pk.prime_norm - pk.heat_norm), pk.euler_err});
+        const Real tier1_err = std::max(pk.poisson_err,
+                                         std::max(fabsl(pk.prime_norm - pk.heat_norm), pk.euler_err));
         if (i) out << ",\n";
         out << "    {\"p\": " << cat.p[i]
             << ", \"kmax\": " << km

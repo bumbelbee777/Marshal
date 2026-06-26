@@ -39,8 +39,8 @@ void FillPronySpectrumGaps(const Heat::HeatTraceSweepResult& sweep,
     if (!pr.ok || pr.eigenvalues_sq.empty()) return;
     ok = true;
 
-    const int m = std::min({static_cast<int>(pr.eigenvalues_sq.size()),
-                            static_cast<int>(gammas.size()), 3});
+    const int m = std::min(static_cast<int>(pr.eigenvalues_sq.size()),
+                            std::min(static_cast<int>(gammas.size()), 3));
     Real sum = 0;
     for (int i = 0; i < m; ++i) {
         const Real gamma = static_cast<Real>(gammas[static_cast<size_t>(i)]);
@@ -145,7 +145,7 @@ SpectralHpReport ComputeSpectralHp(const TraceResult& global,
     const Real spec_mean_gap = cfg.spec_mean_gap > 0 ? cfg.spec_mean_gap : kSpecMeanGapDefault;
 
     std::vector<Real> evals = CollectCylinderSpectrum(cat, N);
-    const size_t m = std::min({gammas.size(), evals.size(), static_cast<size_t>(N)});
+    const size_t m = std::min(gammas.size(), std::min(evals.size(), static_cast<size_t>(N)));
     rep.n_pairs = static_cast<int>(m);
     FillLexSortedGaps(evals, gammas, m, rep.direct_sum_max_gap, rep.direct_sum_mean_gap);
     const int k_spec = rep.lhs_underflow ? 50 : fixed_quotient_k(cat, cfg);

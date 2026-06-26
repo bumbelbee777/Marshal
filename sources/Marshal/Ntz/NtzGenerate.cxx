@@ -212,8 +212,9 @@ bool RunNtzGenerate(const NtzGenerateOptions& opt, NtzGenerateReport& rep, std::
     size_t refine_n = opt.count;
     if (refine_n == 0) refine_n = avail_from_input > 0 ? avail_from_input : 1000;
     const size_t merged_target =
-        std::max({opt.pad_to, refine_n, opt.offset + refine_n,
-                  have_input ? opt.offset + input_lines : size_t{0}});
+        std::max(opt.pad_to, std::max(refine_n,
+                  std::max(opt.offset + refine_n,
+                           have_input ? opt.offset + input_lines : size_t{0})));
     if (opt.pad_to > refine_n) refine_n = opt.pad_to - opt.offset;
 
     if (opt.output.empty()) {

@@ -235,7 +235,7 @@ inline int select_best_k(const PrimeList& pl, const std::vector<double>& gammas,
     for (int i = 0; i < k_max; ++i)
         probe.haar_sqrt_inv[static_cast<size_t>(i)] = 1.0 / std::sqrt(static_cast<double>(probe.primes[i]));
 
-    const int sample = std::min({n, static_cast<int>(gammas.size()), sample_cap});
+    const int sample = std::min(n, std::min(static_cast<int>(gammas.size()), sample_cap));
     int best_k = std::min(6, k_max);
     double best = 1e300;
     for (int k = 6; k <= k_max; ++k) {

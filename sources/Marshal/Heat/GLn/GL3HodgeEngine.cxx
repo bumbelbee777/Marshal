@@ -72,7 +72,7 @@ GL3HodgeProofReport run_gl3_hodge_proof_engine(const Config& cfg, const std::vec
     const bool spectral_contract = rep.theta_stable &&
                                    rep.smallest_eigenvalue_abs <= rep.kernel_tolerance;
     rep.hitchin_divisor_count =
-        spectral_contract ? std::max({kernel_modes, rep.kernel_multiplicity, kHodgeH11}) : 0;
+        spectral_contract ? std::max(kernel_modes, std::max(rep.kernel_multiplicity, kHodgeH11)) : 0;
     rep.cycle_constructive_span =
         spectral_contract ? std::min(rep.hitchin_divisor_count, kHodgeH11) : 0;
     rep.cycle_constructive_ok =

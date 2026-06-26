@@ -354,7 +354,7 @@ HpProofVerdict RunHpProofInduction(const Config& cfg, const TestFunction& tf,
         const auto pk = op.trace_packet(tf, tau, km, cfg.nmax, cfg.ktheta,
                                         cfg.s_euler, cfg.eps, link_n);
         const Real weil_heat = fabsl(pk.prime_norm - pk.heat_norm);
-        const Real local_err = std::max({pk.poisson_err, weil_heat, pk.euler_err});
+        const Real local_err = std::max(pk.poisson_err, std::max(weil_heat, pk.euler_err));
         v.max_local_err = std::max(v.max_local_err, local_err);
         if (local_err > cfg.tier1_tol) {
             v.tier1_all = false;

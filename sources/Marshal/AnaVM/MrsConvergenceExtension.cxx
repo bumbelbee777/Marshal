@@ -82,7 +82,7 @@ bool consecutive_rel_change_below(const std::vector<double>& xs, double tol) {
     const double a = xs[xs.size() - 2];
     const double b = xs[xs.size() - 1];
     const double diff = std::fabs(b - a);
-    const double scale = std::max({1.0, std::fabs(a), std::fabs(b)});
+    const double scale = std::max(1.0, std::max(std::fabs(a), std::fabs(b)));
     return diff / scale <= tol + kEps;
 }
 

@@ -513,7 +513,7 @@ double array_consec_rel_max(const std::vector<double>& xs) {
     for (size_t i = 1; i < xs.size(); ++i) {
         const double a = xs[i - 1];
         const double b = xs[i];
-        const double scale = std::max({1.0, std::fabs(a), std::fabs(b)});
+        const double scale = std::max(1.0, std::max(std::fabs(a), std::fabs(b)));
         worst = std::max(worst, std::fabs(b - a) / scale);
     }
     return worst;

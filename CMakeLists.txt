@@ -24,6 +24,12 @@ find_package(OpenMP)
 
 find_package(Python3 COMPONENTS Interpreter)
 
+# libm is Unix-only; MSVC provides math in the CRT (linking `m` → m.lib fails).
+set(MARSHAL_PLATFORM_LIBS "")
+if(NOT MSVC)
+    list(APPEND MARSHAL_PLATFORM_LIBS m)
+endif()
+
 
 
 set(MARSHAL_SOURCE_DIR ${CMAKE_SOURCE_DIR}/sources)
@@ -290,7 +296,7 @@ add_executable(Marshal ${MARSHAL_SOURCE_DIR}/Marshal/MarshalDriver.cxx)
 
 target_compile_options(Marshal PRIVATE -O3 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
 
-target_link_libraries(Marshal PRIVATE MarshalKernel m)
+target_link_libraries(Marshal PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 if(OpenMP_CXX_FOUND)
 
@@ -302,7 +308,7 @@ endif()
 
 add_executable(marshal-zero-verify ${MARSHAL_SOURCE_DIR}/Marshal/Ntz/ZeroVerifyCli.cxx)
 target_compile_options(marshal-zero-verify PRIVATE -O3 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(marshal-zero-verify PRIVATE MarshalKernel m)
+target_link_libraries(marshal-zero-verify PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 if(OpenMP_CXX_FOUND)
     target_link_libraries(marshal-zero-verify PRIVATE OpenMP::OpenMP_CXX)
 endif()
@@ -315,77 +321,77 @@ add_executable(test-anavm ${CMAKE_SOURCE_DIR}/tests/Unit/AnaVmSymTest.cxx)
 
 add_executable(test-mrs-module ${CMAKE_SOURCE_DIR}/tests/Unit/MrsModuleTest.cxx)
 target_compile_options(test-mrs-module PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-module PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-module PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-mrs-kernel ${CMAKE_SOURCE_DIR}/tests/Unit/MrsKernelTest.cxx)
 target_compile_options(test-mrs-kernel PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-kernel PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-kernel PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-anavm-proof-engine ${CMAKE_SOURCE_DIR}/tests/Unit/AnaProofEngineTest.cxx)
 target_compile_options(test-anavm-proof-engine PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-anavm-proof-engine PRIVATE MarshalKernel m)
+target_link_libraries(test-anavm-proof-engine PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-mrs-hadamard-proof-gate ${CMAKE_SOURCE_DIR}/tests/Unit/MrsHadamardProofGateTest.cxx)
 target_compile_options(test-mrs-hadamard-proof-gate PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-hadamard-proof-gate PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-hadamard-proof-gate PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-mrs-proof-audit ${CMAKE_SOURCE_DIR}/tests/Unit/MrsProofAuditTest.cxx)
 target_compile_options(test-mrs-proof-audit PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-proof-audit PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-proof-audit PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-anavm-xi-hadamard-pipeline
     ${CMAKE_SOURCE_DIR}/tests/Integration/AnaVmXiHadamardPipelineTest.cxx)
 target_compile_options(test-anavm-xi-hadamard-pipeline PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-anavm-xi-hadamard-pipeline PRIVATE MarshalKernel m)
+target_link_libraries(test-anavm-xi-hadamard-pipeline PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-mrs-math ${CMAKE_SOURCE_DIR}/tests/Unit/MrsMathTest.cxx)
 target_compile_options(test-mrs-math PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-math PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-math PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 add_test(NAME MrsMathTest COMMAND test-mrs-math)
 
 add_executable(test-mrs-transform ${CMAKE_SOURCE_DIR}/tests/Unit/MrsTransformTest.cxx)
 target_compile_options(test-mrs-transform PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-transform PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-transform PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 add_test(NAME MrsTransformTest COMMAND test-mrs-transform)
 
 add_executable(test-mrs-ladder-proof-gate ${CMAKE_SOURCE_DIR}/tests/Unit/MrsLadderProofGateTest.cxx)
 target_compile_options(test-mrs-ladder-proof-gate PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-mrs-ladder-proof-gate PRIVATE MarshalKernel m)
+target_link_libraries(test-mrs-ladder-proof-gate PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-anavm-ladder-pipeline
     ${CMAKE_SOURCE_DIR}/tests/Integration/AnaVmLadderPipelineTest.cxx)
 target_compile_options(test-anavm-ladder-pipeline PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-anavm-ladder-pipeline PRIVATE MarshalKernel m)
+target_link_libraries(test-anavm-ladder-pipeline PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 target_compile_options(test-unit PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
 
-target_link_libraries(test-unit PRIVATE MarshalKernel m)
+target_link_libraries(test-unit PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 target_compile_options(test-log-prime PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-log-prime PRIVATE MarshalKernel m)
+target_link_libraries(test-log-prime PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 target_compile_options(test-anavm PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-anavm PRIVATE MarshalKernel m)
+target_link_libraries(test-anavm PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-completion ${CMAKE_SOURCE_DIR}/tests/Unit/CompletionValidationTest.cxx)
 target_compile_options(test-completion PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-completion PRIVATE MarshalKernel m)
+target_link_libraries(test-completion PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-archimedean ${CMAKE_SOURCE_DIR}/tests/Unit/ArchimedeanBoundaryTest.cxx)
 target_compile_options(test-archimedean PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-archimedean PRIVATE MarshalKernel m)
+target_link_libraries(test-archimedean PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-bk ${CMAKE_SOURCE_DIR}/tests/Unit/BerryKeatingTest.cxx)
 target_compile_options(test-bk PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-bk PRIVATE MarshalKernel m)
+target_link_libraries(test-bk PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-validation-router ${CMAKE_SOURCE_DIR}/tests/Unit/ValidationRouterTest.cxx)
 target_compile_options(test-validation-router PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-validation-router PRIVATE MarshalKernel m)
+target_link_libraries(test-validation-router PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 add_executable(test-investigation ${CMAKE_SOURCE_DIR}/tests/Unit/InvestigationTypesTest.cxx)
 target_compile_options(test-investigation PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
-target_link_libraries(test-investigation PRIVATE MarshalKernel m)
+target_link_libraries(test-investigation PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 
 
@@ -393,7 +399,7 @@ add_executable(test-batch ${CMAKE_SOURCE_DIR}/tests/Unit/BatchKernelTest.cxx)
 
 target_compile_options(test-batch PRIVATE -O2 ${MARSHAL_WARN_FLAGS} ${MARSHAL_SIMD_FLAGS})
 
-target_link_libraries(test-batch PRIVATE MarshalKernel m)
+target_link_libraries(test-batch PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 if(OpenMP_CXX_FOUND)
 
@@ -409,13 +415,13 @@ if(MARSHAL_BUILD_BENCH)
 
     target_compile_options(bench-micro PRIVATE -O3 ${MARSHAL_SIMD_FLAGS})
 
-    target_link_libraries(bench-micro PRIVATE MarshalKernel m)
+    target_link_libraries(bench-micro PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
     add_executable(bench-heat ${CMAKE_SOURCE_DIR}/tests/Benchmarks/HeatTraceBench.cxx)
 
     target_compile_options(bench-heat PRIVATE -O3 ${MARSHAL_SIMD_FLAGS})
 
-    target_link_libraries(bench-heat PRIVATE MarshalKernel m)
+    target_link_libraries(bench-heat PRIVATE MarshalKernel ${MARSHAL_PLATFORM_LIBS})
 
 endif()
 

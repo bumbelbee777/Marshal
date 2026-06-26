@@ -1,6 +1,7 @@
 #pragma once
 
 #include "JsonMinimal.hxx"
+#include <algorithm>
 #include <map>
 #include <optional>
 #include <string>

@@ -14,8 +14,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from tools.marshal_bin import marshal_exe
+
 OUT = ROOT / "docs" / "generated" / "cross_sector_weil_study.json"
-MARSHAL = ROOT / "build" / "Marshal.exe"
+MARSHAL = marshal_exe(ROOT)
 ZEROS = ROOT / "tests" / "Fixtures" / "Zeros" / "NtzMergedOneLine.txt"
 
 # CI defaults: enough coverage for cert gates without 15+ minute full spectral grids.

@@ -8,7 +8,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-MARSHAL = ROOT / "build" / "Marshal.exe"
+sys.path.insert(0, str(ROOT))
+from tools.marshal_bin import marshal_exe
+
+MARSHAL = marshal_exe(ROOT)
 LADDER_OUT = ROOT / "docs" / "generated" / "marshal_gln_ladder_sweep.json"
 HODGE_OUT = ROOT / "docs" / "generated" / "marshal_hodge_k3_demo.json"
 

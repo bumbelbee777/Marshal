@@ -896,9 +896,9 @@
       "zero_tail_exact": 4.130988281939043e-44,
       "zero_tail_rvm_bound": 1.0000000000000001e+300,
       "geometric": 1.0699503741015353,
-      "cross_rhs_fin": 0.00048935353553139461,
+      "cross_rhs_fin": 0.00048935353553139472,
       "weil_residual_full": 0.049820143562003705,
-      "weil_margin_fin": 0.00048935353553139461
+      "weil_margin_fin": 0.00048935353553139472
     },
     {
       "a": 3,
@@ -999,9 +999,9 @@
       "zero_tail_exact": 4.130988281939043e-44,
       "zero_tail_rvm_bound": 1.0000000000000001e+300,
       "geometric": 1.0699503741015353,
-      "cross_rhs_fin": 2.2779571756713704e-07,
+      "cross_rhs_fin": 2.2779571756724546e-07,
       "weil_residual_full": 0.049820143562003705,
-      "weil_margin_fin": 2.2779571756713704e-07
+      "weil_margin_fin": 2.2779571756724546e-07
     },
     {
       "a": 4,
@@ -1102,9 +1102,9 @@
       "zero_tail_exact": 4.130988281939043e-44,
       "zero_tail_rvm_bound": 1.0000000000000001e+300,
       "geometric": 1.0699503741015353,
-      "cross_rhs_fin": 1.8604600927158918e-07,
+      "cross_rhs_fin": 1.8604600927148076e-07,
       "weil_residual_full": 0.049820143562003705,
-      "weil_margin_fin": 1.8604600927158918e-07
+      "weil_margin_fin": 1.8604600927148076e-07
     },
     {
       "a": 5,
@@ -1411,9 +1411,9 @@
       "zero_tail_exact": 1.0888190141304786e-96,
       "zero_tail_rvm_bound": 3.9341186265424542e-88,
       "geometric": 1.0699503741015353,
-      "cross_rhs_fin": 1.8604594040545243e-07,
+      "cross_rhs_fin": 1.8604594040556085e-07,
       "weil_residual_full": 0.049820143562003705,
-      "weil_margin_fin": 1.8604594040545243e-07
+      "weil_margin_fin": 1.8604594040556085e-07
     },
     {
       "a": 15,

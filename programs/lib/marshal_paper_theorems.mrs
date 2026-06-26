@@ -190,7 +190,7 @@ mod marshal_paper_theorems {
 
         goal: prop_b2_weil_goal,
 
-        prove: weil_route_discrete_spectrum_lemma,
+        prove: weil_discrete_capstone_lemma,
 
         paper_label: prop:b2-weil,
 
